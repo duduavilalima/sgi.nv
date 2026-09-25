@@ -1,0 +1,46 @@
+<md-dialog aria-label="Nota de Débito - Protocolo: Confirmação" id="dialog_titulo_dialog_protocolo" style="width: 500px;">
+	<form name="DialogProtocoloForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_dialog_protocolo">Nota de Débito - Protocolo: Confirmação</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content flex>
+			<div class="md-dialog-content" layout layout-sm="column" md-theme="sgi">
+
+				<md-input-container flex>
+					<label id="lbl_protocolo">Protocolo </label>
+					<input id="input_protocolo" maxlength="25" md-maxlength="25" name="input_protocolo"
+						   ng-model="copiaProtocoloEntrega" ng-required="true"
+						   size="30" type="text" value="{{copiaProtocoloEntrega}}">
+					<div ng-messages="DialogProtocoloForm.input_protocolo.$error" role="alert">
+						<div ng-message="required">Obrigatório.</div>
+					</div>
+				</md-input-container>
+
+			</div>
+
+			<md-divider></md-divider>
+
+		</md-dialog-content>
+
+		<md-dialog-actions class="navigation padding-8" layout="row">
+
+			<md-button class="md-raised md-accent" id="btn_salvar_protocolo" ng-click="confirmar()"
+					   ng-disabled="DialogProtocoloForm.$invalid">
+				CONFIRMAR
+			</md-button>
+
+			<md-button class="md-raised md-accent" id="btn_cancelar_protocolo" ng-click="cancel()">
+				CANCELAR
+			</md-button>
+
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

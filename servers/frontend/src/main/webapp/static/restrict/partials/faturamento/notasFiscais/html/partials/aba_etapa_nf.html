@@ -1,0 +1,43 @@
+<div layout layout-sm="column">
+	<md-input-container flex>
+		<label id="lbl_numero_aba_etapa">Número</label>
+		<input id="input_numero_aba_etapa" name="input_numero_aba_etapa" ng-disabled="true" type="text"
+			   value="{{::object.faturamentoEtapaTO.numero}}">
+	</md-input-container>
+
+	<md-input-container flex>
+		<label id="lbl_situacao_aba_etapa">Situação</label>
+		<input id="input_situacao_aba_etapa" name="input_situacao_aba_etapa" ng-disabled="true" type="text"
+			   value="{{::object.faturamentoEtapaTO.situacao}}">
+	</md-input-container>
+
+	<div fex flex-gt-sm="50" layout="row">
+
+		<md-input-container flex="50">
+			<label id="lbl_inicio_aba_faturamento">Início</label>
+			<input id="input_inicio_aba_faturamento" name="input_inicio_aba_faturamento" ng-disabled="true" type="text"
+				   value="{{::object.faturamentoEtapaTO.inicio | date:'dd/MM/yyyy'}}">
+		</md-input-container>
+
+		<md-input-container flex="50">
+			<label id="lbl_termino_aba_faturamento">Término</label>
+			<input id="input_termino_aba_faturamento" name="input_termino_aba_faturamento" ng-disabled="true"
+				   type="text" value="{{::object.faturamentoEtapaTO.termino | date:'dd/MM/yyyy'}}">
+		</md-input-container>
+
+	</div>
+
+</div>
+
+<div layout layout-sm="column">
+
+	<md-input-container flex flex-gt-sm="100">
+		<label id="lbl_descricao_item_aba_faturamento">Descrição do item</label>
+		<input id="input_descricao_item_aba_faturamento" name="input_descricao_item_aba_faturamento" ng-disabled="true"
+			   type="text" value="{{::object.faturamentoEtapaTO.descricao}}">
+	</md-input-container>
+</div>
+
+
+</div>
+

@@ -1,0 +1,54 @@
+<div id="tab_disc" layout layout-sm="column">
+    <md-input-container flex ng-show="screenMode === 'VIEW' && !modeDiscriminacao">
+
+		<label id="lbl_discriminacao_servicos_nf" ng-show="screenMode === 'VIEW'">Discriminação</label>
+		<textarea columns="1" id="input_discriminacao_servicos_nf" name="input_discriminacao_servicos_nf"
+				  ng-disabled="screenMode === 'VIEW'"
+				  ng-model="object.infoComplementarContribuinte" rows="10"
+				  style="height: 300px;max-height: 300px;min-height: 300px;overflow-y: scroll;resize: none; font-family: Courier;"></textarea>
+	</md-input-container>
+
+
+	<md-input-container flex ng-show="screenMode !== 'VIEW' || modeDiscriminacao">
+
+		<label id="lbl_discriminacao_servicos_nf_edit" ng-show="screenMode !== 'VIEW' || modeDiscriminacao">Discriminação *</label>
+		<textarea id="input_discriminacao_servicos_nf_edit" style="height: 300px;max-height: 300px;min-height: 300px;overflow-y: scroll;resize: none; font-family: Courier;"
+		          name="input_discriminacao_servicos_nf" ng-model="object.infoComplementarContribuinte"
+				  rows="10"  columns="1" ng-disabled="action" md-maxlength="2000" ng-maxlength="2000" maxlength="2000"></textarea>
+	</md-input-container>
+
+</div>
+
+<div layout layout-sm="column" ng-if="screenMode != 'VIEW'" style="margin-top: 280px; margin-bottom: -240px">
+	<span>*</span>&nbsp;Campos obrigatórios
+</div>
+
+<div class="navigation padding-8" flex layout="row" ng-if="(screenMode === 'NEW' || object.status === 'Aberta') && exibirBotoes"
+	 style="margin-top: 250px;margin-left: -15px;">
+	<md-button class="md-raised md-accent" id="btn_editar_discriminacao_servico"
+			   ng-click="editarDiscriminacaoServicos()" ng-disabled="action" ng-hide="modeDiscriminacao == true"
+			   ng-show="screenMode === 'VIEW' && exibirBotoes">
+		<span class="h4">Editar</span>
+		<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+			<span class="h4">Editar Discriminação</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_salvar_editar_discriminacao"
+			   ng-click="salvarDiscriminacao(wizardStep4)" ng-if="exibirBotoes"
+			   ng-disabled="wizardStep4.$invalid || action" ng-show="modeDiscriminacao == true">
+		Salvar
+		<img ng-show="action" src="../img/gray_carregando.gif" style="height: 20px;width: 20px;margin-top: 8px;"/>
+		<md-tooltip id="tool_tip_btn_salvar_editar_discriminacao" md-direction="bottom">
+			<span class="h4">Salvar as alterações realizadas nesta tela do faturamento</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_cancelar_discriminacao" ng-click="cancelarDiscriminacao(wizardStep4)"
+			   ng-disabled="action" ng-if="modeDiscriminacao == true && exibirBotoes">
+		Cancelar
+		<md-tooltip id="tool_tip_btn_cancelar_discriminacao" md-direction="bottom">
+			<span class="h4">Sair desta nota fiscal, sem gravar as modificações realizadas</span>
+		</md-tooltip>
+	</md-button>
+</div>

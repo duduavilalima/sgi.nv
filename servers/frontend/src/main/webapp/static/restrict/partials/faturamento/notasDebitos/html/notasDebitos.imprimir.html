@@ -1,0 +1,121 @@
+<div id="inicio_pagina" ng-controller="NotaDebitoImpressaoCtrl">
+	<div layout="row">
+		<div id="papel" class="page_layout_print" layout-align="center center">
+			<div flex id="nota_debito" layout="column" class="m-25">
+				<div flex id="cabecalho" layout="row" layout-align="start"
+				class="nota-cabecalho" style="display:flex; height: 250px;">
+					<div class="nota-cabecalho" style="width: 50%; height: 250px;text-align: center;">
+						<img src="../img/top_logo.png" style="margin-top: 25%;border-radius: 10px;width: 80%;">
+					</div>
+					<div class="nota-cabecalho" style="width: 50%; height: 250px;font-size: 17px;">
+						<div layout-align="center center" >
+							<p class="text-center {{ !exibindoStatusND ? 'h4' : 'h5' }}" style="font-size: 17px;">NOTA DE DÉBITO</p>
+							<br>
+							<p class="text-center {{ !exibindoStatusND ? 'h3' : 'h4' }} -m-15" style="font-size: 17px;">
+								{{object.numero}}</p>
+							<hr style="border: 1px #000 solid;">
+							<br>
+							<div>
+								<p class="text-left {{ !exibindoStatusND ? 'h3' : 'h4' }} -m-15" style="margin-left: 10px; font-size: 17px;">
+									Emissão: {{object.dataEmissao | date:"dd/MM/yyyy"}}</p>
+								<p ng-if="((object.faturamentoEtapaTO.inicio | date:'dd') === ('01'))&&(((object.faturamentoEtapaTO.termino | date:'dd') === ('30'))||((object.faturamentoEtapaTO.termino | date:'dd') === ('31')))" class="text-left {{ !exibindoStatusND ? 'h3' : 'h4' }} -m-15" style="margin-left: 10px;font-size: 17px;">
+									Referência:{{ object.faturamentoEtapaTO.inicio | date:'MM/yyyy' }}</p>
+								<p ng-if="(object.faturamentoEtapaTO.inicio | date:'dd') !== ('01')" class="text-left {{ !exibindoStatusND ? 'h3' : 'h4' }} -m-15" style="margin-left: 10px;font-size: 17px;">
+									Referência:{{ object.faturamentoEtapaTO.inicio | date:'dd/MM/yyyy' }} a {{ object.faturamentoEtapaTO.termino | date:'dd/MM/yyyy' }}</p>
+								<p class="text-left {{ !exibindoStatusND ? 'h3' : 'h4' }} -m-15" style="margin-left: 10px;font-size: 17px;">
+									Vencimento: {{object.dataVencimento | date:"dd/MM/yyyy"}}</p>
+								<p class="text-left {{ !exibindoStatusND ? 'h3' : 'h4' }} -m-15" style="margin-left: 10px;font-size: 17px;">
+									Condição: {{ object.faturamentoEtapaTO.faturamento.tipoCobrancaFaturamento.descricao | limitTo:20 }}{{ object.faturamentoEtapaTO.faturamento.tipoCobrancaFaturamento.descricao.length >= 20 ? '...' : ''}}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div flex id="tomador" layout="column" layout-align="start"
+					 style="width: 100%; height: 100%; margin: 0px;">
+					<div style="border: 2px #000 solid; text-align: center; height: 40px;align-items: center;display: grid;">
+						<span style="font-size: 17.9327px; font-family: sans-serif; transform: scaleX(0.807745);"><b>PRESTADOR DE SERVIÇO</b></span>
+					</div>
+					<div style="border: 2px #000 solid; text-align: left; height: 190px;">
+						<div ng-if="object.empresa.tipoPessoa == 'Pessoa Jurídica'" style="margin: 20px; font-size: 17px;float: left;width: 35%;">
+							CNPJ: {{object.empresa.documento}}
+						</div>
+						<div ng-if="object.empresa.tipoPessoa != 'Pessoa Jurídica'" style="margin: 20px; font-size: 17px;float: left;width: 35%;">
+							CPF: {{object.empresa.documento}}
+						</div>
+						<div style="margin: 20px; font-size: 17px;">
+							Inscrição Municipal: {{object.empresa.inscricaoMunicipal}}
+						</div>
+						<div style="margin: 20px; font-size: 17px;">
+							Nome/Razão social: {{object.empresa.nome}}
+						</div>
+						<div style="margin: 20px; font-size: 17px;">
+							Endereço: {{object.empresa.endereco.enderecoCompleto}}
+						</div>
+						<div style="margin: 0px 0px 0px 20px; font-size: 17px;float: left;width: 35%;">
+							Município: {{object.empresa.endereco.cidade.nome}}
+						</div>
+						<div style="margin: 0px 0px 0px 20px; font-size: 17px;float: left;width: 35%;">
+							UF: {{object.empresa.endereco.cidade.uf}}
+						</div>
+					</div>
+					<div flex id="tomadorservico" layout="column" layout-align="start"
+						 style="width: 100%; height: 100%; margin: 0px;">
+						<div style="border: 2px #000 solid; text-align: center; height: 40px;align-items: center;display: grid;">
+							<span style="font-size: 17.9327px; font-family: sans-serif; transform: scaleX(0.807745);"><b>TOMADOR DE SERVIÇO</b></span>
+						</div>
+						<div style="border: 2px #000 solid; text-align: left; height: 230px;">
+							<div style="margin: 20px; font-size: 17px;">
+								Nome/Razão social: {{object.cliente.nome}}
+							</div>
+							<div ng-if="object.cliente.tipoPessoa == 'Pessoa Jurídica'" style="margin: 20px; font-size: 17px;">
+								CNPJ: {{object.cliente.documento}}
+							</div>
+							<div ng-if="object.cliente.tipoPessoa != 'Pessoa Jurídica'" style="margin: 20px; font-size: 17px;">
+								CPF: {{object.cliente.documento}}
+							</div>
+							<div style="margin: 20px; font-size: 17px;">
+								Endereço: {{object.cliente.endereco.enderecoCompleto}}
+							</div>
+							<div style="margin: 0px 0px 0px 20px; font-size: 17px;float: left;width: 38%;">
+								Municipio: {{object.cliente.endereco.cidade.nome}}
+							</div>
+							<div style="margin: 20px; font-size: 17px;">
+								UF: {{object.cliente.endereco.cidade.uf}}
+							</div>
+							<div style="margin: 20px; font-size: 17px;">
+								Inscrição Estadual: {{object.cliente.inscricaoEstadualCliente}}
+							</div>
+						</div>
+					</div>
+					<div flex id="discriminacao1" layout="column" layout-align="start"
+						 style="width: 100%; height: 100%; margin: 0px;">
+						<div style="border: 2px #000 solid; text-align: center; height: 40px;align-items: center;display: grid;">
+							<span style="font-size: 17.9327px; font-family: sans-serif; transform: scaleX(0.807745);"><b>DISCRIMINAÇÃO</b></span>
+						</div>
+						<div layout="column" style="width: 100%; height: 100%; border: 2px #000 solid;">
+							<div layout="column"
+								style="width: 100%; height: 100%; margin: 10px 0px 10px 20px; font-size: 17px; white-space: pre">
+								<label style="text-overflow: ellipsis;overflow: hidden;width: 95%;">{{ object.descricao }}</label>
+							</div>
+						</div>
+					</div>
+					<div flex id="discriminacao" layout="column" layout-align="start"
+						 style="width: 100%; height: 100%; margin: 0px;">
+						<div style="border: 2px #000 solid; text-align: center; height: 40px;align-items: center;display: grid;">
+							<span style="font-size: 17.9327px; font-family: sans-serif; transform: scaleX(0.807745);">VALOR TOTAL: R$ {{object.valorBruto | currency : '' : 2}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="bottom: 23px; margin-bottom: 0; padding-top: 15px; position: fixed; right: 23px; z-index: 998;">
+
+			<md-button aria-label="imprimir" class="md-fab md-mini md-primary no-print" ng-click="imprimir()">
+				<md-icon md-font-icon="icon-printer" md-menu-align-target></md-icon>
+				<md-tooltip id="tool_tip_btn_imprimir" md-direction="bottom">
+					<span class="h4">Imprimir esta nota de débito</span>
+				</md-tooltip>
+			</md-button>
+		</div>
+	</div>
+</div>

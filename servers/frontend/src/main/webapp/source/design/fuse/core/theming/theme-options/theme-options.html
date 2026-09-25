@@ -1,0 +1,37 @@
+<div id="theme-options-panel" layout="row" layout-align="start start" ng-class="{'open':vm.panelOpen}">
+
+	<md-button aria-label="theme options menu button" class="md-icon-button" id="theme-options-panel-button"
+			   ng-click="vm.toggleOptionsPanel()">
+		<md-icon class="icon" md-font-icon="icon-cog"></md-icon>
+	</md-button>
+
+	<div id="theme-options-list" layout="column">
+		<div class="theme-option">
+			<div class="option-title">Layout Mode:</div>
+
+			<md-radio-group layout="row" layout-align="start center" ng-change="vm.updateLayoutMode()"
+							ng-model="vm.layoutMode">
+				<md-radio-button value="boxed">Boxed</md-radio-button>
+				<md-radio-button value="wide">Wide</md-radio-button>
+			</md-radio-group>
+		</div>
+
+		<md-divider></md-divider>
+
+		<div class="theme-option">
+			<div class="option-title">Color Palette:</div>
+
+			<md-menu-item class="theme" ng-repeat="(themeName, theme) in vm.themes.list">
+				<md-button aria-label="{{themeName}}"
+						   class="md-raised theme-button" ng-class="themeName"
+						   ng-click="vm.setActiveTheme(themeName)"
+						   ng-style="{'background-color': theme.primary.color,'border-color': theme.accent.color,'color': theme.primary.contrast1}">
+                    <span>
+                        <md-icon md-font-icon="icon-palette" ng-style="{'color': theme.primary.contrast1}"></md-icon>
+                        <span>{{themeName}}</span>
+                    </span>
+				</md-button>
+			</md-menu-item>
+		</div>
+	</div>
+</div>

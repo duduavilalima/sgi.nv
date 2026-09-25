@@ -1,0 +1,227 @@
+<div layout layout-sm="column" layout-wrap>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_situacao">Situação</label>
+		<md-select id="combo_situacao" name="situacao"
+				   ng-disabled=" object.tipoRelatorio.chave === 'resumo_retencao_contratual' "
+				   ng-model="object.situacaoNotaFaturamento" ng-model-options="{trackBy: '$value.codigo'}">
+			<md-option ng-repeat="situacao in situacoesNotaFaturamento" ng-value="situacao">{{ situacao.nome }}
+			</md-option>
+		</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_combo_data_1">1ª data</label>
+		<md-select id="combo_data_1" name="combo_data_1" ng-change="$emit('changeData1')" ng-model="object.data1"
+		ng-disabled="object.tipoRelatorio.chave === 'mapa_de_vendas_faturamento'">
+			<md-option ng-value="1"></md-option>
+			<md-option ng-value="2">Emissão</md-option>
+			<md-option ng-value="3">Vencimento</md-option>
+			<md-option ng-value="4">Agendamento</md-option>
+			<md-option ng-value="5">Pagamento</md-option>
+			<md-option ng-value="6">Contabilização</md-option>
+		</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_1_data_de">{{object.data1De}}</label>
+		<input id="_1_data_de" max-date="object._1DataAte" name="_1_data_de"
+			   ng-disabled="!object.data1 || object.data1 === 0" ng-model="object._1DataDe" tt-date-picker type="text">
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl__1_data_ate">{{object.data1Ate}}</label>
+		<input id="_1_data_ate" min-date="object._1DataDe" name="_1_data_ate"
+			   ng-disabled="!object.data1 || object.data1 === 0" ng-model="object._1DataAte" tt-date-picker type="text">
+	</md-input-container>
+
+</div>
+
+<div layout layout-sm="column" layout-wrap>
+
+	<md-input-container flex flex-gt-md="25" ng-show="hideCampos('mapaDeVendas')">
+			<label id="lbl_agrupamento">Agrupamento</label>
+			<md-select id="combo_ret" name="agrupamento" ng-model="object.agrupamento" 
+			ng-model-options="{trackBy: '$value.codigo'}">
+				<md-option ng-repeat="agrupamento in agrupamentoList" 
+				ng-value="agrupamento">{{ agrupamento.nome }}</md-option>
+			</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25" ng-show="hideCampos('lote')">
+		<label id="lbl_numero">Lote <span class="class_required" ng-if="desabilitarCampo('lote')">*</span></label>
+		<input id="input_numero" maxlength="9" name="numero" ng-disabled="!desabilitarCampo('lote')"
+			   ng-model="object.numeroLote" type="text" ui-hide-group-sep ui-number-mask="0"
+			   value="{{ object.numeroLote }}">
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25" ng-show="hideCampos('ret')">
+		<label id="lbl_retiss">Retenção do ISS</label>
+		<md-select id="combo_ret" name="retIss" ng-model="object.retISS" ng-model-options="{trackBy: '$value.codigo'}">
+			<md-option ng-repeat="rets in tiposRetencao" ng-value="rets">{{ rets.nome }}</md-option>
+		</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_combo_data_2">2ª data</label>
+		<md-select id="combo_data_2" name="combo_data_2" ng-change="$emit('changeData2')" 
+		ng-model="object.data2" ng-disabled="object.tipoRelatorio.chave === 'mapa_de_vendas_faturamento'"
+				   ng-model-options="{ debounce: 250 }">
+			<md-option ng-value="1"></md-option>
+			<md-option ng-value="2">Emissão</md-option>
+			<md-option ng-value="3">Vencimento</md-option>
+			<md-option ng-value="4">Agendamento</md-option>
+			<md-option ng-value="5">Pagamento</md-option>
+			<md-option ng-value="6">Contabilização</md-option>
+		</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_2_data_de">{{object.data2De}}</label>
+		<input id="_2_data_de" max-date="object._2DataAte" name="_2_data_de"
+			   ng-disabled="(!object.data2 || object.data2 === 0)" ng-model="object._2DataDe"
+			   ng-model-options="{ debounce: 250 }" tt-date-picker type="text">
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl__2_data_ate">{{object.data2Ate}}</label>
+		<input id="_2_data_ate" min-date="object._2DataDe" name="_2_data_ate"
+			   ng-disabled="(!object.data2 || object.data2 === 0)" ng-model="object._2DataAte"
+			   ng-model-options="{ debounce: 250 }" tt-date-picker type="text">
+	</md-input-container>
+
+</div>
+
+<div layout layout="column">
+
+	<md-input-container flex flex-gt-xs="50">
+		<label id="lbl_cc_cl">Gerência</label>
+		<md-select id="combo_gerencia" name="gerencia" ng-disabled="(gerenciaList === null || gerenciaList.length === 0)"
+				   ng-model="object.gerencia" ng-model-options="{trackBy: '$value.codigo'}">
+			<md-option ng-value="undefined" ng-if="!nao_permissao_faturamento && habilitarPesquisaTodasGerencias"></md-option>
+			<md-option ng-repeat="gerencia in gerenciaList" ng-value="gerencia">{{ gerencia.nome }}</md-option>
+		</md-select>
+	</md-input-container>
+
+
+	<md-autocomplete flex flex-gt-xs="25" id="autocomplete_centroLucro"
+					 md-delay="250"
+					 md-floating-label="Centro financeiro"
+					 md-input-name="autocompleteCentroLucro"
+					 md-item-text="item.identificadorFinal + ' - ' + item.nome"
+					 md-items="item in querySearchCentroLucro(searchTextCentroLucro)"
+					 md-menu-class="autocomplete-custom-template"
+					 md-min-length="3"
+					 md-no-cache="false"
+					 md-require-match="" md-search-text="searchTextCentroLucro"
+					 md-selected-item="selectedItemCentroLucro"
+					 md-selected-item-change="fnSelectedItemCentroLucro(item)" name="autocompleteCentroLucro"
+					 value="{{ object.centroFinanceiro.identificadorFinal }} - {{ object.centroFinanceiro.nome }}">
+		<md-item-template>
+			<span class="item-title" style="margin-top: -20px">
+                <h5>
+					<strong>IDENTIFICADOR: </strong>
+					<span md-highlight-flags="i"
+						  md-highlight-text="searchTextCentroLucro">{{item.identificadorFinal}}</span>
+					<span ng-if="item.situacao !== 'Ativo'"> <b>({{item.situacao}})</b> </span>
+				</h5>
+            </span>
+			<span class="item-title" style="margin-top: -25px; margin-bottom: -20px">
+                <h5> <strong>NOME: </strong> <span md-highlight-flags="i" md-highlight-text="searchTextCentroLucro">{{item.nome}} </span> </h5>
+            </span>
+		</md-item-template>
+
+		<div ng-if="wizardStep1.autocompleteCentroLucro.$touched"
+			 ng-messages="wizardStep1.autocompleteCentroLucro.$error" role="alert">
+			<div id="msg_req_match" ng-message="md-require-match">O centro financeiro informado não é válido</div>
+			<div id="msg_req_centroLucro" ng-message="required">Obrigatório.</div>
+			<div id="msg_min_centroLucro" ng-message="minlength">O nome informado não é suficiente.</div>
+			<div id="msg_max_centroLucro" ng-message="maxlength">O nome informado é muito longo.</div>
+		</div>
+	</md-autocomplete>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_tipo">Tipo de faturamento</label>
+		<md-select id="combo_tipo" name="combo_tipo" ng-model="object.tipoFaturamento">
+			<md-option ng-repeat="tipoFaturamento in tipoList" ng-value="tipoFaturamento" value="{{ tipoFaturamento }}">
+				{{ tipoFaturamento.nome }}
+			</md-option>
+		</md-select>
+		<div ng-messages="form.combo_tipo.$error" role="alert">
+			<div id="msg_obrig_tipo" ng-message="required">Obrigatório.</div>
+		</div>
+	</md-input-container>
+
+</div>
+
+<div layout layout="column">
+
+	<md-input-container flex flex-gt-md="50" ng-if="conjRelSugg.has(object.tipoRelatorio.chave)">
+		<label id="lbl_nome_cliente">Cliente/Subcliente</label>
+		<input id="nome_cliente" name="nome_cliente" ng-model="object.cliente.nome" type="text">
+	</md-input-container>
+
+	<div flex flex-gt-xs="50" ng-if="!conjRelSugg.has(object.tipoRelatorio.chave)">
+		<md-autocomplete flex flex-gt-xs="100" id="autocomplete_nome_cliente" md-delay="250"
+						 md-floating-label="Cliente/Subcliente"
+						 md-input-name="autocompleteClienteInp"
+						 md-item-text="item.nome"
+						 md-items="item in querySearchCliente(searchTextCliente)"
+						 md-menu-class="autocomplete-custom-template"
+						 md-min-length="3"
+						 md-no-cache="false"
+						 md-search-text="searchTextCliente"
+						 md-selected-item="selectedItemCliente"
+						 md-selected-item-change="selectedItemChange(item, 'cliente')" name="autocompleteCliente"
+						 ng-disabled="!object.tipoRelatorio" value="{{ object.cliente.nome }}">
+			<md-item-template>
+				<span class="item-title"><h3> <strong> <span
+					md-highlight-text="searchTextCliente"> {{item.documento}} </span> </strong></h3></span>
+				<span class="item-title"><h5> <strong>RAZÃO SOCIAL: </strong> <span md-highlight-flags="i"
+																					md-highlight-text="searchTextCliente">{{item.nome}} </span> </h5></span>
+				<span class="item-title"><h5> <strong>NOME FANTASIA: </strong> <span md-highlight-flags="i"
+																					 md-highlight-text="searchTextCliente">{{item.nomeFantasia}} </span> </h5></span>
+			</md-item-template>
+
+			<div ng-if="faturamento.autocompleteClienteInp.$touched" ng-messages="form.autocompleteClienteInp.$error"
+				 role="alert">
+				<div ng-message="required">Obrigatório.</div>
+				<div ng-message="minlength">O nome informado não é suficiente.</div>
+				<div ng-message="maxlength">O nome informado é muito longo.</div>
+			</div>
+		</md-autocomplete>
+
+		<md-tooltip md-direction="bottom">
+			<span class="h4">Informe o CNPJ, razão social ou o nome fantasia do cliente ou do subcliente</span>
+		</md-tooltip>
+	</div>
+
+	<md-input-container flex flex-gt-md="25" ng-if="object.tipoRelatorio.chave === 'mapa_de_vendas_faturamento'">
+		<label id="combo_tipo_de_valor">Tipo de valor</label>
+		<md-select id="combo_tipo_de_valor" name="combo_tipo_de_valor" ng-model="object.tipoDeValor"
+			ng-model-options="{ debounce: 250 }">
+			<md-option ng-repeat="tipoDeValor in tipoDeValorList" 
+			ng-value="tipoDeValor">{{ tipoDeValor.nome }}
+		</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25" ng-if="object.tipoRelatorio.chave === 'mapa_de_vendas_faturamento'">
+		<label id=""></label>	
+			<label id="quantidadeDeCliente">Quantidade de clientes </label>
+			<input id="quantidadeDeClienteInput" name="numero"
+					ng-blur="$emit('quantidadeDeCliente')"
+					ng-model="object.quantidadeDeCliente" type="text"
+					ui-hide-group-sep ui-number-mask="0"
+				   	value="{{ object.notaSaida.numero }}">
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25" ng-if="object.tipoRelatorio.chave === 'resumo_retencao_contratual' || object.tipoRelatorio.chave === 'relacao_nf_retencao_contratual'">
+		<label id="lbl_saldo_retencao_zerado">Saldo de retenções zerado</label>
+		<md-select id="combo_saldo_retencao_zerado" name="combo_saldo_retencao_zerado" ng-model="object.onSaldo">
+			<md-option ng-value="true">Sim</md-option>
+			<md-option ng-value="false">Não</md-option>
+		</md-select>
+		<md-tooltip class="h4">Indica se os itens com saldo zerado (retenção totalmente recebida) serão exibidos ou não</md-tooltip>
+	</md-input-container>
+
+</div>

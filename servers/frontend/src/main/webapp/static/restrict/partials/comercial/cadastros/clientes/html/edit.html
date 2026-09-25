@@ -1,0 +1,432 @@
+<div class="page-layout simple fullwidth" ng-controller="ClientesDetailCtrl as $ctrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">Comercial</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">Clientes</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">Edição</span>
+			</div>
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">Cliente - Dados Gerais</div>
+						</header>
+
+						<md-progress-linear class="md-warn" md-mode="query" ng-show="!$ctrl.object"></md-progress-linear>
+
+						<div class="white-500-bg">
+							<form name="ClientesForm">
+								<div class="p-16">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_tipo_pessoa">Tipo de pessoa</label>
+											<input id="input_tipo_pessoa" name="tipo_pessoa" ng-disabled="true"
+												   type="text"
+												   value="{{$ctrl.tipoCliente === 'clientePF' ? 'Física' : 'Jurídica'}}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-gt-md="25" flex-sm="100" flex-xs="100"
+															ng-if="$ctrl.tipoCliente != 'clientePF'">
+											<label id="lbl_cnpj">CNPJ</label>
+											<input id="input_cnpj" name="cnpj" ng-blur="$ctrl.consultarDocumento()"
+												   ng-model="$ctrl.object.documento" required type="text" ng-disabled="$ctrl.bloquearCNPJ"
+												   ui-br-cnpj-mask>
+											<div ng-if="ClientesForm.cnpj.$touched || ClientesForm.$submitted"
+												 ng-messages="ClientesForm.cnpj.$error" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+												<ng-message when="cnpj">CNPJ inválido.</ng-message>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-gt-md="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente == 'clientePF'">
+											<label id="lbl_cpf">CPF</label>
+											<input id="input_cpf" name="cpf" ng-blur="$ctrl.consultarDocumento()"
+												   ng-model="$ctrl.object.documento" required="true" type="text"
+												   ui-br-cpf-mask>
+											<div ng-if="ClientesForm.cpf.$touched || ClientesForm.$submitted"
+												 ng-messages="ClientesForm.cpf.$error" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+												<ng-message when="cpf">CPF inválido.</ng-message>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente === 'clientePJ'">
+											<label id="lbl_razao_social">Razão Social</label>
+											<input id="input_razao_social" name="razao_social" ng-disabled="true"
+												   ng-if="!$ctrl.preencherManualmente" type="text"
+												   value="{{ ::$ctrl.object.nome }}">
+											<input id="input_razao_socialD" name="razao_social"
+												   ng-if="$ctrl.preencherManualmente" ng-model="$ctrl.object.nome" required="true"
+												   style="text-transform: uppercase;" type="text">
+											<div ng-messages="ClientesForm.razao_social.$error" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente === 'clientePF'">
+											<label id="lbl_nome">Nome</label>
+											<input id="input_nome" name="nome" ng-disabled="true"
+												   ng-if="!$ctrl.preencherManualmente" type="text"
+												   value="{{ ::$ctrl.object.nome }}">
+											<input id="input_nomeD" name="nome" ng-if="$ctrl.preencherManualmente"
+												   ng-model="$ctrl.object.nome" required="true"
+												   style="text-transform: uppercase;" type="text">
+											<div ng-messages="ClientesForm.nome.$error" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+											</div>
+										</md-input-container>
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_situacao">Situação</label>
+											<input id="input_situacao" name="situacao" ng-disabled="true" value="{{$ctrl.object.situacao}}">
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente === 'clientePF'">
+											<label id="lbl_nome_fantasiaF">Nome fantasia</label>
+											<input id="input_nome_fantasiaF" name="nome_fantasia" ng-model="$ctrl.object.nomeFantasia" ng-disabled="true" type="text" value="{{ }}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente === 'clientePF'">
+											<label id="lbl_ramo_negocioF">Ramo de negócio</label>
+											<input id="input_ramo_negocioF" name="ramo_negocio" ng-disabled="true" type="text" value="{{ }}">
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente === 'clientePJ'">
+											<label id="lbl_nome_fantasia">Nome fantasia</label>
+											<input id="input_nome_fantasia" name="nome_fantasia" ng-disabled="true"
+												   ng-if="!$ctrl.preencherManualmente" type="text" ng-model="$ctrl.object.nomeFantasia"
+												   value="{{ ::$ctrl.object.nomeFantasia}}">
+											<input id="input_nome_fantasiaD" name="nome_fantasia" ng-maxlength="100" maxlength="100" md-maxlength="100"
+												   ng-if="$ctrl.preencherManualmente" ng-model="$ctrl.object.nomeFantasia"
+												   required="true" style="text-transform: uppercase;" type="text">
+											<div ng-messages="ClientesForm.nome_fantasia.$error" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100" ng-if="!$ctrl.preencherManualmente && $ctrl.tipoCliente === 'clientePJ'">
+											<label id="lbl_ramo_negocio">Ramo de negócio</label>
+											<input id="input_ramo_negocio" name="ramo_negocio" ng-disabled="true" type="text" value="{{$ctrl.object.cnae.descricao}}">
+										</md-input-container>
+										<!-- Autocomplete de Ramo de negócio-->
+
+										<md-autocomplete flex flex
+														 flex-gt-md="25"
+														 id="autocomplete_ramo_negocio"
+														 md-delay="250"
+														 md-floating-label="Ramo de negócio"
+														 md-input-id="input_sigla_ramo_negocio"
+														 md-input-minlength="3"
+														 md-input-name="autocompleteRamoNegocio"
+														 md-item-text="item.descricao"
+														 md-items="item in $ctrl.querySearchRamoNegocio(searchTextRamoNegocio)"
+														 md-menu-class="autocomplete-custom-template"
+														 md-min-length="3"
+														 md-no-cache="true"
+														 md-no-cache="false"
+														 md-require-match="true"
+														 md-search-text="searchTextRamoNegocio"
+														 md-selected-item="selectedItemRamoNegocio"
+														 md-selected-item-change="$ctrl.selectedItemChange(item)"
+														 name="autocompleteRamoNegocio"
+														 ng-if="$ctrl.preencherManualmente && $ctrl.tipoCliente === 'clientePJ'"
+														 value="{{$ctrl.object.cnae}}">
+
+											<md-item-template>
+												<span class="item-title" style="margin-top: -20px">
+                                                            <h5> <strong>SIGLA: </strong>
+                                                                <span md-highlight-flags="i"
+																	  md-highlight-text="searchTextRamoNegocio">{{item.sigla}} </span>
+                                                            </h5>
+                                                        </span>
+
+												<span class="item-title" style="margin-top: -20px;margin-bottom: -20px">
+                                                            <h5> <strong>NOME: </strong>
+                                                                <span md-highlight-flags="i"
+																	  md-highlight-text="searchTextRamoNegocio">{{item.descricao}} </span>
+                                                            </h5>
+                                                        </span>
+											</md-item-template>
+
+											<div ng-messages="ClientesForm.autocompleteRamoNegocio.$error"
+												 ng-show="ClientesForm.autocompleteRamoNegocio.$touched" role="alert">
+												<div id="msg_min_client" ng-message="minlength">O nome informado não é
+													suficiente.
+												</div>
+												<div ng-message="md-require-match">Ramo de negócio informado não é
+													válido.
+												</div>
+											</div>
+										</md-autocomplete>
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="25" flex-gt-md="25">
+											<label id="lbl_classificacao">Classificação</label>
+											<md-select id="combo_classificacao" name="classificacao"
+													   ng-model="$ctrl.object.classificacaoCliente"
+													   ng-model-options="{trackBy: '$value.codigo'}" required="true">
+												<md-option ng-repeat="item in $ctrl.listClassificacao" ng-value="item"
+														   value="{{ item}}">{{ item.nome }}
+												</md-option>
+											</md-select>
+											<div ng-messages="ClientesForm.classificacao.$error" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-gt-md="25" ng-if="$ctrl.tipoCliente === 'clientePF'">
+											<label id="lbl_uf_estadualF">UF Inscrição Estadual</label>
+											<input id="input_ufInscricaoEstadualF" name="ufInscricaoEstadual"
+												   ng-disabled="true" type="text" value="{{ }}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-gt-md="25" ng-if="$ctrl.tipoCliente === 'clientePJ'">
+											<label id="lbl_uf_estadual">UF Inscrição Estadual</label>
+											<md-select id="combo_ufInscricaoEstadual" name="ufInscricaoEstadual"
+													   ng-change="$ctrl.habilitarCamposIns()"
+													   ng-disabled="!$ctrl.preencherManualmente"
+													   ng-model="$ctrl.object.ufInscricaoEstadual">
+												<md-option ng-repeat="item in $ctrl.listUfInscricaoEstadual"
+														   ng-value="item.sigla" value="{{item.sigla}}">{{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-gt-md="25" ng-if="$ctrl.tipoCliente === 'clientePF' || $ctrl.insHab">
+											<label id="lbl_inscricaoEstadualF">Inscrição Estadual</label>
+											<input id="input_inscricaoEstadualF" name="inscricaoEstadual" ng-model="$ctrl.object.inscricaoEstadual"
+												   ng-disabled="true" type="text" value="{{ }}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente === 'clientePJ' && !$ctrl.insHab">
+											<label id="lbl_inscricaoEstadual">Inscrição Estadual</label>
+											<input id="input_inscricaoEstadual" name="inscricaoEstadual"
+												   ng-model="$ctrl.object.inscricaoEstadual" required="true" type="text"
+												   ui-br-ie-mask="$ctrl.object.ufInscricaoEstadual">
+											<div
+												ng-if="ClientesForm.inscricaoEstadual.$touched || ClientesForm.$submitted"
+												ng-messages="ClientesForm.inscricaoEstadual.$error" role="alert">
+												<ng-message when="ie">Inscrição Estadual inválida.</ng-message>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-gt-md="25" ng-if="$ctrl.tipoCliente === 'clientePF'">
+											<label id="llbl_inscricaoMunicipalF">Inscrição Municipal</label>
+											<input id="input_inscricaoMunicipalF" name="inscricaoMunicipal"
+												   ng-disabled="true" type="text" value="{{ }}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100"
+															ng-if="$ctrl.tipoCliente === 'clientePJ'">
+											<label id="lbl_inscricaoMunicipal">Inscrição Municipal</label>
+											<input id="input_inscricaoMunicipal" name="inscricaoMunicipal"
+												   ng-disabled="!$ctrl.preencherManualmente || $ctrl.object.ufInscricaoEstadual === 'DF'"
+												   ng-model="$ctrl.object.inscricaoMunicipal" type="text">
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_subCliente">Subcliente</label>
+											<md-select id="combo_subCliente" name="subCliente"
+													   ng-change="$ctrl.desabilitarCampos()" ng-model="$ctrl.object.subCliente">
+												<md-option ng-repeat="item in $ctrl.listSubCliente" ng-value="item" value="{{ item }}">
+													{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.habilitar">
+											<label id="lbl_exclCobr">Excluir (Cobrança)</label>
+											<md-select id="combo_exclCob" name="exclui" ng-model="$ctrl.object.faturamentoCobranca"
+													   value="{{ $ctrl.object.faturamentoCobranca ? 'Sim' : 'Não' }}">
+												<md-option ng-repeat="item in $ctrl.listExcluir" ng-value="item.valor" value="{{ item.valor }}">
+													{{ ::item.nome }}
+												</md-option>
+											</md-select>
+											<md-tooltip id="tool_tip_excluir" md-direction="top">
+												<span class="h4">Indica se o cliente será excluído no relatório de cobrança ou não</span>
+											</md-tooltip>
+										</md-input-container>
+
+										<!-- Autocomplete de Cliente-->
+										<md-autocomplete flex flex
+														 flex-gt-md="50"
+														 id="autocomplete_cliente"
+														 md-delay="250"
+														 md-floating-label="Cliente"
+														 md-input-id="input_nome_cliente"
+														 md-input-maxlength="100"
+														 md-input-minlength="3"
+														 md-input-name="autocompleteCliente"
+														 md-item-text="item.nome"
+														 md-items="item in $ctrl.querySearchCliente(searchTextCliente)"
+														 md-menu-class="autocomplete-custom-template"
+														 md-min-length="3"
+														 md-no-cache="true"
+														 md-no-cache="false"
+														 md-require-match="true"
+														 md-search-text="searchTextCliente"
+														 md-selected-item="selectedItemCliente"
+														 md-selected-item-change="$ctrl.selectedItemChangeC(item)"
+														 name="autocompleteCliente"
+														 ng-if="!$ctrl.habilitar"
+														 required="true"
+														 value="{{ $ctrl.object.clientePrincipal }}">
+
+											<md-item-template>
+													<span class="item-title" style="margin-top: -20px">
+                                                            <h5> <strong>CNPJ: </strong>
+                                                                <span md-highlight-flags="i"
+																	  md-highlight-text="searchTextCliente">{{item.documento}} </span>
+                                                            </h5>
+                                                        </span>
+												<span class="item-title" style="margin-top: -20px;margin-bottom: -20px">
+                                                            <h5> <strong>Razão social: </strong>
+                                                                <span md-highlight-flags="i"
+																	  md-highlight-text="searchTextCliente">{{item.nome}} </span>
+                                                            </h5>
+                                                        </span>
+												<span class="item-title" style="margin-top: -20px;margin-bottom: -20px">
+															<h5> <strong>Nome Fantasia: </strong>
+																<span md-highlight-flags="i"
+																	  md-highlight-text="searchTextCliente">{{item.nomeFantasia}} </span>
+															</h5>
+														</span>
+											</md-item-template>
+
+											<div ng-messages="ClientesForm.autocompleteCliente.$error"
+												 ng-show="ClientesForm.autocompleteCliente.$touched" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+												<div id="msg_min_client_cliente" ng-message="minlength">
+													O nome informado não é suficiente.
+												</div>
+												<div id="msg_max_client_cliente" ng-message="maxlength">
+													O nome informado é muito longo.
+												</div>
+												<div ng-message="md-require-match">
+													O cliente informado não é válido.
+												</div>
+											</div>
+										</md-autocomplete>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100" ng-if="!$ctrl.habilitar">
+											<label id="lbl_cnpjCliente">CNPJ cliente</label>
+											<input id="input_cnpjCliente" name="input_cnpjCliente" ng-disabled="true"
+												   type="text" value="{{$ctrl.object.clientePrincipal.documento}}">
+										</md-input-container>
+
+									</div>
+								</div>
+
+								<!--ABAS-->
+
+								<div>
+									<md-content>
+										<md-tabs md-border-bottom md-dynamic-height>
+											<!-- ABA CONTATO -->
+											<md-tab label="Contatos">
+												<div class="p-16" ng-if="$ctrl.tipoCliente === 'clientePJ'">
+													<div layout="row" layout-sm="column" layout-wrap
+														 layout-xs="column" style="margin-top: -5px;">
+														<md-input-container flex="25" flex-sm="100" flex-xs="100">
+															<label id="lbl_preferencial">Meio de contato preferencial</label>
+															<md-select id="combo_preferencial" name="preferencial" ng-model="$ctrl.object.canalPreferencial">
+																<md-option ng-repeat="item in $ctrl.listPreferencial" ng-value="item" value="{{ item }}">
+																	{{ item }}
+																</md-option>
+															</md-select>
+														</md-input-container>
+													</div>
+												</div>
+
+												<md-tabs md-border-bottom md-dynamic-height>
+
+													<!-- ABA TELEFONES -->
+													<md-tab label="Telefones">
+														<div class="padding-16"
+															 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_telefones.html'">
+														</div>
+													</md-tab>
+
+													<!-- ABA ENDEREÇO -->
+													<md-tab label="Endereço">
+														<div class="padding-16"
+															 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_endereco.html'">
+														</div>
+													</md-tab>
+
+													<!-- ABA E-MAIL -->
+													<md-tab label="E-mails">
+														<div class="padding-16"
+															 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_email.html'">
+														</div>
+													</md-tab>
+												</md-tabs>
+											</md-tab>
+
+											<!-- ABA DADOS SUBCLIENTES -->
+											<md-tab label="Subclientes" ng-if="$ctrl.listaSubclientes!= null && $ctrl.listaSubclientes.length > 0">
+												<div class="padding-16"
+													 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_subclientes.html'">
+												</div>
+											</md-tab>
+										</md-tabs>
+
+										<div class="p-16">
+											<div layout layout-sm="column" style="margin-top: -5px">
+												<span>*</span>&nbsp;Campos obrigatórios
+											</div>
+										</div>
+
+										<md-divider></md-divider>
+
+										<div class="p-8" flex layout="row" layout-align="start start" layout-xs="column">
+											<md-button class="md-raised md-accent" id="btn_salvar" ng-click="$ctrl.salvar()" ng-disabled="ClientesForm.$invalid">
+												Salvar
+												<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+													<span class="h4">Salvar as alterações realizadas neste cliente</span>
+												</md-tooltip>
+											</md-button>
+
+											<md-button class="md-raised md-accent" id="btn_cancelar" ng-click="$ctrl.cancelarEdit()">
+												Cancelar
+												<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+													<span class="h4">Sair deste cliente, sem gravar as modificações realizadas</span>
+												</md-tooltip>
+											</md-button>
+										</div>
+
+									</md-content>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

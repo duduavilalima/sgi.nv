@@ -1,0 +1,235 @@
+<div class="page-layout simple fullwidth" ng-controller="TiposServicoCadastroCtrl" ng-init="initDatepicker();" ng-show="object && object != null">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent">Faturamento</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent">{{::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent">{{ ::subtitulo }}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="content" md-background-bg>
+
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+			<!-- CONTENT -->
+			<div class="content" flex>
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="title_panel">{{::titulo}} - {{::subtitulo}}</div>
+							</header>
+
+							<div class="text-center"><img ng-show="object == null"
+														  src="../img/carregando.gif"
+														  style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/>
+							</div>
+
+							<div ng-show="object != null">
+
+								<div class="white-500-bg">
+									<form name="form" novalidate>
+										<div layout="row" layout-wrap>
+											<div class="about" flex="100" layout="column">
+
+												<div class="content" ng-if="screenMode !== 'VIEW'">
+													<div layout layout-sm="column" layout-wrap>
+														<md-input-container flex flex-gt-md="25">
+															<label id="lbl_sigla">Sigla</label>
+															<input id="input_sigla" name="sigla"
+																   ng-blur="buscarTipoDeServico(object.sigla)"
+																   ng-model="object.sigla" ng-required="true"
+																   type="text">
+															<div ng-messages="form.sigla.$error" role="alert">
+																<div ng-message="required">Obrigatório.</div>
+															</div>
+														</md-input-container>
+
+														<md-input-container flex flex-gt-md="50">
+															<label id="lbl_nome">Nome</label>
+															<input id="input_nome" name="nome" ng-model="object.nome"
+																   ng-required="true" type="text">
+															<div ng-messages="form.nome.$error" role="alert">
+																<div ng-message="required">Obrigatório.</div>
+															</div>
+														</md-input-container>
+
+														<md-input-container flex flex-gt-md="25">
+															<label id="lbl_situacao">Situação</label>
+															<md-select id="combo_situacao" name="situacao"
+																	   ng-model="object.situacao" ng-required="true">
+																<md-option ng-repeat="situacao in enumStatus"
+																		   ng-value="situacao">{{ situacao }}
+																</md-option>
+															</md-select>
+															<div ng-messages="form.situacao.$error" role="alert">
+																<div ng-message="required">Obrigatório.</div>
+															</div>
+														</md-input-container>
+
+													</div>
+
+													<div layout="row">
+														<md-input-container flex flex-gt-md=75">
+															<label id="lbl_tipo_servico_superior">Tipo de serviço
+																superior</label>
+															<input id="input_tipo_servico_superior"
+																   name="tipo_servico_superior"
+																   ng-disabled="true"
+																   type="text"
+																   value="{{ object.servicoTipoPai.sigla == null ? '' : (object.servicoTipoPai.sigla + ' - ' + object.servicoTipoPai.nome) }}">
+														</md-input-container>
+
+														<md-input-container flex flex-gt-md="25">
+															<label id="lbl_habilitaFaturamento">Habilitado para o
+																faturamento</label>
+															<md-select id="combo_habilitaFaturamento"
+																	   name="habilitaFaturamento"
+																	   ng-model="object.tipoFaturamento"
+																	   ng-required="true">
+																<md-option
+																	ng-repeat="tipo in tipoFaturamentoList"
+																	ng-value="tipo.value">{{ tipo.label }}
+																</md-option>
+															</md-select>
+															<div ng-messages="form.habilitaFaturamento.$error"
+																 role="alert">
+																<div ng-message="required">Obrigatório.</div>
+															</div>
+														</md-input-container>
+													</div>
+
+													<div layout layout-sm="column" ng-if="screenMode != 'VIEW'"
+														 style="margin-top: -0px">
+														<span>*</span>&nbsp;Campos obrigatórios
+													</div>
+												</div>
+
+
+												<div class="content" ng-if="screenMode === 'VIEW'">
+													<div layout layout-sm="column" layout-wrap>
+														<md-input-container flex flex-gt-md="25">
+															<label id="lbl_sigla_view">Sigla</label>
+															<input id="input_sigla_view" name="sigla" ng-disabled="true"
+																   ng-model="object.sigla" type="text">
+														</md-input-container>
+
+														<md-input-container flex flex-gt-md="50">
+															<label id="lbl_nome_view">Nome</label>
+															<input id="input_nome_view" name="nome" ng-disabled="true"
+																   ng-model="object.nome" type="text">
+															<md-tooltip class="h3" md-direction="bottom"
+																		style="height: auto !important; white-space: normal;">
+																{{object.nome}}
+															</md-tooltip>
+														</md-input-container>
+
+														<md-input-container flex flex-gt-md=25">
+															<label id="lbl_situacao_view">Situação</label>
+															<input id="input_situacao_view" name="situacao"
+																   ng-disabled="true"
+																   ng-model="object.situacao" type="text">
+														</md-input-container>
+
+													</div>
+
+													<div layout="row">
+														<md-input-container flex flex-gt-md="75">
+															<label id="lbl_tipo_servico_superior_view">Tipo de serviço
+																superior</label>
+															<input id="input_tipo_servico_superior_view"
+																   name="tipo_servico_superior"
+																   ng-disabled="true"
+																   type="text"
+																   value="{{ object.servicoTipoPai.sigla == null ? '' : (object.servicoTipoPai.sigla + ' - ' + object.servicoTipoPai.nome) }}">
+														</md-input-container>
+
+														<md-input-container flex flex-gt-md="25">
+															<label id="lbl_habilitaFaturamento_view">Habilitado para o
+																faturamento</label>
+															<input id="input_habilitaFaturamento_view" name="situacao"
+																   ng-disabled="true"
+																   type="text"
+																   value="{{ tipoFaturamento }}">
+														</md-input-container>
+													</div>
+
+													<div layout layout-sm="column" ng-if="screenMode != 'VIEW'"
+														 style="margin-top: -0px">
+														<span>*</span>&nbsp;Campos obrigatórios
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+
+									<md-divider></md-divider>
+
+									<div class="navigation padding-8" flex layout="row">
+										<md-button class="md-raised md-accent" id="btn_salvar"
+												   ng-click="salvar()" ng-disabled="form.$invalid || action"
+												   ng-hide="screenMode === 'VIEW'">
+											Salvar
+											<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+												<span class="h4">Salvar as alterações realizadas neste lote</span>
+											</md-tooltip>
+										</md-button>
+
+										<md-button class="md-raised md-accent" id="btn_cancelar" ng-click="cancelar()"
+												   ng-disabled="action" ng-hide="screenMode === 'VIEW'">
+											Cancelar
+											<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+												<span class="h4">Sair deste lote contábil, sem gravar as modificações realizadas</span>
+											</md-tooltip>
+										</md-button>
+
+										<md-button class="md-raised md-accent" id="btn_salvar" ng-click="editar()"
+												   ng-disabled="action" ng-hide="screenMode !== 'VIEW'">
+											Editar
+											<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+												<span class="h4">Editar tipo de serviço</span>
+											</md-tooltip>
+										</md-button>
+
+										<md-button class="md-raised md-accent" id="btn_retornar" ng-click="listar()"
+												   ng-disabled="action" ng-show="screenMode === 'VIEW'">
+											Retornar
+											<md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+												<span class="h4">Sair desta tela e retornar para a tela anterior</span>
+											</md-tooltip>
+										</md-button>
+
+										<div flex="100" flex-sm="100" layout="row" layout-align="end center"
+											 ng-hide="screenMode === 'NEW'">
+											<md-button class="md-raised md-accent" id="btn_remover" ng-click="remover()"
+													   ng-disabled="action" ng-show="screenMode === 'VIEW'">
+												Remover
+												<md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+													<span class="h4">Remover este tipo de serviço</span>
+												</md-tooltip>
+											</md-button>
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- / CONTENT -->
+		</div>
+	</div>
+</div>

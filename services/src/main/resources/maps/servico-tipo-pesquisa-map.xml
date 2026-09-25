@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xmlns="http://dozer.sourceforge.net"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping>
+		<class-a>
+			br.com.araujoabreu.sgi.service.nota.transfer.ServicoTipoPesquisaTO
+		</class-a>
+		<class-b>br.com.araujoabreu.sgi.administracao.domain.ServicoTipo
+		</class-b>
+
+		<field-exclude>
+			<a>servicoTipoPai</a>
+			<b>servicoTipoPai</b>
+		</field-exclude>
+
+		<field>
+			<a>codigoPai</a>
+			<b>servicoTipoPai.codigo</b>
+		</field>
+
+	</mapping>
+</mappings>

@@ -1,0 +1,116 @@
+<md-content class="md-padding" layout="column">
+
+	<div flex layout="column">
+
+		<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+			<md-input-container flex flex-gt-md="25">
+				<label id="lbl_data">Data</label>
+				<input id="input_data" name="input_data" ng-disabled="true" type="text"
+					   value="{{ $ctrl.object.fecho.dataReajuste | date : 'dd/MM/yyyy' }}">
+			</md-input-container>
+
+			<md-input-container flex flex-gt-md="25">
+				<label id="lbl_custo_mensal">Custo mensal</label>
+				<input id="input_custo_mensal" name="input_custo_mensal" ng-disabled="true" type="text"
+					   value="{{$ctrl.object.fecho.custoMensal | currency: '' : 2}}">
+			</md-input-container>
+
+			<md-input-container flex flex-gt-md="25">
+				<label id="lbl_bdi">BDI</label>
+				<input id="input_bdi" name="input_bdi" ng-disabled="true" type="text"
+					   value="{{$ctrl.object.fecho.bdi | currency: '' : 2}}">
+			</md-input-container>
+
+			<md-input-container flex flex-gt-md="25">
+				<label id="lbl_perc_tributos">Base de tributos</label>
+				<input id="input_perc_tributos" name="input_perc_tributos" ng-disabled="true" type="text"
+					   value="{{$ctrl.object.fecho.custoMensal + $ctrl.object.fecho.bdi | currency: '' : 2}}">
+			</md-input-container>
+
+		</div>
+
+		<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+			<md-input-container flex flex-gt-md="25">
+				<label id="lbl_tributos">Tributos</label>
+				<input id="input_tributos" name="input_tributos" ng-disabled="true" type="text"
+					   value="{{$ctrl.object.fecho.tributos | currency: '' : 2}}">
+			</md-input-container>
+
+			<md-input-container flex flex-gt-md="25">
+				<label id="lbl_valor_mensal">Valor mensal</label>
+				<input id="input_valor_mensal" name="input_valor_mensal" ng-disabled="true" type="text"
+					   value="{{$ctrl.object.fecho.valorMensal | currency: '' : 2}}">
+			</md-input-container>
+
+			<md-input-container flex flex-gt-md="25">
+				<label id="lbl_prazo">Prazo (meses)</label>
+				<input id="input_prazo" name="input_prazo" ng-disabled="true" type="text"
+					   value="{{$ctrl.object.fecho.prazo}}">
+			</md-input-container>
+
+			<md-input-container flex flex-gt-md="25">
+				<label id="lbl_valor_total">Valor total</label>
+				<input id="input_valor_total" name="input_valor_total" ng-disabled="true" type="text"
+					   value="{{$ctrl.object.fecho.valorTotal | currency: '' : 2}}">
+			</md-input-container>
+
+		</div>
+
+	</div>
+
+	<md-tabs md-border-bottom md-dynamic-height>
+		<md-tab label="Mão de obra">
+			<div
+				 ng-include="'partials/comercial/cadastros/centrosfinanceiros/html/partials/aba_fecho/mao_de_obra.html'">
+			</div>
+		</md-tab>
+
+		<md-tab label="Gastos gerais">
+			<div
+				 ng-include="'partials/comercial/cadastros/centrosfinanceiros/html/partials/aba_fecho/gastos_gerais.html'">
+			</div>
+		</md-tab>
+
+		<md-tab label="Materiais">
+			<div
+				 ng-include="'partials/comercial/cadastros/centrosfinanceiros/html/partials/aba_fecho/materiais.html'">
+			</div>
+		</md-tab>
+
+		<md-tab label="Serviços terceiros">
+			<div
+				 ng-include="'partials/comercial/cadastros/centrosfinanceiros/html/partials/aba_fecho/servicos_terceiros.html'">
+			</div>
+		</md-tab>
+
+		<md-tab label="BDI">
+			<div
+				 ng-include="'partials/comercial/cadastros/centrosfinanceiros/html/partials/aba_fecho/bdi.html'">
+			</div>
+		</md-tab>
+
+		<md-tab label="Tributos">
+			<div
+				 ng-include="'partials/comercial/cadastros/centrosfinanceiros/html/partials/aba_fecho/tributos.html'">
+			</div>
+		</md-tab>
+	</md-tabs>
+
+	<div flex layout="row" layout-align="start start" layout-xs="column">
+		<md-button class="md-raised md-accent" id="btn_alt_fecho" ng-click="$ctrl.alterarFecho()" ng-if="$ctrl.showBtnAlterarFecho">
+			Alterar fecho
+			<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+				<span class="h4">Alterar o fecho requer assinatura</span>
+			</md-tooltip>
+		</md-button>
+		<md-button class="md-raised md-accent" id="btn_criar_fecho" ng-click="$ctrl.criarFecho()" ng-if="$ctrl.showBtnCriarFecho">
+			Criar fecho
+			<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+				<span class="h4">Criar um novo fecho requer assinatura</span>
+			</md-tooltip>
+		</md-button>
+	</div>
+
+</md-content>

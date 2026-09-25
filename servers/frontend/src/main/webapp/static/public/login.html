@@ -1,0 +1,19 @@
+<html>
+<head>
+	<script>
+        // Fazendo o single sign-out sem usar o cliente do CAS, que não redireciona corretamente
+        window.onload=function(){
+            var ifr=document.getElementById('logout');
+            ifr.onload=function(){
+                window.location = "app/main.html";
+            };
+            ifr.src = "http://sgihomolog.fasolti.com.br/sgi/security/logout";
+        };
+
+
+	</script>
+</head>
+<body>
+<iframe id="logout" style="display:none"></iframe>
+</body>
+</html>

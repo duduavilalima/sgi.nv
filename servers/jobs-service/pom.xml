@@ -1,0 +1,143 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>br.com.fasolti.sgi</groupId>
+		<artifactId>servers</artifactId>
+		<version>5.13.6</version>
+	</parent>
+
+	<artifactId>jobs-service</artifactId>
+	<name>SGI :: Nova Versão :: Jobs Server</name>
+
+	<properties>
+	    <module.deploy.skip>false</module.deploy.skip>
+	    <project-rootdir>${project.basedir}/../..</project-rootdir>
+		<spring.config.dataSource>applicationContext-dataSource-local.xml</spring.config.dataSource>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jobs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>br.com.fasolti.sgi</groupId>
+			<artifactId>services</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>br.com.fasolti.queue</groupId>
+			<artifactId>service-runtime</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<outputDirectory>${project.build.outputDirectory}
+							</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../src/main/resources</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>${fasolti.jobs.mainClass}</mainClass>
+					<layout>ZIP</layout>
+					<excludeDevtools>true</excludeDevtools>
+					<!-- Magic happens here! -->
+					<requiresUnpack>
+						<requiresUnpack>
+							<groupId>br.com.fasolti.queue</groupId>
+							<artifactId>service-runtime</artifactId>
+						</requiresUnpack>
+					</requiresUnpack>
+				</configuration>
+				<executions>
+					<execution>
+						<id>jobs-service-repackage</id>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<!-- Solução temporária. Talvez no futuro considerar a criação de um plugin próprio para o Maven, para
+		     compilar, empacotar e executar os projetos do Fasolti Jobs.
+		     Lembrar de executar um container com a imagem "docker.fasolti.com.br/rabbitmq" antes de executar
+		     este profile!
+		  -->
+		<profile>
+			<id>debug.jobs</id>
+			<properties>
+				<spring.context-file>applicationContext-jobs.xml</spring.context-file>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<fork>false</fork>
+							<excludeDevtools>false</excludeDevtools>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>build.docker</id>
+			<properties>
+				<mq.host>localhost</mq.host>
+				<mq.port>5672</mq.port>
+				<mq.username>sgi</mq.username>
+				<mq.password>Q!W@E#R$T%</mq.password>
+				<mq.vhost>/</mq.vhost>
+				<mq.declaring>true</mq.declaring>
+			</properties>
+		</profile>
+	</profiles>
+</project>

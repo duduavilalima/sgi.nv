@@ -1,0 +1,56 @@
+<md-dialog aria-label="Pagamentos">
+	<md-dialog-content style="{{pagamentos.length == 2 ? 'width: 500px; height:200px; overflow-y: hidden;' : 'width: 500px; height:240px; overflow-y: hidden;'}}">
+		<div id="profile" layout="column">
+			<div class="about" layout="column">
+				<div class="profile-box info-box general " layout="column">
+					<md-toolbar>
+						<div class="md-toolbar-tools">
+							<h3>{{titulo}}</h3>
+							<span flex></span>
+							<md-button class="md-icon-button" ng-click="fechar()">
+								<md-icon aria-label="Fechar detalhe" class="s24 white-fg" md-font-icon="icon-close" style="color: white !important;"></md-icon>
+							</md-button>
+						</div>
+					</md-toolbar>
+
+					<div style="height: 160px; overflow-y: auto;">
+						<table class="simple text-center font-size-12" id="table-list2" ms-responsive-table width="100%" style="border:2px solid #DDD;">
+								<thead class="cabecalho-borda-cinza">
+								<th class="titulo_colunas_rb" width="34%">
+									<div class="table-header text-center"><span class="column-title">Número</span></div>
+								</th>
+								<th class="titulo_colunas_rb" width="33%">
+									<div class="table-header text-center"><span class="column-title">Emissão</span></div>
+								</th>
+								<th class="titulo_colunas_rb" width="33%">
+									<div class="table-header text-center"><span class="column-title">Valor</span></div>
+								</th>
+							</thead>
+
+							<tbody>
+								<tr ng-repeat="pg in pagamentos"  class="linha-borda-cinza" ng-class="{'grey-300-bg': hover}" ng-mouseleave="hover = false" ng-mouseover="hover = true">
+									<td class="text-center table-truncate">
+										{{pg.pagamento.numero}}
+									</td>
+									<td class="text-center">
+										{{pg.pagamento.dataEmissao | date:'dd/MM/yyyy'}}
+									</td>
+									<td class="text-right">
+										{{pg.pagamento.valorPagar  | currency:'':2}}
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row" layout-align="center center" style="margin-top: -15px;">
+		<md-button class="md-raised md-accent" ng-click="fechar()" style="margin-right:20px;">
+			Fechar
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>

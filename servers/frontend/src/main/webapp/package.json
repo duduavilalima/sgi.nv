@@ -1,0 +1,18 @@
+{
+  "name": "sgi",
+  "version": "5.11.20-rc.1",
+  "description": "sgi",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "http://git.fasolti.com.br/aa/sgi.git"
+  },
+  "keywords": [
+    "sgi"
+  ],
+  "author": "Fasolti",
+  "license": "MIT",
+  "devDependencies": {
+  }
+}

@@ -1,0 +1,43 @@
+<md-dialog aria-label="Categoria de mão de obra - Novo" id="dialog_categoria_mao_de_obra" style="width: 500px;">
+	<form name="DialogCategoriaMaoDeObraForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 md-autofocus>Categoria de mão de obra - Novo</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="white-bg" role="document">
+
+			<div class="md-dialog-content" md-theme="sgi">
+
+				<div layout layout-sm="column">
+					<md-input-container flex>
+						<label id="lbl_categoria">Categoria</label>
+						<input id="input_categoria" name="input_categoria" ng-model="object.nome" ng-required="true" type="text" value="{{ object.nome }}">
+						<div ng-messages="DialogCategoriaMaoDeObraForm.input_categoria.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>							
+						</div>
+					</md-input-container>
+
+				</div>
+			</div>
+
+            <md-divider></md-divider>
+            
+		</md-dialog-content>
+
+		<md-dialog-actions class="white-bg" layout="row">
+			<md-button class="md-raised md-accent" id="btn_confirmar" ng-click="confirm()" ng-disabled="DialogCategoriaMaoDeObraForm.$invalid || action">
+				CONFIRMAR
+			</md-button>
+			<md-button class="md-raised md-accent" id="btn_cancelar" ng-click="cancel()" ng-disabled="action">
+				CANCELAR
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

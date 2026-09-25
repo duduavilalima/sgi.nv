@@ -1,0 +1,431 @@
+<div flex layout="column">
+    <!--{{object}}-->
+
+    <!-- MODO EXIBIÇÃO-->
+
+    <div class="p-16" flex layout="column">
+        <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_numero_exibir">Número</label>
+                <input id="input_numero_exibir" name="input_numero" ng-disabled="true" type="text" value="{{ object.numero }}">
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_situacao_exibir">Situação</label>
+                <input id="input_situacao_exibir" name="input_situacao" ng-disabled="true" type="text" value="{{ object.status }}">
+            </md-input-container>
+
+            <md-input-container flex="50" flex-sm="100" flex-xs="100">
+                <label id="lbl_criador_exibir">Criador</label>
+                <input id="input_criador_exibir" name="input_criador" ng-disabled="true" type="text" value="{{ object.criador }}">
+            </md-input-container>
+        </div>
+
+        <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl__exibir">Empresa</label>
+                <input id="input_empresa_exibir" name="input_empresa" ng-disabled="true" type="text" value="{{ object.unidade.codnome }}">
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25">
+                <label id="lbl_banco_exibir">Banco</label>
+                <input id="input_banco_exibir" name="input_banco" ng-disabled="true" type="text" value="{{ object.contaCorrente.banco.nome }}">
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25">
+                <label id="lbl_agencia_exibir">Agência/conta</label>
+                <input id="input_agencia_exibir" name="input_agencia" ng-disabled="true" type="text" value="{{object.contaCorrente.agencia }} / {{object.contaCorrente.conta }}-{{object.contaCorrente.digito }} ">
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25">
+                <label id="lbl_meio_pagamento_exibir">Meio de pagamento</label>
+                <input id="input_meio_pagamento_exibir" name="input_meio_pagamento" ng-disabled="true" type="text" value="{{ object.meioPagamento }}">
+            </md-input-container>
+
+        </div>
+
+        <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_cheque_exibir">Cheque anterior</label>
+                <input id="cheque_exibir" name="cheque" ng-disabled="object.meioPagamento.tipo != 'Cheque'" type="text" value="{{ object.chequeAnterior }}">
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100" ng-hide="object.meioPagamento.tipo === 'Cheque'">
+                <label id="lbl_pgt_individual_exibir">Pagamento individual</label>
+                <input id="pgt_individual_exibir" name="pgt_individual" ng-disabled="true" type="text" value="{{ object.pagamentoIndividual? 'Sim' : 'Não' }}">
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25">
+                <label id="lbl_pag_exibir">Pagamento</label>
+                <input id="lbl_paga_exibir" name="pagamento" ng-disabled="true" type="text" value="{{ object.dataPagamento | date : 'dd/MM/yyyy' }}">
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_total_exibir">Total</label>
+                <input id="pgt_total_exibir" name="total" ng-disabled="true" style="font-weight: bold;" type="text" value="{{ object.total | currency:'':2 }}">
+            </md-input-container>
+
+        </div>
+
+        <div layout="row" layout-sm="column" layout-wrap layout-xs="column" ng-if="object.meioPagamento === 'Cheque'">
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_impressao_cheque_view">Impressão do(s)
+                    cheque(s)</label>
+                <input id="impressao_cheque_view" name="impressao" ng-disabled="true" type="text" value="{{ object.impressaoCheque ? 'Sim' : 'Não' }}">
+                <md-tooltip class="h4">Indica se a impressão de cheques foi
+                    realizada
+                </md-tooltip>
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_endosso_cheque_view">Impressão do(s)
+                    endosso(s)</label>
+                <input id="pgt_endosso_cheque_view" name="endosso" ng-disabled="true" type="text" value="{{ object.impressaoEndosso ? 'Sim' : 'Não' }}">
+                <md-tooltip class="h4">Indica se a impressão do endosso de cheques
+                    foi realizada
+                </md-tooltip>
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25">
+                <label id="lbl_segunda_cheque_view">Impressão da(s) 2ª
+                    via(s)</label>
+                <input id="segunda_cheque_view" name="segunda" ng-disabled="true" type="text" value="{{ object.impressao2via ? 'Sim' : 'Não' }}">
+                <md-tooltip class="h4">Indica se a impressão da 2ª via de cheques
+                    foi realizada
+                </md-tooltip>
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_num_pagamentos_cheque_view">Nº pagamentos</label>
+                <input id="num_pagamentos_cheque_view" name="num_pagamentos" ng-disabled="true" type="text" value="{{ object.qtdPagamentos }}">
+            </md-input-container>
+        </div>
+    </div>
+    <md-tabs md-border-bottom md-dynamic-height>
+        <!-- ABA PAGAMENTOS -->
+        <div class="padding-16" ng-include="'partials/tesouraria/relacao_bancaria/html/partials/aba_pagamentos.html'"></div>
+
+        <md-tab label="Observações">
+            <md-content class="md-padding">
+                <md-input-container class="md-block">
+                    <label>Observações</label>
+                    <textarea md-maxlength="2000" md-select-on-focus ng-disabled="true" ng-model="object.observacao" rows="8"></textarea>
+                </md-input-container>
+            </md-content>
+        </md-tab>
+
+        <md-tab label="Resumo">
+            <md-content>
+                <div>
+                    <md-table-container>
+                        <table class="tabela_exibicao" id="tabela" md-table style="border: 1px solid #c4c4c4;">
+                            <tbody class="grey-200-bg" md-body>
+                                <tr md-row ng-repeat-start="item in listaResumo">
+                                    <td md-cell width="74%"><b>{{ item.nome}}</b></td>
+                                    <td md-cell style="text-align: right" width="4%"><b>{{item.qtd}}</b></td>
+                                    <td md-cell style="text-align: right" width="7%"><b>{{item.valor | currency:'':2}}</b></td>
+                                    <td md-cell width="11%"><b>{{item.tipo}}</b></td>
+                                    <td>
+                                        <div flex layout="row" layout-align="center center" ng-if="item.relacaoBancariaPagamentosVO.length > 0">
+                                            <button ng-click="expandedResume(item, false, listaResumo)" ng-if="item.expanded">
+                                                <md-icon md-font-icon="icon-menu-up"></md-icon>
+                                            </button>
+                                            <button ng-click="expandedResume(item, true, listaResumo)" ng-if="!item.expanded">
+                                                <md-icon md-font-icon="icon-menu-down"></md-icon>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr md-row ng-if="item.expanded && item.qtd > 0" ng-repeat-end="">
+                                    <td class="borda_avaliador" colspan="5" md-cell style="padding: 0px;">
+                                        <table class="simple row-border hover text-center white-bg" id="table-list" ms-responsive-table width="100%">
+                                            <thead>
+                                                <tr ng-if="item.relacaoBancariaPagamentosVO.length === 0">
+                                                    <th class="secondary-text" colspan="10"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="titulo_colunas" width="8%">
+                                                        <div class="table-header text-center">
+                                                            <span class="column-title">Número</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="titulo_colunas">
+                                                        <div class="table-header text-center">
+                                                            <span class="column-title">Credor (Nome de fantasia) / Favorecido</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="titulo_colunas" width="10%">
+                                                        <div class="table-header text-center">
+                                                            <span
+                                                        class="column-title">Banco</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="titulo_colunas" width="18%">
+                                                        <div class="table-header text-center">
+                                                            <span class="column-title">Documento para pagamento</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="titulo_colunas" width="6%">
+                                                        <div class="table-header text-center">
+                                                            <span class="column-title">Pagamento</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="titulo_colunas" width="4%">
+                                                        <div class="table-header text-center">
+                                                            <span class="column-title">N° pgto</span>
+                                                            <md-tooltip><span class="h4">Número de pagamentos</span>
+                                                            </md-tooltip>
+                                                        </div>
+                                                    </th>
+                                                    <th class="titulo_colunas" width="7%">
+                                                        <div class="table-header text-center">
+                                                            <span class="column-title">A pagar</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="titulo_colunas" width="5%">
+                                                        <div class="table-header text-center">
+                                                            <span class="column-title">Cheque</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="titulo_colunas"  width="9%">
+                                                        <div class="table-header text-center">
+                                                            <span class="column-title">Situação</span>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr ng-repeat="vo in item.relacaoBancariaPagamentosVO | orderBy : 'codigo'">
+                                                    <td class="{{vo.numero === '—' ? 'text-center' : 'text-left'}}" ng-if="vo.qtdadePagamentos === 1">
+														{{vo.numero}}
+                                                    </td>
+                                                    <td class="{{vo.numero === '—' ? 'text-center' : 'text-left'}}" ng-if="vo.qtdadePagamentos > 1">
+														<md-button aria-label="Detalhes Pagamentos" class="md-icon-button" id="btn_info_pagamentos_{{$index + 1}}" ng-click="exibirListaPagamentos(vo, $event)" style="margin-right: -5px;margin-left: -10px;">
+															<md-icon class="s16" md-font-icon="icon-information-outline"></md-icon>
+															<md-tooltip id="btn_info_pag_{{$index + 1}}_tool_tip" md-direction="bottom">
+																<span class="h4">Clique para ver detalhes</span>
+															</md-tooltip>
+														</md-button>
+                                                    </td>
+                                                    <td class="text-left table-truncate" ng-if="vo.credor" style="padding: 0px 8px;">
+                                                        <md-button aria-label="Detalhes" class="md-icon-button" id="btn_info_credor_{{$index + 1}}" ng-click="exibirDetalhePessoa(vo.credor, $event)" style="margin-right: -5px;margin-left: -10px;">
+                                                            <md-icon class="s16" md-font-icon="icon-information-outline"></md-icon>
+                                                            <md-tooltip id="btn_info_result_{{$index + 1}}_tool_tip" md-direction="bottom">
+                                                                <span class="h4">Clique para ver detalhes</span>
+                                                            </md-tooltip>
+                                                        </md-button>
+                                                        {{ vo.credor.nomeFantasia === undefined ||
+                                                vo.credor.nomeFantasia === '' ?
+                                                vo.credor.nome :
+                                                vo.credor.nomeFantasia}}
+                                                    </td>
+                                                    <td class="text-left" ng-if="vo.tributo">{{ vo.tributo}}
+                                                    </td>
+                                                    <td class="text-left" style="padding: 0px 8px;">
+                                                        <md-button aria-label="Detalhes" class="md-icon-button" id="btn_info_result_{{$index + 1}}" ng-click="exibirDetalheContas(vo, $event)" ng-if="!vo.tributo" ng-if="vo.bancoSelecionado.id != undefined && vo.tipoDocumentoPagamento != 'Boleto'"
+                                                            style="margin-right: -5px;margin-left: -10px;">
+                                                            <md-icon class="s16" md-font-icon="icon-information-outline" style="{{vo.listDadosBancarios.length > 1 && object.status !== 'Aberto' ? 'color: blue !important' : ''}}"></md-icon>
+                                                            <md-tooltip id="btn_info_credor_{{$index + 1}}_tool_tip" md-direction="bottom">
+                                                                <span class="h4">Clique para ver detalhes</span>
+                                                            </md-tooltip>
+                                                        </md-button>
+                                                        {{ vo.bancoSelecionado.nome}}
+                                                    </td>
+                                                    <td class="text-left" style="padding: 0px 8px;">
+                                                        {{ vo.tipoDocumentoPagamento}}
+                                                        <md-tooltip id="btn_info_doc_pag_{{$index + 1}}_tool_tip" md-direction="bottom" ng-if="vo.tipoDocumentoPagamento === 'Guia' || vo.tipoDocumentoPagamento === 'Boleto' || vo.tipoDocumentoPagamento === 'Concessionária'">
+                                                            <span class="h4">
+                                                        <div
+                                                            ng-if="vo.tipoDocumentoPagamento === 'Boleto'">{{vo.linhaDigitavel === undefined || vo.linhaDigitavel === '' ? 'Não informado' : formatarLinhaDigitavel(vo.linhaDigitavel)}}</div>
+                                                        <div
+                                                            ng-if="vo.tipoDocumentoPagamento !== 'Boleto'">{{vo.codigoBarras === undefined || vo.codigoBarras === '' ? 'Não informado' : vo.codigoBarras}}</div>
+                                                    </span>
+                                                        </md-tooltip>
+                                                        <md-icon class="red-400-fg" md-font-icon="icon-checkbox-marked-outline" ng-if="vo.bancoSelecionado.homologado && vo.tipoDocumentoPagamento === 'Depósito em conta/Transferência'"
+                                                            style="margin-top: -5px;font-size: 24px !important;color: green !important;float: right;">
+                                                            <md-tooltip class="h3" md-direction="bottom">
+                                                                Dados bancários homologados
+                                                            </md-tooltip>
+                                                        </md-icon>
+                                                    </td>
+                                                    <td class="text-center">{{
+                                                vo.dataPagamento | date:'dd/MM/yyyy'
+                                                }}
+                                                    </td>
+                                                    <td class="text-right">{{
+                                                vo.qtdadePagamentos}}
+                                                    </td>
+                                                    <td class="text-right" style="padding: 0px 8px;">
+                                                        <div style="float: left">
+                                                            <md-button aria-label="Detalhes" class="md-icon-button" id="btn_info_result_{{$index + 1}}" ng-click="exibirDetalhePagamento(vo, $event)" ng-if="vo.qtdadePagamentos === 1 && screenMode === 'VIEW'" style="margin-left: -10px;">
+                                                                <md-icon class="s16 text-left" md-font-icon="icon-information-outline"></md-icon>
+                                                            </md-button>
+                                                        </div>
+                                                        <span
+                                                    style="float: right; {{vo.qtdadePagamentos === 1 && screenMode === 'VIEW' ? 'margin-top: 9px;' : ''}}">{{ vo.valorAPagar | currency:'':2 }}</span>
+
+                                                    </td>
+                                                    <td class="text-center">{{ vo.cheque}}
+                                                    </td>
+                                                    <td class="text-left" style="padding: 0px 8px;">
+                                                        <md-button class="md-icon-button" id="btn_download_{{$index}}" ng-if="vo.statusPagamento === 'Inválido/Estornado' && item.retornoBancario.identificacaoErro != undefined" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                                            <md-icon class="s16 text-left" md-font-icon="icon-information-outline"></md-icon>
+                                                            <md-tooltip id="tool_tip_btn_download" md-direction="bottom">
+                                                                <span class="h4">{{vo.retornoBancario.identificacaoErro + " - " + vo.retornoBancario.descricao}}</span>
+                                                            </md-tooltip>
+                                                        </md-button>
+                                                        {{ vo.statusPagamento}}
+                                                        <md-button class="md-icon-button" id="btn_download_{{$index}}" ng-click="downloadComprovante(vo)" ng-if="true" ng-if="vo.statusPagamento === 'Pago' && vo.caminhoComprovante != undefined"
+                                                            style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                                            <md-icon class="h3" md-font-icon="icon-download">
+                                                            </md-icon>
+                                                            <md-tooltip id="tool_tip_btn_download" md-direction="bottom">
+                                                                <span class="h4">Realizar o download do comprovante</span>
+                                                            </md-tooltip>
+                                                        </md-button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                </div>
+            </md-content>
+        </md-tab>
+        <!-- Aba Controles -->
+        <md-tab label="Controles">
+            <md-content class="md-padding">
+                <div flex layout="row" layout-sm="row" layout-xs="column">
+                    <md-input-container flex="70" flex-xs="100">
+                        <label>Cadastramento</label>
+                        <input id="cadastramento" name="cadastramento" ng-disabled="true" type="text" value="{{ object.criador }}">
+                    </md-input-container>
+
+                    <md-input-container flex="30" flex-xs="100">
+                        <label>Data/hora</label>
+                        <input id="data_hora" name="data_hora" ng-disabled="true" type="text" value="{{ object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+                    </md-input-container>
+                </div>
+
+                <div flex layout="row" layout-sm="row" layout-xs="column">
+                    <md-input-container flex="70" flex-xs="100">
+                        <label>Última alteração</label>
+                        <input id="alteracao" name="alteracao" ng-disabled="true" type="text" value="{{ object.atualizador }}">
+                    </md-input-container>
+
+                    <md-input-container flex="30" flex-xs="100">
+                        <label>Data/hora</label>
+                        <input id="data_hora2" name="data_hora2" ng-disabled="true" type="text" value="{{ object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+                    </md-input-container>
+                </div>
+
+                <div flex layout="row" layout-sm="row" layout-xs="column">
+                    <md-input-container flex="70" flex-xs="100">
+                        <label>Envio</label>
+                        <input id="envio" name="envio" ng-disabled="true" type="text" value="{{ object.colaboradorEnvio.nome }}">
+                    </md-input-container>
+
+                    <md-input-container flex="30" flex-xs="100">
+                        <label>Data/hora</label>
+                        <input id="data_hora3" name="data_hora3" ng-disabled="true" type="text" value="{{ object.dataEnvio | date:'dd/MM/yyyy HH:mm:ss' }}">
+                    </md-input-container>
+                </div>
+
+                <div flex layout="row" layout-sm="row" layout-xs="column" ng-if="object.meioPagamento !== 'Internet banking'">
+                    <md-input-container flex="70" flex-xs="100">
+                        <label>Baixa bancária</label>
+                        <input id="conciliacao" name="conciliacao" ng-disabled="true" type="text" value="{{ object.colaboradorConciliacao.nome }}">
+                    </md-input-container>
+
+                    <md-input-container flex="30" flex-xs="100">
+                        <label>Data/hora</label>
+                        <input id="data_hora4" name="data_hora4" ng-disabled="true" type="text" value="{{ object.dataConciliacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+                    </md-input-container>
+                </div>
+
+                <div flex layout="row" layout-sm="row" layout-xs="column">
+                    <md-input-container flex="70" flex-xs="100">
+                        <label>Cancelamento</label>
+                        <input id="cancelamento" name="cancelamento" ng-disabled="true" type="text" value="{{ object.colaboradorCancelamento.nome }}">
+                    </md-input-container>
+
+                    <md-input-container flex="30" flex-xs="100">
+                        <label>Data/hora</label>
+                        <input id="data_hora5" name="data_hora5" ng-disabled="true" type="text" value="{{ object.dataCancelamento | date:'dd/MM/yyyy HH:mm:ss' }}">
+                    </md-input-container>
+                </div>
+            </md-content>
+        </md-tab>
+
+        <!-- Aba Interface bancária -->
+        <md-tab label="Interface bancária" ng-if="object.meioPagamento === 'Internet banking'">
+            <md-content class="md-padding">
+                <div flex layout="row" layout-sm="row" layout-xs="column">
+                    <md-input-container flex="25" flex-xs="100">
+                        <label>Envio</label>
+                        <md-tooltip class="h4">Envio à instituição financeira </md-tooltip>
+                        <input id="id_envio" name="id_envio" ng-disabled="true" type="text" value="{{ object.dataEnvioIb | date: 'dd/MM/yyyy HH:mm:ss' }}">
+                    </md-input-container>
+
+                    <md-input-container flex="25" flex-xs="100">
+                        <label>Último retorno</label>
+                        <md-tooltip class="h4">Último retorno da instituição financeira </md-tooltip>
+                        <input id="ultimo_retorno" name="ultimo_retorno" ng-disabled="true" type="text" value="{{ object.dataRetornoIb | date:'dd/MM/yyyy HH:mm:ss' }}">
+                    </md-input-container>
+
+                    <md-input-container flex="25" flex-xs="100">
+                        <label>Itens não recebidos</label>
+                        <md-tooltip class="h4">Número de itens ainda não recebidos da instituição financeira</md-tooltip>
+                        <input id="itens_nao_receb" name="itens_nao_receb" ng-disabled="true" type="text" value="{{ object.itensNaoRecebidos }}">
+                    </md-input-container>
+
+                    <md-input-container flex="25" flex-xs="100">
+                        <label>Itens recebidos</label>
+                        <md-tooltip class="h4">Número de itens recebidos da instituição financeira</md-tooltip>
+                        <input id="itens_recebidos" name="itens_recebidos" ng-disabled="true" type="text" value="{{ object.itensRecebidos }}">
+                    </md-input-container>
+                </div>
+                <div flex layout="row" layout-sm="row" layout-xs="column">
+                    <md-input-container flex="75" flex-xs="100">
+                        <label>Baixa bancária manual</label>
+                        <md-tooltip class="h4">Responsável pela baixa bancária manual (quando não há retorno do banco)</md-tooltip>
+                        <input id="conciliac_manual" name="conciliac_manual" ng-disabled="true" type="text" value="{{ object.colaboradorBaixaManual.nome }}">
+                    </md-input-container>
+
+                    <md-input-container flex="25" flex-xs="100">
+                        <label>Data/hora</label>
+                        <input id="data_hora6" name="data_hora6" ng-disabled="true" type="text" value="{{ object.dataBaixaManual | date:'dd/MM/yyyy HH:mm:ss' }}">
+                    </md-input-container>
+                </div>
+				<div flex layout="row" layout-sm="row" layout-xs="column">
+					<md-input-container flex="75" flex-xs="100">
+						<label>Estorno da baixa bancária</label>
+						<md-tooltip class="h4">Responsável pelo estorno baixa bancária manual (quando não há retorno do banco)</md-tooltip>
+						<input id="conciliac_manual" name="conciliac_manual" ng-disabled="true" type="text" value="{{ object.colaboradorEstornoBaixaManual.nome }}">
+					</md-input-container>
+
+					<md-input-container flex="25" flex-xs="100">
+						<label>Data/hora</label>
+						<input id="data_hora6" name="data_hora6" ng-disabled="true" type="text" value="{{ object.dataEstornoBaixaManual | date:'dd/MM/yyyy HH:mm:ss' }}">
+					</md-input-container>
+				</div>
+                <div flex layout="row" layout-sm="row" layout-xs="column" style="margin-top: -10px">
+                    <md-input-container flex="100" flex-xs="100">
+                        <label id="lbl_motivo">Motivo da baixa bancária
+                            manual</label>
+                        <textarea id="input_motivo" maxlength="2000" name="motivo" ng-disabled="true" ng-model="object.motivoBaixaManual" type="text">
+                        </textarea>
+                    </md-input-container>
+                </div>
+            </md-content>
+        </md-tab>
+    </md-tabs>
+
+</div>

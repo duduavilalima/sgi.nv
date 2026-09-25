@@ -1,0 +1,233 @@
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_codigo">Número</label>
+        <input id="input_codigo" name="input_codigo" disabled="true" type="text" value="{{$ctrl.object.numero}}">
+    </md-input-container>
+
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_situacao">Situação</label>
+        <input id="input_situacao" name="input_situacao" disabled="true" type="text" value="{{$ctrl.object.situacao}}">
+    </md-input-container>
+
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_empresa">
+            Matriz/Filial para o faturamento
+            <md-tooltip>
+                <span class="h4">Matriz/Filial para emissão de notas fiscais (faturamento)</span>
+            </md-tooltip>
+        </label>
+
+        <md-select id="combo_matriz_filial" name="combo_matriz_filial" ng-model="$ctrl.object.unidade" ng-model-options="{trackBy: '$value.codigo'}" required="true">
+            <md-option ng-repeat="item in $ctrl.listEmpresas" ng-value="item" value="{{ item }}">{{ item.codnome }}
+            </md-option>
+        </md-select>
+
+        <div ng-messages="ContratosForm.combo_matriz_filial.$error" ng-if="ContratosForm.combo_matriz_filial.$touched">
+            <div ng-message="required">
+                Obrigatório.
+            </div>
+        </div>
+    </md-input-container>
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_diretoria">Diretoria</label>
+
+        <md-select id="combo_diretoria" name="diretoria"ng-model="$ctrl.object.diretoria" ng-model-options="{trackBy: '$value.codigo'}" ng-required="true" required>
+            <md-option ng-repeat="item in $ctrl.listDiretoria" ng-value="item">{{ item.descricao }}
+            </md-option>
+        </md-select>
+
+        <div ng-messages="ContratosForm.diretoria.$error" ng-if="ContratosForm.diretoria.$touched">
+            <div ng-message="required">
+                Obrigatório.
+            </div>
+        </div>
+
+    </md-input-container>
+</div>
+
+
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_tipo_pessoa">Tipo de pessoa</label>
+        <md-select id="combo_tipoPessoa" name="tipoPessoa" ng-change="$ctrl.changeTipoPessoa()" ng-model="$ctrl.object.cliente.tipoPessoa">
+            <md-option ng-repeat="item in $ctrl.listTipoPessoa" ng-value="item" value="{{ item }}">{{ item | limitTo : 10 : 7 }}
+            </md-option>
+        </md-select>
+    </md-input-container>
+
+    <md-input-container flex="25" flex-gt-md="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.habilitarCnpjRazaoSocial">
+        <label id="lbl_cnpj">CNPJ</label>
+        <input id="input_cnpj" name="cnpj" ng-blur="$ctrl.consultarDocumento()" ng-model="$ctrl.object.cliente.documento" required="true" type="text" ui-br-cnpj-mask>
+        <div ng-if="ContratosForm.cnpj.$touched || ContratosForm.$submitted" ng-messages="ContratosForm.cnpj.$error" role="alert">
+            <div ng-message="required">Obrigatório.</div>
+            <ng-message when="cnpj">CNPJ inválido.</ng-message>
+        </div>
+    </md-input-container>
+
+    <md-input-container flex="25" flex-gt-md="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.habilitarCpfNome">
+        <label id="lbl_cpf">CPF</label>
+        <input id="input_cpf" name="cpf" ng-blur="$ctrl.consultarDocumento()" ng-model="$ctrl.object.cliente.documento" required="true" type="text" ui-br-cpf-mask>
+        <div ng-if="ContratosForm.cpf.$touched || ContratosForm.$submitted" ng-messages="ContratosForm.cpf.$error" role="alert">
+            <div ng-message="required">Obrigatório.</div>
+            <ng-message when="cpf">CPF inválido.</ng-message>
+        </div>
+    </md-input-container>
+
+    <md-input-container flex="50" flex-gt-md="50" flex-sm="100" flex-xs="100" ng-if="$ctrl.habilitarCnpjRazaoSocial">
+        <label id="lbl_razaoSocial">Razão social</label>
+        <input id="input_razaoSocial" name="input_razaoSocial" disabled="true" ng-model="$ctrl.object.cliente.nome" type="text">
+    </md-input-container>
+</div>
+
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex="50" flex-gt-md="50" flex-sm="100" flex-xs="100" ng-if="$ctrl.habilitarCpfNome">
+        <label id="lbl_nomeCliente">Nome</label>
+        <input id="input_nomeCliente" name="input_nomeCliente" disabled="true" ng-model="$ctrl.object.cliente.nome" type="text">
+    </md-input-container>
+
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_assinatura">Assinatura</label>
+
+        <input id="input_assinatura" name="input_assinatura" ng-model="$ctrl.object.dataAssinatura" tt-date-picker type="text">
+
+        <div ng-messages="ContratosForm.input_assinatura.$error" ng-if="ContratosForm.input_assinatura.$touched">
+            <div ng-message="required">
+                Obrigatório.
+            </div>
+        </div>
+    </md-input-container>
+
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_inicio_vigencia">Início da vigência</label>
+        <input id="input_inicio_vigencia" max-date="$ctrl.object.dataFimVigencia" name="inicio_vigencia" ng-change="$ctrl.calcularPrazoContrato()" ng-model="$ctrl.object.dataInicioVigencia" required="true" required tt-date-picker type="text">
+        <div ng-messages="ContratosForm.inicio_vigencia.$error" ng-if="ContratosForm.inicio_vigencia.$touched">
+            <div ng-message="required">
+                Obrigatório.
+            </div>
+
+        </div>
+    </md-input-container>
+
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_fim_vigencia">Fim da vigência</label>
+        <input id="input_fim_vigencia" min-date="$ctrl.object.dataInicioVigencia" name="fim_vigencia" ng-change="$ctrl.calcularPrazoContrato()" ng-model="$ctrl.object.dataFimVigencia" required="true" required tt-date-picker type="text">
+        <div ng-messages="ContratosForm.fim_vigencia.$error" ng-if="ContratosForm.fim_vigencia.$touched">
+            <div ng-message="required">
+                Obrigatório.
+            </div>
+        </div>
+    </md-input-container>
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_prazo">Prazo (meses)</label>
+        <input id="input_prazo" name="prazo" disabled="true" ng-model="$ctrl.object.prazoAtual" type="text">
+    </md-input-container>
+</div>
+
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_valorMensal">Valor mensal</label>
+        <input class="text-left" id="input_valorMensal" name="valorMensal" disabled="true" type="text" value="{{$ctrl.object.valorMensal | currency:'':2 }}">
+    </md-input-container>
+
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_valorTotal">Valor total</label>
+        <input class="text-left" id="input_valorTotal" name="valorTotal" disabled="true" type="text" value="{{$ctrl.object.valorTotal | currency:'':2 }}">
+    </md-input-container>
+
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_retencao">Retenção %</label>
+        <input id="input_retencao" maxlength="6" name="retencao" ng-change="$ctrl.getValorRetencao()" ng-model="$ctrl.object.percentualRetencao" type="text" ui-number-mask="2">
+    </md-input-container>
+
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_valorRetencao">Valor da retenção</label>
+        <input class="text-left" id="input_valorRetencao" name="valorRetencao" disabled="true" type="text" value="{{$ctrl.object.valorRetencao | currency:'':2 }}">
+    </md-input-container>
+</div>
+
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_proposta">Proposta</label>
+        <input id="input_proposta" name="proposta" ng-model="$ctrl.object.proposta" type="text">
+    </md-input-container>
+
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_forma_contratual">Forma de contratação</label>
+
+        <md-select id="combo_forma_contratual" name="forma_contratual" ng-model="$ctrl.object.formaContratacao" required="true" required>
+            <md-option ng-repeat="item in $ctrl.listFormacontratual" ng-value="item" value="{{ item }}">{{ item.descricao }}
+            </md-option>
+        </md-select>
+        <div ng-messages="ContratosForm.forma_contratual.$error" ng-if="ContratosForm.forma_contratual.$touched">
+            <div ng-message="required">
+                Obrigatório.
+            </div>
+        </div>
+    </md-input-container>
+
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_estagio_comercial">Estágio comercial</label>
+
+        <md-select id="combo_estcomercial" name="estcomercial" ng-model="$ctrl.object.estagioComercial" ng-required="true" required>
+            <md-option ng-repeat="item in $ctrl.listComercial" ng-value="item" value="{{ item }}">{{ item }}
+            </md-option>
+        </md-select>
+        <div ng-messages="ContratosForm.estcomercial.$error" ng-if="ContratosForm.estcomercial.$touched">
+            <div ng-message="required">
+                Obrigatório.
+            </div>
+        </div>
+    </md-input-container>
+
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_prorrogacao">Prorrogação</label>
+        <md-select id="combo_prorrogacao" name="prorrogacao" ng-model="$ctrl.object.prorrogacao" ng-required="true" required>
+            <md-option ng-repeat="item in $ctrl.listProrrogacao" ng-value="item" value="{{ item }}">{{ item }}
+            </md-option>
+        </md-select>
+        <div ng-messages="ContratosForm.prorrogacao.$error" ng-if="ContratosForm.prorrogacao.$touched">
+            <div ng-message="required">
+                Obrigatório.
+            </div>
+        </div>
+    </md-input-container>
+
+</div>
+
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_reajuste">Reajuste</label>
+
+        <md-select id="combo_reajuste" name="reajuste" ng-model="$ctrl.object.periodoReajuste">
+            <md-option ng-repeat="item in $ctrl.listReajuste" ng-value="item" value="{{ item }}">{{ item }}
+            </md-option>
+        </md-select>
+    </md-input-container>
+
+    <md-input-container flex flex-gt-md="25" flex-xs="100">
+        <label id="lbl_n_contrato_forn">
+            Nº do contrato do cliente
+            <md-tooltip>
+                <span class="h4">Número de contrato original do cliente</span>
+            </md-tooltip>
+        </label>
+        <input id="input_n_contrato_forn" name="n_contrato_forn" ng-model="$ctrl.object.contratoOriginal" type="text">
+    </md-input-container>
+
+    <md-input-container flex flex-gt-md="50" flex-xs="100">
+        <label id="lbl_indice">Índice</label>
+        <input id="input_indice" name="indice" ng-model="$ctrl.object.indiceReajuste" type="text">
+    </md-input-container>
+
+</div>
+
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex flex-gt-md="100" flex-xs="100">
+        <label id="lbl_resumo">Resumo: objeto do contrato</label>
+        <textarea id="input_resumo" maxlength="2000" md-maxlength="2000" ng-maxlength="2000" name="resumo: objeto do contrato" ng-model="$ctrl.object.resumo" ng-required="true" rows="5" md-no-autogrow="true" md-no-resize="true" md-detect-hidden type="text">
+    </textarea>
+        <div ng-messages="ContratosForm.resumo.$error" ng-if="ContratosForm.resumo.$touched">
+            <div ng-message="required">Obrigatório.</div>
+        </div>
+    </md-input-container>
+</div>

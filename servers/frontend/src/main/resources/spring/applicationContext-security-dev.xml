@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:security="http://www.springframework.org/schema/security"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+	<security:http pattern="/rest/**" entry-point-ref="unauthorizedEntryPoint">
+
+		<!-- Proteção CSRF -->
+		<security:csrf token-repository-ref="csrfTokenRepository"/>
+
+		<!-- LIBERADO -->
+		<security:intercept-url pattern="/rest/auth/**" access="permitAll"/>
+
+		<!-- RESTRITO -->
+		<security:intercept-url pattern="/rest/**" access="isAuthenticated()"/>
+	</security:http>
+
+	<security:http>
+		<security:http-basic/>
+		<security:form-login default-target-url='/app/main.html'
+							 authentication-failure-url="/login?error"
+							 always-use-default-target='false'/>
+		<security:logout invalidate-session="true"
+						 logout-url="/logout"
+						 logout-success-url="/app/main.html"/>
+		<!-- Proteção CSRF -->
+		<security:custom-filter after="CSRF_FILTER" ref="csrfHeaderFilter"/>
+		<security:csrf token-repository-ref="csrfTokenRepository"/>
+		<security:intercept-url pattern="/app/**" access="isAuthenticated()"/>
+	</security:http>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider user-service-ref="userDetailsService">
+			<security:password-encoder ref="passwordEncoder"/>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<!-- Conf beans -->
+
+	<bean id="unauthorizedEntryPoint"
+		  class="br.com.fasolti.commons.security.config.UnauthorizedEntryPoint"/>
+
+	<bean id="userDetailsService"
+		  class="br.com.fasolti.commons.services.security.UserDetailsServiceImpl"/>
+
+	<!-- CSRF beans -->
+
+	<bean id="csrfHeaderFilter"
+		  class="br.com.fasolti.commons.security.config.CsrfHeaderFilter"/>
+
+	<bean id="csrfTokenRepository"
+		  class="br.com.fasolti.commons.security.config.CsrfTokenRepository"/>
+
+	<!-- Accept any password -->
+
+	<bean id="passwordEncoder"
+		  class="br.com.fasolti.commons.security.config.DummyPasswordEncoder"/>
+</beans>

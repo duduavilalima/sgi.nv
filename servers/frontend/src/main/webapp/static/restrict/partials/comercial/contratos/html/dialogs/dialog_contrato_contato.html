@@ -1,0 +1,262 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_contrato_contato" style="width: 750px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_contrato_contato" md-autofocus>Contato - {{title}} </h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+					style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<form name="DialogContratoContatoForm">
+		<md-dialog-content role="document">
+			<div class="md-dialog-content md-dialog-content-body ng-scope">
+
+				<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+					<md-input-container flex="100" flex-sm="100" flex-xs="100">
+						<label id="lbl_NomeContato">Nome</label>
+						<input id="input_nomeContato" name="nomeContato" ng-model="object.contato.nome"
+							required="true" type="text">
+						<div ng-messages="DialogContratoContatoForm.nomeContato.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+				</div>
+
+				<div layout layout-sm="column" style="margin-top: -0px">
+					Telefone 1
+				</div>
+				<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+					<md-input-container flex="25" flex-sm="100" flex-xs="100">
+						<label id="lbl_tipo">Tipo</label>
+						<md-select id="combo_tipo" name="tipo" ng-change="desabilitarCamposTel1()"
+							ng-model="object.contato.telefone1.tipo">
+							<md-option ng-repeat="item in listTipoTelefone" ng-value="item" value="{{ item }}">{{ item
+								}}
+							</md-option>
+						</md-select>
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone1.tipo != 'Celular' && !desabilitar1">
+						<label id="lbl_DDD">DDD</label>
+						<input id="input_DDD" mask="99" name="DDD" ng-model="object.contato.telefone1.ddd"
+							required="true" restrict="reject" type="text">
+						<div ng-messages="DialogContratoContatoForm.DDD.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone1.tipo != 'Celular' && desabilitar1">
+						<label id="lbl_DDDD">DDD</label>
+						<input id="input_dd" name="ddd" ng-disabled="true" ng-if="desabilitar1"
+							ng-model="object.contato.telefone1.ddd" type="text">
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone1.tipo === 'Celular'">
+						<label id="lbl_Operadora">Operadora</label>
+						<md-select id="combo_operadora" name="operadora" ng-model="object.contato.telefone1.operadora"
+							ng-model-options="{trackBy: '$value.codigo'}" required="true">
+							<md-option ng-repeat="item in listOperadoras" ng-value="item" value="{{ item }}">{{
+								item.nome }}
+							</md-option>
+						</md-select>
+						<div ng-messages="DialogContratoContatoForm.operadora.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone1.tipo === 'Celular'">
+						<label id="lbl_DDDCel">DDD</label>
+						<input id="input_DDCelD" mask="99" name="DDD" ng-model="object.contato.telefone1.ddd"
+							required="true" restrict="reject" type="text">
+						<div ng-messages="DialogContratoContatoForm.DDD.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone1.tipo === 'Celular'">
+						<label id="lbl_telefonecel">Telefone</label>
+						<input id="input_telefonecel" mask="99999-9999" name="telefone"
+							ng-model="object.contato.telefone1.numero" required="true" restrict="reject" type="text">
+						<div ng-messages="DialogContratoContatoForm.telefone.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone1.tipo != 'Celular' && !desabilitar1">
+						<label id="lbl_telefone">Telefone</label>
+						<input id="input_telefone" mask="9999-9999" name="telefone" ng-if="!desabilitar1"
+							ng-model="object.contato.telefone1.numero" required="true" restrict="reject" type="text">
+						<div ng-messages="DialogContratoContatoForm.telefone.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone1.tipo != 'Celular' && desabilitar1">
+						<label id="lbl_telefoneD">Telefone</label>
+						<input id="input_tel" name="telefone" ng-disabled="true"
+							ng-model="object.contato.telefone1.numero" type="text">
+					</md-input-container>
+
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone1.tipo != 'Celular' && !desabilitar1">
+						<label id="lbl_ramal">Ramal</label>
+						<input id="input_ramal" mask="9999" name="ramal" ng-if="!desabilitar1"
+							ng-model="object.contato.telefone1.ramal" restrict="reject" type="text">
+					</md-input-container>
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone1.tipo != 'Celular' && desabilitar1">
+						<label id="lbl_ramalD">Ramal</label>
+						<input id="input_ram" name="ramal" ng-disabled="true" ng-model="object.contato.telefone1.ramal"
+							type="text">
+					</md-input-container>
+				</div>
+
+				<div layout layout-sm="column" style="margin-top: -0px">
+					Telefone 2
+				</div>
+				<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+					<md-input-container flex="25" flex-sm="100" flex-xs="100">
+						<label id="lbl_tipo2">Tipo</label>
+						<md-select id="combo_tipo2" name="tipo" ng-change="desabilitarCamposTel2()"
+							ng-model="object.contato.telefone2.tipo">
+							<md-option ng-repeat="item in listTipoTelefone" ng-value="item" value="{{ item }}">{{ item
+								}}
+							</md-option>
+						</md-select>
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone2.tipo != 'Celular' && !desabilitar2">
+						<label id="lbl_DDD2">DDD</label>
+						<input id="input_DDD2" mask="99" name="DDD" ng-if="!desabilitar2"
+							ng-model="object.contato.telefone2.ddd" required="true" restrict="reject" type="text">
+						<div ng-messages="DialogContratoContatoForm.DDD.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone2.tipo != 'Celular' && desabilitar2">
+						<label id="lbl_DDD2D">DDD</label>
+						<input id="input_dd2" name="ddd" ng-disabled="true" ng-model="object.contato.telefone2.ddd"
+							type="text">
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone2.tipo === 'Celular'">
+						<label id="lbl_Operadora2">Operadora</label>
+						<md-select id="combo_operadora2" name="operadora" ng-model="object.contato.telefone2.operadora"
+							ng-model-options="{trackBy: '$value.codigo'}" required="true">
+							<md-option ng-repeat="item in listOperadoras" ng-value="item" value="{{ item }}">{{
+								item.nome }}
+							</md-option>
+						</md-select>
+						<div ng-messages="DialogContratoContatoForm.operadora.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone2.tipo === 'Celular'">
+						<label id="lbl_DDDCel2">DDD</label>
+						<input id="input_DDCelD2" mask="99" name="DDD" ng-model="object.contato.telefone2.ddd"
+							required="true" restrict="reject" type="text">
+						<div ng-messages="DialogContratoContatoForm.DDD.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone2.tipo === 'Celular'">
+						<label id="lbl_telefonecel2">Telefone</label>
+						<input id="input_telefonecel2" mask="99999-9999" name="telefone"
+							ng-model="object.contato.telefone2.numero" required="true" restrict="reject" type="text">
+						<div ng-messages="DialogContratoContatoForm.telefone.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone2.tipo != 'Celular' && !desabilitar2">
+						<label id="lbl_telefone2">Telefone</label>
+						<input id="input_telefone2" mask="9999-9999" name="telefone" ng-if="!desabilitar2"
+							ng-model="object.contato.telefone2.numero" required="true" restrict="reject" type="text">
+						<div ng-messages="DialogContratoContatoForm.telefone.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone2.tipo != 'Celular' && desabilitar2">
+						<label id="lbl_telefone2D">Telefone</label>
+						<input id="input_tel2" name="telefone" ng-disabled="true"
+							ng-model="object.contato.telefone2.numero" type="text">
+					</md-input-container>
+
+
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone2.tipo != 'Celular' && !desabilitar2">
+						<label id="lbl_ramal2">Ramal</label>
+						<input id="input_ramal2" mask="9999" name="ramal" ng-if="!desabilitar2"
+							ng-model="object.contato.telefone2.ramal" restrict="reject" type="text">
+					</md-input-container>
+					<md-input-container flex="25" flex-sm="100" flex-xs="100"
+						ng-if="object.contato.telefone2.tipo != 'Celular' && desabilitar2">
+						<label id="lbl_ramal2D">Ramal</label>
+						<input id="input_ram2" name="ramal" ng-disabled="true" ng-model="object.contato.telefone2.ramal"
+							type="text">
+					</md-input-container>
+				</div>
+
+				<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+					<md-input-container flex="50" flex-sm="100" flex-xs="100">
+						<label id="lbl_EmailContato">E-mail</label>
+						<input id="input_emailContato" name="emailPessoaContato" ng-model="object.contato.email"
+							type="text">
+					</md-input-container>
+
+					<md-input-container flex="50" flex-sm="100" flex-xs="100">
+						<label id="lbl_relacionamento">Relacionamento</label>
+						<md-select id="combo_relacionamento" name="relacionamento"
+							ng-model="object.contato.relacionamentoContato"
+							ng-model-options="{trackBy: '$value.codigo'}" ng-required="true">
+							<md-option ng-repeat="item in listRelacionamento" ng-value="item" value="{{ item }}">
+								{{item.nome}}
+							</md-option>
+						</md-select>
+						<div ng-messages="DialogContratoContatoForm.relacionamento.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+				</div>
+
+				<div class="p-8" layout layout-sm="column" layout-wrap>
+					<span class="red-fg">*&nbsp;</span> Campos obrigatórios
+				</div>
+
+			</div>
+
+			<md-divider></md-divider>
+		</md-dialog-content>
+
+		<md-dialog-actions layout="row">
+			<md-button class="md-raised md-accent" id="btn_salvar_confirmar" ng-click="confirm()"
+				ng-disabled="!DialogContratoContatoForm.$valid">
+				CONFIRMAR
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_cancelar_remover" ng-click="cancel()">
+				Fechar
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+
+	</form>
+
+</md-dialog>

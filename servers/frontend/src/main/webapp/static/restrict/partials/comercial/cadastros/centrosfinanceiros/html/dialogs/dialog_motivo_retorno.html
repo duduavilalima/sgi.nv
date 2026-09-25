@@ -1,0 +1,109 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_motivo_retorno" style="width: 1200px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_motivo_retorno" md-autofocus> {{ ::title }} </h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content class="md-background-bg md-hue-3" role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<form name="DialogMotivoRetornoForm" novalidate>
+
+				<div flex-gt-xs="100" flex-xs layout="column">
+					<md-card md-theme-watch style="margin-left: -10px; margin-right: -10px; margin-top: -10px;">
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex flex-gt-md="100">
+								<label id="lbl_tipo_logr">Motivo</label>
+								<md-select id="combo_motivo" name="combo_motivo" ng-change="selecionarMotivo()"
+										   ng-model="motivo">
+									<md-option ng-repeat="item in listaMotivo | orderBy: 'codigo'" ng-value="item"
+											   value="{{ item }}">{{ item.motivo }}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+						</div>
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<div flex flex-gt-md="100"
+								 ng-if="!listaMotivoEscolhido || listaMotivoEscolhido.length <= 0">
+								<md-whiteframe class="md-whiteframe-1dp" flex flex-gt-md="100" layout
+											   layout-align="center center">
+									<span class="h4 p-32">Não existem <b>Motivos de Retorno</b> informados.</span>
+								</md-whiteframe>
+							</div>
+
+							<div flex flex-gt-md="100" ng-if="listaMotivoEscolhido && listaMotivoEscolhido.length > 0">
+								<table border="1" class="tabela_exibicao hover md-caption" ms-responsive-table
+									   width="100%">
+									<thead>
+									<tr class="grey-200-bg">
+										<th style="border: 1px solid #c4c4c4;" width="25%">
+											<div class="table-header text-center"><span
+												class="column-title">Motivo</span></div>
+										</th>
+										<th style="border: 1px solid #c4c4c4;" width="65%">
+											<div class="table-header text-center"><span
+												class="column-title">Solução</span></div>
+										</th>
+										<th style="border: 1px solid #c4c4c4;" width="10%">
+											<div class="table-header text-center"><span
+												class="column-title">Opção</span></div>
+										</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="item in listaMotivoEscolhido | orderBy: 'codigo'"
+										style="border-bottom: 1px solid #c4c4c4;">
+										<td class="text-left celula pl-5"> {{ item.motivo }}</td>
+										<td class="text-left celula pl-5"> {{ item.solucao }}</td>
+
+										<td class="text-center celula pl-5">
+											<md-button class="md-icon-button" id="btn_excluir{{$index}}"
+													   name="btn_excluir{{$index}}" ng-click="removerMotivo(item)"
+													   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+												<md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+											</md-button>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<md-input-container class="md-block" flex flex-gt-md="100">
+								<label>Observações</label>
+								<textarea id="observacoes" name="observacoes"
+										  ng-model="motivoRetornoDocumento.observacao" rows="4"></textarea>
+							</md-input-container>
+
+						</div>
+
+					</md-card>
+				</div>
+
+			</form>
+		</div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar" ng-click="confirm()">
+			Confirmar
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar" ng-click="cancel()">
+			Cancelar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,82 @@
+<div layout="row" layout-align="start center" ng-controller="ToolbarController as vm">
+	<div flex layout="row" layout-align="start center">
+		<md-button aria-label="Toggle navigation" class="md-icon-button" hide-gt-md
+				   id="navigation-toggle" ng-click="vm.toggleSidenav('navigation')" translate
+				   translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
+			<md-icon class="icon" md-font-icon="icon-menu"></md-icon>
+		</md-button>
+
+		<md-button aria-label="Toggle navigation mode" class="md-icon-button"
+				   hide id="navigation-sidenav-mode-toggle" ng-click="vm.toggleNavigationSidenavFold($event)"
+				   show-gt-md translate
+				   translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION_MODE">
+			<md-icon class="icon" md-font-icon="icon-backburger"></md-icon>
+			<md-tooltip md-direction="bottom">
+				<span class="h4" id="tooltip_bt_sidenav">Recolher menu lateral</span>
+			</md-tooltip>
+		</md-button>
+
+		<md-button aria-label="Botão home" class="md-icon-button" id="bt-home" ng-click="linkHome()"
+				   style="width: 64px;height: 64px;margin: 0;border-right: 1px solid rgba(0, 0, 0, 0.12);border-radius: 0;">
+			<md-icon class="icon" md-font-icon="icon-home"></md-icon>
+			<md-tooltip md-direction="bottom">
+				<span class="h4" id="tooltip_bt_home">Tela principal</span>
+			</md-tooltip>
+		</md-button>
+
+		<md-button aria-label="Botão SGI 1.0" class="md-icon-button" id="bt-sgi-1" ng-click="linkSGI()"
+				   ng-if="apenasFaturamento"
+				   style="width: 64px;height: 64px;margin: 0;border-right: 1px solid rgba(0, 0, 0, 0.12);border-radius: 0;">
+			<img md-menu-align-target src="../img/ico_aa_10.png">
+			<md-tooltip md-direction="bottom">
+				<span class="h4" id="tooltip_bt_sgi_1">SGI v1</span>
+			</md-tooltip>
+		</md-button>
+
+		<!--<md-progress-circular id="toolbar-progress" ng-if="$root.loadingProgress" style="margin-top: 12px;margin-left: 10px;" class="md-accent" md-mode="indeterminate" md-diameter="40"></md-progress-circular>-->
+		<img ng-if="$root.loadingProgress" src="../img/carregando.gif"
+			 style="height: 50px;width: 50px;margin-left: 10px;"/>
+	</div>
+
+	<div layout="row" layout-align="start center">
+		<div class="toolbar-separator"></div>
+		<md-menu-bar id="user-menu">
+			<md-menu md-offset="0 72" md-position-mode="target-right target">
+				<md-button aria-label="User settings" class="user-button" id="btn_menu"
+						   md-menu-origin
+						   ng-click="$mdMenu.open()" translate
+						   translate-attr-aria-label="TOOLBAR.USER_SETTINGS">
+					<div layout="row" layout-align="space-between center">
+						<div class="avatar-wrapper">
+							<!--<img md-menu-align-target class="avatar" src="/static/restrict/img/profile.jpg">-->
+						</div>
+						<span class="username" hide-sm> {{ ::vm.usuario.pessoa.nome  }} </span>
+						<md-icon class="icon s16" hide-sm md-font-icon="icon-chevron-down"></md-icon>
+					</div>
+				</md-button>
+
+				<md-menu-content class="md-background-bg" width="3">
+					<md-menu-item ui-sref="app.pages_profile">
+						<md-button aria-label="Login" id="btn_perfil">
+                            <span layout="row" layout-align="start center">
+                                <md-icon class="icon" md-font-icon="icon-account"></md-icon>
+                                <span>{{ ::vm.usuario.pessoa.nome }}</span>
+                            </span>
+						</md-button>
+					</md-menu-item>
+
+					<md-menu-divider></md-menu-divider>
+
+					<md-menu-item>
+						<md-button aria-label="Sair" id="btn_sair_sistema" ng-click="logout()">
+                            <span layout="row" layout-align="start center">
+                                <md-icon class="icon" md-font-icon="icon-logout"></md-icon>
+                                <span>Sair do sistema</span>
+                            </span>
+						</md-button>
+					</md-menu-item>
+				</md-menu-content>
+			</md-menu>
+		</md-menu-bar>
+	</div>
+</div>

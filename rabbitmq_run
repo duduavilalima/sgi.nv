@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Parando servidor RabbitMQ e MQMail..."
+docker-compose -f docker-compose.mqmail.yml down
+echo "Subindo servidor RabbitMQ e MQMail..."
+docker-compose -f docker-compose.mqmail.yml up -d mq mqmail
+docker ps
+echo "Concluído!"

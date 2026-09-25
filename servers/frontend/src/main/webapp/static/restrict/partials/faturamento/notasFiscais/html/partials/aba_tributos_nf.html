@@ -1,0 +1,441 @@
+<div layout
+	 layout-sm="column">
+
+	<md-input-container flex
+						ng-show="screenMode !== 'VIEW'">
+		<label id="lbl_iss_retido">ISS será retido pelo cliente</label>
+		<md-select id="combo_iss_retido"
+				   name="iss_retido"
+				   ng-change="$emit('comboIssRetido')"
+				   ng-model="object.issRetidoCliente"
+				   ng-required="true"
+				   value="{{ object.issRetidoCliente ? 'Sim' : 'Não' }}">
+			<md-option ng-repeat="opcao in listSN"
+					   ng-value="opcao.valor">{{::opcao.nome}}</md-option>
+		</md-select>
+		<div ng-messages="wizardStep4.iss_retido.$error"
+			 role="alert">
+			<div id="msg_req_iss"
+				 ng-message="required">Obrigatório.</div>
+		</div>
+	</md-input-container>
+	<md-input-container flex
+						ng-show="screenMode === 'VIEW'">
+		<label id="lbl_iss_retido_exibicao">ISS será retido pelo cliente</label>
+		<input id="combo_iss_retido_exibicao"
+			   name="combo_iss_retido_exibicao"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.issRetidoCliente ? 'Sim' : 'Não' }}">
+	</md-input-container>
+
+
+	<md-input-container class="md-input-has-value flex md-sgi-theme"
+						flex
+						ng-if="screenMode !== 'VIEW' && cidadesIguais">
+		<label id="lbl_input_cidade_iss_1">Cidade ISS</label>
+		<input id="input_cidade_iss"
+			   name="cidade_iss"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ ::valueCidadeISS }}">
+	</md-input-container>
+
+	<md-input-container class="md-input-has-value flex md-sgi-theme"
+						flex
+						ng-if="screenMode !== 'VIEW' && !cidadesIguais">
+		<label id="lbl_input_cidade_iss_2">Cidade ISS</label>
+
+		<md-select id="combo_cidade_iss"
+				   name="combo_cidade_iss"
+				   ng-model="cidUnidade"
+				   ng-model-options="{trackBy: '$value.codigo'}">
+			<md-option ng-click="mudarCidUnidade(cidade.objeto)"
+					   ng-repeat="cidade in listaCidadesISS"
+					   ng-value="cidade.objeto">
+				{{ cidade.texto }}
+			</md-option>
+		</md-select>
+
+	</md-input-container>
+
+	<md-input-container class="md-input-has-value flex md-sgi-theme"
+						flex
+						ng-if="screenMode === 'VIEW'">
+		<label id="lbl_input_cidade_iss_exibicao">Cidade ISS</label>
+		<input id="input_cidade_iss_exibicao"
+			   name="cidade_iss_exibicao"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ stringCidadeIss }}">
+	</md-input-container>
+
+</div>
+
+<br>
+
+<div class="simple-table-container md-whiteframe-1dp"
+	 ng-if="listaNotaTributoAliquota"
+	 style="margin-top: -25px">
+
+
+	<table class="tabela_exibicao row-border hover md-caption"
+		   id="table_tributos"
+		   ms-responsive-table>
+		<thead id="table_thead_tributos" class="cabecalho-borda-cinza">
+			<tr>
+				<th class="text-center"
+					width="120px">Tributo</th>
+				<th class="text-center">Categoria</th>
+				<th class="text-center"
+					width="150px">Base de cálculo</th>
+				<th class="text-center"
+					width="60px">%</th>
+				<th class="text-center"
+					width="80px">Valor</th>
+				<th class="text-center"
+					ng-hide="screenMode === 'VIEW'"
+					width="120px">Opções</th>
+			</tr>
+		</thead>
+
+		<tbody id="table_tbody_tributos_list"
+			   ng-show="screenMode === 'VIEW' || temTributoSemIss()">
+			<tr ng-repeat="item in listaNotaTributoAliquota | filter : {aliquota : {categoriaTributo : {tributoTO : {nome: '!' + 'ISS' } } } }" class="linha-borda-cinza">
+				<td>{{item.aliquota.categoriaTributo.tributoTO.nome}}</td>
+				<td>
+					<div class="over-flow-hidden">
+						{{item.aliquota.categoriaTributo.descricao}} -
+						{{item.aliquota.percentual | currency : '' : 2 }}%
+					</div>
+					<md-tooltip md-direction="bottom">
+						<span class="h4">{{item.aliquota.categoriaTributo.descricao}} -
+							{{item.aliquota.percentual | currency : '' : 2 }}%</span>
+					</md-tooltip>
+				</td>
+				<td class="text-right">{{item.baseCalculo | currency : '' : 2 }}</td>
+				<td class="text-right">{{item.aliquota.percentual | currency : '' : 2 }}</td>
+				<td class="text-right">{{item.valor | currency : '' : 2 }}</td>
+				<td class="text-center"
+					ng-hide="screenMode === 'VIEW'"
+					style="padding-top: 0px; padding-bottom: 0px; padding-right: 0px;">
+					<div class="text-center">
+						<md-button class="md-icon-button"
+								   id="btn_zerar_tributo{{$index}}"
+								   name="btn_zerar_tributo_{{$index}}"
+								   ng-click="zerarTributo($event, item)"
+								   ng-if="permitirZerarNotaTributoAliquota(item)"
+								   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+							<md-icon md-font-icon="icon-information-outline"></md-icon>
+							<md-tooltip class="h3"
+										md-direction="bottom">
+								Zerar tributo
+							</md-tooltip>
+						</md-button>
+						<md-button class="md-icon-button"
+								   id="btn_editar_tributo_{{$index}}"
+								   name="btn_editar_tributo_{{$index}}"
+								   ng-click="editarNotaTributoAliquota($event, item)"
+								   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+							<md-icon md-font-icon="icon-pencil"></md-icon>
+							<md-tooltip class="h3"
+										md-direction="bottom">
+								Editar tributo
+							</md-tooltip>
+						</md-button>
+						<md-button class="md-icon-button"
+								   id="btn_excluir_tributo_{{$index}}"
+								   name="btn_excluir_tributo_{{$index}}"
+								   ng-click="excluirNotaTributoAliquota($event, item, false)"
+								   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+							<md-icon class="red-400-fg"
+									 md-font-icon="icon-close"></md-icon>
+							<md-tooltip class="h3"
+										md-direction="bottom">
+								Excluir tributo
+							</md-tooltip>
+						</md-button>
+						<md-button class="md-icon-button"
+								   id="btn_add_novo_tributo"
+								   name="btn_add_novo_tributo"
+								   ng-click="novoNotaTributoAliquota($event, false)"
+								   ng-if="$last && (listaNotaTributoAliquota | filter : {aliquota : {categoriaTributo : {tributoTO : {nome: '!' + 'ISS' } } } }).length < 3"
+								   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+							<md-icon class="green-400-fg"
+									 md-font-icon="icon-plus"></md-icon>
+							<md-tooltip class="h3"
+										md-direction="bottom">
+								Adicionar tributo
+							</md-tooltip>
+
+						</md-button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+
+		<tbody id="table_tbody_tributos_novo"
+			   ng-hide="screenMode === 'VIEW' || temTributoSemIss()">
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td style="text-align: center;">
+					<md-button class="md-icon-button"
+							   id="btn_add_novo_tributo"
+							   name="btn_add_novo_tributo"
+							   ng-click="novoNotaTributoAliquota($event, false)"
+							   style="padding: 0px 0px 0px 0px; margin: -10px -10px -10px -10px;">
+						<md-icon class="green-400-fg"
+								 md-font-icon="icon-plus"></md-icon>
+
+						<md-tooltip class="h3"
+									md-direction="bottom">
+							Adicionar tributo
+						</md-tooltip>
+					</md-button>
+				</td>
+			</tr>
+		</tbody>
+
+		<tbody id="table_tbody_tributos_empty"
+			   ng-hide="screenMode === 'NEW' || screenMode === 'EDIT' || temTributoSemIss()">
+			<tr>
+				<td class="text-center msg-empty-list"
+					colspan="6">Não existem tributos associadas a este faturamento.
+				</td>
+			</tr>
+		</tbody>
+
+		<tfoot id="table_tfoot_tributos">
+			<tr class="md-grey-300-bg">
+				<td></td>
+				<td></td>
+				<td class="text-right celula-direita-gray"
+					style="padding-left: 8px;"><strong>Subtotal</strong>
+				</td>
+				<td class="text-right celula-direita-gray"
+					style="padding-left: 8px;"><strong>{{subtotalPercentualTributo | currency : '' : 2
+				}}</strong>
+				</td>
+				<td class="text-right"
+					style="padding-left: 8px;"><strong>{{subTotalValorTributo | currency : '' : 2
+				}}</strong>
+				</td>
+				<td ng-hide="screenMode === 'VIEW'"></td>
+			</tr>
+		</tfoot>
+
+	</table>
+
+</div>
+
+<p></p>
+
+<div class="simple-table-container md-whiteframe-1dp">
+
+	<table class="tabela_exibicao row-border hover md-caption tabela_exibicao"
+		   id="table_tributosIss"
+		   ms-responsive-table>
+		<thead id="table_thead_iss" class="cabecalho-borda-cinza">
+			<tr class="md-grey-200-bg">
+				<th class="text-center"
+					width="60px">Tributo</th>
+				<th class="text-center"
+					width="60px">UF</th>
+				<th class="text-center">Cidade - Categoria</th>
+				<th class="text-center"
+					width="150px">Base de cálculo</th>
+				<th class="text-center"
+					width="60px">%</th>
+				<th class="text-center"
+					width="80px">Valor</th>
+				<th class="text-center"
+					ng-hide="screenMode === 'VIEW'"
+					width="120px">Opções</th>
+			</tr>
+		</thead>
+
+		<tbody id="table_tbody_iss_list"
+			   ng-show="screenMode === 'VIEW' || temTributoIss()">
+			<tr ng-repeat="item in listaNotaTributoAliquota | filter : {aliquota : {categoriaTributo : {tributoTO : {nome: 'ISS' } } } }" class="linha-borda-cinza">
+				<td>ISS</td>
+				<td class="text-center">{{item.aliquota.categoriaTributo.cidade.uf}}</td>
+				<td>
+					<div class="over-flow-hidden">
+						{{item.aliquota.categoriaTributo.cidade.nome}} - {{item.aliquota.percentual | currency : '' : 2 }}% - {{item.aliquota.categoriaTributo.descricao}}
+					</div>
+					<md-tooltip md-direction="bottom">
+						<span class="h4">
+							{{item.aliquota.categoriaTributo.cidade.nome}} - {{item.aliquota.percentual | currency : '' : 2 }}% - {{item.aliquota.categoriaTributo.descricao}}
+						</span>
+					</md-tooltip>
+				</td>
+				<td class="text-right">{{item.baseCalculo | currency : '' : 2 }}</td>
+				<td class="text-right">{{item.aliquota.percentual | currency : '' : 2 }}</td>
+				<td class="text-right">{{item.valor | currency : '' : 2 }}</td>
+				<td class="text-center"
+					ng-hide="screenMode === 'VIEW'"
+					style="padding-top: 0px; padding-bottom: 0px; padding-right: 0px;">
+					<div>
+						<md-button class="md-icon-button"
+								   id="btn_zerar_tributo{{$index}}"
+								   name="btn_zerar_tributo_{{$index}}"
+								   ng-click="zerarTributo($event, item)"
+								   ng-if="permitirZerarNotaTributoAliquota(item)"
+								   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+							<md-icon md-font-icon="icon-information-outline"></md-icon>
+							<md-tooltip class="h3"
+										md-direction="bottom">
+								Zerar tributo
+							</md-tooltip>
+						</md-button>
+						<md-button class="md-icon-button"
+								   id="btn_editar_tributo_iss_{{$index}}"
+								   name="btn_editar_tributo_iss_{{$index}}"
+								   ng-click="editarNotaTributoAliquota($event, item)"
+								   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+							<md-icon md-font-icon="icon-pencil"></md-icon>
+							<md-tooltip class="h3"
+										md-direction="bottom">
+								Editar tributo
+							</md-tooltip>
+						</md-button>
+						<md-button class="md-icon-button"
+								   id="btn_excluir_tributo_iss_{{$index}}"
+								   name="btn_excluir_tributo_iss_{{$index}}"
+								   ng-click="excluirNotaTributoAliquota($event, item, true)"
+								   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+							<md-icon class="red-400-fg"
+									 md-font-icon="icon-close"></md-icon>
+							<md-tooltip class="h3"
+										md-direction="bottom">
+								Excluir tributo
+							</md-tooltip>
+						</md-button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+
+		<tbody id="table_tbody_iss_novo"
+			   ng-hide="screenMode === 'VIEW' || temTributoIss()">
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td style="text-align: center;">
+					<md-button class="md-icon-button"
+							   id="btn_add_novo_tributo_iss"
+							   name="btn_add_novo_tributo_iss"
+							   ng-click="novoNotaTributoAliquotaISS($event, true)"
+							   style="padding: 0px 0px 0px 0px; margin: -10px -10px -10px -10px;">
+						<md-icon class="green-400-fg"
+								 md-font-icon="icon-plus"></md-icon>
+
+						<md-tooltip class="h3"
+									md-direction="bottom">
+							Adicionar ISS
+						</md-tooltip>
+					</md-button>
+				</td>
+			</tr>
+		</tbody>
+
+		<tbody id="table_tbody_iss_empty"
+			   ng-hide="screenMode === 'NEW' || screenMode === 'EDIT' || temTributoIss()">
+			<tr>
+				<td class="text-center msg-empty-list"
+					colspan="7">Não existem tributo ISS associadas a este
+					faturamento.
+				</td>
+			</tr>
+		</tbody>
+
+		<tfoot id="table_tfoot_iss">
+			<tr class="md-grey-300-bg">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td class="text-right celula-direita-gray"
+					style="padding-left: 8px;"><strong>Total (Subtotal + ISS)</strong>
+				</td>
+				<td class="text-right celula-direita-gray"
+					style="padding-left: 8px;">
+					<strong>{{totalPercentualTributo | currency : '' : 2}}</strong>
+				</td>
+				<td class="text-right"
+					style="padding-left: 8px;">
+					<strong>{{totalValorTributo | currency : '' : 2}}</strong>
+				</td>
+				<td ng-hide="screenMode === 'VIEW'"></td>
+			</tr>
+		</tfoot>
+
+	</table>
+
+</div>
+
+<div class="p-8"></div>
+
+
+<div layout
+	 layout-sm="column"
+	 ng-if="screenMode != 'VIEW'"
+	 style="margin-top: -7px">
+	<span>*</span>&nbsp;Campos obrigatórios
+</div>
+
+
+<div class="navigation padding-8"
+	 flex
+	 layout="row"
+	 ng-hide="screenMode === 'NEW'"
+	 ng-if="object.status === 'Aberta'"
+	 style="margin-top: -0px;margin-left: -15px;">
+	<md-button class="md-raised md-accent"
+			   id="btn_editar_tributos"
+			   ng-click="editarTributos()"
+			   ng-disabled="object.cidadeUF == null || action"
+			   ng-hide="modeTributos === true"
+			   ng-if="screenMode === 'VIEW' && exibirBotoes">
+		Editar
+		<img ng-show="action"
+			 src="../img/gray_carregando.gif"
+			 style="height: 20px;width: 20px;margin-top: 8px;" />
+		<md-tooltip id="tool_tip_btn_editar"
+					md-direction="bottom">
+			<span class="h4">Editar Tributos</span>
+		</md-tooltip>
+	</md-button>
+	<md-button class="md-raised md-accent"
+			   id="btn_salvar_editar_tributos"
+			   ng-click="salvarTributos(wizardStep1)"
+			   ng-if="exibirBotoes"
+			   ng-disabled="wizardStep4.$invalid || action"
+			   ng-show="modeTributos == true">
+		Salvar
+		<md-tooltip id="tool_tip_btn_salvar_editar"
+					md-direction="bottom">
+			<span class="h4">Salvar as alterações realizadas nesta tela de notas fiscais</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent"
+			   id="btn_cancelar_tributos"
+			   ng-click="cancelarTributos(wizardStep4)"
+			   ng-disabled="action"
+			   ng-if="exibirBotoes"
+			   ng-show="modeTributos == true">
+		Cancelar
+		<md-tooltip id="tool_tip_btn_cancelar_tributos"
+					md-direction="bottom">
+			<span class="h4">Sair desta nota fiscal, sem gravar as modificações realizadas</span>
+		</md-tooltip>
+	</md-button>
+</div>

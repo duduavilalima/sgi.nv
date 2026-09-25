@@ -1,0 +1,81 @@
+<md-content ng-if="$ctrl.listaDadosContabeis.length > 0">
+	<table class="simple row-border hover text-center font-size-12"
+		   id="table-listaDadosContabeis" ms-responsive-table
+		   width="100%">
+		<thead class="cabecalho-borda-cinza">
+		<tr>
+			<th class="titulo_colunas_rb" width="10%">
+				<div class="table-header text-center"><span
+					class="column-title">Tipo de dados contábeis</span>
+				</div>
+			</th>
+			<th class="titulo_colunas_rb" width="20%">
+				<div class="table-header text-center"><span
+					class="column-title">Empresa</span></div>
+			</th>
+			<th class="titulo_colunas_rb" width="15%">
+				<div class="table-header text-center"><span
+					class="column-title">Conta contábil</span></div>
+			</th>
+			<th class="titulo_colunas_rb" width="7%">
+				<div class="table-header text-center"><span
+					class="column-title">Opções</span></div>
+			</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr class="linha-borda-cinza"
+			ng-repeat="item in $ctrl.listaDadosContabeis">
+			<td class="text-left"> {{item.tipoEspecial}}</td>
+			<td class="text-left"> {{item.unidade.codnome}}</td>
+			<td class="text-left"> {{item.numeroContaContabil}}</td>
+			<td class="text-center"
+				style="padding-top: 0px; padding-bottom: 0px;">
+				<md-button class="md-icon-button"
+						   id="btn_excluir_excluirContabeis_{{$index}}"
+						   name="btn_excluir_dadosContabeis_{{$index}}"
+						   ng-click="$ctrl.excluirDadosContabeis(item)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon class="red-400-fg"
+							 md-font-icon="icon-close"></md-icon>
+					<md-tooltip class="h3" md-direction="bottom">
+						Excluir
+					</md-tooltip>
+				</md-button>
+				<md-button class="md-icon-button"
+						   id="btn_add_dadosContabeis"
+						   ng-click="$ctrl.novaContaContabil(item)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon md-font-icon="icon-pencil"
+							 style="!important;"></md-icon>
+					<md-tooltip class="h3" md-direction="bottom">
+						Editar
+					</md-tooltip>
+				</md-button>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<md-divider></md-divider>
+</md-content>
+
+<div id="idMensagemDadosContabeis"
+	 ng-if="(($ctrl.listaDadosContabeis == null || $ctrl.listaDadosContabeis.length == 0) && screenMode == 'VIEW')">
+	<md-whiteframe class="md-whiteframe-1dp" flex="100" layout
+				   layout-align="center center">
+		<span class="h4 p-32">Não existe(m) <b>contas contábeis</b> cadastrada(s).</span>
+	</md-whiteframe>
+</div>
+<div class="p-8" flex flex layout="row" layout-align="end center"
+	 layout-xs="column">
+	<md-button class="md-raised md-accent" id="btn_salvar"
+			   ng-click="$ctrl.novaContaContabil($index)"
+			   ng-disabled="$ctrl.desabilitarBotaoNovaCC">
+		NOVA CONTA CONTÁBIL
+		<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+			<span class="h4">Adicionar uma associação com conta contábil para este cliente</span>
+		</md-tooltip>
+	</md-button>
+</div>
+<md-divider></md-divider>

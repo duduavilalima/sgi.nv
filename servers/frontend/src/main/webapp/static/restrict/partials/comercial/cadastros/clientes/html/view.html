@@ -1,0 +1,256 @@
+<div class="page-layout simple fullwidth" ng-controller="ClientesDetailCtrl as $ctrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">Comercial</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">Clientes</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">Exibição</span>
+			</div>
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">Cliente - Dados Gerais</div>
+						</header>
+
+						<md-progress-linear class="md-warn" md-mode="query" ng-show="!$ctrl.object"></md-progress-linear>
+
+						<div class="white-500-bg">
+							<form name="ClientesForm">
+								<div class="p-16">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_tipo_pessoaV">Tipo de pessoa</label>
+											<input id="input_tipo_pessoaV" name="tipo_pessoa" ng-disabled="true" type="text" value="{{$ctrl.tipoCliente === 'clientePF' ? 'Física' : 'Jurídica'}}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-gt-md="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente !== 'clientePF'">
+											<label id="lbl_cnpjV">CNPJ</label>
+											<input id="input_cnpjV" name="cnpj" ng-disabled="true" ng-model="$ctrl.object.documento" type="text" ui-br-cnpj-mask>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-gt-md="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente === 'clientePF'">
+											<label id="lbl_cpfV">CPF</label>
+											<input id="input_cpfV" name="cpf" ng-disabled="true" ng-model="$ctrl.object.documento" type="text" ui-br-cpf-mask>
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente === 'clientePJ'">
+											<label id="lbl_razao_socialV">Razão social</label>
+											<input id="input_razao_socialV" name="razao_social" ng-disabled="true" type="text" value="{{ ::$ctrl.object.nome }}">
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="$ctrl.tipoCliente === 'clientePF'">
+											<label id="lbl_nomeV">Nome</label>
+											<input id="input_nomeV" name="nome" ng-disabled="true" type="text" value="{{ ::$ctrl.object.nome }}">
+										</md-input-container>
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_situacaoV">Situação</label>
+											<input id="input_situacaoV" name="situacao" ng-disabled="true"
+												   value="{{$ctrl.object.situacao}}">
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_nome_fantasiaV">Nome fantasia</label>
+											<input id="input_nome_fantasiaV" name="nome_fantasia" ng-disabled="true"
+												   type="text" value="{{$ctrl.object.nomeFantasia}}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_ramo_negocioV">Ramo de negócio</label>
+											<input id="input_ramo_negocioV" name="ramo_negocio" ng-disabled="true"
+												   type="text" value="{{$ctrl.object.cnae.sigla +' '+ $ctrl.object.cnae.descricao}}">
+											<md-tooltip id="tool_tip_excluirV" md-direction="top">
+												<span class="h4">{{$ctrl.object.cnae.sigla + " " + $ctrl.object.cnae.descricao}}</span>
+											</md-tooltip>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="25" flex-gt-md="25">
+											<label id="lbl_classificacaoV">Classificação</label>
+											<input id="input_classificacao" name="classificacao" ng-disabled="true"
+												   value="{{$ctrl.object.classificacaoCliente.nome}}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-gt-md="25">
+											<label id="lbl_uf_estadualV">UF Inscrição Estadual</label>
+											<input id="input_ufInscricaoEstadual" name="ufInscricaoEstadual"
+												   ng-disabled="true" ng-model="$ctrl.object.ufInscricaoEstadual" value="{{$ctrl.object.ufInscricaoEstadual}}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_inscricaoEstadualV">Inscrição Estadual</label>
+											<input id="input_inscricaoEstadualV" name="inscricaoEstadual" ng-disabled="true"
+												   ng-model="$ctrl.object.inscricaoEstadual" type="text" ui-br-ie-mask="$ctrl.object.ufInscricaoEstadual">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_inscricaoMunicipalV">Inscrição Municipal</label>
+											<input id="input_inscricaoMunicipalV" name="inscricaoMunicipal" ng-disabled="true" type="text" value="{{$ctrl.object.inscricaoMunicipal}}">
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_subClienteV">Subcliente</label>
+											<input id="input_subCliente" name="subCliente" ng-disabled="true" value="{{$ctrl.object.subCliente}}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.object.subCliente === 'Não'">
+											<label id="lbl_exclCobrV">Excluir (Cobrança)</label>
+											<input id="input_exclCobr" name="exclui" ng-disabled="true" value="{{$ctrl.object.faturamentoCobranca ? 'Sim' : 'Não'}}">
+											<md-tooltip id="tool_tip_excluirV" md-direction="top">
+												<span class="h4">Indica se o cliente será excluído no relatório de cobrança ou não</span>
+											</md-tooltip>
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="$ctrl.object.subCliente === 'Sim'">
+											<label id="lbl_nomeClienteV">Cliente</label>
+											<input id="input_nomeClienteV" name="input_nomeCliente" ng-disabled="true" type="text" value="{{$ctrl.object.clientePrincipal.nome}}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100" ng-if="$ctrl.object.subCliente === 'Sim'">
+											<label id="lbl_cnpjClienteV">CNPJ cliente</label>
+											<input id="input_cnpjClienteV" name="input_cnpjCliente" ng-disabled="true" type="text" value="{{$ctrl.object.clientePrincipal.documento}}">
+										</md-input-container>
+
+									</div>
+								</div>
+
+								<!--ABAS-->
+
+								<div>
+									<md-content>
+										<md-tabs md-border-bottom md-dynamic-height>
+											<!-- ABA CONTATO -->
+											<md-tab label="Contatos">
+												<div class="p-16" ng-if="$ctrl.tipoCliente === 'clientePJ'">
+													<div layout="row" layout-sm="column" layout-wrap layout-xs="column" style="margin-top: -5px;">
+														<md-input-container flex="25" flex-sm="100" flex-xs="100">
+															<label id="lbl_preferencialV">Meio de contato preferencial</label>
+															<input id="combo_preferencial" name="preferencial" ng-disabled="true" value="{{$ctrl.object.canalPreferencial}}">
+														</md-input-container>
+													</div>
+												</div>
+
+												<md-tabs md-border-bottom md-dynamic-height>
+													<!--ABA PESSOAS PARA CONTATO -->
+													<md-tab label="Pessoas para contato" ng-if="$ctrl.tipoCliente === 'clientePJ'">
+														<div class="padding-16"
+															 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_pessoa_contato.html'">
+														</div>
+													</md-tab>
+
+													<!-- ABA TELEFONES -->
+													<md-tab label="Telefones">
+														<div class="padding-16"
+															 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_telefones.html'">
+														</div>
+													</md-tab>
+
+													<!-- ABA ENDEREÇO -->
+													<md-tab label="Endereço">
+														<div class="padding-16"
+															 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_endereco.html'">
+														</div>
+													</md-tab>
+
+													<!-- ABA E-MAIL -->
+													<md-tab label="E-mails">
+														<div class="padding-16"
+															 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_email.html'">
+														</div>
+													</md-tab>
+												</md-tabs>
+											</md-tab>
+
+											<!-- ABA DADOS CONTÁBEIS -->
+											<md-tab label="Dados contábeis">
+												<div class="padding-16"
+													 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_dados_contabeis.html'">
+												</div>
+											</md-tab>
+
+											<!-- ABA DADOS SUBCLIENTES -->
+											<md-tab label="Subclientes" ng-if="$ctrl.listaSubclientes && $ctrl.listaSubclientes.length > 0">
+												<div class="padding-16"
+													 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_subclientes.html'">
+												</div>
+											</md-tab>
+
+											<!-- ABA DADOS CONTRATO -->
+											<md-tab label="Contratos">
+												<div class="padding-16"
+													 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_contrato.html'">
+												</div>
+											</md-tab>
+
+											<!-- ABA CONTROLES -->
+											<md-tab label="Controles">
+												<div class="padding-16"
+													 ng-include="'partials/comercial/cadastros/clientes/html/partials/aba_controles.html'">
+												</div>
+											</md-tab>
+										</md-tabs>
+
+										<md-divider></md-divider>
+
+										<div class="p-8" flex layout="row" layout-xs="column">
+											<div flex layout="row" layout-align="start start">
+												<md-button aria-label="Editar" class="md-raised md-accent" id="btn_editar" ng-click="$ctrl.editar()">
+													Editar
+													<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+														<span class="h4">Editar este cliente</span>
+													</md-tooltip>
+												</md-button>
+
+												<md-button aria-label="Retornar" class="md-raised md-accent" id="btn_retornar" ng-click="$ctrl.retornar()">
+													Retornar
+													<md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+														<span class="h4">Sair desta tela e retornar para a tela anterior</span>
+													</md-tooltip>
+												</md-button>
+											</div>
+
+											<div flex layout="row" layout-align="end center">
+												<md-button aria-label="Remover" class="md-raised md-accent" id="btn_remover" ng-click="$ctrl.remover($event)">
+													Remover
+													<md-tooltip id="tool_tip_btn_remover" md-direction="bottom">
+														<span class="h4">Remover este cliente (esta operação não poderá ser desfeita)</span>
+													</md-tooltip>
+												</md-button>
+											</div>
+										</div>
+									</md-content>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

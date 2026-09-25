@@ -1,0 +1,48 @@
+<md-dialog aria-label="Observações" id="dialog_imprimir_observacoes" style="width: 500px;">
+	<form name="DialogObservacoesForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_tributo">{{title}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+
+		<md-dialog-content>
+			<div class="md-dialog-content" md-theme="sgi" style="padding-bottom: 12px; height: 200px;">
+				<div layout layout-sm="column" layout-wrap>
+
+					<md-input-container flex="100" flex-sm="100">
+						<label id="lbl_observacoes">Observações</label>
+						<textarea columns="1" id="input_observacoes" maxlength="2000" md-maxlength="2000"
+								  name="input_observacoes" ng-maxlength="2000" ng-model="object.observacoes"
+								  ng-required="false"
+								  style="height: 130px;max-height: 130px;min-height: 130px;overflow-y: scroll;resize: none;"></textarea>
+					</md-input-container>
+
+				</div>
+			</div>
+
+			<md-divider></md-divider>
+
+		</md-dialog-content>
+
+		<md-dialog-actions class="navigation padding-8" layout="row">
+
+			<md-button class="md-raised md-accent" id="btn_salvar_tributo" ng-click="salvar()" ng-disabled="action">
+				CONFIRMAR
+			</md-button>
+
+			<md-button class="md-raised md-accent" id="btn_cancelar_tributo" ng-click="cancel()" ng-disabled="action">
+				CANCELAR
+			</md-button>
+
+			<span flex></span>
+
+		</md-dialog-actions>
+
+	</form>
+</md-dialog>

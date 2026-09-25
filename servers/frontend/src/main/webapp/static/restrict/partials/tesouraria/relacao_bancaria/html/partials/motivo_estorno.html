@@ -1,0 +1,45 @@
+<md-dialog aria-label="{{titulo}}" id="dialog_motivo" style="width: 600px;">
+	<form name="form_etapa">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_motivo" md-autofocus>{{titulo}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" id="bt_cancelar_dialog_motivo" ng-click="cancel()"
+						   style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="white-bg" role="document">
+			<form name="form">
+				<div class="padding-16">
+					<div flex layout layout-sm="row" style="margin-top: -8px">
+						<md-input-container flex="100" flex md-no-float>
+							<label id="lbl_motivos">Motivo</label>
+
+							<md-select id="combo_motivos" name="combo_motivos" ng-model="object.retornoBancario"
+									   ng-model-options="{trackBy: '$value.codigo'}" placeholder="Motivo">
+								<md-option ng-repeat="item in listMotivos" ng-value="item">{{ item.descricao }}
+								</md-option>
+							</md-select>
+
+						</md-input-container>
+					</div>
+				</div>
+			</form>
+			<md-divider></md-divider>
+		</md-dialog-content>
+
+		<md-dialog-actions layout="row">
+			<md-button class="md-raised md-accent" id="btn_salvar_motivo" ng-click="confirm()"
+					   ng-disabled="form.$invalid">
+				CONFIRMAR
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_fechar_motivo" ng-click="cancel()" ng-disabled="action">
+				CANCELAR
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

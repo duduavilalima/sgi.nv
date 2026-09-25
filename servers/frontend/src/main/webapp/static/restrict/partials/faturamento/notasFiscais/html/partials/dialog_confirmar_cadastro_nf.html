@@ -1,0 +1,70 @@
+<md-dialog aria-label="Nota Fiscal - Numerar: Confirmação" id="dialog_titulo_popup_nota_fiscal_cadastro_prefeitura"
+		   style="width: 700px;">
+	<form name="DialogNumerarForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_nota_fiscal_cadastro_prefeitura" md-autofocus>Nota Fiscal - Cadastro na Prefeitura:
+					Confirmação</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="white-bg" role="document">
+			<div class="md-dialog-content" md-theme="sgi">
+
+				<div layout layout-sm="column">
+					<md-input-container flex>
+						<label id="lbl_numero_dialog_confirmar_cadastro">Número da NF</label>
+						<input id="input_numero_dialog_confirmar_cadastro" maxlength="12" md-maxlength="12"
+							   name="input_numero_dialog_confirmar_cadastro" ng-maxlength="12" ng-model="object.numero"
+							   ng-required="true" type="text" value="{{ object.numero }}">
+						<div ng-messages="DialogConfirmarCadastroForm.input_numero_dialog_numerar.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+							<div ng-message="maxlength">O nome informado é muito longo.</div>
+						</div>
+					</md-input-container>
+
+					<md-content class="md-datepicker-custom" flex style="overflow:hidden;">
+						<div flex layout="column">
+							<label class="md-caption" ng-if="object.dataEmissao!=null"
+								   style="color:gray; margin-left: 10px;">Emissão<span
+								class="class_required">*</span></label>
+							<md-datepicker flex id="input_emissao_dialog_numerar" md-placeholder="Emissão *"
+										   name="input_emissao_dialog_numerar"
+										   ng-model="object.dataEmissao" ng-required="true"
+										   value="{{ object.dataEmissao | date:'dd/MM/yyyy' }}"></md-datepicker>
+						</div>
+						<div ng-messages="DialogNumerarForm.input_emissao_dialog_numerar.$error"
+							 ng-show="DialogNumerarForm.input_emissao_dialog_numerar.$touched" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-content>
+				</div>
+			</div>
+
+			<md-divider></md-divider>
+		</md-dialog-content>
+
+		<md-dialog-actions class="white-bg" layout="row">
+			<md-button class="md-raised md-default" id="btn_confirmar_dialog_confirmar_cadastro" ng-click="confirm()"
+					   ng-disabled="DialogConfirmarCadastroForm.$invalid">
+				CONFIRMAR
+				<md-tooltip id="tool_tip_btn_confirmar_dialog_confirmar_cadastro" md-direction="bottom">
+					<span class="h4">Confirmar cadastramento desta nota fiscal na Prefeitura</span>
+				</md-tooltip>
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_cancelar_dialog_confirmar_cadastro" ng-click="cancel()"
+					   ng-disabled="action">
+				CANCELAR
+				<md-tooltip id="tool_tip_btn_cancelar_dialog_confirmar_cadastro" md-direction="bottom">
+					<span class="h4">Cancelar as alterações realizadas na confirmação do cadastramento desta nota fiscal na Prefeitura</span>
+				</md-tooltip>
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>
+

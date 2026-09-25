@@ -1,0 +1,160 @@
+<div class="page-layout simple fullwidth" ng-controller="FaturamentoCadastroCtrl" ng-show="object && object != null">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ ::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ subtitulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="content" md-background-bg>
+
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+			<!-- CONTENT -->
+			<div class="content" flex>
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="title_panel">{{ ::modulo }} - Novo</div>
+							</header>
+
+							<div>
+								<div class="white-500-bg">
+									<md-content>
+										<md-tabs id="abas_faturamento" md-border-bottom md-dynamic-height
+												 md-selected="index" name="abas_faturamento">
+											<md-tab id="aba_dados_principais" name="aba_dados_principais">
+												<md-tab-label><span>Dados Principais</span></md-tab-label>
+												<md-tab-body>
+													<form name="wizardStep1">
+														<div class="padding-16"
+															 ng-include="'partials/faturamento/faturamento/partials/aba_dados_principais.html'"></div>
+													</form>
+												</md-tab-body>
+											</md-tab>
+											<md-tab id="aba_contrato" label="Contrato" name="aba_contrato"
+													ng-disabled="wizardStep1.$invalid || naoTemContrato">
+												<md-tab-label><span>Contrato</span></md-tab-label>
+												<md-tab-body>
+													<form name="wizardStep2">
+														<div class="padding-16"
+															 ng-include="'partials/faturamento/faturamento/partials/aba_contrato.html'">
+														</div>
+													</form>
+												</md-tab-body>
+											</md-tab>
+											<md-tab id="aba_contato" label="Contato" name="aba_contato"
+													ng-disabled="wizardStep2.$invalid">
+												<md-tab-label><span>Contato</span></md-tab-label>
+												<md-tab-body>
+													<form name="wizardStep3">
+														<div class="padding-16"
+															 ng-include="'partials/faturamento/faturamento/partials/aba_contato.html'">
+														</div>
+													</form>
+												</md-tab-body>
+											</md-tab>
+											<md-tab id="aba_informacoes_complementares"
+													label="Informações Complementares" name="aba_informacoes"
+													ng-disabled="wizardStep2.$invalid">
+												<md-tab-label><span>Informações Complementares</span></md-tab-label>
+												<md-tab-body>
+													<form name="wizardStep4">
+														<div class="padding-16"
+															 ng-include="'partials/faturamento/faturamento/partials/aba_informacoes_complementares.html'">
+														</div>
+													</form>
+												</md-tab-body>
+											</md-tab>
+											<md-tab id="aba_tributos" label="Tributos" name="aba_tributos"
+													ng-disabled="!habilitarAbaTributos() || wizardStep4.$invalid">
+												<md-tab-label><span>Tributos</span></md-tab-label>
+												<md-tab-body>
+													<form name="wizardStep5">
+														<div class="padding-16"
+															 ng-include="'partials/faturamento/faturamento/partials/aba_tributos.html'">
+														</div>
+													</form>
+												</md-tab-body>
+											</md-tab>
+											<md-tab id="aba_discriminacao_servicos" label="Discriminação"
+													md-on-select="novoMontarDiscriminacaoServico()" name="aba_servicos"
+													ng-disabled="wizardStep1.$invalid || wizardStep2.$invalid || wizardStep3.$invalid || wizardStep4.$invalid || wizardStep5.$invalid">
+												<md-tab-label><span>Discriminação</span></md-tab-label>
+												<md-tab-body>
+													<form name="wizardStep6">
+														<div class="padding-16"
+															 ng-include="'partials/faturamento/faturamento/partials/aba_discriminacao_servicos.html'">
+														</div>
+													</form>
+												</md-tab-body>
+											</md-tab>
+										</md-tabs>
+
+										<md-divider></md-divider>
+
+										<div class="navigation padding-8" flex layout="row">
+
+											<div class="navigation padding-8" flex layout="row"
+												 ng-show="screenMode === 'NEW'">
+												<md-button class="md-raised md-accent" id="btn_anterior"
+														   ng-click="previousStep()"
+														   ng-disabled="isFirstStep() || action">
+													Anterior
+													<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+														<span
+															class="h4">Retornar para a tela anterior deste faturamento</span>
+													</md-tooltip>
+												</md-button>
+												<md-button class="md-raised md-accent" id="btn_proximo"
+														   ng-click="nextStep()"
+														   ng-disabled="currentStepInvalid() || isLastStep() || naoTemContrato || action">
+													Próximo
+													<md-tooltip id="tool_tip_btn_proximo" md-direction="bottom">
+														<span class="h4">Ir para a próxima tela deste faturamento</span>
+													</md-tooltip>
+												</md-button>
+												<md-button class="md-raised md-accent" id="btn_cancelar"
+														   ng-click="cancelarNovoFaturamento($event)"
+														   ng-disabled="action" ng-hide="screenMode === 'VIEW'"
+														   ng-show="screenMode === 'NEW'">
+													Cancelar
+													<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+														<span class="h4">Cancelar este novo faturamento (os dados informados serão perdidos)</span>
+													</md-tooltip>
+												</md-button>
+												<md-button class="md-raised md-accent" id="btn_salvar"
+														   ng-click="salvarFaturamento()"
+														   ng-disabled="wizardStep1.$invalid || wizardStep2.$invalid || wizardStep3.$invalid || wizardStep4.$invalid || wizardStep5.$invalid  || wizardStep6.$invalid || action || desabilitarBotaoSalvarFat()"
+														   ng-show="isLastStep()">
+													Salvar
+													<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+														<span class="h4">Salvar os dados deste faturamento</span>
+													</md-tooltip>
+												</md-button>
+											</div>
+										</div>
+									</md-content>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- / CONTENT -->
+		</div>
+	</div>
+</div>

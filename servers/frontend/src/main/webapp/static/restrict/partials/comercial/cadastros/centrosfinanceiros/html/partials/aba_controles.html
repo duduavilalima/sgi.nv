@@ -1,0 +1,160 @@
+<md-content class="md-padding" ng-if="!$ctrl.object.isAssociadoContrato">
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Cadastramento</label>
+			<input id="cadastramento" name="cadastramento" ng-disabled="true" type="text"
+				   value="{{ ::$ctrl.object.nomeCriador }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora" name="data_hora" ng-disabled="true" type="text"
+				   value="{{ ::$ctrl.object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Última alteração</label>
+			<input id="alteracao" name="alteracao" ng-disabled="true" type="text" value="{{ $ctrl.object.nomeAtualizador }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora2" name="data_hora2" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Ativação</label>
+			<input id="ativacao" name="ativacao" ng-disabled="true" type="text" value="{{ $ctrl.object.nomeAtivacao }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora3" name="data_hora3" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.dataAtivacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Inativação</label>
+			<input id="inativacao" name="inativacao" ng-disabled="true" type="text" value="{{ $ctrl.object.nomeInativacao }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora4" name="data_hora4" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.dataInativacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+</md-content>
+
+<md-content class="md-padding" ng-if="$ctrl.object.isAssociadoContrato">
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Cadastramento</label>
+			<input id="criacao" name="criacao" ng-disabled="true" type="text" value="{{ ::$ctrl.object.nomeCriador }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora5" name="data_hora5" ng-disabled="true" type="text"
+				   value="{{ ::$ctrl.object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Última alteração</label>
+			<input id="alteracao" name="alteracao" ng-disabled="true" type="text" value="{{ $ctrl.object.nomeAtualizador }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora2" name="data_hora2" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Ativação</label>
+			<input id="ativacao" name="ativacao" ng-disabled="true" type="text" value="{{ $ctrl.object.nomeAtivacao }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora3" name="data_hora3" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.dataAtivacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Encerramento (com faturamento)</label>
+			<input id="encerramentoComFat" name="encerramentoComFat" ng-disabled="true" type="text" value="{{ $ctrl.object.nomeEncerramentoComFat }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora10" name="data_hora10" ng-disabled="true" type="text"  value="{{ $ctrl.object.dataEncerramentoComFat | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Encerramento</label>
+			<input id="encerramento" name="encerramento" ng-disabled="true" type="text" value="{{ $ctrl.object.nomeEncerramento }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora6" name="data_hora6" ng-disabled="true" type="text" value="{{ $ctrl.object.dataEncerramento | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Paralisação</label>
+			<input id="paralisacao" name="paralisacao" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.nomeParalisacao }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora7" name="data_hora7" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.dataParalisacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Reativação</label>
+			<input id="reativacao" name="reativacao" ng-disabled="true" type="text" value="{{ $ctrl.object.nomeReativacao }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora8" name="data_hora8" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.dataReativacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+
+	<div flex layout="row" layout-sm="row" layout-xs="column">
+		<md-input-container flex="70" flex-xs="100">
+			<label>Cancelamento</label>
+			<input id="cancelamento" name="cancelamento" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.nomeCancelamento }}">
+		</md-input-container>
+
+		<md-input-container flex="30" flex-xs="100">
+			<label>Data/hora</label>
+			<input id="data_hora9" name="data_hora9" ng-disabled="true" type="text"
+				   value="{{ $ctrl.object.dataCancelamento | date:'dd/MM/yyyy HH:mm:ss' }}">
+		</md-input-container>
+	</div>
+</md-content>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.StringHttpMessageConverter"/>
+			<bean
+				class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="jacksonObjectMapper"/>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<mvc:default-servlet-handler/>
+
+	<!--	&lt;!&ndash; Configurações iniciais do Jackson &ndash;&gt;-->
+	<!--	<bean-->
+	<!--		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">-->
+	<!--		<property name="targetObject" ref="jacksonObjectMapper"/>-->
+	<!--		<property name="targetMethod" value="configure"/>-->
+	<!--		<property name="arguments">-->
+	<!--			<list>-->
+	<!--				<value-->
+	<!--					type="com.fasterxml.jackson.databind.DeserializationFeature">FAIL_ON_UNKNOWN_PROPERTIES</value>-->
+	<!--				<value>false</value>-->
+	<!--			</list>-->
+	<!--		</property>-->
+	<!--	</bean>-->
+
+	<!-- Formatação de data padrão ISO no Jackson -->
+	<bean id="jacksonObjectMapper" class="br.com.araujoabreu.sgi.util.CustomObjectMapper" primary="true"/>
+
+	<!-- Dozer mappings -->
+	<bean class="org.dozer.spring.DozerBeanMapperFactoryBean">
+		<property name="mappingFiles" value="classpath*:/**/*-map.xml"/>
+	</bean>
+</beans>

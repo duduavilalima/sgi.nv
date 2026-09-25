@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<context:annotation-config/>
+
+	<context:component-scan base-package="br.com.fasolti.sgi.api"/>
+
+	<!--<bean id="propertyPlaceHolderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>-->
+	<context:property-placeholder
+		location="classpath:spring/conf/*.properties"/>
+
+	<import resource="applicationContext-persistence.xml"/>
+	<import resource="applicationContext-jobs.xml"/>
+
+	<context:component-scan base-package="br.com.araujoabreu.sgi"/>
+	<context:component-scan base-package="br.com.fasolti.commons"/>
+
+	<!-- Dozer mappings -->
+	<bean class="org.dozer.spring.DozerBeanMapperFactoryBean">
+		<property name="mappingFiles" value="classpath*:/**/*-map.xml"/>
+	</bean>
+
+	<cache:annotation-driven/>
+
+</beans>

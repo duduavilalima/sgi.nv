@@ -1,0 +1,194 @@
+<div class="page-layout simple fullwidth">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">Comercial</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">Centros Financeiros</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="subtitulo">Pesquisar</span>
+			</div>
+
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+			<div class="content" flex>
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">Centros Financeiros - Filtros de pesquisa</div>
+							</header>
+							<div class="content">
+								<form name="form" ui-keypress="{13:'$ctrl.buscar(1)'}">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_gerencia">Gerência</label>
+											<md-select id="combo_gerencia" name="gerencia" ng-change="$ctrl.changeGerencia()" ng-model="object.gerencia">
+												<md-option ng-repeat="item in $ctrl.listaGerencia" ng-value="item" value="{{item}}">
+													{{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_matriz_filial">Matriz/Filial</label>
+											<md-select id="combo_matriz_filial" name="matriz_filial" ng-change="$ctrl.changeUnidade()" ng-model="object.unidade">
+												<md-option ng-repeat="item in $ctrl.listUnidades" ng-value="item" value="{{item}}">
+													{{ item.codnome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_contrato">Contrato</label>
+											<input id="input_contrato" name="contrato" ng-model="object.codigoContrato" ui-number-mask="0" ui-hide-group-sep>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_identificador">Identificador</label>
+											<input id="input_identificador" name="identificador" ng-model="object.identificador" type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_nome">Nome</label>
+											<input id="input_nome" name="nome" ng-model="object.nome" type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_situacao">Situação</label>
+											<md-select id="combo_situacao" name="situacao" ng-change="$ctrl.changeSituacao()" ng-model="object.situacao">
+												<md-option ng-repeat="item in $ctrl.listSituacoes" ng-value="item" value="{{item}}">
+													{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_regime">Regime</label>
+											<md-select id="combo_regime" name="regime" ng-change="$ctrl.changeRegime()" ng-model="$ctrl.cumulativo">
+												<md-option value="true">
+													{{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_uf">UF</label>
+											<md-select id="combo_uf" name="uf" ng-change="$ctrl.changeUf()" ng-model="object.uf">
+												<md-option ng-repeat="item in $ctrl.listEstados" ng-value="item" value="{{item}}">
+													{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-autocomplete flex="25" id="autocomplete_cidade"
+														 md-delay="250"
+														 md-floating-label="Cidade"
+														 md-input-id="input_cidade"
+														 md-input-name="autocompleteCidade"
+														 md-item-text="item.nome"
+														 md-items="item in $ctrl.querySearchCidade(searchTextCidade)"
+														 md-menu-class="autocomplete-custom-template"
+														 md-min-length="3"
+														 md-no-cache="false"
+														 md-search-text="searchTextCidade"
+														 md-selected-item="selectedItemCliente"
+														 md-selected-item-change="$ctrl.selectedItemChange(item)"
+														 name="autocompleteCidade"
+														 value="{{ object.cidade }}">
+											<md-item-template>
+												<span class="item-title">
+													<h5>{{item.nome}}</h5>
+												</span>
+											</md-item-template>
+										</md-autocomplete>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_cliente_livre">Permite cliente livre</label>
+											<md-select id="combo_cliente_livre" name="cliente_livre" ng-change="$ctrl.changePermiteClienteLivre()"  ng-model="object.permiteClienteLivre">
+												<md-option value=""></md-option>
+												<md-option value="true">Sim</md-option>
+												<md-option value="false">Não</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<section layout="row" layout-sm="row" layout-wrap layout-xs="column">
+										<div flex layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_pesquisar" name="btn_pesquisar" ng-click="$ctrl.buscar()">
+												Pesquisar
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar" ng-click="$ctrl.reset()">
+												Limpar
+											</md-button>
+										</div>
+										<div flex layout="row" layout-align="end center" layout-align-xs="center center">
+											<md-button class="md-raised md-default" id="btn_novo_centro_financeiro"ui-sref="centrosfinanceiros.new">
+												Novo Centro Financeiro
+											</md-button>
+										</div>
+									</section>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- / CAMPOS DE PESQUISA -->
+
+				<!-- DATATABLE - RESULTADO DA PESQUISA -->
+				<div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result" ng-if="result && result != null">
+					<header class="md-accent-bg">
+						<div class="title" id="titulo_resultado">Centros Financeiros - Resultado da pesquisa</div>
+					</header>
+					<div class="sgiUiGridPesquisa" id="idGridFaturamentos" ng-if="exibirGrid(gridPesquisa)" ng-style="ajustarAlturaTabela(gridPesquisa)"
+						ui-grid="gridPesquisa" ui-grid-auto-resize ui-grid-pinning>
+					</div>
+
+					<div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+						<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+							<span class="h4 p-32">{{mensagemPesquisa()}}</span>
+						</md-whiteframe>
+					</div>
+
+					<section class="p-8" layout="row" layout-align="space-between center" layout-sm="row" layout-wrap>
+						<div></div>
+						<div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+
+						<!-- / DATATABLE - RESULTADO DA PESQUISA -->
+						<div layout="row" layout-align="end center" layout-sm="row" layout-wrap>
+							<md-button class="md-raised md-default" id="btn_novo_centro_financeiro" ui-sref="centrosfinanceiros.new">
+								Novo Centro Financeiro
+								<md-tooltip id="tool_tip_btn_novo_resultado" md-direction="bottom">
+									<span class="h4">Criar novo centro financeiro</span>
+								</md-tooltip>
+							</md-button>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+</div>

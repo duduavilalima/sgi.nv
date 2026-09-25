@@ -1,0 +1,160 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_adicionar_endereco" style="width: 1200px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_adicionar_endereco" md-autofocus> Endereço - {{title}} </h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content class="md-background-bg md-hue-3" role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<form name="DialogAdicionarEnderecoForm" novalidate>
+
+				<div flex-gt-xs="100" flex-xs layout="column">
+					<md-card style="margin-left: -10px; margin-right: -10px; margin-top: -10px;">
+
+						<div class="pl-16 pr-16 pt-16" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex="25" flex-sm="100" flex-xs="100">
+								<label id="lbl_tipo">Tipo</label>
+								<md-select id="combo_tipo" name="tipo" ng-model="object.tipo" required="true">
+									<md-option ng-repeat="item in listTipo" ng-value="item" value="{{ item }}">{{ item
+										}}
+									</md-option>
+								</md-select>
+								<div ng-messages="DialogAdicionarEnderecoForm.tipo.$error" role="alert">
+									<div ng-message="required">Obrigatório.</div>
+								</div>
+							</md-input-container>
+
+							<md-input-container flex="25" flex-sm="100" flex-xs="100">
+								<label id="lbl_cep">CEP</label>
+								<input id="input_cep" mask="99999-999" name="input_cep" ng-model="object.endereco.cep"
+									   required="true" restrict="reject" type="text">
+								<div ng-messages="DialogAdicionarEnderecoForm.input_cep.$error" role="alert">
+									<div ng-message="required">Obrigatório.</div>
+								</div>
+							</md-input-container>
+
+							<!-- Autocomplete de Cidade-->
+							<md-autocomplete flex="50" id="autocomplete_cidade"
+											 md-delay="250"
+											 md-floating-label="Cidade/UF"
+											 md-input-id="input_cidade"
+											 md-input-name="autocompleteCidade"
+											 md-item-text="item.cidadeUf"
+											 md-items="item in querySearchCidade(searchTextCidade)"
+											 md-menu-class="autocomplete-custom-template"
+											 md-min-length="3"
+											 md-no-cache="false"
+											 md-search-text="searchTextCidade"
+											 md-selected-item="selectedItemCliente"
+											 md-selected-item-change="selectedItemChange(item)"
+											 name="autocompleteCidade"
+											 required="true"
+											 value="{{ object.endereco.cidade }}">
+								<md-item-template>
+												<span class="item-title">
+													<h5>{{item.cidadeUf}}</h5>
+												</span>
+								</md-item-template>
+								<div ng-messages="wizardStep1.autocompleteCidade.$error"
+									 ng-show="wizardStep1.autocompleteCidade.$touched" role="alert">
+									<div id="msg_min_client_cidade" ng-message="minlength">O nome informado não é
+										suficiente.
+									</div>
+									<div id="msg_max_client_cidade" ng-message="maxlength">O nome informado é muito
+										longo.
+									</div>
+								</div>
+								<div ng-messages="DialogAdicionarEnderecoForm.autocompleteCidade.$error" role="alert">
+									<div ng-message="required">Obrigatório.</div>
+								</div>
+							</md-autocomplete>
+
+						</div>
+
+						<div class="pl-16 pr-16" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex="25" flex-sm="100" flex-xs="100"
+												ng-if="habilitarComboTipoLogradouro">
+								<label id="lbl_tipoLogradouro_novo">Tipo Logr.</label>
+								<md-select id="combo_tipoLogradouro" name="tipoLogradouro"
+										   ng-model="object.endereco.tipoLogradouro">
+									<md-option ng-repeat="item in listTipoLogradouro " ng-value="item"
+											   value="{{ item }}">{{ item.nome }}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+							<md-input-container flex="25" flex-sm="100" flex-xs="100"
+												ng-if="!habilitarComboTipoLogradouro">
+								<label id="lbl_tipoLogradouro_edicao">Tipo Logr.</label>
+								<md-select id="combo_tipoLogradouro" name="tipoLogradouro"
+										   ng-model="object.endereco.tipoLogradouro"
+										   ng-model-options="{trackBy: '$value.codigo'}">
+									<md-option ng-repeat="item in listTipoLogradouro " ng-value="item"
+											   value="{{ item }}">{{ item.nome }}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+							<md-input-container flex="50" flex-sm="100" flex-xs="100">
+								<label id="lbl_endereco">Logradouro</label>
+								<input id="input_endereco" name="input_endereco" ng-model="object.endereco.endereco"
+									   required="true" type="text">
+								<div ng-messages="DialogAdicionarEnderecoForm.input_endereco.$error" role="alert">
+									<div ng-message="required">Obrigatório.</div>
+								</div>
+							</md-input-container>
+
+							<md-input-container flex="25" flex-sm="100" flex-xs="100">
+								<label id="lbl_numero">Nº</label>
+								<input id="input_numero" name="input_uf" ng-model="object.endereco.numero"
+									   restrict="reject" type="text">
+							</md-input-container>
+
+						</div>
+
+						<div class="pl-16 pr-16" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex="50" flex-sm="100" flex-xs="100">
+								<label id="lbl_complemento">Complemento</label>
+								<input id="input_complemento" name="input_complemento"
+									   ng-model="object.endereco.complemento" type="text">
+							</md-input-container>
+
+							<md-input-container flex="50" flex-sm="100" flex-xs="100">
+								<label id="lbl_bairro">Bairro</label>
+								<input id="input_bairro" name="input_bairro" ng-model="object.endereco.bairro"
+									   type="text">
+							</md-input-container>
+
+						</div>
+
+						<div class="p-16" layout layout-sm="column" layout-wrap>
+							<span class="red-fg">*&nbsp;</span> Campos obrigatórios
+						</div>
+
+					</md-card>
+				</div>
+
+			</form>
+		</div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar" ng-click="confirm()"
+				   ng-disabled="DialogAdicionarEnderecoForm.$invalid">
+			Confirmar
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar" ng-click="cancel()">
+			Cancelar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

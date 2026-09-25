@@ -1,0 +1,67 @@
+<md-dialog aria-label="{{title}}" id="dialog_popup_desconto_devolucao" style="width: 600px;">
+	<form name="DescontoDevolucaoForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_desconto_devolucao">{{title}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+
+		<md-dialog-content>
+
+			<div class="md-dialog-content" md-theme="sgi" style="padding-bottom: 12px; height: 100px;">
+				<div layout layout-sm="column" layout-wrap>
+
+					<md-input-container flex flex-gt-md="75">
+						<label id="lbl_motivo">{{lblCombo}}</label>
+						<md-select id="combo_motivo" name="combo_motivo" ng-model="object.codigoMotivoDescontoDevolucao"
+								   ng-required="true">
+							<md-option ng-repeat="motivo in listaMotivos" ng-value="motivo.codigo">
+								{{motivo.descricao}}
+							</md-option>
+						</md-select>
+						<div ng-messages="DescontoDevolucaoForm.combo_motivo.$error" role="alert">
+							<div id="msg_req_combo_motivo" ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="25" flex-sm="100">
+						<label id="lbl_valor">Valor</label>
+						<input class="text-right" id="input_valor" maxlength="18" name="input_valor" ng-disabled="false"
+							   ng-model="object.valor" ng-required="true" required type="text" ui-number-mask="2">
+						<div ng-messages="DescontoDevolucaoForm.input_valor.$error" role="alert">
+							<div id="msg_req_valor_motivo" ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+				</div>
+			</div>
+
+
+			<md-divider></md-divider>
+
+
+		</md-dialog-content>
+
+		<md-dialog-actions class="navigation padding-8" layout="row">
+
+			<md-button class="md-raised md-accent" id="btn_salvar_desconto_devolucao" ng-click="confirmar()"
+					   ng-disabled="DescontoDevolucaoForm.$invalid || object.codigoMotivoDescontoDevolucao == -1">
+				CONFIRMAR
+
+			</md-button>
+
+			<md-button class="md-raised md-accent" id="btn_cancelar_desconto_devolucao" ng-click="cancel()">
+				CANCELAR
+			</md-button>
+
+			<span flex></span>
+
+		</md-dialog-actions>
+
+	</form>
+</md-dialog>

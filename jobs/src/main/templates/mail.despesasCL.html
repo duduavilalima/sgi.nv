@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+</head>
+<body>
+<p>Prezado,</p>
+<p>
+	Segue a lista de CLs com gastos acima do limite da OS Inicial (<span th:text="${#emailBean.despesasLimite}"></span>%).
+</p>
+
+
+<p>
+Legenda:
+<ul>
+	<li>Orçado sem MO: custo mensal do último fecho do CL, sem os valores de mão-de-obra</li>
+	<li>Despesa homologada (CAP): rateio das NFs e NPs já homologadas pelo Contas a Pagar (CAP) com pagamento no mês/ano considerado, exceto mão-de-obra (salários e rescisões)</li>
+	<li>Despesa total: rateio das NFs e NPs lançadas (mas ainda não homologadas) mais as NFs e NPs já homologadas pelo Contas a Pagar (CAP) com pagamento no mês/ano considerado, exceto mão-de-obra (salários e rescisões)</li>
+</ul>
+</p>
+
+
+<table style="width:900px; border-collapse: collapse;" th:if="${#emailBean.total > 0}" cellspacing="0" border="1">
+	<thead>
+	<tr>
+		<th:block th:each="h : ${emailBean.cFList[0].emailJobCabecalho}">
+			<th th:text="${h}">Header Field</th>
+		</th:block>
+	</tr>
+	</thead>
+	<tbody>
+	<tr th:each="cl : ${emailBean.cFList}">
+		<td><span th:text="${cl.nome}"> xxxxxxxxxxxxxxxxxxxx </span></td>
+		<td style="text-align:center;"><span th:text="${cl.identificadorFinal}"> 9999 </span></td>
+		<td style="text-align:right;"><span th:text="${cl.custoMensalCurrency}"> 999.999.999,99 </span></td>
+		<td style="text-align:right;"><span th:text="${cl.custoHomologadoCurrency}"> 999.999.999,99 </span></td>
+		<td style="text-align:right;"><span th:text="${cl.percentualHomologadoCurrency}"> 9999.9 </span></td>
+		<td style="text-align:right;"><span th:text="${cl.custoLancadoCurrency}"> 999.999.999,99 </span></td>
+		<td style="text-align:right;"><span th:text="${cl.percentualLancadoCurrency}"> 9999.9 </span></td>
+		<td th:each="valor: ${cl.custoLancadoFuturoCurrency}" style="text-align:right;"><span th:text="${valor}"> 999.999.999,99 </span></td>
+	</tr>
+	</tr>
+	</tbody>
+</table>
+
+<p>Para verificar os valores das despesas, acesse o relatório "<strong>Totais Gerais por CL (analítico)</strong>" na opção "<strong>Relatórios</strong>" do menu "<strong>Contas a Pagar</strong>". Informe o período de pagamento considerado (mês atual ou meses futuros) e o CL desejado, se for o caso.</p>
+
+<p>Equipe Araujo Abreu</p>
+<p><i>Esta mensagem foi gerada automaticamente pelo Sistema de Gestão Integrada da Araujo Abreu.</i></p>
+</body>
+
+</html>

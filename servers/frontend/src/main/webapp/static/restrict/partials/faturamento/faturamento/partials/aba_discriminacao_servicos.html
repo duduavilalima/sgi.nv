@@ -1,0 +1,187 @@
+<md-tabs md-border-bottom
+		 md-dynamic-height>
+	<md-tab label="Parte inicial">
+		<div id="tab_disc"
+			 layout
+			 layout-sm="column"
+			 style="height:350px">
+			<md-input-container flex ng-if="screenMode === 'VIEW'">
+				<textarea columns="1"
+						  id="input_parte_inicial_discriminacao_exibicao"
+						  maxlength="2000"
+						  name="parte_inicial_discriminacao_exibicao"
+						  ng-disabled="true"
+						  aria-label="parte_inicial_discriminacao_exibicao"
+						  name="parte_inicial_discriminacao_exibicao"
+						  ng-maxlength="2000"
+						  ng-model="object.discriminacaoInicial"
+						  style="height: 310px;max-height: 310px;min-height: 310px;overflow-y: scroll;resize: none;"></textarea>
+			</md-input-container>
+
+			<md-input-container flex ng-if="screenMode !== 'VIEW'">
+				<textarea columns="1"
+						  id="input_parte_inicial_discriminacao"
+						  maxlength="2000"
+						  md-maxlength="2000"
+						  name="parte_inicial_discriminacao"
+						  ng-disabled="modeDiscriminacao == false && screenMode == 'VIEW'"
+						  ng-maxlength="2000"
+						  aria-label="parte_inicial_discriminacao_edicao"
+						  name="parte_inicial_discriminacao_edicao"
+						  ng-model="object.discriminacaoInicial"
+						  ng-required="true"
+						  style="height: 310px;max-height: 310px;min-height: 310px;overflow-y: scroll;resize: none;outline: none !important;border: 1px solid #e0e0e0;"></textarea>
+				<div ng-messages="wizardStep6.parte_inicial_discriminacao.$error"
+					 ng-show="object.discriminacaoInicial.length > 2000"
+					 role="alert">
+					<div id="msg_req_inicial"
+						 ng-message="required">Preenchimento obrigatório.</div>
+					<div id="msg_max_inicial_"
+						 ng-message="maxlength">O texto é muito longo. O tamanho máximo permitido é de
+						2000 caracteres.
+					</div>
+				</div>
+			</md-input-container>
+		</div>
+	</md-tab>
+	<md-tab label="Parte central">
+		<div id="tab_disc2"
+			 layout
+			 layout-sm="column"
+			 style="height:350px">
+			<md-input-container flex
+								ng-if="screenMode === 'VIEW'">
+				<textarea columns="1"
+						  id="input_parte_central_discriminacao_exibicao"
+						  maxlength="2000"
+						  ng-disabled="true"
+						  ng-maxlength="2000"
+						  aria-label="parte_central_discriminacao_exibicao"
+						  name="parte_central_discriminacao_exibicao"
+						  ng-model="object.discriminacaoCentral"
+						  style="height: 310px;max-height: 310px;min-height: 310px;overflow-y: scroll;resize: none;;"></textarea>
+			</md-input-container>
+
+			<md-input-container flex
+								ng-if="screenMode !== 'VIEW'">
+				<textarea columns="1"
+						  id="input_parte_central_discriminacao"
+						  maxlength="2000"
+						  md-maxlength="2000"
+						  ng-disabled="modeDiscriminacao == false && screenMode == 'VIEW'"
+						  ng-maxlength="2000"
+						  aria-label="parte_central_discriminacao_edicao"
+						  name="parte_central_discriminacao_edicaoo"
+						  ng-model="object.discriminacaoCentral"
+						  style="height: 310px;max-height: 310px;min-height: 310px;overflow-y: scroll;resize: none;outline: none !important;border: 1px solid #e0e0e0;"></textarea>
+				<div ng-messages="wizardStep6.parte_central_discriminacao.$error"
+					 ng-show="wizardStep6.parte_central_discriminacao.$touched"
+					 role="alert">
+					<div id="msg_max_central"
+						 ng-message="maxlength">O texto é muito longo. O tamanho máximo permitido é de 2000
+						caracteres.
+					</div>
+				</div>
+			</md-input-container>
+		</div>
+	</md-tab>
+	<md-tab label="Parte final">
+		<div id="tab_disc3"
+			 layout
+			 layout-sm="column"
+			 style="height:350px">
+			<md-input-container flex ng-if="screenMode === 'VIEW'">
+				<textarea columns="1"
+						  id="input_parte_final_discriminacao_exibicao"
+						  max-rows="4"
+						  maxlength="2000"
+						  md-detect-hidden
+						  aria-label="parte_final_discriminacao_exibicao"
+						  name="parte_final_discriminacao_exibicao"
+						  md-no-autogrow="true"
+						  md-no-resize="true"
+						  ng-disabled="true"
+						  ng-maxlength="2000"
+						  ng-model="object.discriminacaoFinal"
+						  rows="12"
+						  style="height: 310px;max-height: 310px;min-height: 310px;overflow-y: scroll;resize: none;"></textarea>
+			</md-input-container>
+
+			<md-input-container flex
+								ng-if="screenMode !== 'VIEW'">
+				<textarea columns="1"
+						  id="input_parte_final_discriminacao"
+						  max-rows="4"
+						  maxlength="2000"
+						  md-detect-hidden
+						  md-maxlength="2000"
+						  md-no-autogrow="true"
+						  aria-label="parte_final_discriminacao_edicao"
+						  name="parte_final_discriminacao_edicao"
+						  md-no-resize="true"
+						  name="parte_final_discriminacao"
+						  ng-disabled="true"
+						  ng-maxlength="2000"
+						  ng-model="object.discriminacaoFinal"
+						  rows="12"
+						  style="height: 310px;max-height: 310px;min-height: 310px;overflow-y: scroll;resize: none;outline: none !important;border: 1px solid #e0e0e0;"></textarea>
+				<!--<div ng-messages="wizardStep6.parte_final_discriminacao.$error" ng-show="wizardStep6.parte_final_discriminacao.$touched" role="alert">-->
+				<!--<div ng-message="required" id="msg_req_final">Preenchimento obrigatório.</div>-->
+				<!--<div ng-message="maxlength" id="msg_max_final">O texto é muito longo. O tamanho máximo permitido é de 2000 caracteres.</div>-->
+				<!--</div>-->
+			</md-input-container>
+		</div>
+	</md-tab>
+</md-tabs>
+
+<div layout
+	 layout-sm="column"
+	 ng-if="screenMode != 'VIEW'">
+	<span style="color: red;">*</span>&nbsp;Campos obrigatórios
+</div>
+
+<div class="navigation padding-8"
+	 flex
+	 layout="row"
+	 style="margin-top: -0px;margin-left: -15px;"
+	 ng-if="screenMode !== 'NEW' && object.situacao != 'Cancelado' && habilitarBotoesFaturamento">
+	<md-button class="md-raised md-accent"
+			   id="btn_editar_discriminacao_servico"
+			   ng-click="editarDiscriminacaoServicos()"
+			   ng-disabled="action"
+			   ng-hide="modeDiscriminacao == true"
+			   ng-show="screenMode === 'VIEW'">
+		<span class="h4">Editar</span>
+		<img ng-show="action"
+			 src="../img/gray_carregando.gif"
+			 style="height: 20px;width: 20px;margin-top: 8px;" />
+		<md-tooltip id="tool_tip_btn_editar"
+					md-direction="bottom">
+			<span class="h4">Editar Discriminação de Serviços</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent"
+			   id="btn_salvar_editar_discriminacao"
+			   ng-click="salvarDiscriminacao(wizardStep6)"
+			   ng-disabled="wizardStep6.$invalid || action"
+			   ng-show="modeDiscriminacao == true">
+		Salvar
+		<md-tooltip id="tool_tip_btn_salvar_editar_discriminacao"
+					md-direction="bottom">
+			<span class="h4">Salvar as alterações realizadas nesta tela do faturamento</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent"
+			   id="btn_cancelar_discriminacao"
+			   ng-click="cancelarDiscriminacao(wizardStep6)"
+			   ng-disabled="action"
+			   ng-show="modeDiscriminacao == true">
+		Cancelar
+		<md-tooltip id="tool_tip_btn_cancelar_discriminacao"
+					md-direction="bottom">
+			<span class="h4">Sair, sem gravar as modificações realizadas</span>
+		</md-tooltip>
+	</md-button>
+</div>

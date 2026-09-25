@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xmlns="http://dozer.sourceforge.net"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping>
+		<class-a>
+			br.com.araujoabreu.sgi.service.contrato.transfer.ContratoCidadePrestacaoServicosTO
+		</class-a>
+		<class-b>
+			br.com.araujoabreu.sgi.administracao.domain.ContratoCidadePrestacaoServicos
+		</class-b>
+
+		<field-exclude>
+			<a>contrato</a>
+			<b>contrato</b>
+		</field-exclude>
+
+		<field>
+			<a>contrato.codigo</a>
+			<b>contrato.codigo</b>
+		</field>
+
+	</mapping>
+</mappings>

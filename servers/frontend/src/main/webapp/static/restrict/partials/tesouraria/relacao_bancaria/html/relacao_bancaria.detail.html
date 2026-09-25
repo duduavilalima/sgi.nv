@@ -1,0 +1,120 @@
+<div class="page-layout simple fullwidth" ng-controller="RelacaoBancariaDetailCtrl as relacao">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ screenMode === 'VIEW' ? 'Exibição' : (screenMode === 'EDIT' ? 'Edição' : 'Novo') }}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">{{ titulo }} - Dados Gerais</div>
+						</header>
+
+						<div class="text-center"><img ng-if="object === undefined" src="../img/carregando.gif" style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/></div>
+
+						<div ng-if="object != undefined">
+							<div class="white-500-bg">
+								<form name="RelacaoForm" novalidate>
+									<!-- MODO EDIÇAO -->
+
+									<div ng-if="screenMode !== 'VIEW'" ng-include="'partials/tesouraria/relacao_bancaria/html/partials/edit.fields.html'"></div>
+
+									<div ng-if="screenMode === 'VIEW'" ng-include="'partials/tesouraria/relacao_bancaria/html/partials/view.fields.html'"></div>
+
+									<md-divider></md-divider>
+
+									<div ng-include="'partials/tesouraria/relacao_bancaria/html/partials/buttons.rb.html'"></div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<md-button aria-label="Botão Descer tela" class="md-fab md-raised md-accent md-mini btn-descer" ng-click="top()" ng-if="btnFab">
+			<md-icon md-font-icon="icon-chevron-down" style="color: white !important;"></md-icon>
+			<md-tooltip class="h4" md-direction="top">
+				Rolar a tela para o fim
+			</md-tooltip>
+		</md-button>
+
+		<md-button aria-label="Botão Descer tela" class="md-fab md-raised md-accent md-mini btn-descer" ng-click="bottom()" ng-if="btnBottom">
+			<md-icon md-font-icon="icon-chevron-up" style="color: white !important;"></md-icon>
+			<md-tooltip class="h4" md-direction="top">
+				Rolar a tela para o início
+			</md-tooltip>
+		</md-button>
+
+		<md-fab-speed-dial class="botao-opcoes" md-direction="up" md-open="isOpen" ng-class="selectedMode" ng-if="btnFab">
+			<md-fab-trigger>
+				<md-button aria-label="menu" class="md-fab md-accent tamanho-icones">
+					<md-icon class="white-fg" md-font-icon="icon-menu"></md-icon>
+					<md-tooltip class="h4">Clique para ver o menu de opções</md-tooltip>
+				</md-button>
+			</md-fab-trigger>
+
+			<md-fab-actions>
+
+				<md-button aria-label="Editar" class="md-fab md-raised md-mini tamanho-icones" ng-click="editar()"
+						   ng-disabled="object.status !== 'Aberta'">
+					<md-icon md-font-icon="icon-pencil"></md-icon>
+					<md-tooltip class="h4">
+						Editar os dados desta relação bancária
+					</md-tooltip>
+				</md-button>
+
+				<md-button aria-label="Retornar" class="md-fab md-raised md-mini tamanho-icones" ng-click="retornar()">
+					<md-icon md-font-icon="icon-arrow-left-bold-circle-outline"></md-icon>
+					<md-tooltip class="h4">
+						Sair desta tela e retornar para a tela anterior
+					</md-tooltip>
+				</md-button>
+
+
+				<md-button aria-label="Imprimir" class="md-fab md-raised md-mini tamanho-icones" ng-click="imprimir()"
+						   ng-disabled="object.relacaoBancariaPagamentosVO === undefined || object.relacaoBancariaPagamentosVO.length === 0">
+					<md-icon md-font-icon="icon-printer"></md-icon>
+					<md-tooltip class="h4">Imprimir esta relação bancária</md-tooltip>
+				</md-button>
+
+				<md-button aria-label="Remover" class="md-fab md-raised md-mini tamanho-icones"
+						   ng-click="remover($event)" ng-disabled="object.status != 'Aberta'">
+					<md-icon md-font-icon="icon-trash"></md-icon>
+					<md-tooltip class="h4">
+						Remover esta relação bancária (esta operação não poderá ser desfeita)
+					</md-tooltip>
+				</md-button>
+
+				<md-button aria-label="Cancelar RB" class="md-fab md-raised md-mini tamanho-icones"
+						   ng-click="cancelarRb()" ng-disabled="object.status != 'Aguardando retorno'">
+					<md-icon md-font-icon="icon-cancel"></md-icon>
+					<md-tooltip class="h4">
+						Cancelar esta relação bancária e liberar o(s) pagamento(s) para uma nova relação bancária
+					</md-tooltip>
+				</md-button>
+
+
+			</md-fab-actions>
+		</md-fab-speed-dial>
+		<!-- / CONTENT -->
+	</div>
+</div>

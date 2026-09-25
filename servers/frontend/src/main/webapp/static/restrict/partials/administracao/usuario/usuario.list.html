@@ -1,0 +1,167 @@
+<div class="page-layout simple fullwidth" ng-controller="UsuarioListarCtrl as usrCtrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent">{{modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent">{{titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent">Pesquisar</span>
+			</div>
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+			<div class="content" flex>
+
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title">{{titulo}} - Filtros de pesquisa</div>
+							</header>
+
+							<div class="content">
+								<form name="form">
+									<div layout layout-sm="column" layout-wrap>
+										<md-input-container flex flex-gt-md="20">
+											<label id="lbl_login">Login</label>
+											<input id="input_login" name="login" ng-model="object.login" type="text"
+												   value="{{ object.login }}">
+										</md-input-container>
+
+										<!--<md-input-container flex flex-gt-md="20">-->
+										<!--<label id="lbl_situacao">Situação</label>-->
+										<!--<md-select id="combo_situacao" name="situacao" ng-model="object.situacao" value="{{ object.situacao }}" ng-change="$emit('changeSituacao')">-->
+										<!--<md-option ng-repeat="status in enumStatus" ng-value="status" value="{{ status }}">{{ status }}</md-option>-->
+										<!--</md-select>-->
+										<!--</md-input-container>-->
+									</div>
+
+									<div layout layout-sm="column" layout-wrap ui-i18n="pt-br">
+										<!--<md-input-container flex flex-gt-xs="60">-->
+										<!--<label id="lbl_cliente_sub">Cliente/Subcliente</label>-->
+										<!--<input id="input_cliente_sub" type="text" name="ident" ng-model="object.nomeCliente" value="{{ object.nomeCliente }}" ng-maxlength="200" maxlength="200">-->
+										<!--<md-tooltip md-direction="bottom">-->
+										<!--<span class="h4">Informe o CNPJ, razão social ou o nome fantasia do cliente ou do subcliente</span>-->
+										<!--</md-tooltip>-->
+										<!--</md-input-container>-->
+
+										<!--<md-input-container flex flex-gt-xs="20">-->
+										<!--<label id="lbl_cc_cl">Centro de lucro</label>-->
+										<!--<input id="input_cc_cl" type="text" name="cc_cl" class="text-left" ng-model="object.numCentroFinanceiro" value="{{ object.numCentroFinanceiro }}" ui-number-mask="0" ui-hide-group-sep maxlength="4">-->
+										<!--</md-input-container>-->
+
+										<!--<md-input-container flex flex-gt-xs="20">-->
+										<!--<label id="lbl_contrato">Contrato</label>-->
+										<!--<input id="input_contrato" type="text" name="contrato" class="text-left"-->
+										<!--ng-model="object.codigoContrato" value="{{ object.codigoContrato }}" ui-number-mask="0" ui-hide-group-sep maxlength="9">-->
+										<!--</md-input-container>-->
+									</div>
+
+									<div layout layout-sm="column" layout-wrap>
+										<!--<md-input-container flex="25" flex-sm="100">-->
+										<!--<label id="lbl_totalDe">Total de (R$)</label>-->
+										<!--<input id="input_totalDe" type="text" class="text-left" name="total_de" ng-model="object.totalDe" value="{{ object.totalDe }}" ui-number-mask="2" maxlength="18">-->
+										<!--</md-input-container>-->
+
+										<!--<md-input-container flex="25" flex-sm="100">-->
+										<!--<label id="lbl_totalAte">Total até (R$)</label>-->
+										<!--<input id="input_totalAte" type="text" class="text-left" name="total_ate" ng-model="object.totalAte" value="{{ object.totalAte }}" ui-number-mask="2" maxlength="18">-->
+										<!--</md-input-container>-->
+
+										<!--<md-input-container flex="50" flex-sm="100">-->
+										<!--<label id="lbl_descricao_item">Descrição item</label>-->
+										<!--<input id="input_descricao_item" type="text" name="desc_item" ng-model="object.descricaoItem" value="{{ object.descricaoItem }}" md-maxlength="200" ng-maxlength="200" maxlength="200">-->
+										<!--</md-input-container>-->
+									</div>
+
+									<section layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_pesquisar"
+													   name="btn_pesquisar"
+													   ng-click="buscar(1)"
+													   ng-disabled="isAction"
+											>
+												Pesquisar
+											</md-button>
+											<!--{{usrCtrl.possuiTodosPerfis.possuiTodosPerfisLista}} - {{usrCtrl.possuiUmPerfil.possuiUmPerfilLista}}-->
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset()" ng-disabled="isAction">
+												Limpar
+												<md-tooltip md-direction="bottom">
+													<span class="h4">Limpar filtros de pesquisa</span>
+												</md-tooltip>
+											</md-button>
+										</div>
+										<div flex="auto" layout-wrap show-gt-sm>
+										</div>
+										<!--										<div flex="30" flex-sm="10" layout="row" layout-align="end center">-->
+										<!--											<md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction"> Novo Usuário-->
+										<!--												<md-tooltip md-direction="bottom">-->
+										<!--													<span class="h4">Novo Usuário</span>-->
+										<!--												</md-tooltip>-->
+										<!--											</md-button>-->
+										<!--										</div>-->
+									</section>
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- / CAMPOS DE PESQUISA -->
+
+				<!-- DATATABLE - RESULTADO DA PESQUISA -->
+				<div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result"
+					 ng-if="result && result != null">
+					<header class="md-accent-bg">
+						<div class="title">{{titulo}} - Resultado da pesquisa</div>
+					</header>
+
+					<div class="sgiUiGridPesquisa" id="idGridFaturamentos" ng-if="exibirGrid(gridPesquisa)"
+						 ng-style="ajustarAlturaTabela(gridPesquisa)" ui-grid="gridPesquisa" ui-grid-auto-resize
+						 ui-grid-pinning></div>
+
+					<div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+						<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+							<span class="h4">{{mensagemPesquisa(titulo)}}</span>
+						</md-whiteframe>
+					</div>
+
+					<section class="p-8" layout="row" layout-align="space-between center" layout-sm="row" layout-wrap>
+						<div></div>
+
+						<div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+
+						<!--						<div layout="row" layout-align="end center" layout-sm="row" layout-wrap>-->
+						<!--							<md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction"> Novo Usuário-->
+						<!--								<md-tooltip md-direction="bottom">-->
+						<!--									<span class="h4">Novo usuário</span>-->
+						<!--								</md-tooltip>-->
+						<!--							</md-button>-->
+						<!--						</div>-->
+					</section>
+
+				</div>
+				<!-- / DATATABLE - RESULTADO DA PESQUISA -->
+
+			</div>
+
+		</div>
+
+	</div>
+	<!-- / CONTENT -->
+
+</div>

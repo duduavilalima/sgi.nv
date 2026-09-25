@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xmlns="http://dozer.sourceforge.net"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping>
+		<class-a>
+			br.com.araujoabreu.sgi.service.administracao.transfer.EnderecoPesquisaTO
+		</class-a>
+		<class-b>br.com.fasolti.corporativo.pessoa.domain.Endereco</class-b>
+
+		<field>
+			<a>codigoTipoLogradouro</a>
+			<b>tipoLogradouro.codigo</b>
+		</field>
+
+		<field>
+			<a>codigoCidade</a>
+			<b>cidade.codigo</b>
+		</field>
+
+	</mapping>
+</mappings>

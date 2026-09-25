@@ -1,0 +1,378 @@
+<div class="page-layout simple fullwidth" ng-controller="ContasAReceberCadastroCtrl">
+	<!--ng-show="object && object != null && object.codigo != null"-->
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ ::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ subtitulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">{{ ::titulo }} - {{subtitulo}}</div>
+						</header>
+
+						<div class="text-center"><img ng-show="object.codigo == null" src="../img/carregando.gif"
+													  style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/>
+						</div>
+
+						<div ng-show="object.codigo != null">
+							<div class="white-500-bg">
+
+								<div class="padding-16">
+
+									<form name="form_parcela">
+
+										<div layout layout-sm="column" layout-wrap>
+
+											<div flex layout="column" style="padding-left: 6px;">
+												<label id="lbl_numero">Número da NF</label>
+												<span class="link-contrato" ng-click="openNewTargetNF()"
+													  style="margin-top: 5px;"><b>{{ object.notaSaida.numero }}</b></span>
+											</div>
+											<span style="width: 2.5px;"></span>
+
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_parcela">Parcela</label>
+												<input id="input_parcela" name="input_parcela" ng-disabled="true"
+													   ng-model="object.ordem" type="text">
+											</md-input-container>
+
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_situacao">Situação</label>
+												<input id="input_situacao" name="input_situacao" ng-disabled="true"
+													   ng-model="object.situacao" type="text"
+													   value="{{object.situacao === 'Aberta (NF não processada)' ? 'Aberta' : object.situacao === 'Finalizada (recebida)' ? 'Recebida' : object.situacao}}">
+											</md-input-container>
+
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_empresa">Matriz/Filial</label>
+												<input id="input_empresa" name="input_empresa" ng-disabled="true"
+													   ng-model="object.notaSaida.empresa.codnome" type="text">
+											</md-input-container>
+
+										</div>
+
+										<div layout layout-sm="column" layout-wrap>
+
+											<div flex layout="column"
+												style="height: 52px;width: 98%;overflow: hidden;border-bottom: dotted;display: inline-block;border-bottom-color: transparent;background-image: linear-gradient(90deg, rgba(0,0,0,0.98) 0, rgba(0,0,0,0.98) 38%, transparent 0);
+											background-image: -ms-linear-gradient(left, transparent 0, rgba(0,0,0,0.38) 100%);background-position: bottom -1px left 0;background-size: 4px 1px;background-repeat: repeat-x;">
+												<label id="lbl_cliente_aba_faturamento" style="margin-top: -4px;">
+													Cliente
+												</label>
+												<div>
+													<span class="link-contrato" style="margin-top: 5px;"
+													ng-click="exibirDetalheCliente(object.notaSaida.faturamentoEtapaTO.faturamento.cliente.codigo, object.notaSaida.faturamentoEtapaTO.faturamento.cliente.tipoPessoa, object.notaSaida.faturamentoEtapaTO.faturamento.cliente.tipoPessoa, $event);">
+														{{ object.notaSaida.faturamentoEtapaTO.faturamento.cliente.nome }}
+													</span>
+												</div>
+											</div>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_centro_lucro">Centro de lucro</label>
+												<input id="input_centro_lucro" name="input_centro_lucro"
+													   ng-disabled="true" type="text"
+													   value="{{object.notaSaida.centroFinanceiro.identificadorFinal + ' - ' + object.notaSaida.centroFinanceiro.nome}}">
+												<md-tooltip id="tool_input_centro_lucro" md-direction="bottom">
+													<span class="h4">{{object.notaSaida.centroFinanceiro.identificadorFinal + ' - ' + object.notaSaida.centroFinanceiro.nome}}</span>
+												</md-tooltip>
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_tipo_faturamento">Tipo de faturamento</label>
+												<input id="input_tipo_faturamento" name="input_tipo_faturamento"
+													   ng-disabled="true" type="text"
+													   value="{{ object.notaSaida.faturamentoEtapaTO.faturamento.tipo }}">
+											</md-input-container>
+
+										</div>
+
+										<div layout layout-sm="column" layout-wrap>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_valor_bruto">Bruto</label>
+												<input id="input_valor_bruto" maxlength="18" name="input_valor_bruto"
+													   ng-disabled="true" ng-model="object.valorBruto" type="text"
+													   ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_tributos">Tributos (-)</label>
+												<input id="input_tributos" maxlength="18" name="input_tributos"
+													   ng-disabled="true" ng-model="valorTributos" type="text"
+													   ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_subtotal">Subtotal</label>
+												<input id="input_subtotal" maxlength="18" name="input_subtotal"
+													   ng-disabled="true" ng-model="subtotal" type="text"
+													   ui-number-mask="2">
+												<md-tooltip id="tool_tip_input_subtotal" md-direction="bottom">
+													<span
+														class="h4">Valor bruto menos tributos, exceto PIS/COFINS/CSLL</span>
+												</md-tooltip>
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_retencao_contratual_val">Retenção contratual (-)</label>
+												<input id="input_retencao_contratual_val" maxlength="18"
+													   name="input_retencao_contratual_val" ng-disabled="true"
+													   ng-model="object.valorRetencaoRetida" type="text"
+													   ui-number-mask="2">
+											</md-input-container>
+
+										</div>
+
+										<div layout layout-sm="column" layout-wrap>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_valor_desconto">Desconto (-)</label>
+												<input id="input_valor_desconto" maxlength="18"
+													   name="input_valor_desconto" ng-disabled="true"
+													   ng-model="object.valorDesconto" type="text" ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_devolucao">Devolução (+)</label>
+												<input id="input_devolucao" maxlength="18" name="input_devolucao"
+													   ng-disabled="true" ng-model="object.valorDevolucao" type="text"
+													   ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_valor_juros">Juros (+)</label>
+												<input id="input_valor_juros" maxlength="18" name="input_valor_juros"
+													   ng-disabled="true" ng-model="object.valorJuros" type="text"
+													   ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_valor_liquido_errado">Líquido (=)</label>
+												<input id="input_valor_liquido_errado" maxlength="18"
+													   name="input_valor_liquido" ng-disabled="true"
+													   ng-model="object.valorLiquido"
+													   style="font-weight: bold; {{isValorLiquidoDiferente() ? 'color: red !important' : ''}}"
+													   type="text" ui-number-mask="2">
+											</md-input-container>
+
+										</div>
+
+
+										<div layout layout-sm="column" layout-wrap>
+
+											<md-input-container flex flex-gt-md="25">
+												<label id="lbl_emissao">Emissão</label>
+												<input id="input_emissao" ng-disabled="true"
+													   ng-model="object.notaSaida.dataEmissao" tt-date-picker
+													   type="text">
+											</md-input-container>
+
+											<md-input-container flex flex-gt-md="25">
+												<label id="lbl_vencimento">Vencimento</label>
+												<input id="input_vencimento" min-date="object.notaSaida.dataEmissao"
+													   name="dataVencimento" ng-blur="verificarVencimentoEdicao()"
+													   ng-disabled="screenMode === 'VIEW' || object.situacao === 'Finalizada (recebida)'"
+													   ng-model="object.dataVencimento"
+													   ng-required="screenMode === 'EDIT'"
+													   tt-date-picker type="text">
+												<div ng-messages="form_etapa.dataVencimento.$error" role="alert">
+													<div id="msg_req_vencimento" ng-message="required">Vencimento é um
+														campo de preenchimento obrigatório.
+													</div>
+												</div>
+											</md-input-container>
+
+											<md-input-container flex="50">
+												<label id="lbl_motivo_alteracao_vencimento">Motivo de alteração da data
+													de vencimento</label>
+												<input id="input_motivo_alteracao_vencimento" maxlength="200"
+													   md-maxlength="200" name="motivoVencimento"
+													   ng-disabled="desabilitarMovitoVencimento()" ng-maxlength="200"
+													   ng-model="object.motivoDataVencimento"
+													   ng-required="!desabilitarMovitoVencimento()" type="text">
+												<div ng-messages="form_etapa.motivoVencimento.$error" role="alert">
+													<div id="msg_req_movtivoVencimento" ng-message="required">
+														Obrigatório.
+													</div>
+													<div id="msg_max_motivoVencimento" ng-message="max">A descrição
+														informada é muito longa.
+													</div>
+												</div>
+											</md-input-container>
+
+										</div>
+
+										<div layout layout-sm="column" layout-wrap>
+
+											<md-input-container flex flex-gt-md="25">
+												<label id="lbl_agendamento">Agendamento</label>
+												<input id="input_agendamento" ng-disabled="true"
+													   ng-model="object.dataAgendamento" tt-date-picker type="text">
+											</md-input-container>
+
+											<md-input-container flex="50">
+												<label id="lbl_motivo_agendamento">Observações</label>
+												<input id="input_motivo_agendamento" maxlength="200"
+													   name="input_motivo_agendamento" ng-disabled="true"
+													   ng-maxlength="200" ng-model="object.motivoDataAgendamento"
+													   type="text">
+											</md-input-container>
+
+											<md-input-container flex flex-gt-md="25">
+												<label id="lbl_pagamento">Pagamento</label>
+												<input id="input_pagamento" min-date="object.notaSaida.dataEmissao"
+													   name="pagamento"
+													   ng-disabled="object.situacao === 'Finalizada (recebida)'"
+													   ng-model="object.dataPagamento"
+													   ng-required="screenMode === 'EDIT'"
+													   tt-date-picker type="text">
+												<div ng-messages="form_etapa.pagamento.$error" role="alert">
+													<div id="msg_req_pagamento" ng-message="required">Pagamento é um
+														campo de preenchimento obrigatório.
+													</div>
+												</div>
+											</md-input-container>
+
+										</div>
+
+										<div layout layout-sm="column" layout-wrap>
+
+											<md-input-container flex flex-gt-md="25">
+												<label id="lbl_contabilizacao">Contabilização</label>
+												<input id="input_contabilizacao" min-date="object.dataPagamento"
+													   name="input_contabilizacao" ng-disabled="true"
+													   ng-model="object.dataContabilizacao" ng-required="false"
+													   tt-date-picker type="text">
+												<div ng-messages="form_etapa.dataContabilizacao.$error" role="alert">
+													<div id="msg_req_contabilizacao" ng-message="required">
+														Contabilização é um campo de preenchimento obrigatório.
+													</div>
+												</div>
+											</md-input-container>
+
+											<md-input-container flex flex-gt-md="25">
+												<label id="lbl_banco">Banco</label>
+												<md-select id="combo_banco" name="combo_banco"
+														   ng-change="$emit('changeBanco')"
+														   ng-disabled="bancoList.length == 0 || object.situacao === 'Finalizada (recebida)'"
+														   ng-model="object.bancoSelecionado"
+														   ng-model-options="{trackBy: '$value.codigo'}"
+														   ng-required="true" required>
+													<md-option
+														ng-repeat="cc in bancoList | orderBy: 'banco.nome' | unique:'banco.nome'"
+														ng-value="cc.banco">{{cc.banco.nome}}
+													</md-option>
+												</md-select>
+												<div ng-messages="form_parcela.combo_banco.$error" role="alert">
+													<div id="msg_req_banco" ng-message="required">Obrigatório.</div>
+												</div>
+											</md-input-container>
+
+											<md-input-container flex flex-gt-md="25">
+												<label id="lbl_agencia_conta">Agência/Conta</span></label>
+												<md-select id="combo_agencia_conta" name="agencia_conta"
+														   ng-change="$emit('changeAgenciaEdicao')"
+														   ng-disabled="agenciaContaList == null || agenciaContaList.length == 0 || object.situacao === 'Finalizada (recebida)'"
+														   ng-model="object.contaCorrente"
+														   ng-model-options="{trackBy: '$value.codigo'}"
+														   ng-required="true" required>
+													<md-option
+														ng-repeat="agenciaConta in agenciaContaList | orderBy: 'agencia' | orderBy: 'conta'"
+														ng-value="agenciaConta">
+														{{ montarLabelAgenciaConta(agenciaConta) }}
+													</md-option>
+												</md-select>
+												<div ng-messages="form_parcela.agencia_conta.$error" role="alert">
+													<div id="msg_req_agencia" ng-message="required">Obrigatório.</div>
+												</div>
+											</md-input-container>
+
+											<md-input-container flex flex-gt-md="25" ng-if="!liberarEdicaoTipoDocumento()">
+												<label id="lbl_doc_pagamento">Tipo de documento para o pagamento do cliente</label>
+												<input id="input_doc_pagamento" name="input_doc_pagamento"
+													   ng-disabled="true" ng-model="object.tipoDocumento" type="text">
+												<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+													<span
+														class="h4">Tipo de documento para o pagamento do cliente</span>
+												</md-tooltip>
+											</md-input-container>
+
+											<md-input-container flex flex-gt-md="25" ng-if="liberarEdicaoTipoDocumento()">
+												<label id="lbl_doc_pagamento_combo">Tipo de documento para o pagamento do cliente</label>
+												<md-select id="combo_doc_pagamento" name="doc_pagamento" ng-disabled="object.contaCorrente === null"
+														   ng-model="object.tipoDocumento" ng-required="true">
+													<md-option ng-repeat="docPagamento in enumTipoDocumentoPagamento" ng-value="docPagamento"
+															   value="{{ docPagamento }}">
+														{{ docPagamento }}
+													</md-option>
+												</md-select>
+												<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+													<span
+														class="h4">Tipo de documento para o pagamento do cliente</span>
+												</md-tooltip>
+											</md-input-container>
+
+										</div>
+
+									</form>
+								</div>
+
+
+								<div class="navigation padding-8" flex layout="row" ng-if="!temPerfilFaturamentoCnsGerencia">
+
+									<md-button class="md-raised md-accent" id="btn_salvar_editar_dados_principais"
+											   ng-click="salvarParcela()"
+											   ng-disabled="form_parcela.$invalid || action || object.situacao === 'Finalizada (recebida)'">
+										Salvar
+										<img ng-show="action" src="../img/gray_carregando.gif"
+											 style="height: 20px;width: 20px;margin-top: 8px;"/>
+										<md-tooltip id="tool_tip_btn_salvar_editar" md-direction="bottom">
+											<span class="h4">Salvar as alterações realizadas nesta parcela</span>
+										</md-tooltip>
+									</md-button>
+
+									<md-button class="md-raised md-accent" id="btn_cancelar_dados_principais"
+											   ng-click="cancelarEditar()" ng-disabled="action">
+										Cancelar
+										<md-tooltip id="tool_tip_btn_cancelar_dados_principais" md-direction="bottom">
+											<span
+												class="h4">Sair desta parcela, sem gravar as modificações realizadas</span>
+										</md-tooltip>
+									</md-button>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / CONTENT -->
+	</div>
+</div>
+
+
+

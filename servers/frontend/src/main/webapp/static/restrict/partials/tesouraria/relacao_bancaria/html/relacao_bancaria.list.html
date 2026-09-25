@@ -1,0 +1,192 @@
+<div class="page-layout simple fullwidth" id="page_list" ng-controller="RelacaoBancariaListarCtrl">
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">{{::modulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo">{{::titulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="subtitulo">{{::subtitulo}}</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+    <!-- CONTENT -->
+    <div class="content" md-background-bg>
+        <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+            <div class="content" flex>
+                <!-- CAMPOS DE PESQUISA -->
+                <div layout="row" layout-wrap>
+                    <div class="about" flex="100" layout="column">
+                        <div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+                            <header class="md-accent-bg">
+                                <div class="title" id="titulo_filtro">{{ ::titulo}} - Filtros de pesquisa</div>
+                            </header>
+                            <div class="content" style="padding: 0px !important;">
+                                <form name="form" ng-submit="buscar()" ui-keypress="{13:'buscar($event)'}">
+                                    <md-content>
+                                        <md-tabs md-border-bottom md-dynamic-height md-selected="abaDefault">
+                                            <md-tab label="Relação bancária">
+                                                <md-content class="p-16">
+                                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_numero">Número</label>
+                                                            <input id="numero_input" name="numero" ng-model="object.numero" type="text">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_situacao">Situação</label>
+                                                            <md-select id="combo_situacao" name="situacao" ng-change="$emit('changeSituacao')" ng-model="object.status" value="{{ object.situacao }}">
+                                                                <md-option ng-value="" value=""></md-option>
+                                                                <md-option ng-repeat="item in listSituacaoes" ng-value="item">{{ item }}
+                                                                </md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_pagamento_de">Pagamento de</label>
+                                                            <input id="pagamento_de_input" max-date="object.pagamentoAte" ng-model="object.pagamentoDe" tt-date-picker type="text">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_pagamento__ate">Pagamento até</label>
+                                                            <input id="pagamento_ate_input" min-date="object.pagamentoDe" ng-model="object.pagamentoAte" tt-date-picker type="text">
+                                                        </md-input-container>
+                                                    </div>
+
+                                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_empresa">Empresa</label>
+                                                            <md-select id="combo_empresa" name="empresa" ng-change="$emit('changeEmpresa')" ng-model="object.unidade">
+                                                                <md-option ng-value="" value=""></md-option>
+                                                                <md-option ng-repeat="item in empresaList" ng-value="item">{{ item.codnome }}
+                                                                </md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_banco">Banco</label>
+                                                            <md-select id="combo_banco" name="banco" ng-change="$emit('changeBanco')" ng-disabled="changeEmpresaAction || object.unidade == null" ng-model="object.bancoPesquisa">
+                                                                <md-option ng-value="" value=""></md-option>
+                                                                <md-option ng-repeat="item in bancoList | orderBy: 'nome' " ng-value="item">{{item.nome}}
+                                                                </md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_agencia_conta">Agência/Conta</label>
+                                                            <md-select id="combo_agencia_conta" name="agencia_conta" ng-change="changeAgencia()" ng-disabled="changeBancoAction || object.bancoPesquisa == null" ng-model="object.contaCorrente" ng-model-options="{trackBy: '$value.codigo'}">
+                                                                <md-option ng-repeat="agenciaConta in agenciaContaList | orderBy: 'agencia' | orderBy: 'conta'" ng-value="agenciaConta">
+                                                                    {{ montarLabelAgenciaConta(agenciaConta) }}
+                                                                </md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_meio_pagamento">Meio pagamento</label>
+                                                            <md-select id="combo_meio_pagamento" name="meio_pagamento" ng-change="$emit('changeMeioPagamento')" ng-model="object.meioPagamento">
+                                                                <md-option ng-value="" value=""></md-option>
+                                                                <md-option ng-repeat="item in listMeiosPgto" ng-value="item" value="{{ item }}">{{item}}
+                                                                </md-option>
+                                                                {{item}}
+                                                            </md-select>
+                                                        </md-input-container>
+
+                                                        <div id="idTotais" ng-if="exibirGrid(gridPesquisa) && exibeTotais">
+                                                            <!--Total pago: <b>{{object.totalPago | currency:'':2}} ({{object.totalItens}}) </b> pagamentos-->
+                                                            <!--TOTAL ITENS (pagos/validos): <b>{{object.totalItens}}</b>-->
+                                                        </div>
+                                                    </div>
+                                                </md-content>
+                                            </md-tab>
+                                            <md-tab label="Pagamentos">
+                                                <md-content class="md-padding">
+                                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+                                                        <md-input-container flex flex-gt-md="20">
+                                                            <label id="lbl_numero_pagamento">Número</label>
+                                                            <input id="numero_numero_pagamento" name="numero_pagamento" ng-model="object.numeroPagamento" type="text">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="50">
+                                                            <label id="lbl_credor">Credor</label>
+                                                            <input id="credor" name="nomeCredor" ng-model="object.nomeCredor" type="text">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="30">
+                                                            <label>Tributos</label>
+                                                            <md-select data-md-container-class="selectdemoSelectHeader" id="combo_tributos" md-on-close="clearSearchTerm()" multiple ng-model="object.tributos">
+                                                                <md-optgroup label="Tributos">
+                                                                    <md-option ng-repeat="item in listTributos | orderBy: 'nome'" ng-value="item">{{ item.nome }}
+                                                                    </md-option>
+                                                                </md-optgroup>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                    </div>
+                                                </md-content>
+                                            </md-tab>
+                                        </md-tabs>
+
+                                    </md-content>
+                                    <section class="p-16" layout="row" layout-sm="row" layout-wrap layout-xs="column">
+                                        <div flex="30" flex-sm="10" layout="row" layout-align="start center">
+                                            <md-button class="md-raised md-accent" focus-me="true" id="btn_pesquisar" name="btn_pesquisar" ng-disabled="isAction" type="submit">
+                                                Pesquisar
+                                            </md-button>
+                                            <md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar" ng-click="reset()" ng-disabled="isAction">
+                                                Limpar
+                                            </md-button>
+                                        </div>
+                                        <div flex="auto" layout-wrap show-gt-sm>
+                                            <md-button class="md-raised md-default" hide-gt-md hide-sm id="btn_novo" ng-click="novo()" ng-disabled="isAction">
+                                                Nova relação bancária
+                                            </md-button>
+                                        </div>
+                                        <div flex="40" hide-xs layout="row" layout-align="end center">
+                                            <md-button class="md-raised md-default" id="btn_novo" ng-click="novo()" ng-disabled="isAction">
+                                                Nova relação bancária
+                                            </md-button>
+                                        </div>
+                                    </section>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- / CAMPOS DE PESQUISA -->
+                <!-- DATATABLE - RESULTADO DA PESQUISA -->
+                <div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result" ng-if="result && result != null">
+                    <header class="md-accent-bg">
+                        <div class="title" id="titulo_resultado">{{ ::titulo}} - Resultado da pesquisa</div>
+                    </header>
+
+                    <div class="sgiUiGridPesquisa" id="idGridRelacaoBancaria" ng-if="exibirGrid(gridPesquisa)" ng-style="ajustarAlturaTabela(gridPesquisa)" ui-grid="gridPesquisa" ui-grid-auto-resize ui-grid-pinning></div>
+
+                    <div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+                        <md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+                            <span class="h4 p-32">{{mensagemPesquisa()}}</span>
+                        </md-whiteframe>
+                    </div>
+
+                    <section class="p-8" layout="row" layout-align="space-between center" layout-sm="row" layout-wrap>
+						<div></div>
+                        <div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+                        <div layout="row" layout-align="end center" layout-sm="row" layout-wrap>
+                            <md-button class="md-raised md-default" id="btn_novo" ng-click="novo()" ng-disabled="isAction">
+                                Nova relação bancária
+                            </md-button>
+                        </div>
+                    </section>
+
+                </div>
+                <!-- / DATATABLE - RESULTADO DA PESQUISA -->
+            </div>
+        </div>
+    </div>
+    <!-- / CONTENT -->
+</div>

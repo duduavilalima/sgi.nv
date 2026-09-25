@@ -1,0 +1,464 @@
+<div id="inicio_pagina" ng-controller="CentrosFinanceirosDetailCtrl as $ctrl">
+
+    <div layout="row">
+        <div id="papel" layout-align="center center" class="page_layout_print">
+
+            <div flex id="os_inicial_impressao" layout="column" style="margin: 25px;">
+
+                <md-table-container>
+
+                    <table border="1" class="tabela_exibicao hover md-caption" ms-responsive-table width="100%">
+
+                        <tbody>
+                            <tr class="table_border_print">
+                                <td class="text-center p-3" colspan="2" rowspan="2" width="33.2%">
+                                    <span class="logo-text"><img src="../img/logo_aa.png" style="width: 150px;"></span>
+                                </td>
+                                <td class="text-center p-3" colspan="2" width="33.4%">
+                                    <b>ORDEM DE SERVIÇO INICIAL</b>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Produto</b>
+                                    <br>
+                                    <b>{{$ctrl.dadosImpressao.produto}}</b>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Data</b>
+                                    <br>
+                                    <b>{{ $ctrl.object.fecho.dataReajuste | date:'dd/MM/yyyy' }}</b>
+                                </td>
+                            </tr>
+
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print">
+                                    <b class="label_cell_print">Nº de controle</b>
+                                    <br>
+                                    <b>{{$ctrl.object.contratoTO.numero}}</b>
+                                </td>
+                                <td class="text-left cell_print">
+                                    <b class="label_cell_print">Centro de lucro</b>
+                                    <br>
+                                    <b>{{$ctrl.object.identificador}}</b>
+                                </td>
+                                <td class="text-left cell_print">
+                                    <b class="label_cell_print">Proposta nº</b>
+                                    <br>
+                                    <b>{{$ctrl.object.contratoTO.proposta}}</b>
+                                </td>
+                                <td class="text-left cell_print">
+                                    <b class="label_cell_print">Valor contratual</b>
+                                    <br>
+                                    <b>R$ {{$ctrl.object.fecho.valorTotal | currency: '' : 2}}</b>
+                                </td>
+                            </tr>
+
+                            <tr class="table_border_print">
+                                <td class="text-center" colspan="2">
+                                    <b>{{::$ctrl.object.unidade.matriz.codnome | uppercase}}</b>
+                                </td>
+                                <td class="text-left cell_print" colspan="2">
+                                    <b class="label_cell_print">Gerente</b>
+                                    <br>
+                                    <b>{{$ctrl.object.contatoAA.nome}}</b>
+                                </td>
+                                <td class="text-left cell_print" colspan="2">
+                                    <b class="label_cell_print">Engº responsável</b>
+                                    <br>
+                                    <b>{{$ctrl.object.engenheiroResponsavel.nome}}</b>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <br>
+                    <b>Empreendimento</b>
+
+                    <table border="1" class="tabela_exibicao hover md-caption" ms-responsive-table width="100%">
+                        <tbody>
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="6" width="100%">
+                                    <b class="label_cell_print">Nome do empreendimento</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.object.nome}}</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="4" width="66.6%">
+                                    <b class="label_cell_print">Endereço</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.endereco}}</span>
+                                </td>
+                                <td class="text-left cell_print" colspan="2" width="33.4%">
+                                    <b class="label_cell_print">Bairro</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.bairro}}</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="2" width="33.2%">
+                                    <b class="label_cell_print">CEP</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.cep}}</span>
+                                </td>
+                                <td class="text-left cell_print" colspan="3" width="50.1%">
+                                    <b class="label_cell_print">Município</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.municipio}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">UF</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.uf}}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <br>
+                    <b>Cliente</b>
+
+                    <table border="1" class="tabela_exibicao hover md-caption" ms-responsive-table width="100%">
+                        <tbody>
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="3" width="49.9%">
+                                    <b class="label_cell_print">Razão social</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.cliente.nome}}</span>
+                                </td>
+                                <td class="text-left cell_print" colspan="3" width="50.1%">
+                                    <b class="label_cell_print">Endereço</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.cliente.endereco.enderecoCompleto}}</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="2" width="33.2%">
+                                    <b class="label_cell_print">CNPJ</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.cliente.documento}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Inscrição estadual</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.inscricaoEstadualUnidadeFederal}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Inscrição municipal</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.inscricaoMunicipal}}</span>
+                                </td>
+                                <td class="text-left cell_print" colspan="2" width="33.4%">
+                                    <b class="label_cell_print">Bairro</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.cliente.endereco.bairro}}</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="2" width="33.2%">
+                                    <b class="label_cell_print">CEP</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.cliente.endereco.cep}}</span>
+                                </td>
+                                <td class="text-left cell_print" colspan="3" width="50.1%">
+                                    <b class="label_cell_print">Município</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.cliente.endereco.cidade.nome}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">UF</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.cliente.endereco.uf}}</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="3" width="49.9%">
+                                    <b class="label_cell_print">Contato</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contato}}</span>
+                                </td>
+                                <td class="text-left cell_print" colspan="3" width="50.1%">
+                                    <b class="label_cell_print">{{$ctrl.dadosImpressao.labelTipoContato}}</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.meioContato}}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <br>
+
+                    <table border="1" class="tabela_exibicao hover md-caption" ms-responsive-table width="100%">
+                        <tbody>
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="2" width="33.2%">
+                                    <b class="label_cell_print">{{$ctrl.dadosImpressao.labelBeneficio}}</b>
+                                    <br>
+                                    <div ng-if="$ctrl.dadosImpressao.valorBeneficio && $ctrl.dadosImpressao.valorBeneficio > 0">
+                                        <span class="page_layout_print_text">R${{$ctrl.dadosImpressao.valorBeneficio | currency: '' : 2}}</span>
+                                    </div>
+                                    <div ng-if="!$ctrl.dadosImpressao.valorBeneficio || $ctrl.dadosImpressao.valorBeneficio <= 0">
+                                        <span class="page_layout_print_text">Não</span>
+                                    </div>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Plano de saúde</b>
+                                    <br>
+                                    <div ng-if="$ctrl.dadosImpressao.planoSaude && $ctrl.dadosImpressao.planoSaude > 0">
+                                        <span class="page_layout_print_text">R${{$ctrl.dadosImpressao.planoSaude | currency: '' : 2}}</span>
+                                    </div>
+                                    <div ng-if="!$ctrl.dadosImpressao.planoSaude || $ctrl.dadosImpressao.planoSaude <= 0">
+                                        <span class="page_layout_print_text">Não</span>
+                                    </div>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Estágio comercial</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.estagioComercial}}</span>
+                                </td>
+                                <td class="text-left cell_print" colspan="2" width="33.4%">
+                                    <b class="label_cell_print">Forma de contratação</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.formaContratacao.descricao}}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <br>
+                    <b>Informações comerciais</b>
+
+                    <table border="1" class="tabela_exibicao hover md-caption" ms-responsive-table width="100%">
+                        <tbody>
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="2" width="33.2%">
+                                    <b class="label_cell_print">Prazo contratual (meses)</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.prazoAtual}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Início</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.dataInicioVigencia | date:'dd/MM/yyyy'}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Término</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.dataFimVigencia | date:'dd/MM/yyyy'}}</span>
+                                </td>
+                                <td class="text-left cell_print" colspan="2" width="33.4%">
+                                    <b class="label_cell_print">Prorrogação</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.prorrogacao}}</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="2" width="33.2%">
+                                    <b class="label_cell_print">Forma reajuste</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.periodoReajuste}}</span>
+                                </td>
+                                <td class="text-left cell_print" colspan="2" width="33.4%">
+                                    <b class="label_cell_print">Índice</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.indiceReajuste}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">1º mês</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.dadosImpressao.contrato.dataInicioVigencia | date:'MMMM/yyyy'}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">1º valor</b>
+                                    <br>
+                                    <span class="page_layout_print_text">R$ {{$ctrl.object.fecho.valorMensal | currency: '' : 2}}</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" colspan="2" width="33.2%">
+                                    <b class="label_cell_print">Forma de pagamento</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.object.formaPagamento}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Garantias</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.object.garantias}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Critério de medição</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.object.criterioMedicao}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Previsão reajuste</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.object.dataPrevisaoReajuste | date:'dd/MM/yyyy'}}</span>
+                                </td>
+                                <td class="text-left cell_print" width="16.7%">
+                                    <b class="label_cell_print">Regime</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.object.cumulativo ? 'Cumulativo' : 'Não cumulativo'}}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <br>
+
+                    <table border="1" class="tabela_exibicao hover md-caption" ms-responsive-table width="100%">
+                        <tbody>
+                            <tr class="table_border_print">
+                                <td class="text-left cell_print" width="100%">
+                                    <b class="label_cell_print">Observações</b>
+                                    <br>
+                                    <span class="page_layout_print_text">{{$ctrl.object.observacao}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br>
+
+                    <table border="0" ms-responsive-table width="100%">
+                        <tbody>
+                            <tr class="table_border_print">
+
+                                <td class="text-left table_print_end_tables" style="padding-right: 10px;" width="50%">
+
+                                    <b>Valores</b>
+                                    <br>
+
+                                    <table border="1" class="tabela_exibicao hover md-caption page_layout_print_text" ms-responsive-table width="100%">
+                                        <thead>
+                                            <th class="text-center table_border_print auxiliary_table_title" width="57%">Descrição
+                                            </th>
+                                            <th class="text-center table_border_print auxiliary_table_title" width="30%">Valor (R$)
+                                            </th>
+                                            <th class="text-center table_border_print auxiliary_table_title" width="13%">%
+                                            </th>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr ng-repeat="linha in $ctrl.dadosImpressao.listaValores" class="table_border_print" style="font-weight: {{$index == 0 || $index == 2 || $index == 11 ? 'bold' : 'normal';}}">
+                                                <td class="text-left table_border_print auxiliary_table_title">
+                                                    <span ng-if="$index >= 4 && $index <= 8">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    <span ng-if="$index >= 9 && $index <= 10" style="color: white;">{{linha[0]}}</span>
+                                                    <span ng-if="$index < 9 || $index > 10">{{linha[0]}}</span>
+                                                </td>
+                                                <td class="text-right table_border_print auxiliary_table_title">
+                                                    <span ng-if="linha[1]">{{linha[1] | currency: '' : 2}}</span>
+                                                    <span ng-if="!linha[1] && !($index >= 9 && $index <= 10)">0,00</span>
+                                                </td>
+                                                <td class="text-right table_border_print auxiliary_table_title">
+                                                    {{linha[2] | currency: '' : 2}}
+                                                </td>
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                </td>
+
+                                <td class="text-left table_print_end_tables" width="50%">
+
+                                    <b>Assinaturas</b>
+                                    <br>
+
+                                    <table border="1" class="tabela_exibicao hover md-caption page_layout_print_text" ms-responsive-table width="100%">
+                                        <thead>
+                                            <th class="text-center table_border_print auxiliary_table_title" width="26%">Etapa
+                                            </th>
+                                            <th class="text-center table_border_print auxiliary_table_title">Responsável
+                                            </th>
+                                            <th class="text-center table_border_print auxiliary_table_title" width="16%">Data
+                                            </th>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr ng-repeat="assinatura in $ctrl.object.listaAssinaturas" class="table_border_print">
+                                                <td class="text-left table_border_print auxiliary_table_title">
+                                                    {{ assinatura.etapaFluxo.nome }}
+                                                </td>
+                                                <td class="text-left table_border_print auxiliary_table_title">
+                                                    {{ assinatura.colaborador.nome }}
+                                                </td>
+                                                <td class="text-center table_border_print auxiliary_table_title">
+                                                    {{ assinatura.dataRealizacao | date:'dd/MM/yyyy' }}
+                                                </td>
+                                            </tr>
+
+                                            <tr class="space_helper_cell_tr">
+                                                <td class="text-left space_helper_cell_td">.</td>
+                                                <td class="text-left space_helper_cell_td">.</td>
+                                                <td class="text-center space_helper_cell_td">.</td>
+                                            </tr>
+
+                                            <tr class="table_border_print">
+                                                <td class="text-left table_border_print auxiliary_table_title">
+                                                    Encargos sociais
+                                                </td>
+                                                <td class="text-left table_border_print auxiliary_table_title" colspan="2">
+                                                    <span ng-if="$ctrl.percentualEncargosSociais">{{ $ctrl.percentualEncargosSociais | currency: '':2 }}%</span>
+                                                </td>
+                                            </tr>
+
+                                            <tr class="table_border_print">
+                                                <td class="text-left table_border_print auxiliary_table_title">
+                                                    Impostos
+                                                </td>
+                                                <td class="text-left table_border_print auxiliary_table_title" colspan="2">
+                                                    <span ng-if="$ctrl.object.fecho.percentualImposto">{{ $ctrl.object.fecho.percentualImposto | currency: '':2 }}%</span>
+                                                </td>
+                                            </tr>
+
+                                            <tr class="table_border_print">
+                                                <td class="text-left table_border_print auxiliary_table_title">
+                                                    Total HH
+                                                </td>
+                                                <td class="text-left table_border_print auxiliary_table_title" colspan="2">
+                                                    {{ $ctrl.object.totalHH | currency: '':0 }}
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </md-table-container>
+
+            </div>
+
+        </div>
+
+        <div style="bottom: 23px; margin-bottom: 0; padding-top: 15px; position: fixed; right: 23px; z-index: 998;">
+
+            <md-button aria-label="imprimir" class="md-fab md-mini md-primary no-print" ng-click="$ctrl.imprimir()">
+                <md-icon md-font-icon="icon-printer" md-menu-align-target></md-icon>
+            </md-button>
+
+            <md-button aria-label="Use Android" class="md-fab md-mini md-primary no-print" ng-click="$ctrl.voltar()">
+                <md-icon md-font-icon="icon-undo" md-menu-align-target></md-icon>
+            </md-button>
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,264 @@
+<div class="page-layout simple fullwidth" ng-controller="PrevisaoFaturamentoDetail">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent">Faturamento</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent">{{::titulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent">{{ ::subtitulo }}</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <div class="content" md-background-bg>
+
+        <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+            <!-- CONTENT -->
+            <div class="content" flex>
+
+                <div layout="row" layout-wrap>
+
+                    <div class="about" flex="100" layout="column">
+
+                        <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+
+                            <header class="md-accent-bg">
+                                <div class="title" id="title_panel">{{::titulo}} - {{::subtitulo}}</div>
+                            </header>
+
+                            <div class="white-500-bg">
+
+                                <form name="form" novalidate>
+                                    <div layout="row" layout-wrap>
+                                        <div class="about" flex="100" layout="column">
+
+                                            <div class="content">
+
+                                                <div layout layout-sm="column" layout-wrap>
+
+                                                    <md-input-container flex flex-gt-md="25">
+                                                        <label id="lbl_competencia">Competência</label>
+                                                        <input id="input_competencia" name="input_competencia" ng-disabled="true" type="text" value="{{ object.competencia | date:'MMMM/yyyy' }}">
+                                                    </md-input-container>
+
+                                                </div>
+
+                                                <div class="simple-table-container md-whiteframe-1dp">
+                                                    <md-table-container>
+                                                        <table class="tabela_exibicao" id="tabela" md-table style="border: 1px solid #c4c4c4;">
+                                                            <tbody class="grey-200-bg" md-body>
+                                                                <tr md-row ng-repeat-start="item in listaGerencia">
+                                                                    <td md-cell width="85%"><b>{{ item.nome}}</b></td>
+                                                                    <td md-cell style="text-align: right" width="4%"><b>{{
+																	item.qtd}}</b></td>
+                                                                    <td md-cell style="text-align: right" width="7%"><b>{{
+																	item.total | currency:'':2}}</b></td>
+                                                                    <td>
+                                                                        <div flex layout="row" layout-align="center center" ng-show="item.listaPrevisao.length > 0">
+                                                                            <button ng-click="expandedResume(item, false, listaGerencia)" ng-show="item.expanded">
+                                                                                <md-icon md-font-icon="icon-menu-up"></md-icon>
+                                                                            </button>
+                                                                            <button ng-click="expandedResume(item, true, listaGerencia)" ng-show="!item.expanded">
+                                                                                <md-icon md-font-icon="icon-menu-down"></md-icon>
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr md-row ng-repeat-end="" ng-show="item.expanded && item.qtd > 0">
+                                                                    <td class="borda_avaliador" colspan="5" md-cell style="padding: 0px;">
+                                                                        <table class="simple row-border hover text-center white-bg" id="table-list" ms-responsive-table width="100%">
+
+                                                                            <thead>
+                                                                                <tr ng-show="item.listaPrevisao.length == 0">
+                                                                                    <th class="secondary-text" colspan="10"></th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="titulo_colunas" width="10%">
+                                                                                        <div class="table-header text-center">
+                                                                                            <span class="column-title">Nº</span>
+                                                                                        </div>
+                                                                                    </th>
+                                                                                    <th class="titulo_colunas" width="10%">
+                                                                                        <div class="table-header text-center">
+                                                                                            <span class="column-title">CL</span>
+                                                                                        </div>
+                                                                                    </th>
+                                                                                    <th class="titulo_colunas" width="20%">
+                                                                                        <div class="table-header text-center">
+                                                                                            <span class="column-title">OS inicial</span>
+                                                                                        </div>
+                                                                                    </th>
+                                                                                    <th class="titulo_colunas" width="20%">
+                                                                                        <div class="table-header text-center">
+                                                                                            <span class="column-title">Contratual</span>
+                                                                                        </div>
+                                                                                    </th>
+                                                                                    <th class="titulo_colunas" width="20%">
+                                                                                        <div class="table-header text-center">
+                                                                                            <span
+																						class="column-title">Extra</span>
+                                                                                        </div>
+                                                                                    </th>
+                                                                                    <th class="titulo_colunas" width="20%">
+                                                                                        <div class="table-header text-center">
+                                                                                            <span
+																						class="column-title">Total</span>
+                                                                                        </div>
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+
+                                                                            <tbody>
+                                                                                <tr ng-repeat="previsao in item.listaPrevisao | orderBy : 'cl'">
+
+                                                                                    <td class="text-center">{{$index + 1}}</td>
+                                                                                    <td class="text-center">
+                                                                                        {{::previsao.centroFinanceiro.identificadorFinal}}
+                                                                                    </td>
+                                                                                    <td class="text-right">
+                                                                                        {{::previsao.valorOSInicial | currency :
+																				'' : 2}}
+                                                                                    </td>
+
+                                                                                    <td class="text-right">
+                                                                                        <div ng-if="screenMode === 'VIEW' || tipoFaturamento === 'Extra contratual'">
+                                                                                            {{::previsao.valorContratual |
+																					currency : '' : 2 }}
+                                                                                        </div>
+                                                                                        <div ng-if="screenMode === 'EDIT' && tipoFaturamento !== 'Extra contratual'">
+                                                                                            <md-input-container style="margin-top: 0px; margin-bottom: 0px;">
+                                                                                                <input class="text-right" name="input_{{$index}}_{{::previsao.centroFinanceiro.identificadorFinal}}" aria-label="input_{{$index}}_{{::previsao.centroFinanceiro.identificadorFinal}}" max="9999999999"
+                                                                                                    maxlength="13" min="0.01" ng-change="$emit('atualizarTotais')" ng-model="previsao.valorContratual" ui-number-mask="2">
+                                                                                            </md-input-container>
+                                                                                        </div>
+                                                                                    </td>
+
+                                                                                    <td class="text-right">
+                                                                                        <div ng-if="screenMode === 'VIEW' || tipoFaturamento === 'Contratual'">
+                                                                                            {{::previsao.valorExtra | currency :
+																					'' : 2 }}
+                                                                                        </div>
+                                                                                        <div ng-if="screenMode === 'EDIT' && tipoFaturamento !== 'Contratual'">
+                                                                                            <md-input-container style="margin-top: 0px; margin-bottom: 0px;">
+                                                                                                <input class="text-right" max="9999999999" name="input_{{$index}}_{{::previsao.centroFinanceiro.identificadorFinal}}" aria-label="input_{{$index}}_{{::previsao.centroFinanceiro.identificadorFinal}}"
+                                                                                                    maxlength="13" min="0.01" ng-change="$emit('atualizarTotais')" ng-model="previsao.valorExtra" ui-number-mask="2">
+                                                                                            </md-input-container>
+                                                                                        </div>
+                                                                                    </td>
+
+                                                                                    <td class="text-right">
+                                                                                        {{previsao.valorContratual +
+																				previsao.valorExtra | currency : '' : 2
+																				}}
+                                                                                    </td>
+
+                                                                                </tr>
+                                                                            </tbody>
+
+                                                                            <tfoot>
+                                                                                <tr class="md-grey-300-bg">
+                                                                                    <td></td>
+                                                                                    <td class="text-right" style="padding-left: 8px;"><strong>Total:</strong>
+                                                                                    </td>
+                                                                                    <td class="text-right" style="padding-left: 8px;"><strong>{{
+																				item.totalOSInicial |
+																				currency:'':2}}</strong></td>
+                                                                                    <td class="text-right" style="padding-left: 8px;"><strong>{{
+																				item.totalContratual |
+																				currency:'':2}}</strong></td>
+                                                                                    <td class="text-right" style="padding-left: 8px;"><strong>{{
+																				item.totalExtra |
+																				currency:'':2}}</strong></td>
+                                                                                    <td class="text-right" style="padding-left: 8px;"><strong>{{
+																				item.total | currency:'':2}}</strong>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tfoot>
+
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </md-table-container>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <md-divider></md-divider>
+
+                                <div class="navigation padding-8" flex layout="row">
+                                    <md-button class="md-raised md-accent" id="btn_editar" ng-click="editar()" ng-if="temPerfilAnalista && screenMode === 'VIEW'">
+                                        EDITAR
+                                        <md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+                                            <span class="h4">Editar os valores da previsão de faturamento</span>
+                                        </md-tooltip>
+                                    </md-button>
+
+                                    <md-button class="md-raised md-accent" id="btn_imprimir" ng-click="imprimir()" ng-if="screenMode === 'VIEW'">
+                                        IMPRIMIR
+                                        <md-tooltip id="tool_tip_btn_exibir" md-direction="bottom">
+                                            <span class="h4">Imprimir esta previsão de faturamento</span>
+                                        </md-tooltip>
+                                    </md-button>
+
+                                    <md-button class="md-raised md-accent" id="btn_editar" ng-click="competenciaAnterior($event)" ng-if="screenMode === 'EDIT'">
+                                        COMPETÊNCIA ANTERIOR
+                                        <md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+                                            <span class="h4">Repetir os valores da competência anterior para esta competência (os valores já informados serão sobrepostos)</span>
+                                        </md-tooltip>
+                                    </md-button>
+
+                                    <md-button class="md-raised md-accent" id="btn_editar" ng-click="salvar()" ng-if="screenMode === 'EDIT'">
+                                        SALVAR
+                                        <md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+                                            <span
+												class="h4">Salvar as alterações realizadas na previsão de faturamento</span>
+                                        </md-tooltip>
+                                    </md-button>
+
+                                    <md-button class="md-raised md-accent" id="btn_cancelar" ng-click="cancelar()">
+                                        CANCELAR
+                                        <md-tooltip id="tool_tip_btn_exibir" md-direction="bottom">
+                                            <span class="h4"
+												  ng-if="screenMode === 'VIEW'">Retornar à tela anterior</span>
+                                            <span class="h4" ng-if="screenMode === 'EDIT'">Sair desta previsão de faturamento, sem gravas as modificações realizadas</span>
+                                        </md-tooltip>
+                                    </md-button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+
+            <md-button aria-label="Botão Descer tela" class="md-fab md-raised md-accent md-mini btn-descer" ng-click="top()" ng-if="btnFab">
+                <md-icon md-font-icon="icon-chevron-down" style="color: white !important;"></md-icon>
+                <md-tooltip class="h4" md-direction="top">
+                    Rolar a tela para o fim
+                </md-tooltip>
+            </md-button>
+
+            <md-button aria-label="Botão Descer tela" class="md-fab md-raised md-accent md-mini btn-descer" ng-click="bottom()" ng-if="btnBottom">
+                <md-icon md-font-icon="icon-chevron-up" style="color: white !important;"></md-icon>
+                <md-tooltip class="h4" md-direction="top">
+                    Rolar a tela para o início
+                </md-tooltip>
+            </md-button>
+
+        </div>
+    </div>
+</div>

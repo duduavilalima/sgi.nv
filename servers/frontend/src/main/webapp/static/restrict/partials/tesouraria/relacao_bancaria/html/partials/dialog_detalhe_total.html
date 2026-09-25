@@ -1,0 +1,40 @@
+<md-dialog aria-label="RB/{{codigoRB}}" id="dialog_titulo_popup_conta_Contabil" style="width: 400px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_conta_Contabil" md-autofocus> RB/{{codigoRB}} - Totais</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="fechar()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content role="document">
+		<table id="tabela">
+			<thead>
+			<tr>
+				<th class="titulo_colunas" style="text-align: center;"></th>
+				<th class="titulo_colunas" style="width: 25%; text-align: center;">Valor</th>
+				<th class="titulo_colunas" style="width: 25%; text-align: center;">Pagamentos</th>
+			</tr>
+			</thead>
+
+			<tbody>
+			<tr ng-class="{'grey-300-bg': hover}" ng-mouseleave="hover = false" ng-mouseover="hover = true"
+				ng-repeat="item in listaValores">
+				<td style="font-weight: bold">{{::item.label}}</td>
+				<td style="text-align: right;">{{::item.valor | currency : '' : 2}}</td>
+				<td style="text-align: right;">{{::item.numpags}}</td>
+			</tr>
+			</tbody>
+		</table>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row" layout-align="center center" style="margin-top: -5px;">
+		<md-button class="md-raised md-accent" id="btn_fechar" ng-click="fechar()" ng-disabled="action">
+			Fechar
+		</md-button>
+	</md-dialog-actions>
+
+</md-dialog>

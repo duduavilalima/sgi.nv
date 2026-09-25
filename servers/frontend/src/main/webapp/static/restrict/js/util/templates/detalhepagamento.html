@@ -1,0 +1,454 @@
+<md-dialog aria-label="Detalhe pagamento">
+	<md-dialog-content style="width: 600px">
+		<div id="profile" layout="column">
+			<div class="about" layout="column">
+				<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+					<md-toolbar>
+						<div class="md-toolbar-tools">
+							<h3 ng-if="pagamento.tipo == 'NP'">Nota de pagamento</h3>
+							<h3 ng-if="pagamento.tipo == 'NF' && pagamento.notaFiscalTO.tipoFornecimento == 'Só material'">
+								Nota fiscal (Materiais)</h3>
+							<h3 ng-if="pagamento.tipo == 'NF' && pagamento.notaFiscalTO.tipoFornecimento == 'Só serviço'">
+								Nota fiscal (Serviços)</h3>
+							<h3 ng-if="pagamento.tipo == 'TA'">Tributo Acumulado (TA)</h3>
+							<h3 ng-if="pagamento.tipo == 'TR'">Tributo (TR)</h3>
+							<span flex></span>
+							<md-button class="md-icon-button" ng-click="fechar()">
+								<md-icon aria-label="Fechar detalhe" class="s24 white-fg" md-font-icon="icon-close"
+										 style="color: white !important;"></md-icon>
+							</md-button>
+						</div>
+					</md-toolbar>
+
+					<div class="content">
+						<form class="mt-20" name="detalhePagamento">
+
+							<!-- NF  Serviços -->
+							<div
+								ng-if="pagamento.tipo == 'NF' && pagamento.notaFiscalTO.tipoFornecimento == 'Só serviço'">
+
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_itens_nfs">Valor dos itens</label>
+										<input class="text-left" id="input_detalhe_valor_itens_nfs" name="itens"
+											   ng-disabled="true" ng-model="pagamento.totalValorItens" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_servicos_nf">Valor serviços</label>
+										<input class="text-left" id="input_detalhe_servicos_nf" name="servicos"
+											   ng-disabled="true" ng-model="pagamento.totalValorServicos" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_desconto_nfs">Desconto (-)</label>
+										<input class="text-left" id="input_detalhe_valor_desconto_nfs" name="desconto"
+											   ng-disabled="true" ng-model="pagamento.notaFiscalTO.desconto" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_tributos_nfs">Tributos (-)</label>
+										<input class="text-left" id="input_detalhe_tributos_nfs" name="tributos"
+											   ng-disabled="true" ng-model="pagamento.valorTributo" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_outros_nf">Outros descontos (-)</label>
+										<input class="text-left" id="input_detalhe_outros_nf" name="outros"
+											   ng-disabled="true" ng-model="pagamento.totalOutrosDescontos" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_nota_nfs">Valor da nota (=)</label>
+										<input class="text-left" id="input_detalhe_valor_nota_nfs" name="valorNota"
+											   ng-disabled="true" ng-model="pagamento.notaFiscalTO.valor" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+							</div>
+
+							<!-- NF  Materiais -->
+							<div
+								ng-if="pagamento.tipo == 'NF' && pagamento.notaFiscalTO.tipoFornecimento == 'Só material'">
+
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_itens_nf">Valor dos itens</label>
+										<input class="text-left" id="input_detalhe_valor_itens_nf" name="itens"
+											   ng-disabled="true" ng-model="pagamento.totalValorItens" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_ipi_nf">IPI (+)</label>
+										<input class="text-left" id="input_detalhe_ipi_nf" name="ipi" ng-disabled="true"
+											   ng-model="pagamento.notaFiscalTO.valorIpi" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_desconto_nf">Desconto (-)</label>
+										<input class="text-left" id="input_detalhe_valor_desconto_nf" name="desconto"
+											   ng-disabled="true" ng-model="pagamento.notaFiscalTO.desconto" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_outras_nf">Outras despesas (-)</label>
+										<input class="text-left" id="input_detalhe_outras_nf" name="outras"
+											   ng-disabled="true" ng-model="pagamento.notaFiscalTO.valorOutrasDespesas"
+											   type="text" ui-number-mask="2">
+									</md-input-container>
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_frete_nf">Frete/Seguro (+)</label>
+										<input class="text-left" id="input_detalhe_valor_frete_nf" name="frete"
+											   ng-disabled="true" ng-model="pagamento.valorFreteSeguro" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_nota_nf">Valor da nota (=)</label>
+										<input class="text-left" id="input_detalhe_valor_nota_nf" name="valorNota"
+											   ng-disabled="true" ng-model="pagamento.notaFiscalTO.valor" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+							</div>
+
+							<!-- NP  -->
+							<div ng-if="pagamento.tipo == 'NP'">
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_nota">Valor da nota</label>
+										<input class="text-left" id="input_detalhe_valor_nota" name="valorNota"
+											   ng-disabled="true" ng-model="pagamento.valor" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_multa">Multa (+)</label>
+										<input class="text-left" id="input_detalhe_multa" name="multa"
+											   ng-disabled="true" ng-model="pagamento.valorMulta" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_parcela">Valor da parcela</label>
+										<input class="text-left" id="input_detalhe_valor_parcela" name="valorParcela"
+											   ng-disabled="true" ng-model="pagamento.valor" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_juros">Juros (+)</label>
+										<input class="text-left" id="input_detalhe_juros" name="juros"
+											   ng-disabled="true" ng-model="pagamento.valorJuros" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_tributos">Tributos (-)</label>
+										<input class="text-left" id="input_detalhe_tributos" name="tributos"
+											   ng-disabled="true" ng-model="pagamento.valorTributo" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_descontos">Desconto (-)</label>
+										<input class="text-left" id="input_detalhe_descontos" name="descontos"
+											   ng-disabled="true" ng-model="pagamento.valorDesconto" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_outros_desc">Outros descontos (-)</label>
+										<input class="text-left" id="input_detalhe_outros_desc" name="outrosDesc"
+											   ng-disabled="true" ng-model="pagamento.totalOutrosDescontos" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_pagar">A pagar (=)</label>
+										<input class="text-left" id="input_detalhe_pagar" name="pagar"
+											   ng-disabled="true" ng-model="pagamento.valorPagar" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+							</div>
+
+							<!-- TA -->
+							<div ng-if="pagamento.tipo == 'TA'">
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_ta">Valor</label>
+										<input class="text-left" id="input_detalhe_valor_ta" name="valorta"
+											   ng-disabled="true" ng-model="pagamento.valor" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_multa_ta">Multa (+)</label>
+										<input class="text-left" id="input_detalhe_multa_ta" name="multa"
+											   ng-disabled="true" ng-model="pagamento.valorMulta" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_juros">Juros (+)</label>
+										<input class="text-left" id="input_detalhe_valor_juros" name="juros"
+											   ng-disabled="true" ng-model="pagamento.valorJuros" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="50" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_pagar_ta">Valor a pagar (=)</label>
+										<input class="text-left" id="input_detalhe_pagar_ta" name="pagar"
+											   ng-disabled="true" ng-model="pagamento.valorPagar" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+							</div>
+
+							<!-- TR -->
+							<div ng-if="pagamento.tipo == 'TR'">
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_base">Base de cálculo</label>
+										<input class="text-left" id="input_detalhe_base" name="base" ng-disabled="true"
+											   ng-model="pagamento.valorTributo" type="text" ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_aliq">Aliquota (%)</label>
+										<input class="text-left" id="input_detalhe_aliq" name="aliq" ng-disabled="true"
+											   ng-model="pagamento.notaValorISS" type="text" ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_tr">Valor</label>
+										<input class="text-left" id="input_detalhe_valor_tr" name="valortr"
+											   ng-disabled="true" ng-model="pagamento.valor" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_multa_tr">Multa (+)</label>
+										<input class="text-left" id="input_detalhe_multa_tr" name="multa"
+											   ng-disabled="true" ng-model="pagamento.valorMulta" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_valor_juros_tr">Juros (+)</label>
+										<input class="text-left" id="input_detalhe_valor_juros_tr" name="juros"
+											   ng-disabled="true" ng-model="pagamento.valorJuros" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_pagar_tr">Valor a pagar (=)</label>
+										<input class="text-left" id="input_detalhe_pagar_tr" name="pagar"
+											   ng-disabled="true" ng-model="pagamento.valorPagar" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<!-- TRIBUTOS -->
+					<div
+						ng-if="pagamento.tipo == 'NF' && pagamento.notaFiscalTO.tipoFornecimento == 'Só serviço' && pagamento.valorTributo > 0">
+						<md-toolbar>
+							<div class="md-toolbar-tools">
+								<h3>Tributos</h3>
+							</div>
+						</md-toolbar>
+						<div class="content">
+							<form class="mt-20" name="detalhePagamento2">
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_irrf_nf">IRRF</label>
+										<input class="text-left" id="input_detalhe_irrf_nf" name="servicos"
+											   ng-disabled="true" ng-model="pagamento.notaValorIRRF" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_pis_nf">PIS/COFINS/CSLL</label>
+										<input class="text-left" id="input_detalhe_pus_nf" name="pis" ng-disabled="true"
+											   ng-model="pagamento.notaValorPIS" type="text" ui-number-mask="2">
+									</md-input-container>
+
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_inss_nf">INSS</label>
+										<input class="text-left" id="input_detalhe_inss_nf" name="outros"
+											   ng-disabled="true" ng-model="pagamento.notaValorINSS" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+								</div>
+
+								<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+									<md-input-container flex="33" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_iss_nfs">ISS</label>
+										<input class="text-left" id="input_detalhe_iss_nfs" name="valorNota"
+											   ng-disabled="true" ng-model="pagamento.notaValorISS" type="text"
+											   ui-number-mask="2">
+									</md-input-container>
+									<md-input-container flex="66" flex-sm="50" flex-xs="50">
+										<label id="lbl_detalhe_iss_uf_nfs">ISS (UF/Cidade)</label>
+										<input class="text-left" id="input_detalhe_iss_uf_nfs" name="valorNota"
+											   ng-disabled="true" ng-model="pagamento.issUF" type="text">
+									</md-input-container>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<!--PAGAMENTO-->
+					<div ng-if="pagamento.tipo == 'NF'">
+						<md-toolbar>
+							<div class="md-toolbar-tools">
+								<h3>Este pagamento</h3>
+							</div>
+						</md-toolbar>
+
+						<div class="content">
+							<form class="mt-20" name="detalhePagamento3">
+								<!-- NF  Serviços -->
+								<div ng-if="pagamento.notaFiscalTO.tipoFornecimento == 'Só serviço'">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_valor_nf_s">Valor</label>
+											<input class="text-left" id="input_detalhe_valor_nf_s" name="valor"
+												   ng-disabled="true" ng-model="pagamento.valor" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_juros_nf_s">Juros (+)</label>
+											<input class="text-left" id="input_detalhe_juros_nf_s" name="juros"
+												   ng-disabled="true" ng-model="pagamento.valorJuros" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_multa_nf_s">Multa (+)</label>
+											<input class="text-left" id="input_detalhe_multa_nf_S" name="multa"
+												   ng-disabled="true" ng-model="pagamento.valorMulta" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_valor_adiantamento_nf_s">Adiantamento (-)</label>
+											<input class="text-left" id="input_detalhe_valor_adiantamento_nf_s"
+												   name="adiantamento" ng-disabled="true"
+												   ng-model="pagamento.valorAdiantamento" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_desconto_nf_s">Desconto (-)</label>
+											<input class="text-left" id="input_detalhe_desconto_nf_S" name="desconto"
+												   ng-disabled="true" ng-model="pagamento.valorDesconto" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_valor_pagar_nf_s">Valor a pagar (=)</label>
+											<input class="text-left" id="input_detalhe_dvalor_pagar_nf_s"
+												   name="valorPagar" ng-disabled="true" ng-model="pagamento.valorPagar"
+												   type="text" ui-number-mask="2">
+										</md-input-container>
+									</div>
+								</div>
+
+								<!-- NF  Materiais -->
+								<div ng-if="pagamento.notaFiscalTO.tipoFornecimento == 'Só material'">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_valor_nf">Valor</label>
+											<input class="text-left" id="input_detalhe_valor_nf" name="valor"
+												   ng-disabled="true" ng-model="pagamento.valor" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_valor_devolucao_nf">NF/Devolução (-)</label>
+											<input class="text-left" id="input_detalhe_valor_devolucao_nf"
+												   name="devolucao" ng-disabled="true"
+												   ng-model="pagamento.valorDevolucao" type="text" ui-number-mask="2">
+										</md-input-container>
+
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_valor_adiantamento_nf">Adiantamento (-)</label>
+											<input class="text-left" id="input_detalhe_valor_adiantamento_nf"
+												   name="adiantamento" ng-disabled="true"
+												   ng-model="pagamento.valorAdiantamento" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_multa_nf">Multa (+)</label>
+											<input class="text-left" id="input_detalhe_multa_nf" name="multa"
+												   ng-disabled="true" ng-model="pagamento.valorMulta" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_juros_nf">Juros (+)</label>
+											<input class="text-left" id="input_detalhe_juros_nf" name="juros"
+												   ng-disabled="true" ng-model="pagamento.valorJuros" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_desconto_nf">Desconto (-)</label>
+											<input class="text-left" id="input_detalhe_desconto_nf" name="desconto"
+												   ng-disabled="true" ng-model="pagamento.valorDesconto" type="text"
+												   ui-number-mask="2">
+										</md-input-container>
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="33" flex-sm="50" flex-xs="50">
+											<label id="lbl_detalhe_valor_pagar_nf">Valor a pagar (=)</label>
+											<input class="text-left" id="input_detalhe_dvalor_pagar_nf"
+												   name="valorPagar" ng-disabled="true" ng-model="pagamento.valorPagar"
+												   type="text" ui-number-mask="2">
+										</md-input-container>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row" layout-align="center center" style="margin-top: 1px;">
+		<md-button class="md-raised md-accent" ng-click="fechar()" style="margin-right:20px;">
+			Fechar
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>

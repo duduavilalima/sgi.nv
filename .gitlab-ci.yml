@@ -1,0 +1,39 @@
+include:
+    -
+        project: 'aa/deploy'
+        ref: next/v4
+        file: '/gitlab-ci/gitlab-ci.common.yml'
+
+variables:
+    SGI_SERVICE_VARNAMES: "WEB JOBS"
+    SGI_RECREATE_SERVICES: "webnv jobs"
+
+.artifact-paths: &artifact-paths
+    paths:
+        - build/target
+
+.cache-paths: &cache-paths
+    paths:
+        - build/m2/repository
+        - build/cache
+        - build/target
+        - servers/frontend/node-bin
+        - servers/frontend/src/main/webapp/source/node_modules
+
+build-stable-sources:
+    artifacts:
+        <<: *artifact-paths
+    cache:
+        <<: *cache-paths
+
+build-prerelease-sources:
+    artifacts:
+        <<: *artifact-paths
+    cache:
+        <<: *cache-paths
+
+build-unstable-sources:
+    artifacts:
+        <<: *artifact-paths
+    cache:
+        <<: *cache-paths

@@ -1,0 +1,74 @@
+<md-dialog aria-label="Cidade para faturamento - Novo" id="dialog_titulo_popup_cidade_faturamento_novo"
+		   style="width: 600px;">
+	<form name="form_dialog_cidade" ng-controller="FaturamentoEtapaCtrl">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_cidade_faturamento_novo" md-autofocus>Cidade para faturamento - Novo</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" id="bt_fechar_popup_cidade_faturamento_novo" ng-click="cancel()"
+						   style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="white-bg">
+			<div class="md-dialog-content" md-theme="sgi" style="padding-bottom: 0px;">
+
+				<div layout layout-sm="column">
+					<md-input-container>
+						<label id="lbl_uf_dialog_cidade">UF</label>
+						<md-select id="combo_uf_dialog_cidade" name="combo_uf_dialog_cidade"
+								   ng-change="$emit('changeUF')" ng-model="object.uf"
+								   ng-required="true" value="{{ object.uf }}">
+							<md-option ng-repeat="uf in ufCidades | orderBy: 'uf'" ng-value="uf">{{ uf }}</md-option>
+						</md-select>
+						<div ng-messages="form_dialog_cidade.combo_uf_dialog_cidade.$error" role="alert">
+							<div id="msg_obrigatorio_uf" ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_cidade_dialog_cidade">Cidade</label>
+						<md-select id="combo_cidade_dialog_cidade" name="combo_cidade_dialog_cidade"
+								   ng-model="object.cidade" ng-model-options="{trackBy: '$value.codigo'}"
+								   ng-required="true"
+								   value="{{ object.cidade.nome }}">
+							<md-option ng-repeat="cidade in cidadesDialog | orderBy: 'nome'" ng-value="cidade">{{
+								cidade.nome }}
+							</md-option>
+						</md-select>
+						<div ng-messages="form_dialog_cidade.combo_cidade_dialog_cidade.$error" role="alert">
+							<div id="msg_obrigatorio_nome_cidade" ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+				</div>
+
+			</div>
+
+			<md-divider></md-divider>
+
+		</md-dialog-content>
+
+		<md-dialog-actions class="navigation padding-8 white-bg" style="padding-right: 16px;">
+
+			<div flex layout="row">
+
+				<div flex="100" flex-sm="100" layout="row" layout-align="start center">
+
+					<md-button class="md-raised md-accent" id="btn_salvar_dialog_cidade" ng-click="salvar()"
+							   ng-disabled="desabilitarBotaoSalvar()">
+						Salvar
+					</md-button>
+
+					<md-button class="md-raised md-accent" id="btn_cancelar_dialog_cidade" ng-click="cancelar()">
+						CANCELAR
+					</md-button>
+				</div>
+
+			</div>
+
+		</md-dialog-actions>
+	</form>
+</md-dialog>

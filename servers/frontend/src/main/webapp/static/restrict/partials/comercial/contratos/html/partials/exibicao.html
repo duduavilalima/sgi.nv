@@ -1,0 +1,104 @@
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_codigo_exibir">Número</label>
+        <input id="input_codigo_exibir" name="input_codigo_exibir" disabled="true" disabled="true" type="text"
+            value="{{ $ctrl.object.numero }}">
+    </md-input-container>
+
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_situacao_exibir">Situação</label>
+        <input id="input_situacao_exibir" name="input_situacao_exibir" disabled="true" disabled="true" type="text"
+            value="{{ $ctrl.object.situacao }}">
+    </md-input-container>
+
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_matriz_filial_exibir">
+            Matriz/Filial para o faturamento
+            <md-tooltip>
+                <span class="h4">Matriz/Filial para emissão de notas fiscais (faturamento)</span>
+            </md-tooltip>
+        </label>
+        <input id="input_matriz_filial_exibir" name="matriz_filial_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.unidade.codnome }}">
+    </md-input-container>
+
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_diretoria_exibir">Diretoria</label>
+        <input id="combo_diretoria_exibir" name="diretoria_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.diretoria.descricao }}">
+    </md-input-container>
+</div>
+
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex flex-gt-xs="25">
+        <label id="lbl_tipo_pessoa_exibir">Tipo de pessoa</label>
+        <input id="input_tipo_pessoa_exibir" name="tipo_pessoa_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.cliente.tipoPessoa | limitTo : 10 : 7 }}">
+    </md-input-container>
+
+    <md-input-container flex flex-gt-xs="25">
+        <label id="lbl_cnpj_exibir">CNPJ</label>
+        <input id="input_cnpj_exibir" name="cnpj_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.cliente.documento }}">
+    </md-input-container>
+
+    <md-input-container flex flex-gt-xs="50">
+        <label id="lbl_razao_social_exibir">Razão social</label>
+        <input id="input_razao_social_exibir" name="razao_social_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.cliente.nome }}">
+    </md-input-container>
+</div>
+
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex flex-sm="100" flex-xs="100">
+        <label id="lbl_assinatura_exibir">Assinatura</label>
+        <input id="input_assinatura_exibir" name="assinatura_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.dataAssinatura | date:'dd/MM/yyyy'}}">
+    </md-input-container>
+
+    <md-input-container flex flex-sm="100" flex-xs="100">
+        <label id="lbl_inicio_vigencia_exibir">Início da vigência</label>
+        <input id="input_inicio_vigencia_exibir" name="inicio_vigencia_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.dataInicioVigencia | date:'dd/MM/yyyy'}}">
+    </md-input-container>
+
+    <md-input-container flex flex-sm="100" flex-xs="100">
+        <label id="lbl_fim_vigencia_exibir">Fim da vigência</label>
+        <input id="input_fim_vigencia_exibir" name="fim_vigencia_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.dataFimVigencia | date:'dd/MM/yyyy' }}">
+    </md-input-container>
+
+    <md-input-container flex flex-sm="100" flex-xs="100">
+        <label id="lbl_prazo_exibir">Prazo (meses)</label>
+        <input id="input_prazo_exibir" name="prazo_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.prazoAtual }}">
+    </md-input-container>
+</div>
+
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_valorMensal_exibir">Valor mensal (ativos)</label>
+        <input id="input_valorMensal_exibir" name="valorMensal_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.valorMensal | currency:'':2 }}"
+            style="{{ ( $ctrl.object.valorMensal !== $ctrl.totalValorMensalCF )  ? 'color: red !important' : '' }}">
+    </md-input-container>
+
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_valor_total_exibir">Valor total</label>
+        <input id="input_valor_total_exibir" name="valor_total_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.valorTotal | currency:'':2 }}"
+            style="{{ ($ctrl.object.valorTotal !== $ctrl.totalValorTotalCF) ? 'color: red !important' : '' }}">
+    </md-input-container>
+
+    <md-input-container flex flex-sm="100" flex-xs="100">
+        <label id="lbl_retencao_exibir">% Retenção</label>
+        <input id="input_retencao_exibir" name="retencao_exibir" disabled="true" type="text"
+            value="{{ $ctrl.object.percentualRetencao | currency:'':2  }}">
+    </md-input-container>
+
+    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+        <label id="lbl_valorRetencao_exibir">Valor da retenção</label>
+        <input id="input_valorRetencao_exibir" name="valorRetencao" disabled="true" type="text"
+            value="{{ $ctrl.object.retencao | currency:'':2  }}">
+    </md-input-container>
+</div>

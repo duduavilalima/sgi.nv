@@ -1,0 +1,325 @@
+<div layout layout-sm="column" ng-init="initDatepicker();">
+	<md-input-container flex>
+		<label id="lbl_valor">Valor (R$)</label>
+		<input class="text-left" id="input_valor" max="999999999999" maxlength="18" min="0.01" name="valor"
+			   ng-change="inputValorFaturamento()" ng-disabled="screenMode === 'VIEW'" ng-model="object.valor"
+			   ng-required="screenMode !== 'VIEW'" type="text" ui-number-mask="2">
+		<div ng-messages="wizardStep4.valor.$error" role="alert">
+			<div id="msg_req_valor" ng-message="required">Preenchimento obrigatório.</div>
+			<div id="msg_min_valor" ng-message="min">O valor do faturamento deve ser maior do que zero.</div>
+			<div id="msg_max_valor" ng-message="max">Valor não pode ser maior de 999.999.999.999,99.</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex ng-if="screenMode != 'VIEW' && habilitarTipoDocumentoFaturamento(object)">
+		<label id="lbl_div_mat_serv">Tipo de itens</label>
+		<md-select id="combo_div_mat_serv" name="div_mat_serv" ng-change="changeDivMatServ()"
+				   ng-disabled="screenMode === 'VIEW'" ng-model="object.tipoFornecimento" ng-required="screenMode != 'VIEW'">
+			<md-option ng-repeat="divMatServ in divMatSerList" ng-value="divMatServ">{{divMatServ}}</md-option>
+		</md-select>
+		<div ng-messages="wizardStep4.div_mat_serv.$error" role="alert">
+			<div id="msg_req_div_valor_mat_serv" ng-message="required">Preenchimento obrigatório.</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex ng-if="screenMode === 'VIEW' || !habilitarTipoDocumentoFaturamento(object)">
+		<label id="lbl_div_mat_serv_exibicao">Tipo de itens</label>
+		<input class="text-left" id="combo_div_mat_serv_exibicao" name="combo_div_mat_serv_exibicao" ng-disabled="true"
+			   type="text" value="{{ object.tipoFornecimento }}">
+		<md-tooltip id="tool_div_mat_serv_exibicao" md-direction="bottom" ng-if="screenMode != 'VIEW' && !habilitarTipoDocumentoFaturamento(object)">
+			<span class="h4">Existe(m) etapa(s) associada(s) a este faturamento (edição não permitida)</span>
+		</md-tooltip>
+	</md-input-container>
+
+	<md-input-container flex>
+		<label id="lbl_percentual_servico">Serviço (%)</label>
+		<input class="text-left" id="input_percentual_servico" maxlength="6" name="percentual_servico"
+			   ng-disabled="object.tipoFornecimento !== 'Serviço/Material' || screenMode === 'VIEW'"
+			   ng-model="object.percentualServico" ng-required="object.tipoFornecimento === 'Serviço/Material'"
+			   type="text" ui-number-mask="2" ui-percentage-value>
+		<div ng-if="wizardStep4.percentual_servico.$touched" ng-messages="wizardStep4.percentual_servico.$error"
+			 role="alert">
+			<div id="msg_req_servico" ng-message="required">Preenchimento obrigatório.</div>
+		</div>
+
+		<div class="red-400-fg" ng-if="percentualMax" role="alert"
+			 style="font-size: 12px;line-height: 14px;transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);opacity: 1;margin-top: 0;padding-top: 5px;">
+			<div class="md-input-message-animation ng-scope" id="msg_perc_min_serv" ng-if="percentualMax">
+				O percentual de serviço/mão-de-obra deve ser menor do que 100%.
+			</div>
+		</div>
+		<div class="red-400-fg" ng-if="percentualMin" role="alert"
+			 style="font-size: 12px;line-height: 14px;transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);opacity: 1;margin-top: 0;padding-top: 5px;">
+			<div class="md-input-message-animation ng-scope" id="msg_perc_max_serv" ng-if="percentualMin">
+				O percentual do serviço deve ser maior do que zero.
+			</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex>
+		<label id="lbl_valor_servico">Serviço (R$)</label>
+		<input class="text-left" id="input_valor_servico" maxlength="18" name="valor_servico" ng-disabled="true"
+			   ng-model="object.valorServico" type="text" ui-number-mask="2">
+	</md-input-container>
+</div>
+<div layout layout-sm="column">
+	<md-input-container flex="25">
+		<label id="lbl_percentual_material">Material (%)</label>
+		<input class="text-left" id="input_percentual_material" maxlength="18" name="percentual_material"
+			   ng-disabled="true" ng-model="object.percentualMaterial" type="text" ui-number-mask="2"
+			   ui-percentage-value>
+	</md-input-container>
+	<md-input-container flex="25">
+		<label id="lbl_valor_material">Material (R$)</label>
+		<input class="text-left" id="input_valor_material" maxlength="18" name="valor_material" ng-disabled="true"
+			   ng-model="object.valorMaterial" type="text" ui-number-mask="2">
+	</md-input-container>
+	<md-input-container flex="25">
+		<label id="lbl_valor_tributos">Tributos (-)</label>
+		<input class="text-left" id="input_valor_tributos" name="valor_tributos" ng-disabled="true"
+			   ng-model="object.valorTributos" type="text" ui-number-mask="2">
+	</md-input-container>
+	<md-input-container flex="25">
+		<label id="lbl_porcentagem_retencao">Retenção contratual (%)</label>
+		<input class="text-left" id="input_porcentagem_retencao" name="porcentagem_retencao"
+			   ng-change="changePercentualRetencaoContratual()" ng-disabled="screenMode === 'VIEW'"
+			   ng-model="object.percentualRetencaoContratual" type="text" ui-number-mask="2">
+	</md-input-container>
+</div>
+<div layout layout-sm="column">
+	<md-input-container flex="25">
+		<label id="lbl_valor_retencao">Retenção contratual (-)</label>
+		<input class="text-left" id="input_valor_retencao" name="valor_retencao" ng-disabled="true"
+			   ng-model="object.valorRetencaoContratual" type="text" ui-number-mask="2">
+	</md-input-container>
+
+	<md-input-container flex="25">
+		<label id="lbl_porcentagem_retencao_acessoria">Retenção acessória (%)</label>
+		<input class="text-left" id="input_porcentagem_retencao_acessoria" name="porcentagem_retencao"
+			   ng-change="changePercentualRetencaoAcessoria()" ng-disabled="screenMode === 'VIEW'"
+			   ng-model="object.percentualRetencaoAcessoria" type="text" ui-number-mask="2">
+	</md-input-container>
+
+	<md-input-container flex="25">
+		<label id="lbl_valor_retencao_acessoria">Retenção acessória (-)</label>
+		<input class="text-left" id="input_valor_retencao_acessoria" name="valor_retencao" ng-disabled="true"
+			   ng-model="object.valorRetencaoAcessoria" type="text" ui-number-mask="2">
+	</md-input-container>
+
+
+	<md-input-container flex="25">
+		<label id="lbl_valor_liquido">Líquido (=)</label>
+		<input class="text-left text-bold" id="input_valor_liquido" min="0.01" name="valor_liquido" ng-disabled="true"
+			   style="{{'color:' + colorLiquido}} !important" type="text"
+			   value="{{ object.valor - object.valorTributos - object.valorRetencaoContratual - object.valorRetencaoAcessoria | currency : '' : 2 }}">
+		<div ng-messages="wizardStep4.valor.$error" role="alert">
+			<div id="msg_min_valor_liquido" ng-message="min">O valor líquido deve ser maior do que zero.</div>
+			<div id="msg_max_valor_liquido" ng-message="max">Valor não pode ser maior de 999.999.999.999,99.</div>
+		</div>
+	</md-input-container>
+</div>
+
+<div layout layout-sm="column">
+
+	<md-input-container flex="25" ng-if="screenMode !== 'VIEW'">
+		<label id="lbl_tipo_cobranca">Tipo de cobrança</label>
+		<md-select id="combo_tipo_cobranca" name="tipo_cobranca" ng-change="$emit('changetipoCobranca')"
+				   ng-disabled="screenMode === 'VIEW'"
+				   ng-model="object.tipoCobrancaFaturamento" ng-model-options="{trackBy: '$value.codigo'}"
+				   ng-required="true">
+			<md-option ng-repeat="tipoCobranca in tipoCobrancaList | orderBy: 'descricao'" ng-value="tipoCobranca"> {{tipoCobranca.descricao }}</md-option>
+		</md-select>
+		<div ng-messages="wizardStep4.tipo_cobranca.$error" role="alert">
+			<div id="msg_req_tipo_cobranca" ng-message="required">Preenchimento obrigatório.</div>
+		</div>
+
+	</md-input-container>
+
+	<md-input-container flex="25" ng-if="screenMode === 'VIEW'">
+		<label id="lbl_tipo_cobranca_exibicao">Tipo de cobrança</label>
+		<input id="input_tipo_cobranca_exibicao" name="tipo_cobranca_exibir" ng-disabled="true"
+			   ng-model="object.tipoCobrancaFaturamento.descricao" type="text">
+		<md-tooltip md-direction="bottom">
+			<span class="h4">{{ object.tipoCobrancaFaturamento.descricao }}</span>
+		</md-tooltip>
+	</md-input-container>
+
+
+	<md-input-container flex="25" ng-if="screenMode !== 'VIEW'">
+		<label id="lbl_banco">Banco</label>
+		<md-select id="combo_banco" name="combo_banco" ng-change="$emit('changeBanco')"
+				   ng-disabled="screenMode === 'VIEW' || object.centroFinanceiro === null ||  bancoList.length === 0"
+				   ng-model="object.contaCorrente.banco"
+				   ng-model-options="{trackBy: '$value.codigo'}" ng-required="true">
+			<md-option ng-repeat="cc in bancoList | orderBy: 'banco.nome' | unique:'banco.nome'" ng-value="cc.banco">
+				{{cc.banco.nome}}
+			</md-option>
+		</md-select>
+		<div ng-messages="wizardStep4.combo_banco.$error" role="alert">
+			<div id="msg_req_banco" ng-message="required">Preenchimento obrigatório.</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex="25" ng-if="screenMode === 'VIEW'">
+		<label id="lbl_combo_banco_exibicao">Banco</label>
+		<input id="input_combo_banco_exibicao" name="banco_exibicao" ng-disabled="true"
+			   ng-model="object.contaCorrente.banco.nome" type="text">
+	</md-input-container>
+
+	<md-input-container flex="25" ng-if="screenMode !== 'VIEW'">
+		<label id="lbl_agencia_conta">Agência / Conta</label>
+		<md-select id="combo_agencia_conta" name="agencia_conta" ng-change="definirDocumentoPagamento()"
+				   ng-disabled="screenMode === 'VIEW' || object.centroFinanceiro === null || agenciaContaList === null || agenciaContaList.length === 0"
+				   ng-model="object.contaCorrente" ng-model-options="{trackBy: '$value.id'}"
+				   ng-required="true" value="{{ object.contaCorrente.conta + '-' + object.contaCorrente.agencia }}">
+			<md-option ng-repeat="agenciaConta in agenciaContaList | orderBy: 'agencia' | orderBy: 'conta'" ng-value="agenciaConta">
+				{{ montarLabelAgenciaConta(agenciaConta) }}
+			</md-option>
+		</md-select>
+		<div ng-messages="wizardStep4.agencia_conta.$error" role="alert">
+			<div id="msg_req_agencia" ng-message="required">Preenchimento obrigatório.</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex="25" ng-if="screenMode === 'VIEW'">
+		<label id="lbl_agencia_conta_exibicao">Agência / Conta</label>
+		<input id="input_agencia_conta_exibicao" name="agencia_conta_exibicao" ng-disabled="true" type="text"
+			   value="{{ montarLabelAgenciaConta(object.contaCorrente) }}">
+	</md-input-container>
+
+	<md-input-container flex="25" ng-if="screenMode !== 'VIEW' && object.contaCorrente.boletoFaturamento">
+		<label id="lbl_combo_doc_pagamento_edicao">Documento para o pagamento</label>
+		<md-select id="combo_doc_pagamento" name="doc_pagamento"
+				   ng-disabled="screenMode === 'VIEW' || object.centroFinanceiro === null || agenciaContaList === null || agenciaContaList.length === 0"
+				   ng-model="object.tipoDocumentoPagamento"
+				   ng-required="true">
+			<md-option value="Boleto">Boleto</md-option>
+			<md-option value="Depósito em conta/Transferência">Depósito em conta/Transferência</md-option>
+		</md-select>
+		<div ng-messages="wizardStep4.agencia_conta.$error" role="alert">
+			<div id="msg_req_agencia" ng-message="required">Preenchimento obrigatório.</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex="25"  ng-if="screenMode === 'VIEW' || !object.contaCorrente.boletoFaturamento">
+		<label id="lbl_combo_doc_pagamento_exibicao">Documento para o pagamento</label>
+		<input id="input_combo_doc_pagamento_exibicao" name="doc_pagamento_exibicao" ng-disabled="true" type="text" ng-model="object.tipoDocumentoPagamento"
+			   value="{{ object.tipoDocumentoPagamento }}">
+	</md-input-container>
+
+</div>
+
+<div layout layout-sm="column">
+
+	<md-input-container flex="75" ng-if="screenMode === 'VIEW' && object.tipoFornecimento === 'Só material'">
+		<label id="lbl_servico_aba_dados_E">Código do serviço</label>
+		<input id="servico_aba_dados_material" name="servico_aba_dados_material" ng-if="object.tipoFornecimento === 'Só material'" ng-disabled="true" />
+	</md-input-container>
+
+	<md-input-container flex="75" ng-if="screenMode === 'VIEW' && object.tipoFornecimento !== 'Só material'">
+		<label id="lbl_servico_aba_dados">Código do serviço</label>
+		<input id="servico_aba_dados" name="servico_aba_dados" ng-if="object.tipoFornecimento !== 'Só material'"
+		       ng-disabled="true" type="text" value="{{ object.servicoTipo.sigla + ' - ' + object.servicoTipo.nome }}">
+		<md-tooltip md-direction="bottom" ng-if="object.tipoFornecimento !== 'Só material'">
+			<span class="h4">{{ object.servicoTipo.sigla + ' - ' + object.servicoTipo.nome }}</span>
+		</md-tooltip>
+	</md-input-container>
+
+	<div flex="75" ng-if="screenMode != 'VIEW'">
+		<md-autocomplete id="autocomplete_servico_aba_dados" md-delay="350"
+						 md-floating-label="Código do serviço"
+						 md-input-id="input_servico_aba_info"
+						 md-input-name="autocompleteServico"
+						 md-item-text="item.siglaNome"
+						 md-items="item in querySearchServico(searchTextServico.search)"
+						 md-menu-class="autocomplete-custom-template"
+						 md-min-length="3"
+						 md-no-cache="false"
+						 md-escape-options="clear"
+						 md-search-text="searchTextServico.search"
+						 md-selected-item="selectedItemServico"
+						 md-selected-item-change="selectedItemChangeService(item)"
+						 name="autocompleteServico"
+						 ng-disabled="screenMode === 'VIEW' || object.tipoFornecimento === 'Só material'"
+						 ng-if="screenMode != 'VIEW'"
+						 ng-required="object.tipoFornecimento !== 'Só material'"
+						 title=" ">
+			<md-item-template>
+				<span class="item-title" style="margin-top: -25px; margin-bottom: -20px">
+					<h5><span md-highlight-flags="i" md-highlight-text="searchTextServico"> {{item.sigla}} </span> - <span md-highlight-flags="i" md-highlight-text="searchTextServico">{{item.nome}} </span></h5>
+				</span>
+			</md-item-template>
+			<div ng-if="wizardStep4.autocompleteServico.$touched" ng-messages="wizardStep4.autocompleteServico.$error" role="alert">
+				<div ng-message="required">Preenchimento obrigatório.</div>
+			</div>
+		</md-autocomplete>
+
+		<md-tooltip md-direction="bottom" ng-if="object.servicoTipo">
+			<span class="h4">{{!object.servicoTipo ? '' : object.servicoTipo.sigla + ' - ' + object.servicoTipo.nome}}</span>
+		</md-tooltip>
+	</div>
+
+	<md-input-container flex ng-if="screenMode != 'VIEW' && habilitarTipoDocumentoFaturamento(object)">
+		<label id="lbl_div_doc_fat">Tipo de documento para faturamento</label>
+		<md-select id="combo_div_doc_fat" name="div_doc_fat" ng-change="$emit('changeTipoDocumentoFaturamento')"
+				   ng-model="object.tipoDocumentoFaturamento" ng-required="screenMode != 'VIEW'">
+			<md-option ng-repeat="tipoDocFat in tipoDocFatList" ng-value="tipoDocFat">{{tipoDocFat}}</md-option>
+		</md-select>
+		<div ng-messages="wizardStep4.div_mat_serv.$error" role="alert">
+			<div id="msg_req_div_doc_fat" ng-message="required">Preenchimento obrigatório.</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex ng-if="screenMode === 'VIEW' || !habilitarTipoDocumentoFaturamento(object)">
+		<label id="lbl_div_doc_fat_exibicao">
+			<div>Tipo de documento para faturamento</div>
+		</label>
+		<input class="text-left" id="combo_div_doc_fat_exibicao" name="combo_div_doc_fat_exibicao" ng-disabled="true"
+			   type="text" value="{{ object.tipoDocumentoFaturamento }}">
+		<md-tooltip id="tool_tip_fat_exibicao" md-direction="bottom" ng-if="screenMode != 'VIEW' && !habilitarTipoDocumentoFaturamento(object)">
+			<span class="h4">Existe(m) etapa(s) associada(s) a este faturamento (edição não permitida)</span>
+		</md-tooltip>
+	</md-input-container>
+</div>
+
+
+<div layout layout-sm="column" ng-if="screenMode !== 'VIEW'" style="margin-top: 10px">
+	<span>*</span>&nbsp;Campos obrigatórios
+</div>
+
+
+<div class="navigation padding-8"
+	 flex
+	 layout="row"
+	 ng-hide="screenMode === 'NEW'"
+	 ng-if="habilitarBotoesFaturamento && object.situacao !== 'Cancelado'" style="margin-top: -0px;margin-left: -15px;">
+	<md-button class="md-raised md-accent"
+			   id="btn_editar_informacoes_comp"
+			   ng-click="editarInformacoesCompl()"
+			   ng-disabled="action"
+			   ng-hide="modeInformacoes === true"
+			   ng-if="screenMode === 'VIEW'">
+		<span class="h4">Editar</span>
+		<img ng-if="action" src="../img/gray_carregando.gif" style="height: 20px;width: 20px;margin-top: 8px;"/>
+		<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+			<span class="h4">Editar Informações Complementares</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_salvar_editar_informacoes_comp"
+			   ng-click="salvarInformacoesCompl(wizardStep4)" ng-disabled="wizardStep4.$invalid || 0 >= (object.valor - object.valorTributos - object.valorRetencaoContratual - object.valorRetencaoAcessoria) || object.servicoTipo === null || action"
+			   ng-if="modeInformacoes === true">
+		Salvar
+		<md-tooltip id="tool_tip_btn_salvar_editar" md-direction="bottom">
+			<span class="h4">Salvar as alterações realizadas nesta tela do faturamento</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_cancelar_informacoes_comp" ng-click="cancelarInformacoesCompl(wizardStep4)"
+			   ng-disabled="action" ng-if="modeInformacoes === true">
+		Cancelar
+		<md-tooltip id="tool_tip_btn_cancelar_informacoes_comp" md-direction="bottom">
+			<span class="h4">Sair deste faturamento, sem gravar as modificações realizadas</span>
+		</md-tooltip>
+	</md-button>
+</div>

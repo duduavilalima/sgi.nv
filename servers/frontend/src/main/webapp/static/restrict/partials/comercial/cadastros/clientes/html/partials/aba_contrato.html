@@ -1,0 +1,70 @@
+<md-content ng-if="$ctrl.listaContratos.length > 0">
+	<table class="simple row-border hover text-center font-size-12"
+		   id="table-listContrato" ms-responsive-table width="100%">
+		<thead class="cabecalho-borda-cinza">
+		<tr>
+			<th class="titulo_colunas_rb" width="10%">
+				<div class="table-header text-center"><span
+					class="column-title">Número</span></div>
+			</th>
+			<th class="titulo_colunas_rb" width="20%">
+				<div class="table-header text-center"><span
+					class="column-title">Situação</span></div>
+			</th>
+			<th class="titulo_colunas_rb" width="15%">
+				<div class="table-header text-center"><span
+					class="column-title">Diretoria</span></div>
+			</th>
+			<th class="titulo_colunas_rb" width="15%">
+				<div class="table-header text-center"><span
+					class="column-title">Matriz/Filial</span></div>
+			</th>
+			<th class="titulo_colunas_rb" width="10%">
+				<div class="table-header text-center"><span
+					class="column-title">Fim da vigência</span></div>
+			</th>
+			<th class="titulo_colunas_rb" width="10%">
+				<div class="table-header text-center"><span
+					class="column-title">Prazo</span></div>
+			</th>
+			<th class="titulo_colunas_rb" width="10%">
+				<div class="table-header text-center"><span
+					class="column-title">Valor mensal</span></div>
+			</th>
+			<th class="titulo_colunas_rb" width="10%">
+				<div class="table-header text-center"><span
+					class="column-title">Valor total</span></div>
+			</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr class="linha-borda-cinza"
+			ng-repeat="item in $ctrl.listaContratos">
+			<td class="text-left"> {{item.numero}}</td>
+			<td class="text-left"> {{item.situacao}}</td>
+			<td class="text-left"> {{item.diretoria.nome}}</td>
+			<td class="text-left"> {{item.unidade.codnome}}</td>
+			<td class="text-center"> {{item.dataFimVigencia |
+				date:'dd/MM/yyyy'}}
+			</td>
+			<td class="text-center"> {{item.prazoAtual}}</td>
+			<td class="text-right"> {{item.valorMensal |
+				currency:'':2}}
+			</td>
+			<td class="text-right"> {{item.valorTotal |
+				currency:'':2}}
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</md-content>
+
+<div id="idMensagemContratos"
+	 ng-if="$ctrl.listaContratos == null || $ctrl.listaContratos.length == 0">
+	<md-whiteframe class="md-whiteframe-1dp" flex="100" layout
+				   layout-align="center center">
+		<span class="h4 p-32">Não existem <b>contratos</b> associados a este cliente.</span>
+	</md-whiteframe>
+</div>
+<md-divider></md-divider>

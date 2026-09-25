@@ -1,0 +1,65 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_conta_Contabil" style="width: 700px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_conta_Contabil" md-autofocus> Conta contábil para {{title}}</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+					style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<form name="DialogContaContabilForm">
+
+				<!-- Autocomplete de Conta Contabil-->
+				<md-autocomplete flex flex flex-gt-md="100" id="autocomplete_conta_contabil" md-delay="250"
+					md-floating-label="Conta Contábil" md-input-id="input_numero_conta_contabil"
+					md-input-name="autocompleteContaContabil" md-item-text="item.numero + ' - ' + item.descricao"
+					md-items="item in querySearchContaContabil(searchTextContaContabil)"
+					md-menu-class="autocomplete-custom-template" md-min-length="3" md-no-cache="false"
+					md-search-text="searchTextContaContabil" md-selected-item="selectedItemContaContabil"
+					md-selected-item-change="fnSelectedItemContaContabil(item)" name="autocompleteContaContabil">
+
+					<md-item-template>
+						<span class="item-title" style="margin-top: -20px; margin-bottom: -20px">
+							<h5>
+								<strong>NÚMERO: </strong>
+								<span md-highlight-flags="i"
+									md-highlight-text="searchTextContaContabil">{{item.numero}} </span>
+								<strong> DESCRIÇÃO: </strong>
+								<span md-highlight-flags="i"
+									md-highlight-text="searchTextContaContabil">{{item.descricao}} </span>
+							</h5>
+						</span>
+					</md-item-template>
+
+					<div ng-messages="wizardStep1.autocompleteCliente.$error"
+						ng-show="wizardStep1.autocompleteCliente.$touched" role="alert">
+						<div id="msg_req_client" ng-message="required">Obrigatório.</div>
+						<div id="msg_min_client" ng-message="minlength">O nome informado não é suficiente.</div>
+						<div id="msg_max_client" ng-message="maxlength">O nome informado é muito longo.</div>
+					</div>
+				</md-autocomplete>
+
+				<div layout layout-sm="column" ng-if="screenMode != 'VIEW'" style="margin-top: -0px">
+					<span>*</span>&nbsp;Campos obrigatórios
+				</div>
+
+			</form>
+		</div>
+
+		<md-divider></md-divider>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar_confirmar" ng-click="confirm()" ng-disabled="action">
+			CONFIRMAR
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar_remover" ng-click="cancel()" ng-disabled="action">
+			Fechar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

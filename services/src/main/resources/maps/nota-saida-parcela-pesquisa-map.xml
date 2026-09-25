@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xmlns="http://dozer.sourceforge.net"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping>
+		<class-a>
+			br.com.araujoabreu.sgi.service.nota.transfer.NotaSaidaParcelaPesquisaTO
+		</class-a>
+		<class-b>br.com.araujoabreu.sgi.compras.domain.NotaSaidaParcela
+		</class-b>
+
+		<field-exclude>
+			<a>notaSaida</a>
+			<b>notaSaida</b>
+		</field-exclude>
+
+		<field>
+			<a>notaSaida.codigo</a>
+			<b>notaSaida.codigo</b>
+		</field>
+
+		<field>
+			<a>notaSaida.numero</a>
+			<b>notaSaida.numero</b>
+		</field>
+
+		<field>
+			<a>notaSaida.status</a>
+			<b>notaSaida.status</b>
+		</field>
+
+		<field>
+			<a>notaSaida.dataEmissao</a>
+			<b>notaSaida.dataEmissao</b>
+		</field>
+
+		<field>
+			<a>notaSaida.dataEmissao</a>
+			<b>notaSaida.dataEmissao</b>
+		</field>
+
+    <field>
+      <a>notaSaida.tipoFornecimento</a>
+      <b>notaSaida.tipoFornecimento</b>
+    </field>
+
+		<field>
+			<a>notaSaida.empresa.codigo</a>
+			<b>notaSaida.empresa.codigo</b>
+		</field>
+
+		<field>
+			<a>notaSaida.empresa.codnome</a>
+			<b>notaSaida.empresa.codnome</b>
+		</field>
+
+		<field>
+			<a>notaSaida.centroFinanceiro.contratoTO.numero</a>
+			<b>notaSaida.centroFinanceiro.contrato.numero</b>
+		</field>
+
+		<field>
+			<a>notaSaida.centroFinanceiro.identificadorFinal</a>
+			<b>notaSaida.centroFinanceiro.identificadorFinal</b>
+		</field>
+
+		<field>
+			<a>notaSaida.centroFinanceiro.nome</a>
+			<b>notaSaida.centroFinanceiro.nome</b>
+		</field>
+
+    <field>
+      <a>notaSaida.centroFinanceiro.situacao</a>
+      <b>notaSaida.centroFinanceiro.situacao</b>
+    </field>
+
+
+		<field-exclude>
+			<a>parcelaRetencoes</a>
+			<b>parcelaRetencoes</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>responsavelRecebimento</a>
+			<b>responsavelRecebimento</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>responsavelCancelamento</a>
+			<b>responsavelCancelamento</b>
+		</field-exclude>
+
+		<!--        <field-exclude>
+                    <a>contaCorrentePrevista</a>
+                    <b>contaCorrentePrevista</b>
+                </field-exclude>
+
+                <field-exclude>
+                    <a>contaCorrenteRecebimento</a>
+                    <b>contaCorrenteRecebimento</b>
+                </field-exclude>
+
+                <field>
+                    <a>contaCorrentePrevista.codigo</a>
+                    <b>contaCorrentePrevista.codigo</b>
+                </field>
+
+                <field>
+                    <a>contaCorrenteRecebimento.codigo</a>
+                    <b>contaCorrenteRecebimento.codigo</b>
+                </field>-->
+
+	</mapping>
+
+</mappings>

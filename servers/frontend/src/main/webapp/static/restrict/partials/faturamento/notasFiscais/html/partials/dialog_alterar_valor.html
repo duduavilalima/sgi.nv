@@ -1,0 +1,53 @@
+<md-dialog aria-label="Nota fiscal - Alteração de valor bruto" id="dialog_nota_fiscal_alterar_valor"
+		   style="width: 400px;">
+	<form name="DialogAlterarValorForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_dialog_nota_fiscal_alterar_valor" md-autofocus>Nota fiscal - Alteração de valor
+					bruto</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="white-bg" role="document">
+			<div class="md-dialog-content" md-theme="sgi">
+
+				<div layout layout-sm="column">
+
+					<md-input-container flex>
+						<label id="lbl_valor_bruto">Valor bruto</label>
+						<input id="input_valor_bruto" max="9999999999" maxlength="13" min="0.01"
+							   name="input_valor_bruto" ng-model="object.faturamentoEtapaTO.valor"
+							   ng-required="true" type="text" ui-number-mask="2"
+							   value="{{ object.faturamentoEtapaTO.valor }}">
+						<div ng-messages="DialogAlterarValorForm.input_valor_bruto.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+				</div>
+			</div>
+
+			<md-divider></md-divider>
+		</md-dialog-content>
+
+		<md-dialog-actions class="white-bg" layout="row">
+
+			<md-button class="md-raised md-default" id="btn_confirmar_dialog_alterar_valor" ng-click="confirm()"
+					   ng-disabled="DialogAlterarValorForm.$invalid || action">
+				<span>CONFIRMAR </span>
+				<img ng-show="action" src="../img/gray_carregando.gif"
+					 style="height: 20px;width: 20px;margin-top: 8px;"/>
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_cancelar_dialog_alterar_valor" ng-click="cancel()"
+					   ng-disabled="action">
+				CANCELAR
+			</md-button>
+			<span flex></span>
+
+		</md-dialog-actions>
+	</form>
+</md-dialog>

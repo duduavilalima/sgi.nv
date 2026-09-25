@@ -1,0 +1,94 @@
+<md-content class="md-padding" layout="column">
+
+    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+        <md-input-container flex flex-gt-md="25">
+            <label id="lbl_contrato">Contrato</label>
+            <input id="input_contrato" name="input_contrato" ng-disabled="true" type="text"
+                value="{{$ctrl.object.contratoTO.numero}}">
+        </md-input-container>
+
+        <md-input-container flex flex-gt-md="50">
+            <label id="lbl_forma_pgto">Forma de pagamento</label>
+            <input id="input_forma_pgto" name="input_forma_pgto" ng-disabled="screenMode === 'VIEW'" type="text" maxlength="100" ng-model="$ctrl.object.formaPagamento"
+                ng-required="screenMode !== 'VIEW'">
+        </md-input-container>
+
+        <md-input-container flex flex-gt-md="25" ng-if="screenMode === 'VIEW'">
+            <label id="lbl_garantias_exibicao">Garantias</label>
+            <input id="input_garantias_exibicao" name="input_garantias_exibicao" ng-disabled="screenMode === 'VIEW'"
+                type="text" value="{{$ctrl.object.garantias}}">
+        </md-input-container>
+        <md-input-container flex flex="25" ng-if="screenMode !== 'VIEW'">
+            <label id="lbl_garantias_combo">Garantias</label>
+            <md-select id="garantias_individual" name="garantias_individual" ng-model="$ctrl.object.garantias"
+                ng-required="screenMode !== 'VIEW'">
+                <md-option ng-repeat="item in $ctrl.listGarantias" ng-value="item.value" value="{{ item.value }}">
+                    {{ item.name }}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+    </div>
+
+    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+        <md-input-container flex flex-gt-md="50">
+            <label id="lbl_criterio_medicao">Critério de medição</label>
+            <input id="input_criterio_medicao" name="input_criterio_medicao" ng-disabled="screenMode === 'VIEW'"
+                type="text" maxlength="100" ng-model="$ctrl.object.criterioMedicao" ng-required="screenMode !== 'VIEW'">
+        </md-input-container>
+
+        <md-input-container flex flex-gt-md="25" ng-if="screenMode === 'VIEW'">
+            <label id="lbl_prev_reajuste_exibicao">Previsão de reajuste</label>
+            <input id="input_prev_reajuste_exibicao" name="lbl_prev_reajuste_exibicao"
+                ng-disabled="screenMode === 'VIEW'" type="text"
+                value="{{$ctrl.object.dataPrevisaoReajuste | date:'dd/MM/yyyy'}}">
+        </md-input-container>
+
+        <!-- FIXME PICK DATA -->
+        <md-input-container flex flex-gt-md="25" ng-if="screenMode !== 'VIEW'">
+            <label id="prev_reajuste">Previsão de reajuste</label>
+            <input id="input_reajuste" name="prev_reajuste"
+                ng-blur="$ctrl.blurDataPrevisaoReajuste($ctrl.object.dataPrevisaoReajuste)"
+                ng-model="$ctrl.object.dataPrevisaoReajuste" tt-date-picker type="text">
+        </md-input-container>
+
+        <md-input-container flex flex-gt-md="25">
+            <label id="lbl_total_hh">Total HH</label>
+            <input id="input_total_hh" name="input_total_hh" maxlength="7" ui-number-mask="0"
+                ng-disabled="screenMode === 'VIEW'" type="text" ng-model="$ctrl.object.totalHH">
+        </md-input-container>
+
+    </div>
+
+
+    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+        <md-input-container flex flex-gt-md="25">
+            <label id="lbl_formaContratacao">Forma de contratação</label>
+            <input id="input_formaContratacao" name="formaContratacao" ng-disabled="true" type="text"
+                ng-model="$ctrl.object.contratoTO.formaContratacao.descricao">
+        </md-input-container>
+
+        <md-input-container flex flex-gt-md="25">
+            <label id="lbl_dataInicioVigencia">Início da vigência</label>
+            <input id="input_dataInicioVigencia" name="dataInicioVigencia" ng-disabled="true" type="text"
+            value="{{$ctrl.object.contratoTO.dataInicioVigencia | date:'dd/MM/yyyy'}}">
+        </md-input-container>
+
+        <md-input-container flex flex-gt-md="25">
+            <label id="lbl_dataFimVigencia">Fim da vigência</label>
+            <input id="input_dataFimVigencia" name="dataFimVigencia" ng-disabled="true" type="text"
+            value="{{$ctrl.object.contratoTO.dataFimVigencia | date:'dd/MM/yyyy'}}">
+        </md-input-container>
+
+        <md-input-container flex flex-gt-md="25">
+            <label id="lbl_prorrogacao">Prorrogação</label>
+            <input id="input_prorrogacao" name="prorrogacao" ng-disabled="true" type="text"
+            value="{{$ctrl.object.contratoTO.prorrogacao}}">
+        </md-input-container>
+
+    </div>
+
+</md-content>

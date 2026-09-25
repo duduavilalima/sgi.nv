@@ -1,0 +1,63 @@
+<div style="overflow-x:auto;font-size: 1.2rem;">
+
+    <table class="tabela_exibicao" id="tabela" style="border: 1px solid #c4c4c4;width: 2000px !important;">
+
+        <thead>
+            <tr>
+                <th class="titulo_colunas" style="width: 10%"><div class="table-header text-center"><span class="column-title">Rubrica</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Janeiro</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Fevereiro</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Março</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Abril</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Maio</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Junho</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Julho</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Agosto</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Setembro</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Outubro</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Novembro</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Dezembro</span></div></th>
+                <th class="titulo_colunas" style="width: 100px"><div class="table-header text-center"><span class="column-title">Total</span></div></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr ng-repeat="item in $ctrl.listaPrevisao">
+                <td class="text-left" title="{{ item.despesaCustos.descricao }}">{{ item.despesaCustos.descricao }}</td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(1)" ng-model="item._1.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(2)" ng-model="item._2.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(3)" ng-model="item._3.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(4)" ng-model="item._4.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(5)" ng-model="item._5.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(6)" ng-model="item._6.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(7)" ng-model="item._7.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(8)" ng-model="item._8.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(9)" ng-model="item._9.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(10)" ng-model="item._10.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(11)" ng-model="item._11.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right"><div><md-input-container style="margin-top: -20px; margin-bottom: 0px;"><input class="text-right" name="input_{{$index}}" aria-label="input_{{$index}}" max="9999999999" maxlength="13" min="0.01" ng-change="$ctrl.atualizarTotais(12)" ng-model="item._12.valor" ui-number-mask="2"></md-input-container></div></td>
+                <td class="text-right">{{ (item._1.valor + item._2.valor + item._3.valor + item._4.valor + item._5.valor + item._6.valor + item._7.valor + item._8.valor + item._9.valor + item._10.valor + item._11.valor + item._12.valor) | currency : '' : 2}}</td>
+            </tr>
+        </tbody>
+
+        <tfoot>
+            <tr class="md-grey-300-bg">
+                <td class="text-right" style="padding-left: 8px;"><strong>Total:</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["1"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["2"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["3"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["4"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["5"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["6"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["7"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["8"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["9"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["10"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["11"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisMes["12"] | currency:'':2}}</strong></td>
+                <td class="text-right" style="padding-left: 8px;"><strong>{{$ctrl.totaisGeral | currency:'':2}}</strong></td>
+            </tr>
+        </tfoot>
+
+    </table>
+</div>

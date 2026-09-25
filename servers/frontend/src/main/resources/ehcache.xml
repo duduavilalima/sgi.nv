@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+	<defaultCache eternal="true" maxElementsInMemory="100"
+				  overflowToDisk="false"/>
+	<cache name="unidade" maxEntriesLocalHeap="200" timeToLiveSeconds="3600"
+		   maxElementsInMemory="10000"/>
+	<cache name="interface_faturamento" maxEntriesLocalHeap="200"
+		   timeToLiveSeconds="3600" maxElementsInMemory="10000"/>
+	<cache name="usuario" maxEntriesLocalHeap="200" timeToLiveSeconds="3600"
+		   maxElementsInMemory="10000"/>
+	<cache name="perfil" maxEntriesLocalHeap="200" timeToLiveSeconds="3600"
+		   maxElementsInMemory="10000"/>
+	<cache name="pessoa_fisica" maxEntriesLocalHeap="200"
+		   timeToLiveSeconds="3600" maxElementsInMemory="10000"/>
+	<cache name="cidade" maxEntriesLocalHeap="200" timeToLiveSeconds="3600"
+		   maxElementsInMemory="10000"/>
+	<cache name="pessoa" maxEntriesLocalHeap="200" timeToLiveSeconds="3600"
+		   maxElementsInMemory="10000"/>
+</ehcache>

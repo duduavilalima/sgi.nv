@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:cache="http://www.springframework.org/schema/cache"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<context:annotation-config/>
+	<context:component-scan base-package="br.com.araujoabreu.sgi"/>
+	<context:component-scan base-package="br.com.fasolti.sgi"/>
+	<context:component-scan base-package="br.com.fasolti.commons"/>
+	<context:component-scan base-package="br.com.fasolti.queue.appconfig"/>
+
+	<context:property-placeholder
+		location="classpath:spring/conf/*.properties"/>
+
+	<bean id="propertyPlaceHolderConfigurer"
+		  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+
+	<import resource="@spring.context-file@"/>
+
+	<cache:annotation-driven/>
+
+	<bean id="cacheManager"
+		  class="org.springframework.cache.ehcache.EhCacheCacheManager"
+		  p:cacheManager-ref="ehcache">
+	</bean>
+
+	<bean id="ehcache"
+		  class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+		  p:configLocation="classpath:ehcache.xml"
+		  p:shared="true">
+	</bean>
+
+	<bean name="mvcValidator" class="org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean"
+		  primary="true"/>
+</beans>

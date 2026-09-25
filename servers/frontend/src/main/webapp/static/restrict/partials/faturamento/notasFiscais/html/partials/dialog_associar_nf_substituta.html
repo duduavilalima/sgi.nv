@@ -1,0 +1,82 @@
+<md-dialog aria-label="NF Cancelada - Associar NF Substituta" id="dialog_nota_fiscal_dialog_associar_nf_substituta"
+		   style="width: 600px;">
+	<form name="form">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_dialog_dialog_associar_nf_substituta" md-autofocus>NF Cancelada - Associar NF
+					Substituta</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="white-bg" role="document">
+			<div class="md-dialog-content" md-theme="sgi">
+
+				<div layout layout-sm="column">
+
+					<md-autocomplete flex="100" flex-xs="100" id="autocomplete_associar_nf_substituta"
+									 md-delay="250"
+									 md-floating-label="Número da NF"
+									 md-input-id="autocompleteAssociarNf"
+									 md-input-name="autocompleteAssociarNf"
+									 md-item-text="item.numero"
+									 md-items="item in querySearchNumero(searchTextNumero)"
+									 md-menu-class="autocomplete-custom-template"
+									 md-min-length="1"
+									 md-no-cache="false"
+									 md-require-match=""
+									 md-search-text="searchTextNumero"
+									 md-selected-item="selectedNumero"
+									 md-selected-item-change="selectedItemChange(item)"
+									 name="autocompleteAssociarNf"
+									 ng-required="true"
+									 title=" "
+									 value="{{ numero }}">
+						<md-item-template>
+						<span class="item-title" style="margin-top: -25px">
+							<h5>
+								<strong>Número: </strong>
+								<span md-highlight-flags="i"
+									  md-highlight-text="searchTextCliente">{{item.numero}}</span>
+							</h5>
+						</span>
+							<span class="item-title" style="margin-top: -25px; margin-bottom: -20px">
+							<h5>
+								<strong>Data emissão: </strong>
+								<span md-highlight-flags="i" md-highlight-text="searchTextCliente">{{item.dataEmissao | date: 'dd/MM/yyyy'}}</span>
+							</h5>
+						</span>
+						</md-item-template>
+
+						<div ng-if="form.autocompleteAssociarNf.$touched"
+							 ng-messages="form.autocompleteAssociarNf.$error" role="alert">
+							<div id="msg_req_client" ng-message="required">Obrigatório.</div>
+						</div>
+					</md-autocomplete>
+
+				</div>
+			</div>
+
+			<md-divider></md-divider>
+		</md-dialog-content>
+
+		<md-dialog-actions class="white-bg" layout="row">
+
+			<md-button class="md-raised md-default" id="btn_confirmar_dialog_associar_nf_substituta"
+					   ng-click="confirm()" ng-disabled="form.$invalid || action">
+				<span>CONFIRMAR </span>
+				<img ng-show="action" src="../img/gray_carregando.gif"
+					 style="height: 20px;width: 20px;margin-top: 8px;"/>
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_cancelar_dialog_associar_nf_substituta" ng-click="cancel()"
+					   ng-disabled="action">
+				CANCELAR
+			</md-button>
+			<span flex></span>
+
+		</md-dialog-actions>
+	</form>
+</md-dialog>

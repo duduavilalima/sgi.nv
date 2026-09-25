@@ -1,0 +1,92 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_conta_Contabil" style="width: 900px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_conta_Contabil" md-autofocus>Associação conta contábil x histórico - {{title}}</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<form name="DialogContaContabilForm">
+
+				<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+					<md-input-container flex flex-gt-md="30" ng-if="habilitarComboEmpresa">
+						<label id="lbl_empresa">Empresa</label>
+						<md-select id="combo_empresa" name="empresa" ng-change="changeEmpresa()"
+								   ng-model="object.unidade" ng-model-options="{trackBy: '$value.codigo'}"
+								   ng-required="true" required>
+							<md-option ng-repeat="item in listEmpresas" ng-value="item">{{item.codnome}}</md-option>
+						</md-select>
+						<div ng-messages="form.empresa.$error" role="alert">
+							<div ng-message="required">Empresa é um campo de preenchimento obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="30" ng-if="!habilitarComboEmpresa">
+						<label id="lbl_empresa_edicao">Empresa</label>
+						<input id="input_empresa_edicao" name="input_empresa_edicao" ng-disabled="true" type="text"
+							   value="{{object.unidade.codnome}}">
+					</md-input-container>
+
+					<!-- Autocomplete de Conta Contabil-->
+					<md-autocomplete flex flex flex-gt-md="70" id="autocomplete_conta_contabil" md-delay="250"
+									 md-floating-label="Conta contábil"
+									 md-input-id="input_numero_conta_contabil"
+									 md-input-name="autocompleteContaContabil"
+									 md-item-text="item.numero + ' - ' + item.descricao"
+									 md-items="item in querySearchContaContabil(searchTextContaContabil)"
+									 md-menu-class="autocomplete-custom-template"
+									 md-min-length="3"
+									 md-no-cache="false"
+									 md-search-text="searchTextContaContabil"
+									 md-selected-item="selectedItemContaContabil"
+									 md-selected-item-change="fnSelectedItemContaContabil(item)"
+									 name="autocompleteContaContabil"
+									 ng-disabled="habilitarContaContabil"
+									 ng-required="true">
+
+						<md-item-template>
+							<span class="item-title" style="margin-top: -20px">
+								<h5> <strong>NÚMERO: </strong>
+									<span md-highlight-flags="i" md-highlight-text="searchTextContaContabil">{{item.numero}} </span>
+								    <strong> DESCRIÇÃO: </strong>
+									<span md-highlight-flags="i" md-highlight-text="searchTextContaContabil">{{item.descricao}} </span>
+								</h5>
+							</span>
+						</md-item-template>
+
+						<div ng-messages="wizardStep1.autocompleteCliente.$error"
+							 ng-show="wizardStep1.autocompleteCliente.$touched" role="alert">
+							<div id="msg_req_client" ng-message="required">Obrigatório.</div>
+							<div id="msg_min_client" ng-message="minlength">O nome informado não é suficiente.</div>
+							<div id="msg_max_client" ng-message="maxlength">O nome informado é muito longo.</div>
+						</div>
+					</md-autocomplete>
+				</div>
+
+				<div layout layout-sm="column" ng-if="screenMode != 'VIEW'" style="margin-top: -0px">
+					<span>*</span>&nbsp;Campos obrigatórios
+				</div>
+
+			</form>
+		</div>
+
+		<md-divider></md-divider>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar_confirmar" ng-click="confirm()" ng-disabled="action"
+				   ng-disabled="!DialogContaContabilForm.$valid || action">
+			CONFIRMAR
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar_remover" ng-click="cancel()" ng-disabled="action">
+			Fechar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,55 @@
+<md-dialog aria-label="Centro de lucro - Legenda" id="dialog_cl_legenda"  style="width: 600px;">
+	<form name="form_dialog_cidade" ng-controller="FaturamentoEtapaCtrl">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_cidade_faturamento_novo" md-autofocus>Centro de lucro - Legenda</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" id="bt_fechar_popup_cidade_faturamento_novo" ng-click="$ctrl.cancel()"
+						   style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="white-bg">
+			<div class="md-dialog-content" md-theme="sgi" style="padding-bottom: 0px;">
+
+				<div layout layout-sm="column">
+					<md-input-container flex="100">
+						<label id="lbl_vermelho" style="color:red;"><strong>Em vermelho</strong></label>
+						<input id="input_numero_dialog_etapa" name="numero" ng-disabled="true" type="text" value="Centros de lucro com o total anual da margem (BDI) negativo">
+					</md-input-container>
+				</div>
+
+				<div layout layout-sm="column">
+					<md-input-container flex="100">
+						<label id="lbl_vermelho" style="color:orange;"><strong>Em amarelo</strong></label>
+						<input id="input_numero_dialog_etapa" name="numero" ng-disabled="true" type="text" value="Centros de lucro com o total anual da margem (BDI) abaixo do previsto">
+					</md-input-container>
+				</div>
+
+				<div layout layout-sm="column">
+					<md-input-container flex="100">
+						<label id="lbl_vermelho"><strong>Em preto</strong></label>
+						<input id="input_numero_dialog_etapa" name="numero" ng-disabled="true" type="text" value="Centros de lucro com o total anual da margem (BDI) igual ou acima do previsto">
+					</md-input-container>
+				</div>
+
+			</div>
+
+			</br>
+
+		</md-dialog-content>
+
+		<md-dialog-actions class="navigation padding-8 white-bg" style="padding-right: 16px;">
+			<div flex layout="row">
+				<div flex="100" flex-sm="100" layout="row" layout-align="start center">
+					<md-button class="md-raised md-accent" id="btn_fechar" ng-click="$ctrl.cancel()">
+						Fechar
+					</md-button>
+				</div>
+			</div>
+		</md-dialog-actions>
+
+	</form>
+</md-dialog>

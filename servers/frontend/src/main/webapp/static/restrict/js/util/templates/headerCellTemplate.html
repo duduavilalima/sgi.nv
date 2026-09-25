@@ -1,0 +1,22 @@
+<script id="headerCellTemplate.html" type="text/ng-template">
+	<!--<div role="columnheader" style="height: 45px;" layout="row" layout-align="center center">-->
+	<div role="columnheader" style="height: {{grid.appScope.alturaHeader()}}px;" layout="row"
+		 layout-align="center center">
+
+        <span id="colHeader_{{col.uid}}">{{col.name}}
+            <md-tooltip id="tool_tip_header_{{col.uid}}" md-direction="bottom" ng-if="col.headerTooltip">
+                <span class="{{grid.appScope.getDefaultCellClassToolTip()}}">{{col.displayName}}</span>
+            </md-tooltip>
+
+            <span ng-if="col.enableSorting">
+                <md-button id="btn_sort_result_{{col.uid}}" aria-label="Ordenar coluna"
+						   ng-click="grid.appScope.ordenar(col)" class="md-icon-button">
+                    <md-icon md-font-icon="{{grid.appScope.definirIcone(col)}}" class="s20"></md-icon>
+                </md-button>
+            </span>
+
+        </span>
+
+	</div>
+
+</script>

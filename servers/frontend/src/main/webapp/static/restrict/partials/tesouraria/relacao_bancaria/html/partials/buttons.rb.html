@@ -1,0 +1,113 @@
+<div class="p-8" flex layout="row" layout-align="start start" ng-if="screenMode !== 'VIEW'">
+    <md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvarRelacaoBancaria()" ng-disabled="RelacaoForm.$invalid || action">
+        Salvar
+        <img ng-if="action"
+             src="../img/gray_carregando.gif" style="height: 20px;width: 20px;margin-top: 8px;"/>
+        <md-tooltip class="h4">Salvar as alterações realizadas nesta relação
+            bancária
+        </md-tooltip>
+    </md-button>
+
+    <md-button class="md-raised md-accent" id="btn_cancelar" ng-click="cancelar()" ng-disabled="action">
+        Cancelar
+        <md-tooltip class="h4">Sair desta relação bancária, sem gravar as
+            modificações realizadas
+        </md-tooltip>
+    </md-button>
+</div>
+
+<div class="p-8" flex layout="row" ng-if="screenMode === 'VIEW'">
+    <div flex="50" layout="row" layout-align="start start">
+        <md-button aria-label="Editar" class="md-raised md-accent" id="btn_editar" ng-click="editar()" ng-disabled="object.status !== 'Aberta'">
+            Editar
+            <md-tooltip class="h3" md-direction="bottom">
+                Editar os dados desta relação bancária
+            </md-tooltip>
+        </md-button>
+
+        <md-button aria-label="Enviar" class="md-raised md-accent" id="btn_enviar" ng-click="enviar()" ng-disabled="botaoEnviarAction || object.relacaoBancariaPagamentosVO.length === 0" ng-if="object.status === 'Aberta'">
+            Enviar
+            <img ng-if="botaoEnviarAction"
+                 src="../img/gray_carregando.gif"
+                 style="height: 20px;width: 20px;margin-top: 8px;"/>
+            <md-tooltip class="h3" md-direction="bottom">
+                Enviar pagamentos desta relação bancária para o banco
+            </md-tooltip>
+        </md-button>
+
+        <md-button aria-label="Retornar" class="md-raised md-accent" id="btn_retornar" ng-click="retornar()">
+            Retornar
+            <md-tooltip class="h3" md-direction="bottom">
+                Sair desta tela e retornar para a tela anterior
+            </md-tooltip>
+        </md-button>
+
+        <md-button aria-label="Conciliação manual" class="md-raised md-accent" id="btn_conciliacao_manual" ng-click="conciliarRB()" ng-if="object.baixaManual">
+            Baixa Bancária Manual
+            <md-tooltip class="h3" md-direction="bottom">
+                Realizar a baixa bancária manual desta relação bancária (quando a
+                baixa bancária não aconteceu através da interface automática)
+            </md-tooltip>
+        </md-button>
+
+        <md-button aria-label="Conciliação bancária" class="md-raised md-accent" id="btn_conciliacao_bancaria" ng-click="realizarBaixaBancaria()" ng-disabled="!isConciliacao" ng-if="object.meioPagamento !== 'Internet banking'">
+            Baixa Bancária
+            <md-tooltip class="h3" md-direction="bottom">
+                Realizar a baixa bancária desta relação bancária
+            </md-tooltip>
+        </md-button>
+
+        <md-button aria-label="Imprimir" class="md-raised md-accent" id="btn_imprimir" ng-click="imprimir()" ng-disabled="object.relacaoBancariaPagamentosVO === undefined || object.relacaoBancariaPagamentosVO.length === 0">
+            Imprimir
+            <md-tooltip class="h3" md-direction="bottom">
+                Imprimir esta relação bancária
+            </md-tooltip>
+        </md-button>
+
+        <md-button aria-label="Imprimir" class="md-raised md-accent" id="impCheqBt" ng-click="imprimirCheque($event)" ng-disabled="object.status != 'Aguardando retorno'" ng-if="object.meioPagamento === 'Cheque'">
+            Imprimir cheque
+            <md-tooltip class="h3" md-direction="bottom">
+                Imprimir o(s) cheque(s) desta Relação Bancária
+            </md-tooltip>
+        </md-button>
+
+        <md-button aria-label="Imprimir" class="md-raised md-accent" id="impEndoBt" ng-click="imprimirEndosso($event)" ng-disabled="object.status != 'Aguardando retorno'" ng-if="object.meioPagamento === 'Cheque'">
+            Imprimir endosso
+            <md-tooltip class="h3" md-direction="bottom">
+                Imprimir o endosso do(s) cheque(s) desta Relação Bancária
+            </md-tooltip>
+        </md-button>
+
+        <md-button aria-label="Imprimir" class="md-raised md-accent" id="impCopCheqBt" ng-click="imprimirCopia($event)" ng-disabled="object.status != 'Aguardando retorno'" ng-if="object.meioPagamento === 'Cheque' && !object.contaCorrente.chequeCarbono">
+            Imprimir cópia de cheque
+            <md-tooltip class="h3" md-direction="bottom">
+                Imprimir a cópia do(s) cheque(s) desta Relação Bancária
+            </md-tooltip>
+        </md-button>
+
+    </div>
+
+    <div flex layout="row" layout-align="end center">
+		<md-button aria-label="Estornar Baixa Manual" class="md-raised md-accent" id="btn_estornar_baixa" ng-click="estornoBaixaRB()" ng-if="habilitarEstornoBaixa()">
+			Estornar Baixa Manual
+			<md-tooltip class="h3" md-direction="bottom">
+				Estornar a baixa bancária manual desta relação bancária
+			</md-tooltip>
+		</md-button>
+
+        <md-button aria-label="Remover" class="md-raised md-accent" id="btn_remover" ng-click="remover($event)" ng-disabled="object.status != 'Aberta'">
+            Remover
+            <md-tooltip class="h3" md-direction="bottom">
+                Remover esta relação bancária (esta operação não poderá ser desfeita)
+            </md-tooltip>
+        </md-button>
+
+        <md-button aria-label="Cancelar RB" class="md-raised md-accent" id="btn_cancelar_rb" ng-click="cancelarRb()" ng-disabled="object.status != 'Aguardando retorno'">
+            CANCELAR RB
+            <md-tooltip class="h3" md-direction="bottom">
+                Cancelar esta relação bancária e liberar o(s) pagamento(s) para uma
+                nova relação bancária
+            </md-tooltip>
+        </md-button>
+    </div>
+</div>

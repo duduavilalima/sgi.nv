@@ -1,0 +1,229 @@
+<div layout layout-sm="column">
+
+	<md-input-container flex style="margin-bottom: 0px;">
+		<label id="lbl_iss_retido_exibicao">ISS será retido pelo cliente</label>
+		<md-select id="combo_iss_retido"
+				   name="iss_retido"
+				   ng-change="$emit('comboIssRetido')"
+				   ng-model="object.notaSaida.issRetidoClienteRecebimento"
+				   ng-required="true">
+			<md-option ng-repeat="opcao in listSN"
+					   ng-value="opcao.valor">{{::opcao.nome}}</md-option>
+		</md-select>
+		<div ng-messages="wizardStep4.iss_retido.$error"
+			 role="alert">
+			<div id="msg_req_iss"
+				 ng-message="required">Obrigatório.</div>
+		</div>
+	</md-input-container>
+
+
+	<md-input-container class="md-input-has-value flex md-sgi-theme" flex style="margin-bottom: 0px;">
+		<label id="lbl_cidade_iss">Cidade ISS</label>
+
+		<input id="input_cidade_iss" name="input_cidade_iss" ng-disabled="true" ng-if="!opcoesCidades" type="text"
+			   value="{{cidadeIssStr}}">
+
+		<md-select id="combo_cidade_iss" name="combo_cidade_iss" ng-if="opcoesCidades" ng-model="cidadeIssObj"
+				   ng-model-options="{trackBy: '$value.codigo'}">
+			<md-option ng-click="selecionarCidade(cidade.objeto)" ng-repeat="cidade in listaCidadesISS"
+					   ng-value="cidade.objeto">
+				{{ cidade.texto }}
+			</md-option>
+		</md-select>
+
+	</md-input-container>
+
+</div>
+
+<br><br>
+
+<div class="simple-table-container md-whiteframe-1dp">
+
+	<table class="tabela_exibicao row-border hover md-caption" id="table_tributos" ms-responsive-table>
+		<thead id="table_thead_tributos" class="cabecalho-borda-cinza">
+		<tr class="md-grey-200-bg">
+			<th class="text-center" width="10%">Tributo</th>
+			<th class="text-center" width="53%">Categoria</th>
+			<th class="text-center" width="15%">Base de cálculo</th>
+			<th class="text-center" width="4%">%</th>
+			<th class="text-center" width="8%">Valor</th>
+			<th class="text-center" width="10%">Opções</th>
+		</tr>
+		</thead>
+
+		<tbody id="table_tbody_tributos_list" ng-if="listaTemTributo">
+		<tr ng-repeat="item in listaTributos | filter : {categoriaTributo : {tributoTO : {nome: '!' + 'ISS' } } }" class="linha-borda-cinza">
+			<td>{{item.categoriaTributo.tributoTO.nome}}</td>
+			<td>
+				<div class="over-flow-hidden">
+					{{item.categoriaTributo.descricao}} - {{item.aliquota.percentual | currency : '' : 2 }}%
+				</div>
+				<md-tooltip md-direction="bottom">
+					<span class="h4">{{item.categoriaTributo.descricao}} - {{item.aliquota.percentual | currency : '' : 2 }}%</span>
+				</md-tooltip>
+			</td>
+			<td style="text-align: right;">{{item.baseCalculo | currency : '' : 2 }}</td>
+			<td style="text-align: right;">{{item.aliquota.percentual | currency : '' : 2 }}</td>
+			<td style="text-align: right;">{{item.valor | currency : '' : 2 }}</td>
+			<td class="text-center" style="padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 10px;">
+				<div>
+					<md-button class="md-icon-button" id="btn_editar_tributo_{{$index}}"
+							   name="btn_editar_tributo_{{$index}}" ng-click="editarTributo($event, item)"
+							   ng-if="temPerfilAnalista" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon md-font-icon="icon-pencil"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Editar tributo
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" id="btn_excluir_tributo_{{$index}}"
+							   name="btn_excluir_tributo_{{$index}}" ng-click="excluirTributo($event, item)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Remover tributo
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" id="btn_add_novo_tributo" name="btn_add_novo_tributo"
+							   ng-click="adicionarTributo($event)"
+							   ng-if="$last && (listaTributos | filter : {categoriaTributo : {tributoTO : {nome: '!' + 'ISS' } } }).length < 3"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="green-400-fg" md-font-icon="icon-plus"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Adicionar tributo
+						</md-tooltip>
+
+					</md-button>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+
+		<tbody id="table_tbody_tributos_novo" ng-if="!listaTemTributo">
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>
+				<md-button class="md-icon-button" id="btn_add_novo_tributo" name="btn_add_novo_tributo"
+						   ng-click="adicionarTributo($event)"
+						   style="padding: 0px 0px 0px 0px; margin: -10px -10px -10px -10px;">
+					<md-icon class="green-400-fg" md-font-icon="icon-plus"></md-icon>
+
+					<md-tooltip class="h3" md-direction="bottom">
+						Adicionar tributo
+					</md-tooltip>
+				</md-button>
+			</td>
+		</tr>
+		</tbody>
+
+		<tfoot id="table_tfoot_tributos">
+		<tr class="md-grey-300-bg">
+			<td></td>
+			<td></td>
+			<td class="celula-direita-gray" style="padding-left: 8px; text-align: right;"><strong>Subtotal</strong>
+			</td>
+			<td class="celula-direita-gray" style="padding-left: 8px; text-align: right;"><strong>{{subtotalPercentualTributos | currency : '' : 2}}</strong>
+			</td>
+			<td class="celula-direita-gray" style="padding-left: 8px; text-align: right;"><strong>{{subtotalValorTributos | currency : '' : 2}}</strong>
+			</td>
+			<td></td>
+		</tr>
+		</tfoot>
+
+	</table>
+
+</div>
+
+<p></p>
+
+<div class="simple-table-container md-whiteframe-1dp">
+
+	<table class="tabela_exibicao row-border hover md-caption tabela_exibicao" id="table_tributosIss"
+		   ms-responsive-table>
+		<thead id="table_thead_iss" class="cabecalho-borda-cinza">
+		<tr class="md-grey-200-bg">
+			<th class="text-center" width="7%">Tributo</th>
+			<th class="text-center" width="3%">UF</th>
+			<th class="text-center" width="55%">Cidade - Categoria</th>
+			<th class="text-center" width="13%">Base de cálculo</th>
+			<th class="text-center" width="4%">%</th>
+			<th class="text-center" width="8%">Valor</th>
+			<th class="text-center" width="10%">Opções</th>
+		</tr>
+		</thead>
+
+		<tbody id="table_tbody_iss_list" ng-if="listaTemTributoComIss">
+		<tr ng-repeat="item in listaTributos | filter : {categoriaTributo : {tributoTO : {nome: 'ISS' } } }" class="linha-borda-cinza">
+			<td>ISS</td>
+			<td>{{item.categoriaTributo.cidade.uf}}</td>
+			<td>{{item.categoriaTributo.cidade.nome}} - {{item.aliquota.percentual | currency : '' : 2 }}% -
+				{{item.categoriaTributo.descricao}}
+			</td>
+			<td style="text-align: right;">{{item.baseCalculo | currency : '' : 2 }}</td>
+			<td style="text-align: right;">{{item.aliquota.percentual | currency : '' : 2 }}</td>
+			<td style="text-align: right;">{{item.valor | currency : '' : 2 }}</td>
+			<td class="text-center" style="padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 10px;">
+				<div>
+					<md-button class="md-icon-button" id="btn_editar_tributo_iss_{{$index}}"
+							   name="btn_editar_tributo_iss_{{$index}}" ng-click="editarTributoIss($event, item)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon md-font-icon="icon-pencil"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Editar tributo
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" id="btn_excluir_tributo_iss_{{$index}}"
+							   name="btn_excluir_tributo_iss_{{$index}}" ng-click="excluirTributo($event, item)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">Remover tributo</md-tooltip>
+					</md-button>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+
+		<tbody id="table_tbody_iss_novo" ng-if="!listaTemTributoComIss">
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>
+				<md-button class="md-icon-button" id="btn_add_novo_tributo_iss" name="btn_add_novo_tributo_iss"
+						   ng-click="adicionarTributoIss($event)"
+						   style="padding: 0px 0px 0px 0px; margin: -10px -10px -10px -10px;">
+					<md-icon class="green-400-fg" md-font-icon="icon-plus"></md-icon>
+
+					<md-tooltip class="h3" md-direction="bottom">
+						Adicionar ISS
+					</md-tooltip>
+				</md-button>
+			</td>
+		</tr>
+		</tbody>
+
+		<tfoot id="table_tfoot_iss">
+		<tr class="md-grey-300-bg">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td class="celula-direita-gray" style="padding-left: 8px; text-align: right;"><strong>Total (Subtotal + ISS)</strong>
+			</td>
+			<td class="celula-direita-gray" style="padding-left: 8px; text-align: right;"><strong>{{totalPercentualTributos | currency : '' : 2}}</strong>
+			</td>
+			<td class="celula-direita-gray" style="padding-left: 8px; text-align: right;"><strong>{{totalValorTributos | currency : '' : 2}}</strong>
+			</td>
+			<td></td>
+		</tr>
+		</tfoot>
+
+	</table>
+
+</div>

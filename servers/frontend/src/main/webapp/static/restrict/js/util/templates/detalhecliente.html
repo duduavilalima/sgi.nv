@@ -1,0 +1,91 @@
+<md-dialog aria-label="Detalhe pessoa">
+	<md-dialog-content style="width: 600px;">
+		<div id="profile" layout="column">
+			<div class="about" layout="column">
+				<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+					<md-toolbar>
+						<div class="md-toolbar-tools">
+							<h3>{{pessoa.tipoPessoaJuridica}} - Dados gerais</h3>
+							<span flex></span>
+							<md-button class="md-icon-button" ng-click="fechar()">
+								<md-icon aria-label="Fechar detalhe" class="s24 white-fg" md-font-icon="icon-close"
+										 style="color: white !important;"></md-icon>
+							</md-button>
+						</div>
+					</md-toolbar>
+
+					<div class="content">
+						<form name="detalhePessoa">
+							<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+								<md-input-container flex="100" flex-sm="100" flex-xs="100">
+									<label id="lbl_detalhe_razao_social">
+										{{ pessoa.tipoPessoaJuridica === 'Pessoa Física' ? 'Nome' : 'Razão social' }}
+									</label>
+									<input class="text-left" id="input_detalhe_razao_social" name="razaoSocial"
+										   ng-disabled="true" ng-model="pessoa.nome" type="text">
+								</md-input-container>
+							</div>
+
+							<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+								 ng-show="pessoa.tipoPessoaJuridica == 'Cliente' || pessoa.tipoPessoaJuridica == 'CLIENTE'">
+								<md-input-container flex="100" flex-sm="100" flex-xs="100">
+									<label id="lbl_detalhe_nome_fantasia">Nome fantasia</label>
+									<input class="text-left" id="input_detalhe_nome_fantasia" name="nomeFantasia"
+										   ng-disabled="true" ng-model="pessoa.nomeFantasia" type="text">
+								</md-input-container>
+							</div>
+
+							<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+								<md-input-container flex="100" flex-sm="100" flex-xs="100">
+									<label id="lbl_detalhe_documento">
+										{{ pessoa.tipoPessoaJuridica === 'Pessoa Física' ? 'CPF' : 'CNPJ' }}
+									</label>
+									<input class="text-left" id="input_detalhe_documento" name="documento"
+										   ng-disabled="true" ng-model="pessoa.documento" type="text">
+								</md-input-container>
+							</div>
+
+							<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+								 ng-show="pessoa.tipoPessoa == 'Pessoa Jurídica'">
+								<md-input-container flex="50" flex-sm="50" flex-xs="50"
+													ng-show="pessoa.ufInscricaoEstadual == null">
+									<label id="lbl_detalhe_insc_est">Inscrição estadual</label>
+									<input class="text-left" id="input_detalhe_insc_est" name="inscricaoEstadual"
+										   ng-disabled="true" ng-model="pessoa.inscricaoEstadual" type="text">
+								</md-input-container>
+
+								<md-input-container flex="50" flex-sm="50" flex-xs="50"
+													ng-show="pessoa.ufInscricaoEstadual != null">
+									<label id="lbl_detalhe_insc_est_uf">Inscrição estadual</label>
+									<input class="text-left" id="input_detalhe_insc_est_uf" name="inscricaoEstadual"
+										   ng-disabled="true" ng-model="pessoa.inscEstadualUf" type="text">
+								</md-input-container>
+
+								<md-input-container flex="50" flex-sm="50" flex-xs="50">
+									<label id="lbl_detalhe_insc_mun">Inscrição municipal</label>
+									<input class="text-left" id="input_detalhe_insc_mun" name="inscricaoMunicipal"
+										   ng-disabled="true" ng-model="pessoa.inscricaoMunicipal" type="text">
+								</md-input-container>
+							</div>
+
+							<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+								<md-input-container flex="100" flex-sm="100" flex-xs="100">
+									<label id="lbl_contacontabil_mun">Conta contábil</label>
+									<input class="text-left" id="input_contacontabil_mun" name="contacontabil"
+										   ng-disabled="true" ng-model="pessoa.contacontabil" type="text">
+								</md-input-container>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row" layout-align="center center" style="margin-top: -15px;">
+		<md-button class="md-raised md-accent" ng-click="fechar()" style="margin-right:20px;">
+			Fechar
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>

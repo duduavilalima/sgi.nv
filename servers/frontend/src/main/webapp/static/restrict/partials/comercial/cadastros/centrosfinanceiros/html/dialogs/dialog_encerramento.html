@@ -1,0 +1,32 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_encerramento" style="width: 700px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_encerramento" md-autofocus>Encerrar Centro Financeiro: Confirmação</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<span class="h4">Deseja realmente encerrar este centro financeiro?</span>
+		</div>
+		<md-divider></md-divider>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar" ng-click="confirmFat()" ng-if="showBtnFat">
+			Confirmar (<b><u>COM</u></b> faturamento)
+		</md-button>
+		<md-button class="md-raised md-accent" id="btn_salvar" ng-click="confirm()">
+			Confirmar (<b><u>SEM</u></b> faturamento)
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar" ng-click="cancel()">
+			Cancelar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

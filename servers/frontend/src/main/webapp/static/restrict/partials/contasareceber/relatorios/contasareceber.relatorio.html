@@ -1,0 +1,158 @@
+<div class="page-layout simple fullwidth">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ :: modulo}} </span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="subtitulo">{{ ::titulo}}</span>
+			</div>
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<form name="form" novalidate>
+			<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+				<div class="content" flex>
+					<!-- CAMPOS DE PESQUISA -->
+					<div layout="row" layout-wrap>
+						<div class="about" flex="100" layout="column">
+							<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+								<header class="md-accent-bg">
+									<div class="title" id="titulo_filtro">Contas a Receber - Filtros de relatório</div>
+								</header>
+								<div class="white-500-bg" flex>
+
+									<div class="p-16" flex layout-xs="column">
+
+										<div flex layout layout-sm="column">
+											<md-input-container flex flex-gt-md="25">
+												<label id="lbl_relatorio">Relatório</label>
+												<md-select id="combo_relatorio" name="relatorio"
+														   ng-change="$emit('changeRelatorio')"
+														   ng-model="object.tipoRelatorio" ng-required="true" required>
+													<md-option ng-repeat="relatorio in tiposRelatorios"
+															   ng-value="relatorio" ng-disabled="relatorio.chave === '-'">{{ relatorio.nome }}
+													</md-option>
+												</md-select>
+												<div ng-messages="form.relatorio.$error" role="alert">
+													<div ng-message="required">Relatório é um campo de preenchimento
+														obrigatório.
+													</div>
+												</div>
+											</md-input-container>
+
+
+											<md-input-container flex flex-gt-md="25">
+												<label id="lbl_ordem">Ordem</label>
+												<md-select id="combo_ordem" name="ordem"
+														   ng-disabled="object.tipoRelatorio.chave != 'duplicatas' &&
+														   object.tipoRelatorio.chave != 'duplicatas_recebidas' &&
+														   object.tipoRelatorio.chave != 'notas_debito_aberto' &&
+														   object.tipoRelatorio.chave != 'notas_debito_recebidas'"
+														   ng-model="object.relatorioOrdem"
+														   ng-model-options="{trackBy: '$value'}">
+													<md-option ng-value="1">Filial</md-option>
+													<md-option ng-value="2">Gerência</md-option>
+													<md-option ng-value="3">Centro de lucro</md-option>
+												</md-select>
+											</md-input-container>
+
+
+											<md-input-container flex>
+												<label id="lbl_formato">Formato</label>
+												<md-select id="combo_formato" name="formato"
+														   ng-model="object.tipoFormato"
+														   ng-model-options="{trackBy: '$value.codigo'}">
+													<md-option ng-repeat="formato in tiposFormatos" ng-value="formato">
+														{{ formato.nome }}
+													</md-option>
+												</md-select>
+											</md-input-container>
+
+											<md-input-container flex>
+												<label id="lbl_empresa">Matriz / Filial da NF</label>
+												<md-select id="combo_empresa" multiple name="empresa"
+														   ng-change="$emit('changeEmpresa')"
+														   ng-model="object.unidade.codigo" ng-required="true" required>
+													<div ng-repeat="unidade in empresaList">
+														<div style="padding-top: 10px;
+																padding-left: 5px;
+																background: rgba(128, 128, 128, 0.53);
+																color: #fff;
+																font-weight: bold;">
+															<md-checkbox aria-label="Todos"
+																		 ng-change="todos(unidade.todos, unidade)"
+																		 ng-model="unidade.todos">
+																<div>{{unidade.empresa}}</div>
+															</md-checkbox>
+														</div>
+														<md-option
+															ng-repeat="filial in unidade.filiais | orderBy:['tipoUnidade','codnome']"
+															ng-value="filial.codigo">{{filial.codnome}}
+														</md-option>
+													</div>
+												</md-select>
+											</md-input-container>
+										</div>
+
+										<md-tabs id="abas_relatorios" md-border-bottom md-center-tabs="false"
+												 md-dynamic-height md-selected="index" name="abas_relatorios">
+											<md-tab id="aba_contas_a_receber" label="Contas a Receber"
+													name="aba_contas_a_receber" ng-disabled="false">
+												<div class="padding-16"
+													 ng-include="'partials/contasareceber/relatorios/partials/aba_contas_receber.html'">
+												</div>
+											</md-tab>
+
+											<md-tab id="aba_tributos" label="Tributos" name="aba_tributos"
+													ng-disabled="false">
+												<div class="padding-16"
+													 ng-include="'partials/contasareceber/relatorios/partials/aba_tributos.html'">
+												</div>
+											</md-tab>
+
+											<md-tab id="aba_tributos" label="Especiais" name="aba_especiais"
+													ng-disabled="false">
+												<div class="padding-16"
+													 ng-include="'partials/contasareceber/relatorios/partials/aba_especiais.html'">
+												</div>
+											</md-tab>
+										</md-tabs>
+
+									</div>
+
+
+									<md-divider></md-divider>
+
+									<section layout="row" layout-sm="row">
+										<div class="p-8" flex="100" flex-sm="30" layout="row"
+											 layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_novo"
+													   ng-click="gerarRelatorio()" ng-disabled="form.$invalid">Gerar
+												relatório
+											</md-button>
+
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset(form)" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+									</section>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<!-- / CONTENT -->
+	</div>
+</div>

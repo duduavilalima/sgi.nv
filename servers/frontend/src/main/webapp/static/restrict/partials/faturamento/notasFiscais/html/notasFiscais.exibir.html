@@ -1,0 +1,278 @@
+<div class="page-layout simple fullwidth" ng-controller="NotaFiscalFaturamentoCadastroCtrl">
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">{{::modulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo">{{::titulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="subtitulo">{{subtitulo}}</span>
+            </div>
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+    <div class="content" md-background-bg>
+        <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+            <!-- CONTENT -->
+            <div class="content" flex>
+                <div layout="row" layout-wrap>
+                    <div class="about" flex="100" layout="column">
+                        <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+                            <header class="md-accent-bg">
+                                <div class="title" id="title_panel">{{::titulo}} - {{subtitulo}}</div>
+                            </header>
+                            <div class="text-center"><img ng-if="object.codigo == null" src="../img/carregando.gif"
+                                    style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px" />
+                            </div>
+                            <div ng-if="object && object != null && object.codigo != null">
+                                <div class="white-500-bg">
+                                    <md-content>
+                                        <md-tabs id="abas_nota_fiscal" md-border-bottom md-dynamic-height
+                                            md-selected="index" name="abas_nota_fiscal">
+                                            <md-tab id="aba_dados_principais_nf" label="Dados principais"
+                                                name="aba_dados_principais_nf"
+                                                ng-disabled="modeTributos === true || modeDiscriminacao === true || modeParcelas === true || vindoDoContasReceber === true">
+                                                <form name="wizardStep1">
+                                                    <div class="padding-16"
+                                                        ng-include="'partials/faturamento/notasFiscais/html/partials/aba_dados_principais_nf.html'">
+                                                    </div>
+                                                </form>
+                                            </md-tab>
+                                            <md-tab id="aba_tributos" label="Tributos" name="aba_tributos"
+                                                ng-disabled="modeDadosPrincipais === true || modeDiscriminacao === true || modeParcelas === true || vindoDoContasReceber === true || object.tipoFornecimento === 'Só material'">
+                                                <form name="wizardStep2">
+                                                    <div class="padding-16"
+                                                        ng-include="'partials/faturamento/notasFiscais/html/partials/aba_tributos_nf.html'">
+                                                    </div>
+                                                </form>
+                                            </md-tab>
+                                            <md-tab id="aba_faturamento_nf" label="Faturamento"
+                                                name="aba_faturamento_nf"
+                                                ng-disabled="modeDadosPrincipais === true || modeDiscriminacao === true || modeParcelas === true || vindoDoContasReceber === true">
+                                                <form name="wizardStep3">
+                                                    <div class="padding-16"
+                                                        ng-include="'partials/faturamento/notasFiscais/html/partials/aba_faturamento_nf.html'">
+                                                    </div>
+                                                </form>
+                                            </md-tab>
+                                            <md-tab id="aba_etapa_nf" label="Etapa" name="aba_etapa_nf"
+                                                ng-disabled="modeDadosPrincipais === true || modeDiscriminacao === true || modeParcelas === true || vindoDoContasReceber === true">
+                                                <form name="wizardStep4">
+                                                    <div class="padding-16"
+                                                        ng-include="'partials/faturamento/notasFiscais/html/partials/aba_etapa_nf.html'">
+                                                    </div>
+                                                </form>
+                                            </md-tab>
+                                            <md-tab id="aba_discriminacao_servicos_nf"
+                                                label="Discriminação" name="aba_discriminacao_servicos_nf"
+                                                ng-disabled="modeTributos === true || modeDadosPrincipais === true || modeParcelas === true || vindoDoContasReceber === true">
+                                                <form name="wizardStep5">
+                                                    <div class="padding-16" ng-if="screenMode !== 'VIEW'"
+                                                        ng-include="'partials/faturamento/notasFiscais/html/partials/aba_discriminacao_servico_nf.html'"
+                                                        style="height: 470px;">
+                                                    </div>
+                                                    <div class="padding-16" ng-if="screenMode === 'VIEW'"
+                                                        ng-include="'partials/faturamento/notasFiscais/html/partials/aba_discriminacao_servico_nf.html'"
+                                                        style="height: 400px;">
+                                                    </div>
+                                                </form>
+                                            </md-tab>
+                                            <md-tab id="aba_parcelas_nf" label="Parcelas" name="aba_parcelas_nf"
+                                                ng-disabled="modeTributos === true || modeDadosPrincipais === true || modeDiscriminacao === true"
+                                                ng-if="object.formaPagamento === 'Parcelada'">
+                                                <form name="wizardStep6">
+                                                    <div class="padding-16"
+                                                        ng-include="'partials/faturamento/notasFiscais/html/partials/aba_parcelas_nf.html'">
+                                                    </div>
+                                                </form>
+                                            </md-tab>
+                                            <md-tab id="aba_cancelamentos_nf" label="Cancelamento"
+                                                name="aba_cancelamentos_nf"
+                                                ng-disabled="modeTributos === true || modeDadosPrincipais === true || modeDiscriminacao === true || modeParcelas === true"
+                                                ng-if="object.responsavelCancelamento && object.responsavelCancelamento.codigo">
+                                                <form name="wizardStep7">
+                                                    <div class="padding-16"
+                                                        ng-include="'partials/faturamento/notasFiscais/html/partials/aba_cancelamento_nf.html'">
+                                                    </div>
+                                                </form>
+                                            </md-tab>
+                                            <md-tab id="aba_controles" label="Controles" name="aba_controles"
+                                                ng-disabled="modeTributos === true || modeDadosPrincipais === true || modeDiscriminacao === true || modeParcelas === true || modeFormaPagamentoParcelada === true">
+                                                <form name="wizardStep8">
+                                                    <div class="padding-16"
+                                                        ng-include="'partials/faturamento/notasFiscais/html/partials/aba_controles_nf.html'">
+                                                    </div>
+                                                </form>
+                                            </md-tab>
+                                        </md-tabs>
+                                        <md-divider></md-divider>
+                                        <div class="navigation padding-8" flex layout="row">
+                                            <div flex="100" flex-sm="100" layout="row" layout-align="start center"
+                                                ng-hide="screenMode === 'NEW' || vindoDoContasReceber">
+                                                <md-button class="md-raised md-accent" id="btn_retornar"
+                                                    ng-click="retornarTelaAnterior()"
+                                                    ng-disabled="screenMode === 'EDIT' || botaoNumerarDesabilitado || action">
+                                                    Retornar
+                                                    <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+                                                        <span class="h4">Sair desta tela e retornar para a tela
+                                                            anterior</span>
+                                                    </md-tooltip>
+                                                </md-button>
+                                                <md-button class="md-raised md-accent" id="btn_retornar"
+                                                    ng-click="numerarNotaFiscal($event)"
+                                                    ng-disabled="screenMode === 'EDIT' || botaoNumerarDesabilitado || action"
+                                                    ng-if="object.status === 'Aberta' && exibirBotoes">
+                                                    Numerar
+                                                    <img ng-if="botaoNumerarDesabilitado"
+                                                        src="../img/gray_carregando.gif"
+                                                        style="height: 20px;width: 20px;margin-top: 8px;" />
+                                                    <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+                                                        <span class="h4">Atribuir o próximo número disponível (na
+                                                            matriz/filial) para esta nota fiscal</span>
+                                                    </md-tooltip>
+                                                </md-button>
+                                                <md-button class="md-raised md-accent" id="btn_retornar"
+                                                    ng-click="cancelarNumeracaoNotaFiscal($event)"
+                                                    ng-disabled="botaoConfirmarcadastroDesabilitado || action"
+                                                    ng-if="object.status === 'A processar' && exibirBotoes">
+                                                    Cancelar numeração
+                                                    <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+                                                        <span class="h4">Cancelar a numeração desta nota fiscal,
+                                                            reabrindo-a para alterações</span>
+                                                    </md-tooltip>
+                                                </md-button>
+                                                <md-button class="md-raised md-accent" id="btn_retornar"
+                                                    ng-click="confirmarCadastroNotaFiscal($event)"
+                                                    ng-disabled="botaoConfirmarcadastroDesabilitado || action"
+                                                    ng-if="object.status === 'A processar' && object.interfacePrefeitura === false && exibirBotoes">
+                                                    Confirmar cadastro
+                                                    <img ng-if="botaoConfirmarcadastroDesabilitado"
+                                                        src="../img/gray_carregando.gif"
+                                                        style="height: 20px;width: 20px;margin-top: 8px;" />
+                                                    <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+                                                        <span class="h4">Confirmar o cadastramento desta nota fiscal na
+                                                            Prefeitura</span>
+                                                    </md-tooltip>
+                                                </md-button>
+                                                <md-button class="md-raised md-accent" id="btn_protocolo"
+                                                    ng-click="inserirProtocolo($event)" ng-if="exibirBotoes"
+                                                    ng-disabled="object.status !== 'Em recebimento' || action || screenMode !== 'VIEW'">
+                                                    PROTOCOLO
+                                                    <img src="../img/gray_carregando.gif"
+                                                        style="height: 20px;width: 20px;margin-top: 8px;"
+                                                        ng-if="actionProtocolo" />
+                                                    <md-tooltip id="tool_tip_protocolo" md-direction="bottom">
+                                                        <span class="h4">Incluir protocolo</span>
+                                                    </md-tooltip>
+                                                </md-button>
+                                                <md-button class="md-raised md-accent" id="btn_imprimir"
+                                                    ng-click="imprimir()" ng-disabled="action">
+                                                    IMPRIMIR NF
+                                                    <md-tooltip id="tool_tip_protocolo" md-direction="bottom">
+                                                        <span class="h4">Imprimir esta nota fiscal</span>
+                                                    </md-tooltip>
+                                                </md-button>
+												<md-button class="md-raised md-accent" id="btn_imprimir"
+														   ng-click="imprimirRps()" ng-disabled="action">
+													IMPRIMIR RPS
+													<md-tooltip id="tool_tip_protocolo" md-direction="bottom">
+														<span class="h4">Imprimir o RPS desta nota fiscal</span>
+													</md-tooltip>
+												</md-button>
+                                                <md-button class="md-raised md-accent" id="btn_imprimir"
+                                                    ng-click="associarNfSubstituta($event)" ng-disabled="action"
+                                                    ng-if="object.status === 'Cancelada' && exibirBotoes">
+                                                    ASSOCIAR NF SUBSTITUTA
+                                                    <md-tooltip id="tool_tip_protocolo" md-direction="bottom">
+                                                        <span class="h4">NF Cancelada - Associar NF Substituta</span>
+                                                    </md-tooltip>
+                                                </md-button>
+                                            </div>
+                                            <div flex="100" flex-sm="100" layout="row" layout-align="end center"
+                                                ng-if="exibirBotoes"
+                                                ng-hide="screenMode === 'NEW' || vindoDoContasReceber">
+                                                <div
+                                                    ng-if="object.status === 'A processar' || object.status === 'Em recebimento'">
+                                                    <md-button class="md-raised md-accent" id="btn_ajustar_valor"
+                                                        layout-align="end center" ng-click="alterarValor($event)"
+                                                        ng-disabled="object.formaPagamento === 'Parcelada' || action">
+                                                        AJUSTAR VALOR
+                                                        <md-tooltip id="tool_tip_btn_ajustar_valor"
+                                                            md-direction="bottom">
+                                                            <span class="h4">Alterar o valor desta nota fiscal</span>
+                                                        </md-tooltip>
+                                                    </md-button>
+                                                </div>
+                                                <div ng-if="vindoDoContasReceber && exibirBotoes">
+                                                    <md-button class="md-raised md-accent" id="btn_cancelar"
+                                                        layout-align="end center"
+                                                        ng-click="retornarParaContasReceber($event)"
+                                                        ng-disabled="action || vindoDoContasReceber">
+                                                        Cancelar
+                                                        <md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+                                                            <span class="h4">Cancelar a operação e retornar para a tela
+                                                                anterior</span>
+                                                        </md-tooltip>
+                                                    </md-button>
+                                                </div>
+                                                <div ng-if="!vindoDoContasReceber && exibirBotoes">
+                                                    <md-button class="md-raised md-accent" id="btn_cancelar"
+                                                        layout-align="end center" ng-click="cancelarNotaFiscal($event)"
+                                                        ng-disabled="screenMode === 'EDIT' || action || !todasParcelasRecebidas || vindoDoContasReceber"
+                                                        ng-if="object.status === 'Em recebimento' || object.status === 'Em processamento'">
+                                                        Cancelar
+                                                        <md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+                                                            <span class="h4">Cancelar esta nota fiscal</span>
+                                                        </md-tooltip>
+                                                    </md-button>
+                                                    <md-button class="md-raised md-accent" id="btn_remover"
+                                                        layout-align="end center" ng-click="removerNotaFiscal($event)"
+                                                        ng-disabled="screenMode === 'EDIT' || botaoNumerarDesabilitado || action || vindoDoContasReceber"
+                                                        ng-if="object.status === 'Aberta'">
+                                                        Remover
+                                                        <md-tooltip id="tool_tip_btn_remover" md-direction="bottom">
+                                                            <span class="h4">Remover esta nota fiscal (esta operação não
+                                                                poderá ser desfeita)</span>
+                                                        </md-tooltip>
+                                                    </md-button>
+                                                </div>
+                                                <div ng-if="object.status === 'Em recebimento' && exibirBotoes">
+                                                    <md-button class="md-raised md-accent" id="btn_remover_nf_numerada"
+                                                        layout-align="end center" ng-click="removerNfNumerada($event)"
+                                                        ng-disabled="!todasParcelasRecebidas || action || vindoDoContasReceber">
+                                                        REMOVER NF NUMERADA
+                                                        <md-tooltip md-direction="bottom">
+                                                            <span class="h4">Remover esta nota fiscal já numerada (e
+                                                                suas parcelas)</span>
+                                                        </md-tooltip>
+                                                    </md-button>
+                                                </div>
+                                                <div ng-if="object.status === 'Cancelada Faturamento' && exibirBotoes">
+                                                    <md-button class="md-raised md-accent"
+                                                        id="btn_reverter_cancelamento" layout-align="end center"
+                                                        ng-click="reverterCancelamento($event)"
+                                                        ng-disabled="action || vindoDoContasReceber">
+                                                        REVERTER CANCELAMENTO
+                                                        <md-tooltip md-direction="bottom">
+                                                            <span class="h4">Reverter o cancelamento desta nota
+                                                                fiscal</span>
+                                                        </md-tooltip>
+                                                    </md-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </md-content>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+    </div>
+</div>

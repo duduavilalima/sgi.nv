@@ -1,0 +1,149 @@
+<div class="p-4" flex layout-xs="column">
+
+	<!--FILTROS DE RELATORIO-->
+	<div flex layout layout="column">
+
+		<md-input-container flex="50" flex-sm="100">
+			<label id="lbl_sub">Cliente da NF</label>
+			<input id="input_sub" name="ident" ng-model="object.subcliente.nome" type="text">
+			<md-tooltip md-direction="bottom">
+				<span class="h4">Informe o CNPJ/CPF ou a razão social/nome do cliente da NF (para o qual a NF foi emitida</span>
+			</md-tooltip>
+		</md-input-container>
+
+		<md-input-container flex flex-gt-xs="50" flex-sm="100">
+			<label id="lbl_gerencia">Gerência</label>
+			<md-select id="combo_gerencia" name="gerencia" ng-change="$emit('changeGerencia')" ng-if="gerenciaList.length > 1"
+					   ng-model="object.gerencia" ng-model-options="{trackBy: '$value.codigo'}">
+				<md-option ng-value="null" ng-if="!nao_permissao_faturamento"></md-option>
+				<md-option ng-repeat="gerencia in gerenciaList" ng-value="gerencia">{{ gerencia.nome
+					}}
+				</md-option>
+			</md-select>
+
+			<input id="input_gerencia" name="nome_gerencia" ng-disabled="gerenciaList.length === 1"
+				   ng-if="gerenciaList.length === 1" type="text" value="{{ object.gerencia.nome }}">
+		</md-input-container>
+
+	</div>
+
+	<div flex layout layout layout-sm="column">
+
+		<md-autocomplete flex flex-gt-xs="25" id="autocomplete_centroLucro"
+						 md-delay="250"
+						 md-floating-label="Centro financeiro"
+						 md-input-name="autocompleteCentroLucro"
+						 md-item-text="item.identificadorFinal + ' - ' + item.nome"
+						 md-items="item in querySearchCentroLucro(searchTextCentroLucro)"
+						 md-menu-class="autocomplete-custom-template"
+						 md-min-length="3"
+						 md-no-cache="false"
+						 md-require-match=""
+						 md-search-text="searchTextCentroLucro" md-search-text-change="fnChangeTextCentroLucro()"
+						 md-selected-item="selectedItemCentroLucro"
+						 md-selected-item-change="fnSelectedItemCentroLucro(item)" name="autocompleteCentroLucro"
+						 value="{{ object.centroFinanceiro.identificadorFinal }} - {{ object.centroFinanceiro.nome }}">
+			<md-item-template>
+			<span class="item-title" style="margin-top: -20px">
+                <h5>
+					<strong>IDENTIFICADOR: </strong>
+					<span md-highlight-flags="i"
+						  md-highlight-text="searchTextCentroLucro">{{item.identificadorFinal}}</span>
+					<span ng-if="item.situacao !== 'Ativo'"> <b>({{item.situacao}})</b> </span>
+				</h5>
+            </span>
+				<span class="item-title" style="margin-top: -25px; margin-bottom: -20px">
+                <h5> <strong>NOME: </strong> <span md-highlight-flags="i" md-highlight-text="searchTextCentroLucro">{{item.nome}} </span> </h5>
+            </span>
+			</md-item-template>
+
+			<div ng-if="wizardStep1.autocompleteCentroLucro.$touched"
+				 ng-messages="wizardStep1.autocompleteCentroLucro.$error" role="alert">
+				<div id="msg_req_match" ng-message="md-require-match">O centro financeiro informado não é válido</div>
+				<div id="msg_req_centroLucro" ng-message="required">Obrigatório.</div>
+				<div id="msg_min_centroLucro" ng-message="minlength">O nome informado não é suficiente.</div>
+				<div id="msg_max_centroLucro" ng-message="maxlength">O nome informado é muito longo.</div>
+			</div>
+		</md-autocomplete>
+
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl_combo_data_1">1ª data</label>
+			<md-select id="combo_data_1" name="combo_data_1" ng-change="$emit('changeData1')"
+					   ng-disabled="object.tipoRelatorio.chave === 'nfs_canceladas' || object.tipoRelatorio.chave === 'fluxo_de_caixa' || object.tipoRelatorio.chave === 'nfs_canceladas_com_pedido'"
+					   ng-model="object.data1">
+				<md-option ng-value="1"></md-option>
+				<md-option ng-value="2">Emissão</md-option>
+				<md-option ng-value="3">Vencimento</md-option>
+				<md-option ng-value="4">Agendamento</md-option>
+				<md-option ng-value="5">Pagamento</md-option>
+				<md-option ng-value="6">Contabilização</md-option>
+				<md-option ng-if="object.tipoRelatorio.chave === 'nfs_canceladas' || object.tipoRelatorio.chave === 'nfs_canceladas_com_pedido'" ng-value="7">Cancelamento</md-option>
+			</md-select>
+		</md-input-container>
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl_1_data_de">{{object.data1De}}</label>
+			<input id="_1_data_de" max-date="object._1DataAte" name="_1_data_de" ng-change="$emit('changeDataDe1')" ng-disabled="!object.data1 || object.data1 === 0"
+				   ng-model="object._1DataDe" tt-date-picker
+				   type="text">
+		</md-input-container>
+
+
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl__1_data_ate">{{object.data1Ate}}</label>
+			<input id="_1_data_ate" min-date="object._1DataDe" name="_1_data_ate" ng-disabled="!object.data1 || object.data1 === 0 || object.tipoRelatorio.chave === 'fluxo_de_caixa'" ng-model="object._1DataAte"
+				   tt-date-picker
+				   type="text">
+		</md-input-container>
+
+	</div>
+
+	<div flex layout layout layout-sm="column">
+
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl_combo_data_2">2ª data</label>
+			<md-select id="combo_data_2" name="combo_data_2" ng-change="$emit('changeData2')"
+					   ng-model="object.data2" ng-model-options="{ debounce: 250 }">
+				<md-option ng-value="1"></md-option>
+				<md-option ng-value="2">Emissão</md-option>
+				<md-option ng-value="3">Vencimento</md-option>
+				<md-option ng-value="4">Agendamento</md-option>
+				<md-option ng-value="5">Pagamento</md-option>
+				<md-option ng-value="6">Contabilização</md-option>
+			</md-select>
+		</md-input-container>
+
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl_2_data_de">{{object.data2De}}</label>
+			<input id="_2_data_de" max-date="object._2DataAte" name="_2_data_de"
+				   ng-disabled="!object.data2 || object.data2 === 0" ng-model="object._2DataDe"
+				   ng-model-options="{ debounce: 250 }" tt-date-picker type="text">
+		</md-input-container>
+
+
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl__2_data_ate">{{object.data2Ate}}</label>
+			<input id="_2_data_ate" min-date="object._2DataDe" name="_2_data_ate"
+				   ng-disabled="!object.data2 || object.data2 === 0" ng-model="object._2DataAte"
+				   ng-model-options="{ debounce: 250 }" tt-date-picker type="text">
+		</md-input-container>
+
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl_situacao">Situação</label>
+			<md-select id="combo_situacao" name="situacao" ng-change="$emit('changeSituacao')"
+					   ng-disabled="desabilitarCampo('situacao')" ng-model="object.situacao"
+					   ng-model-options="{trackBy: '$value.codigo'}">
+				<md-option ng-repeat="situacao in situacaoList" ng-value="situacao">{{ situacao && situacao.nome }}
+				</md-option>
+			</md-select>
+		</md-input-container>
+
+
+	</div>
+
+	<!-- / CONTENT -->
+
+	<div ng-if="screenMode != 'VIEW'" style="margin-top: 20px">
+		<span>*</span>&nbsp;Campos obrigatórios / É obrigatório informar, pelo menos, um período de datas
+	</div>
+
+</div>

@@ -1,0 +1,155 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_adicionar_anexo" style="width: 1200px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_adicionar_anexo" md-autofocus> Anexo - {{title}} </h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content class="md-background-bg md-hue-3" role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope" md-theme="sgi">
+			<form name="DialogAdicionarAnexoForm" novalidate>
+
+				<div flex-gt-xs="100" flex-xs layout="column">
+					<md-card md-theme-watch style="margin-left: -10px; margin-right: -10px; margin-top: -10px;">
+
+						<div class="p-8" layout layout-sm="column" layout-wrap>
+
+							<div layout="column" layout-wrap style="margin-top: -15px;">
+
+								<section ng-show="habilitarBtnArquivo || title != 'Edição'" layout="row" layout-sm="row" layout-wrap>
+									<div flex="100" flex-sm="100" layout="row" layout-align="start center">
+										<p style="margin-top: 20px;margin-bottom: 20px"><strong>Observação:
+											</strong>O(s)
+											tipo(s) de arquivo(s) permitido(s) é(são):
+											<strong>JPG, JPEG, TIF, "GIF, BMP, PNG, PDF, DOC, DOCX, XLS, XLSX,
+												TXT.</strong> O tamanho máximo de cada arquivo é <strong>10MB.</strong>
+										</p>
+									</div>
+								</section>
+
+								<div ng-show="habilitarBtnArquivo || title != 'Edição'" class="mt-5">
+									<fieldset>
+										<div flex layout="row">
+											<choose-file flex="100" layout="row" layout-sm="column">
+												<div flex="70" layout="row" layout-align="start center">
+													<md-button class="md-raised md-accent mt-15" id="uploadButton"
+														ng-disabled="habilitarBtnArquivo || title === 'Edição'">
+														<md-icon class="white-fg" md-font-icon="icon-plus"></md-icon>
+														Selecionar arquivo
+													</md-button>
+													<input class="ng-hide" id="fileInput" name="fileInput" type="file">
+													<div flex="30">
+														<md-input-container flex flex-gt-md="100"
+															style="margin-bottom: 0px; height: 45px; padding-left: 10px;">
+															<input aria-label="Nome do arquivo" ng-disabled="true"
+																ng-model="fileName" type="text">
+														</md-input-container>
+
+														<div ng-if="file" style="width: 500px; margin-left: 10px;">
+															<h4>Importação realizada com sucesso.</h4>
+														</div>
+													</div>
+												</div>
+
+											</choose-file>
+
+											<div flex="30" layout="row" layout-align="end center">
+												<md-button class="md-raised md-accent mt-15" id="uploadButton"
+													ng-click="$broadcast('limparTudo')" ng-disabled="fileName === undefined">
+													<md-icon class="white-fg" md-font-icon="icon-close"></md-icon>
+													Limpar tudo
+												</md-button>
+											</div>
+
+										</div>
+									</fieldset>
+								</div>
+							</div>
+
+						</div>
+
+						<div ng-show="habilitarBtnArquivo || title != 'Edição'" class="p-8" flex layout="row" layout-align="start center">
+							<div flex layout="row" layout-align="start center">
+								<md-button aria-label="Processar arquivo" class="md-raised md-accent"
+									ng-click="processar()" ng-disabled=" fileName === undefined || fileName === '' || habilitarSalvar === true">
+									Processar arquivo
+								</md-button>
+
+								<p><strong>(Necessário para processar o arquivo importado)</strong></p>
+							</div>
+						</div>
+
+						<div class="content pl-8 pr-8" layout layout-sm="column" layout-wrap>
+							<md-input-container flex="25">
+								<label id="lbl_tipo">Tipo</label>
+								<md-select id="combo_tipo" name="tipo" ng-change="selecionarAditivo()"
+									ng-disabled="!habilitarSalvar" ng-model="object.tipo" required="true">
+									<md-option ng-repeat="item in listTipo" ng-value="item" >{{ item
+										}}
+									</md-option>
+								</md-select>
+								<div ng-messages="DialogAdicionarAnexoForm.tipo.$error" role="alert">
+									<div ng-message="required">Obrigatório.</div>
+								</div>
+							</md-input-container>
+
+							<md-input-container flex="25" ng-if="habilitarAditivo">
+								<label id="lbl_aditivo_combo">Aditivo</label>
+								<md-select id="combo_aditivo" name="aditivo" ng-disabled="!habilitarSalvar"
+									ng-model="object.aditivo" ng-model-options="{trackBy: '$value.codigo'}"
+									required="true">
+									<md-option ng-repeat="item in  $ctrl.listAditivos" ng-value="item">{{
+										item.resumoMinimo }}
+									</md-option>
+								</md-select>
+								<div ng-messages="DialogAdicionarAnexoForm.aditivo.$error" role="alert">
+									<div ng-message="required">Obrigatório.</div>
+								</div>
+							</md-input-container>
+
+							<md-input-container flex="25" ng-if="!habilitarAditivo">
+								<label id="lbl_aditivo">Aditivo</label>
+								<input id="input_aditivo" name="input_aditivo" ng-disabled="true" type="text"
+									value=" — ">
+							</md-input-container>
+
+							<md-input-container ng-if="title === 'Edição'" flex="50">
+								<label id="lbl_descricao">Descrição</label>
+								<input id="input_descricao" name="input_descricao" ng-disabled="!habilitarSalvar"
+									ng-model="object.anexo.descricao" required="true" type="text">
+								<div ng-messages="DialogAdicionarAnexoForm.input_descricao.$error" role="alert">
+									<div ng-message="required">Obrigatório.</div>
+								</div>
+							</md-input-container>
+
+							<md-input-container ng-if="title === 'Novo'" flex="50">
+								<label id="lbl_descricao">Descrição</label>
+								<input id="input_descricao" name="input_descricao" ng-disabled="!habilitarSalvar"
+									ng-model="object.descricao" required="true" type="text">
+								<div ng-messages="DialogAdicionarAnexoForm.input_descricao.$error" role="alert">
+									<div ng-message="required">Obrigatório.</div>
+								</div>
+							</md-input-container>
+						</div>
+					</md-card>
+				</div>
+			</form>
+		</div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar" ng-click="adicionarAnexo()"
+			ng-disabled="!DialogAdicionarAnexoForm.$valid">
+			Salvar
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar" ng-click="cancel()">
+			Fechar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

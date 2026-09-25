@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>br.com.fasolti.sgi</groupId>
+		<artifactId>parent</artifactId>
+		<version>5.13.6</version>
+	</parent>
+
+	<artifactId>servers</artifactId>
+	<packaging>pom</packaging>
+
+	<name>SGI :: Nova Versão :: Servers parent</name>
+
+	<properties>
+		<!-- Contexto da aplicação -->
+		<project.root>../..</project.root>
+
+		<!-- Configurações de deploy do Cargo -->
+		<deploy.container>tomcat8x</deploy.container>
+		<deploy.server.id>${deploy.container}-dev</deploy.server.id>
+
+		<!-- Dados do banco para debugar no Jetty -->
+		<db.host>localhost</db.host>
+		<db.port>5433</db.port>
+		<db.name>sgi.producao</db.name>
+		<db.username>postgres</db.username>
+		<db.password>P0o9i8u7</db.password>
+		<spring.config.dataSource>applicationContext-dataSource-jndi.xml</spring.config.dataSource>
+
+		<!-- RabbitMQ -->
+
+		<mq.host>localhost</mq.host>
+		<mq.port>5672</mq.port>
+		<mq.username>guest</mq.username>
+		<mq.password>guest</mq.password>
+		<mq.vhost>/</mq.vhost>
+		<mq.declaring>true</mq.declaring>
+
+		<!-- Jobs Service config -->
+
+		<fasolti.jobs.mainClass>br.com.fasolti.queue.service.Main</fasolti.jobs.mainClass>
+		<fasolti.jobs.logging.level>DEBUG</fasolti.jobs.logging.level>
+		<fasolti.jobs.persistence.logging.level>INFO
+		</fasolti.jobs.persistence.logging.level>
+
+	</properties>
+
+	<modules>
+		<module>rest</module>
+		<module>frontend</module>
+		<module>jobs-service</module>
+	</modules>
+
+	<profiles>
+		<profile>
+			<id>build.docker</id>
+			<properties>
+				<mq.declaring>false</mq.declaring>
+			</properties>
+		</profile>
+		<profile>
+			<id>deploy.docker</id>
+			<properties>
+				<deploy.server.id>${deploy.container}-docker</deploy.server.id>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>2.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.cargo</groupId>
+					<artifactId>cargo-maven2-plugin</artifactId>
+					<version>1.6.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>${jetty.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<overwrite>true</overwrite>
+					<delimiters>
+						<delimiter>@</delimiter>
+					</delimiters>
+					<useDefaultDelimiters>false</useDefaultDelimiters>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<configuration>
+					<path>${server.context}${application.context}</path>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<configuration>
+					<container>
+						<containerId>${deploy.container}</containerId>
+						<type>remote</type>
+					</container>
+					<configuration>
+						<type>runtime</type>
+						<properties>
+							<cargo.server.settings>${deploy.server.id}
+							</cargo.server.settings>
+						</properties>
+					</configuration>
+					<deployables>
+						<deployable>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>${project.artifactId}</artifactId>
+							<type>war</type>
+							<properties>
+								<context>
+									${server.context}${application.context}
+								</context>
+							</properties>
+						</deployable>
+					</deployables>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- App monitoring  -->
+
+		<!--
+		<dependency>
+			<groupId>net.bull.javamelody</groupId>
+			<artifactId>javamelody-core</artifactId>
+			<version>1.50.0</version>
+		</dependency>
+		-->
+
+		<!-- Fasolti -->
+
+		<!-- 		<dependency> -->
+		<!-- 			<groupId>br.com.fasolti.commons</groupId> -->
+		<!-- 			<artifactId>commons-security</artifactId> -->
+		<!-- 		</dependency> -->
+
+		<!-- Servlet API -->
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+
+		<!-- Spring -->
+
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- ehcache -->
+
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+		</dependency>
+
+	</dependencies>
+
+</project>

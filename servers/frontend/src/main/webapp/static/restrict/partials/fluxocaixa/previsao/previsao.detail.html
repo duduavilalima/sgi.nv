@@ -1,0 +1,290 @@
+<div class="page-layout simple fullwidth" ng-controller="PrevisaoDetailCtrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ ::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ screenMode === 'VIEW' ? 'Exibição' : (screenMode === 'EDIT' ? 'Edição' : 'Novo') }}</span>
+			</div>
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">Previsão - Dados Gerais</div>
+						</header>
+
+						<md-progress-linear class="md-warn" md-mode="query"
+											ng-show="object == null"></md-progress-linear>
+
+						<div class="white-500-bg">
+							<form name="PrevisaoForm">
+								<div class="p-16" ng-if="screenMode !== 'VIEW'">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_empresa">Empresa</label>
+											<md-select id="combo_empresa" name="empresa" ng-model="object.unidade"
+													   ng-model-options="{trackBy: '$value.codigo'}" ng-required="true"
+													   required>
+												<md-option ng-repeat="item in listEmpresas" ng-value="item"
+														   value="{{ item }}">{{ item.codnome }}
+												</md-option>
+											</md-select>
+											<div ng-messages="PrevisaoForm.empresa.$error"
+												 ng-show="PrevisaoForm.empresa.$touched">
+												<div ng-message="required">
+													Obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_diretoria">Diretoria</label>
+											<md-select id="combo_diretoria" name="diretoria" ng-model="object.diretoria"
+													   ng-model-options="{trackBy: '$value.codigo'}" ng-required="true"
+													   required>
+												<md-option ng-repeat="item in listDiretorias" ng-value="item"
+														   value="{{ item }}">{{ item.descricao}}
+												</md-option>
+											</md-select>
+											<div ng-messages="PrevisaoForm.diretoria.$error"
+												 ng-show="PrevisaoForm.diretoria.$touched">
+												<div ng-message="required">
+													Obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<!-- Autocomplete de Despesa-->
+										<md-autocomplete flex flex
+														 flex-gt-md="50"
+														 id="autocomplete_despesa"
+														 md-delay="250"
+														 md-floating-label="Despesa"
+														 md-input-id="input_despesa"
+														 md-input-maxlength="30"
+														 md-input-minlength="3"
+														 md-input-name="autocompleteDespesa"
+														 md-item-text="item.descricao"
+														 md-items="item in querySearchDespesa(searchTextDespesa)"
+														 md-menu-class="autocomplete-custom-template"
+														 md-min-length="3"
+														 md-no-cache="true"
+														 md-no-cache="false"
+														 md-require-match="true"
+														 md-search-text="searchTextDespesa"
+														 md-selected-item="selectedItemDespesa"
+														 md-selected-item-change="selectedItemDespesaChange(item)"
+														 name="autocompleteDespesa"
+														 required="true"
+														 value="{{ object.despesaFluxoCaixa}}">
+
+											<md-item-template>
+												<span class="item-title" style="margin-top: -20px;margin-bottom: -20px">
+															<h5>
+																<span md-highlight-flags="i"
+																	  md-highlight-text="searchTextDespesa">{{item.descricao}}</span>
+															</h5>
+														</span>
+											</md-item-template>
+
+											<div ng-messages="PrevisaoForm.autocompleteDespesa.$error"
+												 ng-show="PrevisaoForm.autocompleteDespesa.$touched" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+												<div id="msg_min_despesa" ng-message="minlength">A descrição informada
+													não é suficiente.
+												</div>
+												<div id="msg_max_despesa" ng-message="maxlength">A despesa informada
+													deve ter 30 caracteres ou menos.
+												</div>
+												<div ng-message="md-require-match">A despesa informada não é válida.
+												</div>
+											</div>
+										</md-autocomplete>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_data">Data</label>
+											<input id="input_data" name="data" ng-model="object.data" ng-required="true"
+												   required tt-date-picker type="text">
+											<div ng-messages="PrevisaoForm.data.$error"
+												 ng-show="PrevisaoForm.data.$touched">
+												<div ng-message="required">
+													Obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_valor">Valor</label>
+											<input id="input_valor" maxlength="18" name="input_valor"
+												   ng-model="object.valor" ng-required="true" type="text"
+												   ui-number-mask="2">
+											<div ng-messages="PrevisaoForm.input_valor.$error"
+												 ng-show="PrevisaoForm.input_valor.$touched">
+												<div ng-message="required">
+													Obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+									</div>
+									<div class="p-16">
+										<div layout layout-sm="column" style="margin-top: -5px">
+											<span class="red-fg">*&nbsp;</span> Campos obrigatórios
+										</div>
+									</div>
+								</div>
+								<!-----View------->
+								<div class="p-16" ng-if="screenMode === 'VIEW'">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_empresaV">Empresa</label>
+											<input id="input_empresaV" name="input_empresa" ng-disabled="true"
+												   type="text" value="{{::object.unidade.codnome }}">
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_diretoria_exibir">Diretoria</label>
+											<input id="combo_diretoria_exibir" name="diretoria_exibir"
+												   ng-disabled="true" type="text"
+												   value="{{ object.diretoria.descricao }}">
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_desepesaV">Despesa</label>
+											<input id="input_despesaV" name="despesaV" ng-disabled="true" type="text"
+												   type="text" value="{{ ::object.despesaFluxoCaixa.descricao }}">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_dataV">Data</label>
+											<input id="input_dataV" name="dataV" ng-disabled="true" type="text"
+												   value="{{::object.data | date : 'dd/MM/yyyy' }}">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_valorV">Valor</label>
+											<input id="input_valorV" name="input_valorV" ng-disabled="true" type="text"
+												   value="{{::object.valor | currency:'':2 }}">
+										</md-input-container>
+									</div>
+
+									<md-tabs md-border-bottom md-dynamic-height>
+										<!-- ABA CONTROLES -->
+										<md-tab label="Controles" ng-if="screenMode === 'VIEW'">
+											<div class="p-16">
+												<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+													 style="margin-top: -5px;">
+
+													<md-input-container flex="50" flex-sm="100" flex-xs="100">
+														<label id="lbl_cadastramento">Cadastramento</label>
+														<input id="input_cadastramento" name="cadastramento"
+															   ng-disabled="true" type="text"
+															   value="{{object.nomeCriador}}">
+													</md-input-container>
+
+													<md-input-container flex="50" flex-sm="100" flex-xs="100">
+														<label id="lbl_data_hora">Data/hora</label>
+														<input id="input_data_hora" name="input_data_hora"
+															   ng-disabled="true" type="text"
+															   value="{{ object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+													</md-input-container>
+												</div>
+												<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+													 style="margin-top: -5px;">
+
+													<md-input-container flex="50" flex-sm="100" flex-xs="100">
+														<label id="lbl_ultima_alteracao">Última alteração</label>
+														<input id="input_ultima_alteracao" name="input_ultima_alteracao"
+															   ng-disabled="true" type="text"
+															   value="{{object.nomeAtualizador}}">
+													</md-input-container>
+
+													<md-input-container flex="50" flex-sm="100" flex-xs="100">
+														<label id="lbl_data_hora2">Data/hora</label>
+														<input id="input_data_hora2" name="data_hora2"
+															   ng-disabled="true" type="text"
+															   value="{{ object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+													</md-input-container>
+												</div>
+											</div>
+										</md-tab>
+									</md-tabs>
+								</div>
+
+								<md-divider></md-divider>
+								<div class="p-8" flex layout="row" layout-align="start start" layout-xs="column"
+									 ng-if="screenMode !== 'VIEW'">
+									<md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvar()"
+											   ng-disabled="PrevisaoForm.$invalid">
+										Salvar
+										<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+											<span class="h4">Salvar as alterações realizadas nesta previsão</span>
+										</md-tooltip>
+									</md-button>
+
+									<md-button class="md-raised md-accent" id="btn_cancelar" ng-click="cancelarEdit()">
+										Cancelar
+										<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+											<span
+												class="h4">Sair desta previsão, sem gravar as modificações realizadas</span>
+										</md-tooltip>
+									</md-button>
+								</div>
+
+								<div class="p-8" flex layout="row" layout-xs="column" ng-if="screenMode === 'VIEW'">
+									<div flex layout="row" layout-align="start start">
+										<md-button aria-label="Editar" class="md-raised md-accent" id="btn_editar"
+												   ng-click="editar()">
+											Editar
+											<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+												<span class="h4">Editar os dados desta previsão</span>
+											</md-tooltip>
+										</md-button>
+
+										<md-button aria-label="Retornar" class="md-raised md-accent" id="btn_retornar"
+												   ng-click="retornar()">
+											Retornar
+											<md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+												<span class="h4">Sair desta tela e retornar para a tela anterior</span>
+											</md-tooltip>
+										</md-button>
+									</div>
+
+									<div flex layout="row" layout-align="end center">
+										<md-button aria-label="Remover" class="md-raised md-accent" id="btn_remover"
+												   ng-click="remover($event)">
+											Remover
+											<md-tooltip id="tool_tip_btn_remover" md-direction="bottom">
+												<span class="h4">Remover esta previsão (esta operação não poderá ser desfeita)</span>
+											</md-tooltip>
+										</md-button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,35 @@
+<md-dialog aria-label="Cancelar recebimento com baixa: Confirmação"
+		   id="dialog_titulo_popup_baixa_retencao" style="width: 700px;">
+	<form name="DialogParcelaForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_baixa_retencao" md-autofocus>Cancelar recebimento com baixa: Confirmação</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content role="document">
+			<div class="md-dialog-content md-dialog-content-body ng-scope">
+				<p class="ng-binding" id="msg_popup_baixa_retencao">Esta parcela possui <b>baixa de retenção</b>. Deseja realmente cancelar o recebimento (as baixas serão removidas e a Contabilidade deve ser informada)?</p>
+			</div>
+			<md-divider></md-divider>
+		</md-dialog-content>
+
+		<md-dialog-actions layout="row">
+			<md-button class="md-raised md-default" id="btn_confirmar_baixa_retencao" ng-click="confirm()"
+					   ng-disabled="action">
+				<img ng-show="action" src="../img/gray_carregando.gif"
+					 style="height: 20px;width: 20px;margin-top: 8px;"/>
+				CONFIRMAR
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_cancelar_baixa_retencao" ng-click="cancel()"
+					   ng-disabled="action">
+				CANCELAR
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

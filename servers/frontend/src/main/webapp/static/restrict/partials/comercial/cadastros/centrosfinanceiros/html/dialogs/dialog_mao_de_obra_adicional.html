@@ -1,0 +1,59 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_mao_de_obra_adicional" style="width: 600px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_mao_de_obra_adicional" md-autofocus> {{ ::title }} </h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content class="md-background-bg md-hue-3" role="document">
+
+		<md-table-container>
+			<table border="1" class="tabela_exibicao hover md-caption" ms-responsive-table width="100%">
+				<thead>
+				<tr class="md-grey-200-bg">
+					<th class="text-center" style="border: 1px solid #c4c4c4;" width="70%">Descrição</th>
+					<th class="text-center" style="border: 1px solid #c4c4c4;" width="30%">Valor</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr class="linha-borda-cinza md-white-500-bg" ng-repeat="item in listaAdicional">
+					<td class="text-left">{{item.categoriaMaoDeObraAdicional.nome}}</td>
+					<td class="text-right" ng-if="!edit">
+						{{item.valorUnitario | currency:'':2}}
+					</td>
+					<td class="text-right" ng-if="edit">
+						<input class="text-right" maxlength="14" ng-keyup="atualizarTotal()"
+							   ng-model="item.valorUnitario" style="margin-left: 15px; width: 80%;" type="text"
+							   ui-number-mask="2">
+					</td>
+				</tr>
+
+				<tr class="md-grey-500-bg">
+					<td class="text-left"><strong>Total</strong></td>
+					<td class="text-right"><strong>{{total | currency:'':2}}</strong></td>
+				</tr>
+
+				</tbody>
+			</table>
+		</md-table-container>
+
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+
+		<div flex layout="row" layout-xs="column">
+			<md-button class="md-raised md-accent" id="btn_add_mao_obra_salvar" ng-click="save()" ng-disabled="action" ng-if="edit">
+				CONFIRMAR
+			</md-button>
+			<md-button class="md-raised md-accent" id="btn_add_mao_obra_fechar" ng-click="cancel()" ng-disabled="action">
+				Fechar
+			</md-button>
+		</div>
+
+	</md-dialog-actions>
+</md-dialog>

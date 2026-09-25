@@ -1,0 +1,260 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_adicionar_lancamento" style="width: 1600px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_adicionar_lancamento" md-autofocus> {{ ::title }} </h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content class="md-background-bg md-hue-3" role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<form name="DialogAdicionarLancamentoForm">
+
+				<div flex-gt-xs="100" flex-xs layout="column">
+					<md-card md-theme-watch style="margin-left: -10px; margin-right: -10px; margin-top: -10px;">
+						<div class="border-bottom md-accent-bg white-fg" layout="row" style="height: 40px;">
+							<h3 class="pl-16" style="margin-top: 10px;">Conciliação Bancária - Adicionar lançamento -
+								Filtros de pesquisa</h3>
+						</div>
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_numero">Número</label>
+								<input id="input_numero" name="numero" ng-model="object.numero" type="text">
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_situacao">Situação</label>
+								<input id="input_situacao" name="situacao" ng-disabled="true" ng-value="object.status"
+									   type="text">
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_pagamento_de">Pagamento de</label>
+								<input id="pagamento_de_input" ng-model="object.pagamentoDe" tt-date-picker type="text">
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_pagamento__ate">Pagamento até</label>
+								<input id="pagamento_ate_input" ng-model="object.pagamentoAte" tt-date-picker
+									   type="text">
+							</md-input-container>
+
+						</div>
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_empresa">Empresa</label>
+								<input id="input_empresa" ng-disabled="true" ng-value="object.unidade.codnome"
+									   type="text">
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_banco">Banco</label>
+								<md-select id="combo_banco" name="banco" ng-change="changeBanco()"
+										   ng-model="object.banco">
+									<md-option ng-repeat="item in listBancos | unique: 'codigo'" ng-value="item"
+											   value="{{ item }}">{{item.nome}}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="50">
+								<label id="lbl_agencia">Agência/conta</label>
+								<md-select id="combo_agencia" name="agencia" ng-change="changeAgencia()"
+										   ng-model="object.contaCorrente">
+									<md-option ng-repeat="item in listAgencias" ng-value="item" value="{{ item }}">
+										{{ item.codigo == null ? '' : item.agencia + ' / ' + item.conta + '-' +
+										item.digito }}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+						</div>
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<!--Ajustar esse autocomplete para conta contabil-->
+							<md-autocomplete flex flex
+											 flex-gt-md="50"
+											 id="autocomplete_conta_contabil"
+											 md-delay="250"
+											 md-floating-label="Conta contábil"
+											 md-input-id="input_numero_conta_contabil"
+											 md-input-name="autocompleteContaContabil"
+											 md-item-text="item.numero + ' - ' + item.descricao"
+											 md-items="item in querySearchContaContabil(searchTextContaContabil)"
+											 md-menu-class="autocomplete-custom-template"
+											 md-min-length="3"
+											 md-no-cache="false"
+											 md-search-text="searchTextContaContabil"
+											 md-selected-item="selectedItemContaContabil"
+											 md-selected-item-change="selectedItemChange(item)"
+											 name="autocompleteContaContabil"
+											 value="{{ object.contaContabil }}">
+								<md-item-template>
+                                                <span class="item-title">
+                                                    <h3> <strong> <span md-highlight-flags="i"
+																		md-highlight-text="searchTextContaContabil"> {{item.numero}} - {{item.descricao}} </span> </strong>
+                                                    </h3>
+                                                </span>
+									<span class="item-title">
+                                                    <h5> <strong>NÚMERO: </strong> <span md-highlight-flags="i"
+																						 md-highlight-text="searchTextContaContabil">{{item.numero}} </span> </h5>
+                                                </span>
+									<span class="item-title">
+                                                    <h5> <strong>DESCRIÇÃO: </strong> <span md-highlight-flags="i"
+																							md-highlight-text="searchTextContaContabil">{{item.descricao}} </span> </h5>
+                                                </span>
+								</md-item-template>
+								<div ng-messages="wizardStep1.autocompleteContaContabil.$error"
+									 ng-show="wizardStep1.autocompleteContaContabil.$touched" role="alert">
+									<div id="msg_req_client" ng-message="required">Obrigatório.</div>
+									<div id="msg_min_client" ng-message="minlength">O nome informado não é suficiente.
+									</div>
+									<div id="msg_max_client" ng-message="maxlength">O nome informado é muito longo.
+									</div>
+								</div>
+							</md-autocomplete>
+
+							<md-input-container flex="25" flex-sm="100" flex-xs="100">
+								<label id="lbl_valor_de">Valor de (R$)</label>
+								<input class="text-left" id="input_valor_de" maxlength="18" name="valor_de"
+									   ng-model="object.valorDe" type="text" ui-number-mask="2">
+							</md-input-container>
+							<md-input-container flex="25" flex-sm="100" flex-xs="100">
+								<label id="lbl_valor_ate">Valor até (R$)</label>
+								<input class="text-left" id="input_valor_ate" maxlength="18" name="valor_ate"
+									   ng-model="object.valorAte" type="text" ui-number-mask="2">
+							</md-input-container>
+
+						</div>
+
+						<div class="p-8" layout layout-sm="column" layout-wrap>
+							<md-button class="md-raised md-accent" id="btn_pesquisar" ng-click="pesquisar()"
+									   ng-disabled="action">
+								Pesquisar
+							</md-button>
+							<md-button class="md-raised md-default" id="btn_limpar" ng-click="limpar()"
+									   ng-disabled="action">
+								Limpar
+							</md-button>
+						</div>
+
+					</md-card>
+				</div>
+
+				<!-- / CAMPOS DE PESQUISA -->
+				<!-- DATATABLE - RESULTADO DA PESQUISA -->
+				<div flex-gt-xs="100" flex-xs layout="column" ng-if="pesquisaRealizada && listaLancamentos.length > 0">
+					<md-card md-theme-watch style="margin-left: -10px; margin-right: -10px;">
+						<div class="border-bottom md-accent-bg white-fg" layout="row" style="height: 40px;">
+							<h3 class="pl-16" style="margin-top: 10px;">Conciliação Bancária - Adicionar lançamento -
+								Resultado da pesquisa</h3>
+						</div>
+
+						<div layout="row">
+							<div style="overflow: auto !important; max-height: 300px !important; width: 100%">
+								<table class="simple row-border hover font-size-12" id="table-list" ms-responsive-table
+									   width="100%">
+									<thead>
+									<tr class="cabecalho-borda-cinza">
+										<th class="titulo_colunas" width="8%">
+											<div class="table-header text-center"><span
+												class="column-title">Número</span></div>
+										</th>
+										<th class="titulo_colunas" width="7%">
+											<div class="table-header text-center"><span
+												class="column-title">Situação</span></div>
+										</th>
+										<th class="titulo_colunas" width="10%">
+											<div class="table-header text-center"><span
+												class="column-title">Banco</span></div>
+										</th>
+										<th class="titulo_colunas" width="15%">
+											<div class="table-header text-center"><span class="column-title">Agência / Conta</span>
+											</div>
+										</th>
+										<th class="titulo_colunas">
+											<div class="table-header text-center"><span class="column-title">Conta contábil</span>
+											</div>
+										</th>
+										<th class="titulo_colunas" width="9%">
+											<div class="table-header text-center"><span
+												class="column-title">Pagamento</span></div>
+										</th>
+										<th class="titulo_colunas" width="9%">
+											<div class="table-header text-center"><span
+												class="column-title">Valor</span></div>
+										</th>
+										<th class="titulo_colunas" width="4%">
+											<div class="table-header text-center"><span class="column-title">D/C</span>
+											</div>
+										</th>
+										<th class="titulo_colunas" style="padding-right: 8px;" width="4%">
+											<div class="table-header text-center"><span
+												class="column-title">Opções</span></div>
+										</th>
+									</tr>
+									</thead>
+
+									<tbody>
+									<tr class="linha-borda-cinza linha-alinhado-meio"
+										ng-repeat="item in listaLancamentos">
+										<td class="text-left"> {{ ::item.numero }}</td>
+										<td class="text-left"> {{ ::item.status }}</td>
+										<td class="text-left"> {{ ::item.contaCorrente.banco.nome }}</td>
+										<td class="text-center"> {{ getAgenciaConta(item.contaCorrente) }}</td>
+										<td class="text-left"> {{ ::item.contaContabil.numero }} - {{
+											::item.contaContabil.descricao }}
+										</td>
+										<td class="text-center"> {{ ::item.data | date:'dd/MM/yyyy' }}</td>
+										<td class="text-right"> {{ ::item.valor | currency:'':2 }}</td>
+										<td class="text-center"> {{ ::item.debitoCredito }}</td>
+										<td class="text-center" style="padding-right: 8px;">
+											<md-checkbox aria-label="Selecionar" class="md-sgi-theme"
+														 ng-checked="exists(item)"
+														 ng-click="selecionar(item)"
+														 style="margin-bottom: 0px; margin-left: 10px;">
+											</md-checkbox>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</md-card>
+				</div>
+
+				<div flex-gt-xs="100" flex-xs layout="column" ng-if="pesquisaRealizada && listaLancamentos.length == 0">
+					<md-card md-theme-watch style="margin-left: -10px;margin-right: -10px;">
+						<span
+							style="margin: 10px 10px 10px 10px; text-align: center;"><b>Nenhum resultado encontrado.</b></span>
+					</md-card>
+				</div>
+
+			</form>
+		</div>
+
+		<!-- / DATATABLE - RESULTADO DA PESQUISA -->
+
+
+		<md-divider></md-divider>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar" ng-click="adicionar()" ng-disabled="action"
+				   ng-disabled="!lancamentoSelecionado">
+			Adicionar lançamento
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar" ng-click="cancel()" ng-disabled="action">
+			Fechar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

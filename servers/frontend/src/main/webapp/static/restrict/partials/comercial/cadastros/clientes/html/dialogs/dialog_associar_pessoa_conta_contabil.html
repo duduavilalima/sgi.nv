@@ -1,0 +1,100 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_conta_Contabil" style="width: 950px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_conta_Contabil" md-autofocus>Conta contábil - {{title}}</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+					style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<form name="DialogContaContabilForm">
+
+				<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+					<md-input-container flex flex-gt-md="30" ng-if="true">
+						<label id="lbl_tipoDadosContabeis">Tipo</label>
+						<input id="input_tipoDadosContabeis" name="input_tipoDadosContabeis" ng-disabled="true" type="text" value="{{object.tipoEspecial}}">
+					</md-input-container>
+
+					<md-input-container flex flex-gt-md="20" ng-if="habilitarComboEmpresa">
+						<label id="lbl_empresa">Empresa</label>
+						<md-select id="combo_empresa" name="empresa" ng-change="changeEmpresa()"
+							ng-model="object.unidade" ng-model-options="{trackBy: '$value.codigo'}" ng-required="true"
+							required>
+							<md-option ng-repeat="item in listEmpresas" ng-value="item">{{item.codnome}}</md-option>
+						</md-select>
+						<div ng-messages="DialogContaContabilForm.empresa.$error" role="alert">
+							<div ng-message="required">Empresa é um campo de preenchimento obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="20" ng-if="!habilitarComboEmpresa">
+						<label id="lbl_empresa_edicao">Empresa</label>
+						<input id="input_empresa_edicao" name="input_empresa_edicao" ng-disabled="true" type="text"
+							value="{{object.unidade.codnome}}">
+					</md-input-container>
+
+					<!-- Autocomplete de Pessoa Conta Contabil-->
+					<md-autocomplete flex flex flex-gt-md="50" id="autocomplete_pessoaContaContabil" md-delay="250"
+						md-floating-label="Conta contábil" md-input-id="input_pessoaContaContabil"
+						md-input-maxlength="30" md-input-minlength="3" md-input-name="autocompletePessoaContaContabil"
+						md-item-text="pcc.numero + ' - ' + pcc.descricao"
+						md-items="pcc in querySearchContaContabil(searchTextPessoaContaContabil, object.tipoEspecial, object.unidade)"
+						md-menu-class="autocomplete-custom-template" md-min-length="3" md-no-cache="true"
+						md-no-cache="false" md-search-text="searchTextPessoaContaContabil"
+						md-selected-item="selectedItemPessoaContaContabil"
+						md-selected-item-change="selectedItemChangePCC(object, pcc)"
+						name="autocompletePessoaContaContabil" required="true" ngmodel="object.contaContabil">
+
+						<md-item-template>
+							<span class="item-title" style="margin-top: -20px">
+								<h5> <strong>Número: </strong>
+									<span md-highlight-flags="i"
+										md-highlight-text="searchTextPessoaContaContabil">{{pcc.numero}} </span>
+								</h5>
+							</span>
+							<span class="item-title" style="margin-top: -20px;margin-bottom: -20px">
+								<h5> <strong>Descrição: </strong>
+									<span md-highlight-flags="i"
+										md-highlight-text="searchTextPessoaContaContabil">{{pcc.descricao}} </span>
+								</h5>
+							</span>
+						</md-item-template>
+
+						<div ng-messages="DialogContaContabilForm.autocompleteCliente.$error"
+							ng-show="DialogContaContabilForm.autocompleteCliente.$touched" role="alert">
+							<div ng-message="required">Conta Contábil é um campo de preenchimento obrigatório.</div>
+							<div id="msg_min_client_contaContabil" ng-message="minlength">O nome informado não é
+								suficiente.
+							</div>
+							<div id="msg_max_client_contaContabil" ng-message="maxlength">O nome informado é muito
+								longo.
+							</div>
+						</div>
+					</md-autocomplete>
+				</div>
+
+				<div layout layout-sm="column" ng-if="screenMode != 'VIEW'" style="margin-top: -0px">
+					<span>*</span>&nbsp;Campos obrigatórios
+				</div>
+
+			</form>
+		</div>
+
+		<md-divider></md-divider>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar_confirmar" ng-click="confirm()" ng-disabled="action"
+			ng-disabled="!DialogContaContabilForm.$valid || action">
+			CONFIRMAR
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar_remover" ng-click="cancel()" ng-disabled="action">
+			Fechar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

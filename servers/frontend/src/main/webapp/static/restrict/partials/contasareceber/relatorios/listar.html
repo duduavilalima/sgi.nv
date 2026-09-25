@@ -1,0 +1,338 @@
+<div class="page-layout simple fullwidth">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ :: modulo}} </span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="subtitulo">{{ ::titulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<form name="form" novalidate>
+			<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+				<div class="content" flex>
+
+					<!-- CAMPOS DE PESQUISA -->
+					<div layout="row" layout-wrap>
+						<div class="about" flex="100" layout="column">
+							<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+								<header class="md-accent-bg">
+									<div class="title" id="titulo_filtro">{{ ::titulo}} - Filtros de relatório</div>
+								</header>
+								<div class="white-500-bg" flex layout-xs="column">
+
+									<div class="p-16" flex layout layout-sm="column">
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_relatorio">Relatório</label>
+											<md-select id="combo_relatorio" name="relatorio"
+													   ng-model="object.tipoRelatorio" ng-required="true" required>
+												<md-option ng-repeat="relatorio in tiposRelatorios"
+														   ng-value="relatorio">{{ relatorio.nome }}
+												</md-option>
+											</md-select>
+											<div ng-messages="form.relatorio.$error" role="alert">
+												<div ng-message="required">Relatório é um campo de preenchimento
+													obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex>
+											<label id="lbl_formato">Formato</label>
+											<md-select id="combo_formato" name="formato" ng-model="object.tipoFormato">
+												<md-option ng-repeat="formato in tiposFormatos" ng-selected="index == 1"
+														   ng-value="formato">{{ formato.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_empresa">Matriz / Filial</label>
+											<md-select id="combo_empresa" name="empresa"
+													   ng-change="$emit('changeEmpresa')"
+													   ng-model="object.unidade.codigo" ng-required="true" required
+													   value="{{ object.unidade.codigo }}">
+												<md-option ng-repeat="unidade in empresaList" ng-value="unidade.codigo">
+													{{ unidade.codnome }}
+												</md-option>
+											</md-select>
+											<div ng-messages="form.empresa.$error" role="alert">
+												<div ng-message="required">Matriz/Filial é um campo de preenchimento
+													obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+									</div>
+
+									<!--FILTROS DE RELATORIO-->
+
+									<div class="p-16 mt-20" flex layout="column" layout>
+										<md-autocomplete flex id="autocomplete_nome_cliente" md-delay="250"
+														 md-floating-label="Cliente/Subcliente"
+														 md-input-name="autocompleteClienteInp" md-item-text="item.nome"
+														 md-items="item in querySearchCliente(searchTextCliente)"
+														 md-menu-class="autocomplete-custom-template" md-min-length="3"
+														 md-no-cache="false" md-search-text="searchTextCliente"
+														 md-selected-item="selectedItemCliente"
+														 md-selected-item-change="selectedItemChange(item, 'cliente')"
+														 name="autocompleteCliente" value="{{ object.cliente.nome }}">
+											<md-item-template>
+												<span class="item-title"><h3> <strong> <span
+													md-highlight-text="searchTextCliente"> {{item.documento}} </span> </strong></h3></span>
+												<span class="item-title"><h5> <strong>RAZÃO SOCIAL: </strong> <span
+													md-highlight-flags="i" md-highlight-text="searchTextCliente">{{item.nome}} </span> </h5></span>
+												<span class="item-title"><h5> <strong>NOME FANTASIA: </strong> <span
+													md-highlight-flags="i" md-highlight-text="searchTextCliente">{{item.nomeFantasia}} </span> </h5></span>
+											</md-item-template>
+
+											<div ng-if="faturamento.autocompleteClienteInp.$touched"
+												 ng-messages="form.autocompleteClienteInp.$error" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+												<div ng-message="minlength">O nome informado não é suficiente.</div>
+												<div ng-message="maxlength">O nome informado é muito longo.</div>
+											</div>
+										</md-autocomplete>
+
+										<md-input-container flex flex-gt-xs="50">
+											<label id="lbl_gerencia">Gerência</label>
+											<md-select id="combo_gerencia" name="gerencia"
+													   ng-change="$emit('changeGerencia')"
+													   ng-if="gerenciaList.length > 1" ng-model="object.gerencia"
+													   ng-model-options="{trackBy: '$value.codigo'}">
+												<md-option ng-value="null"></md-option>
+												<md-option ng-repeat="gerencia in gerenciaList" ng-value="gerencia">{{
+													gerencia.nome }}
+												</md-option>
+											</md-select>
+
+											<input id="input_gerencia" name="desc_gerencia" ng-disabled="true"
+												   ng-if="gerenciaList.length = 1" type="text"
+												   value="{{ object.gerencia.nome }}">
+
+										</md-input-container>
+
+
+										<!--<md-input-container flex flex-gt-xs="50">-->
+										<!--<label id="lbl_cc_cl">Gerência</label>-->
+										<!--<md-select id="combo_gerencia" name="gerencia" ng-model="object.gerencia" ng-model-options="{trackBy: '$value.codigo'}" ng-change="$emit('changeGerencia')">-->
+										<!--<md-option ng-value="null" ></md-option>-->
+										<!--<md-option ng-repeat="gerencia in gerenciaList" ng-value="gerencia">{{ gerencia.nome }}</md-option>-->
+										<!--</md-select>-->
+										<!--</md-input-container>-->
+									</div>
+
+
+									<div class="p-16" flex layout layout layout-sm="column">
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_situacao">Situação</label>
+											<md-select id="combo_situacao" name="situacao"
+													   ng-model="object.situacaoNotaContasReceber">
+												<md-option ng-repeat="situacao in situacoesNotaContasReceber"
+														   ng-value="situacao">{{ situacao.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+
+										<!--{{bancoList}}-->
+										<!--&#45;&#45;&#45;&#45;&#45;&#45;-->
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_banco">Banco</span>
+											</label>
+											<md-select id="combo_banco" name="combo_banco"
+													   ng-change="$emit('changeBanco')"
+													   ng-disabled="bancoList == null || bancoList.length == 0"
+													   ng-model="object.contaCorrente.banco"
+													   ng-model-options="{trackBy: '$value.codigo'}">
+												<md-option
+													ng-repeat="cc in bancoList | orderBy: 'banco.nome' | unique:'banco.nome'"
+													ng-value="cc.banco">{{cc.banco.nome}}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_agencia_conta">Agência/Conta</label>
+											<md-select id="combo_agencia_conta" name="agencia_conta"
+													   ng-change="$emit('changeAgencia')"
+													   ng-disabled="agenciaContaList == null || agenciaContaList.length == 0"
+													   ng-model="object.contaCorrente"
+													   ng-model-options="{trackBy: '$value.codigo'}">
+												<md-option
+													ng-repeat="agenciaConta in agenciaContaList | orderBy: 'agencia' | orderBy: 'conta'"
+													ng-value="agenciaConta">
+													{{ montarLabelAgenciaConta(agenciaConta) }}
+												</md-option>
+											</md-select>
+											<div ng-messages="wizardStep3.agencia_conta.$error" role="alert">
+												<div id="msg_req_agencia" ng-message="required">Obrigatório.</div>
+											</div>
+										</md-input-container>
+
+										<!--&#45;&#45;&#45;&#45;&#45;&#45;-->
+
+
+										<!--<md-input-container flex flex-gt-md="25">-->
+										<!--<label id="lbl_banco">Banco</label>-->
+										<!--<md-select name="combo_tipo" id="combo_banco" ng-model="object.tipoFaturamento" value="{{ object.tipoFaturamento }}">-->
+										<!--<md-option ng-repeat="tipoFaturamento in tipoList" ng-value="tipoFaturamento" value="{{ tipoFaturamento }}">{{ tipoFaturamento.nome }}</md-option>-->
+										<!--</md-select>-->
+										<!--<div ng-messages="form.combo_tipo.$error" role="alert">-->
+										<!--<div id="msg_obrig_tipo" ng-message="required">Obrigatório.</div>-->
+										<!--</div>-->
+										<!--</md-input-container>-->
+
+										<!--<md-input-container flex flex-gt-md="50">-->
+										<!--<label id="lbl_agencia">Agência/Conta</label>-->
+										<!--<md-select name="combo_agencia" id="combo_banco" ng-model="object.tipoFaturamento" value="{{ object.tipoFaturamento }}">-->
+										<!--<md-option ng-repeat="tipoFaturamento in tipoList" ng-value="tipoFaturamento" value="{{ tipoFaturamento }}">{{ tipoFaturamento.nome }}</md-option>-->
+										<!--</md-select>-->
+										<!--<div ng-messages="form.combo_tipo.$error" role="alert">-->
+										<!--<div id="msg_obrig_agencia" ng-message="required">Obrigatório.</div>-->
+										<!--</div>-->
+										<!--</md-input-container>-->
+									</div>
+
+									<div class="p-16" flex layout layout layout-sm="column">
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_emissao_de_input">Emissão de</label>
+											<input id="emissao_de_input" max-date="object.emissaoAte"
+												   ng-model="object.emissaoDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_emissao_ate_input">Emissão até</label>
+											<input id="emissao_ate_input" min-date="object.emissaoDe"
+												   ng-model="object.emissaoAte" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_vencimento_de_input">Vencimento de</label>
+											<input id="vencimento_de_input" max-date="object.dataVencimentoAte"
+												   ng-model="object.dataVencimentoDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_vencimento_ate_input">Vencimento até</label>
+											<input id="vencimento_ate_input" min-date="object.dataVencimentoDe"
+												   ng-model="object.dataVencimentoAte" tt-date-picker type="text">
+										</md-input-container>
+									</div>
+
+									<div class="p-16" flex layout layout layout-sm="column" style="margin-top: -40px">
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_pagamento_de_input">Pagamento de</label>
+											<input id="pagamento_de_input" max-date="object.periodoAte"
+												   ng-model="object.periodoDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_pagamento_ate_input">Pagamento até</label>
+											<input id="pagamento_ate_input" min-date="object.periodoDe"
+												   ng-model="object.periodoAte" tt-date-picker type="text">
+										</md-input-container>
+
+										<!--<md-content class="md-datepicker-custom" style="overflow:hidden;" flex="25">-->
+										<!--<label class="md-caption label_datapicker" ng-if="object.periodoDe != null">Período de</label>-->
+										<!--<md-datepicker id="periodo_de" flex name="periodode" ng-model="object.periodoDe" md-placeholder="Período de" flex md-max-date="object.periodoAte" name="emissao_de"></md-datepicker>-->
+										<!--<div ng-messages="form.periodode.$error" ng-show="faturamento.periodode.$touched" role="alert">-->
+										<!--<div id="msg_obrig_periodo_de" ng-message="required" class="msg_datapicker">"Obrigatório.</div>-->
+										<!--</div>-->
+										<!--</md-content>-->
+
+										<!--<md-content class="md-datepicker-custom" style="overflow:hidden;" flex="25">-->
+										<!--<label class="md-caption label_datapicker" ng-if="object.periodoAte != null">Período até</label>-->
+										<!--<md-datepicker id="periodo_ate" flex name="periodoate" ng-model="object.periodoAte" md-placeholder="Período até" md-min-date="object.periodoDe" flex name="emissao_ate"></md-datepicker>-->
+										<!--<div ng-messages="form.periodoate.$error" ng-show="faturamento.periodoate.$touched" role="alert">-->
+										<!--<div id="msg_obrig_periodo_ate" ng-message="required" class="msg_datapicker">"Obrigatório.</div>-->
+										<!--</div>-->
+										<!--</md-content>-->
+
+										<md-input-container flex="25" flex-sm="25">
+											<label id="lbl_valorDe">Valor bruto de (R$)</label>
+											<input class="text-left" flex flex id="input_valorDe" maxlength="18"
+												   name="valor_de" ng-model="object.valorDe" type="text"
+												   ui-number-mask="2" value="{{ object.totalDe }}">
+										</md-input-container>
+										<div ng-messages="form.valorDe.$error" ng-show="faturamento.valorDe.$touched"
+											 role="alert">
+											<div id="msg_obrig_valor_de" ng-message="required">Obrigatório.</div>
+										</div>
+										<div ng-messages="form.valorDe" ng-show="validaValorDeAte()" role="alert">
+											<div id="msg_valor_de" ng-message="required">O valor do campo "Valor de"
+												deve ser menor que o valor do campo "Valor até.".
+											</div>
+										</div>
+
+										<md-input-container flex="25" flex-sm="25">
+											<label id="lbl_valorAte">Valor bruto até (R$)</label>
+											<input class="text-left" flex id="input_valorAte" maxlength="18"
+												   name="valor_ate" ng-model="object.valorAte" type="text"
+												   ui-number-mask="2" value="{{ object.totalAte }}">
+										</md-input-container>
+										<div ng-messages="form.valorAte.$error" ng-show="faturamento.valorAte.$touched"
+											 role="alert">
+											<div id="msg_obrig_valor_ate" ng-message="required">Obrigatório.</div>
+										</div>
+										<div ng-messages="form.valorAte" ng-show="validaValorDeAte()" role="alert">
+											<div id="msg_valor_ate" ng-message="required">O valor do campo "Valor até"
+												deve ser maior que o valor do campo "Valor de.".
+											</div>
+										</div>
+									</div>
+
+									<div class="p-16" flex layout layout layout-sm="column" style="margin-top: -45px">
+
+										<picklist id="pickListCcCl" name="pickListCcCl" pick-flex="100"
+												  pick-label-src="CC/CL" pick-model="tselected"
+												  pick-options="cl.name for cl in toptions" size="10"/>
+
+									</div>
+
+
+									<!-- / CONTENT -->
+
+									<div class="p-16" ng-if="screenMode != 'VIEW'" style="margin-top: -30px">
+										<span>*</span>&nbsp;Campos obrigatórios / É obrigatório informar, pelo menos, um
+										período de datas
+									</div>
+
+
+									<md-divider></md-divider>
+
+									<section layout="row" layout-sm="row" layout-wrap>
+										<div class="p-8" flex="100" flex-sm="30" layout="row"
+											 layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_novo"
+													   ng-click="gerarRelatorio()" ng-disabled="form.$invalid">Gerar
+												relatório
+											</md-button>
+
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+									</section>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<!-- / CONTENT -->
+	</div>
+</div>

@@ -1,0 +1,435 @@
+<div class="page-layout simple fullwidth" ng-controller="LancamentosDetailCtrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ ::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ screenMode === 'VIEW' ? 'Exibição' : (screenMode === 'EDIT' ? 'Edição' : 'Novo') }}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">{{ ::titulo }} - Dados Gerais</div>
+						</header>
+
+						<div class="text-center"><img ng-show="object == null" src="../img/carregando.gif"
+													  style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/>
+						</div>
+
+						<div ng-show="object != null">
+							<div class="white-500-bg">
+								<form name="LancamentoForm" novalidate>
+									<div flex layout="column" ng-show="screenMode !== 'VIEW'">
+										<div class="p-16" flex layout="column">
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex="25" flex-sm="100" flex-xs="100">
+													<label id="lbl_numero">Número</label>
+													<input id="input_numero" name="input_numero" ng-disabled="true"
+														   type="text" value="{{ object.numero }}">
+												</md-input-container>
+
+												<md-input-container flex="25" flex-sm="100" flex-xs="100">
+													<label id="lbl_situacao">Situação</label>
+													<input id="input_situacao" name="input_situacao" ng-disabled="true"
+														   type="text" value="{{ object.status }}">
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_pag">Pagamento</label>
+													<input id="lbl_paga" name="pagamento" ng-model="object.data"
+														   ng-required="true" required tt-date-picker type="text">
+													<div ng-messages="LancamentoForm.pagamento.$error"
+														 ng-show="LancamentoForm.pagamento.$touched">
+														<div ng-message="required">
+															Obrigatório.
+														</div>
+													</div>
+												</md-input-container>
+
+												<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																	ng-show="screenMode === 'NEW'">
+													<label id="lbl_empresa">Empresa</label>
+													<md-select id="combo_empresa" name="empresa"
+															   ng-change="changeEmpresa()"
+															   ng-disabled="screenMode === 'EDIT'"
+															   ng-model="object.unidade"
+															   ng-model-options="{trackBy: '$value.codigo'}"
+															   ng-required="screenMode === 'NEW'" required>
+														<md-option ng-repeat="item in listEmpresas track by $index"
+																   ng-value="item" value="{{ item }}">{{ item.codnome }}
+														</md-option>
+													</md-select>
+													<div ng-messages="LancamentoForm.empresa.$error"
+														 ng-show="LancamentoForm.empresa.$touched">
+														<div ng-message="required">
+															Obrigatório.
+														</div>
+													</div>
+												</md-input-container>
+
+												<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																	ng-show="screenMode === 'EDIT'">
+													<label id="lbl_empresa_exibicao">Empresa</label>
+													<input id="input_empresa" name="input_empresa" ng-disabled="true"
+														   type="text" value="{{ object.unidade.codnome }}">
+												</md-input-container>
+
+											</div>
+
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_banco">Banco</label>
+													<md-select id="combo_banco" name="banco" ng-change="changeBanco()"
+															   ng-disabled="object.unidade == null || listBancos.length == 0"
+															   ng-model="object.banco"
+															   ng-model-options="{trackBy: '$value.codigo'}"
+															   ng-required="true" required>
+														<md-option
+															ng-repeat="item in listBancos | unique: 'codigo' track by $index"
+															ng-value="item" value="{{ item }}">{{item.nome}}
+														</md-option>
+													</md-select>
+													<div ng-messages="LancamentoForm.banco.$error"
+														 ng-show="LancamentoForm.banco.$touched">
+														<div ng-message="required">
+															Obrigatório.
+														</div>
+													</div>
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="50">
+													<label id="lbl_agencia">Agência / Conta</label>
+													<md-select id="combo_agencia" name="agencia"
+															   ng-change="changeAgencia()"
+															   ng-disabled="object.unidade == null || object.banco == null"
+															   ng-model="object.contaCorrente"
+															   ng-model-options="{trackBy: '$value.codigo'}"
+															   ng-required="true" required>
+														<md-option ng-repeat="item in listAgencias track by $index"
+																   ng-value="item" value="{{ item }}">
+															{{ item.codigo == null ? '' : item.agencia + ' / ' +
+															item.conta + '-' + item.digito }}
+														</md-option>
+													</md-select>
+													<div ng-messages="LancamentoForm.agencia.$error"
+														 ng-show="LancamentoForm.agencia.$touched">
+														<div ng-message="required">
+															Obrigatório.
+														</div>
+													</div>
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_valor">Valor</label>
+													<input id="input_valor" maxlength="18" name="input_valor"
+														   ng-model="object.valor" ng-required="true" type="text"
+														   ui-number-mask="2">
+													<div ng-messages="LancamentoForm.input_valor.$error"
+														 ng-show="LancamentoForm.input_valor.$touched">
+														<div ng-message="required">
+															Obrigatório.
+														</div>
+													</div>
+												</md-input-container>
+
+											</div>
+
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-autocomplete flex
+																 flex flex-gt-md="75"
+																 id="autocomplete_conta_contabil" md-delay="250"
+																 md-floating-label="Conta contábil"
+																 md-input-id="input_numero_conta_contabil"
+																 md-input-name="autocompleteContaContabil"
+																 md-item-text="item.numero + ' - ' + item.descricao"
+																 md-items="item in querySearchContaContabil(searchTextContaContabil)"
+																 md-menu-class="autocomplete-custom-template"
+																 md-min-length="3"
+																 md-no-cache="true"
+																 md-search-text="searchTextContaContabil"
+																 md-selected-item="selectedItemContaContabil"
+																 md-selected-item-change="selectedItemChange(item)"
+																 name="autocompleteContaContabil"
+																 ng-disabled="!object.unidade"
+																 ng-required="true">
+													<md-item-template>
+														<span class="item-title">
+															<h3> <span md-highlight-flags="i"
+																	   md-highlight-text="searchTextContaContabil"> {{item.numero}} - {{item.descricao}} </span> </h3>
+														</span>
+													</md-item-template>
+
+													<div ng-messages="LancamentoForm.autocompleteContaContabil.$error"
+														 ng-show="LancamentoForm.autocompleteContaContabil.$touched"
+														 role="alert">
+														<div id="msg_req_client" ng-message="required">Obrigatório.
+														</div>
+														<div id="msg_min_client" ng-message="minlength">O nome informado
+															não é suficiente.
+														</div>
+														<div id="msg_max_client" ng-message="maxlength">O nome informado
+															é muito longo.
+														</div>
+													</div>
+												</md-autocomplete>
+
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_debito">Débito / Crédito</label>
+													<md-select id="combo_debito" name="debito"
+															   ng-change="changeDebitoCredito()"
+															   ng-model="object.debitoCredito">
+														<md-option ng-repeat="item in listDebitoCredito track by $index"
+																   ng-value="item">
+															{{ item === "C" ? "Crédito" : "Débito" }}
+														</md-option>
+													</md-select>
+												</md-input-container>
+
+											</div>
+
+										</div>
+
+										<div class="p-16" flex layout="row" layout-align="start start"
+											 style="margin-top: -30px;">
+											<span class="red-fg">*&nbsp;</span> Campos obrigatórios
+										</div>
+
+									</div>
+
+									<div flex layout="column" ng-show="screenMode === 'VIEW'">
+										<div class="p-16" flex layout="column">
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex="25" flex-sm="100" flex-xs="100">
+													<label id="lbl_numero_exibir">Número</label>
+													<input id="input_numero_exibir" name="input_numero_exibir"
+														   ng-disabled="true" type="text" value="{{::object.numero}}">
+												</md-input-container>
+
+												<md-input-container flex="25" flex-sm="100" flex-xs="100">
+													<label id="lbl_situacao_exibir">Situação</label>
+													<input id="input_situacao_exibir" name="input_situacao_exibir"
+														   ng-disabled="true" type="text" value="{{object.status}}">
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_pag_exibir">Pagamento</label>
+													<input id="lbl_paga_exibir" name="pagamento_exibir"
+														   ng-disabled="true" type="text"
+														   value="{{::object.data | date : 'dd/MM/yyyy' }}">
+												</md-input-container>
+
+												<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																	ng-show="screenMode === 'VIEW'">
+													<label id="lbl_empresa_exibir">Empresa</label>
+													<input id="input_empresa_exibir" name="input_empresa"
+														   ng-disabled="true" type="text"
+														   value="{{::object.unidade.codnome }}">
+												</md-input-container>
+											</div>
+
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_banco_exibir">Banco</label>
+													<input id="input_banco_exibir" name="input_banco" ng-disabled="true"
+														   type="text" value="{{::object.contaCorrente.banco.nome }}">
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="50">
+													<label id="lbl_agencia_exibir">Agência / Conta</label>
+													<input id="input_agencia_exibir" name="input_agencia"
+														   ng-disabled="true" type="text"
+														   value="{{::object.contaCorrente.agencia }} / {{::object.contaCorrente.conta }}-{{::object.contaCorrente.digito }} ">
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_valor_exibir">Valor</label>
+													<input id="input_valor_exibir" name="input_valor_exibir"
+														   ng-disabled="true" type="text"
+														   value="{{::object.valor | currency:'':2 }}">
+												</md-input-container>
+
+											</div>
+
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex flex-gt-md="75">
+													<label id="lbl_conta_contabil_exibir">Conta contábil</label>
+													<input id="input_conta_contabil_exibir"
+														   name="input_conta_contabil_exibir" ng-disabled="true"
+														   type="text"
+														   value="{{ ::object.contaContabil.numero }} - {{ ::object.contaContabil.descricao }}">
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_debito_exibir">Débito / Crédito</label>
+													<input id="input_debito_exibir" name="input_debito_exibir"
+														   ng-disabled="true" type="text"
+														   value="{{ object.debitoCredito === 'D' ? 'Débito' : 'Crédito' }}">
+												</md-input-container>
+
+											</div>
+										</div>
+										<md-tabs md-border-bottom md-dynamic-height>
+											<md-tab label="Controles">
+												<md-content class="md-padding">
+													<div flex layout="row" layout-sm="row" layout-xs="column">
+														<md-input-container flex="70" flex-xs="100">
+															<label>Cadastramento</label>
+															<input id="cadastramento" name="cadastramento"
+																   ng-disabled="true" type="text"
+																   value="{{ ::object.nomeCriador }}">
+														</md-input-container>
+
+														<md-input-container flex="30" flex-xs="100">
+															<label>Data/hora</label>
+															<input id="data_hora" name="data_hora" ng-disabled="true"
+																   type="text"
+																   value="{{ ::object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+														</md-input-container>
+													</div>
+
+													<div flex layout="row" layout-sm="row" layout-xs="column">
+														<md-input-container flex="70" flex-xs="100">
+															<label>Última alteração</label>
+															<input id="alteracao" name="alteracao" ng-disabled="true"
+																   type="text" value="{{ object.nomeAtualizador }}">
+														</md-input-container>
+
+														<md-input-container flex="30" flex-xs="100">
+															<label>Data/hora</label>
+															<input id="data_hora2" name="data_hora2" ng-disabled="true"
+																   type="text"
+																   value="{{ object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+														</md-input-container>
+													</div>
+
+													<div flex layout="row" layout-sm="row" layout-xs="column">
+														<md-input-container flex="70" flex-xs="100">
+															<label>Cancelamento</label>
+															<input id="cancelamento" name="cancelamento"
+																   ng-disabled="true" type="text"
+																   value="{{ object.colaboradorCancelamento.nome }}">
+														</md-input-container>
+
+														<md-input-container flex="30" flex-xs="100">
+															<label>Data/hora</label>
+															<input id="data_hora5" name="data_hora5" ng-disabled="true"
+																   type="text"
+																   value="{{ object.dataCancelamento | date:'dd/MM/yyyy HH:mm:ss' }}">
+														</md-input-container>
+													</div>
+												</md-content>
+											</md-tab>
+										</md-tabs>
+
+									</div>
+
+									<md-divider></md-divider>
+									<div class="p-8" flex layout="row" layout-align="start start" layout-xs="column"
+										 ng-show="screenMode !== 'VIEW'">
+										<md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvar()"
+												   ng-disabled="action || LancamentoForm.$invalid || !object.contaContabil">
+											Salvar
+											<img ng-show="action" src="../img/gray_carregando.gif"
+												 style="height: 20px;width: 20px;margin-top: 8px;"/>
+											<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+												<span class="h4">Salvar as alterações realizadas neste lançamento</span>
+											</md-tooltip>
+										</md-button>
+
+										<md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvarNovo()"
+												   ng-disabled="action || LancamentoForm.$invalid || !object.contaContabil"
+												   ng-show="screenMode === 'NEW'">
+											Salvar e Novo
+											<img ng-show="action" src="../img/gray_carregando.gif"
+												 style="height: 20px;width: 20px;margin-top: 8px;"/>
+											<md-tooltip id="tool_tip_btn_salvar_novo" md-direction="bottom">
+												<span class="h4">Salvar as alterações realizadas neste lançamento e criar um novo lançamento</span>
+											</md-tooltip>
+										</md-button>
+
+										<md-button class="md-raised md-accent" id="btn_cancelar"
+												   ng-click="cancelarEdit()" ng-disabled="action">
+											Cancelar
+											<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+												<span class="h4">Sair deste lançamento, sem gravar as modificações realizadas</span>
+											</md-tooltip>
+										</md-button>
+									</div>
+
+									<div class="p-8" flex layout="row" layout-xs="column"
+										 ng-show="screenMode === 'VIEW'">
+										<div flex layout="row" layout-align="start start">
+											<md-button aria-label="Editar" class="md-raised md-accent" id="btn_editar"
+													   ng-click="editar()"
+													   ng-disabled="action || object.status !== 'Aberto'">
+												Editar
+												<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+													<span class="h4">Editar os dados deste lançamento</span>
+												</md-tooltip>
+											</md-button>
+
+											<md-button aria-label="Retornar" class="md-raised md-accent"
+													   id="btn_retornar" ng-click="retornar()" ng-disabled="action">
+												Retornar
+												<md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+													<span
+														class="h4">Sair desta tela e retornar para a tela anterior</span>
+												</md-tooltip>
+											</md-button>
+
+										</div>
+
+										<div flex layout="row" layout-align="end center">
+											<md-button aria-label="Remover" class="md-raised md-accent" id="btn_remover"
+													   ng-click="remover($event)"
+													   ng-disabled="action || object.status !== 'Aberto'">
+												Remover
+												<md-tooltip id="tool_tip_btn_remover" md-direction="bottom">
+													<span class="h4">Remover este lançamento (esta operação não poderá ser desfeita)</span>
+												</md-tooltip>
+											</md-button>
+
+											<md-button aria-label="Cancelar LT" class="md-raised md-accent"
+													   id="btn_cancelar_rb" ng-click="cancelar($event)"
+													   ng-disabled="action || object.status !== 'Aberto'">
+												Cancelar LT
+												<md-tooltip id="tool_tip_btn_cancelar_lt" md-direction="bottom">
+													<span class="h4">Cancelar este lançamento (esta operação não poderá ser desfeita)</span>
+												</md-tooltip>
+											</md-button>
+
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / CONTENT -->
+	</div>
+</div>

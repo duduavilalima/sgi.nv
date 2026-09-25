@@ -1,0 +1,40 @@
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_cadastramento_faturamento">Cadastramento</label>
+		<input class="text-left" id="input_cadastramento_faturamento" name="cadastramento_faturamento"
+			   ng-disabled="true" type="text" value="{{ ::object.nomeCriador }}">
+	</md-input-container>
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_cadastramento_dialog_etapa">Data/hora</label>
+		<input class="text-left" id="input_data_hora_cadastramento_dialog_etapa"
+			   name="data_hora_cadastramento_dialog_etapa" ng-disabled="true" type="text"
+			   value="{{ object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_ultima_alteracao_faturamento">Última alteração</label>
+		<input class="text-left" id="input_ultima_alteracao_faturamento" name="ultima_alteracao_faturamento"
+			   ng-disabled="true" type="text" value="{{ ::object.nomeAtualizador }}">
+	</md-input-container>
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_ultima_alteracao_faturamento">Data/hora</label>
+		<input class="text-left" id="input_data_hora_ultima_alteracao_faturamento"
+			   name="data_hora_ultima_alteracao_faturamento" ng-disabled="true" type="text"
+			   value="{{ object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_cancelamento_faturamento">Cancelamento</label>
+		<input class="text-left" id="input_cancelamento_faturamento" name="cancelamento_faturamento" ng-disabled="true"
+			   type="text" value="{{ ::object.cancelador.nome }}">
+	</md-input-container>
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_cancelamento_faturamento">Data/hora</label>
+		<input class="text-left" id="input_data_hora_cancelamento_faturamento" name="data_hora_cancelamento_faturamento"
+			   ng-disabled="true" type="text" value="{{ object.dataCancelamento| date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>

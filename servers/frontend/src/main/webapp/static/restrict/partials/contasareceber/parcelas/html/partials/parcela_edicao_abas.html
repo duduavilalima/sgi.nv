@@ -1,0 +1,172 @@
+<div class="page-layout simple fullwidth" ng-controller="ContasAReceberCadastroCtrl">
+	<!--ng-show="object && object != null && object.codigo != null"-->
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ ::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ subtitulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">{{ ::titulo }} - {{subtitulo}}</div>
+						</header>
+
+						<div class="text-center"><img ng-show="object.codigo == null" src="../img/carregando.gif"
+													  style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/>
+						</div>
+
+						<div ng-show="object.codigo != null">
+							<div class="white-500-bg">
+
+								<div class="padding-16">
+
+									<form>
+										<div layout layout-sm="column" layout-wrap>
+											<div flex="25" flex-sm="100" layout="column"
+												 style="padding-left: 6px; margin-top: -4px;">
+												<label id="lbl_numero">Número da NF</label>
+												<span class="link-contrato" ng-click="openNewTargetNF()"><b>{{ object.notaSaida.numero }}</b></span>
+											</div>
+											<span style="width: 2.5px;"></span>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_parcela">Parcela</label>
+												<input id="input_parcela" name="input_parcela" ng-disabled="true"
+													   ng-model="object.ordem" type="text">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_situacao">Situação</label>
+												<input id="input_situacao" name="input_situacao" ng-disabled="true"
+													   type="text"
+													   value="{{object.situacao == 'Aberta (NF não processada)' ? 'Aberta' : object.situacao == 'Finalizada (recebida)' ? 'Recebida' : object.situacao}}">
+											</md-input-container>
+
+											<md-input-container flex>
+												<label id="lbl_empresa">Matriz/Filial</label>
+												<input id="input_empresa" name="input_empresa" ng-disabled="true"
+													   ng-model="object.notaSaida.empresa.codnome" type="text">
+											</md-input-container>
+										</div>
+
+										<div layout layout-sm="column" layout-wrap>
+
+											<div flex layout="column"
+												style="height: 52px;width: 98%;overflow: hidden;border-bottom: dotted;display: inline-block;border-bottom-color: transparent;background-image: linear-gradient(90deg, rgba(0,0,0,0.98) 0, rgba(0,0,0,0.98) 38%, transparent 0);
+											background-image: -ms-linear-gradient(left, transparent 0, rgba(0,0,0,0.38) 100%);background-position: bottom -1px left 0;background-size: 4px 1px;background-repeat: repeat-x;">
+												<label id="lbl_cliente_aba_faturamento"
+													style="margin-top: -4px;">Cliente</label>
+												<div>
+													<span class="link-contrato" style="margin-top: 5px;"
+													ng-click="exibirDetalheCliente(object.notaSaida.faturamentoEtapaTO.faturamento.cliente.codigo, object.notaSaida.faturamentoEtapaTO.faturamento.cliente.tipoPessoa, object.notaSaida.faturamentoEtapaTO.faturamento.cliente.tipoPessoa, $event);">
+														{{ object.notaSaida.faturamentoEtapaTO.faturamento.cliente.nome }}
+													</span>
+												</div>
+											</div>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_centro_lucro">Centro de lucro</label>
+												<input id="input_centro_lucro" name="input_centro_lucro"
+													   ng-disabled="true" type="text"
+													   value="{{object.notaSaida.centroFinanceiro.identificadorFinal + ' - ' + object.notaSaida.centroFinanceiro.nome}}">
+												<md-tooltip id="tool_input_centro_lucro" md-direction="bottom">
+													<span class="h4">{{object.notaSaida.centroFinanceiro.identificadorFinal + ' - ' + object.notaSaida.centroFinanceiro.nome}}</span>
+												</md-tooltip>
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_tipo_faturamento">Tipo de faturamento</label>
+												<input id="input_tipo_faturamento" name="input_tipo_faturamento"
+													   ng-disabled="true" type="text"
+													   value="{{ object.notaSaida.faturamentoEtapaTO.faturamento.tipo }}">
+											</md-input-container>
+
+										</div>
+									</form>
+
+
+									<md-content>
+										<md-tabs id="abas_parcelas" md-border-bottom md-dynamic-height
+												 md-selected="index" name="abas_parcelas">
+											<md-tab id="aba_recebimento" label="Recebimento" name="aba_recebimento">
+												<form name="wizardStep1">
+													<div class="padding-16"
+														 ng-include="'partials/contasareceber/parcelas/html/partials/aba_recebimento_edicao.html'">
+													</div>
+												</form>
+											</md-tab>
+											<md-tab id="aba_tributos" label="Tributos" name="aba_tributos"
+													ng-if="object != null && object.codigo != null && object.notaSaida.tipoFornecimento != 'so material'">
+												<form name="wizardStep2">
+													<div class="padding-16"
+														 ng-include="'partials/contasareceber/parcelas/html/partials/aba_tributos_edicao.html'">
+													</div>
+												</form>
+											</md-tab>
+											<md-tab id="aba_desconto_devolucao" label="DESCONTO / DEVOLUÇÃO"
+													name="aba_desconto_devolucao"
+													ng-if="object != null && object.codigo != null">
+												<form name="wizardStep3">
+													<div class="padding-16"
+														 ng-include="'partials/contasareceber/parcelas/html/partials/aba_desconto_devolucao_edicao.html'">
+													</div>
+												</form>
+											</md-tab>
+										</md-tabs>
+
+										<md-divider></md-divider>
+
+										<div class="navigation padding-8" flex layout="row" ng-if="!temPerfilFaturamentoCnsGerencia">
+
+											<md-button class="md-raised md-accent" id="btn_receber"
+													   ng-click="salvarRecebimentoParcela()"
+													   ng-disabled="action || wizardStep1.$invalid">
+												Receber
+												<img ng-show="action" src="../img/gray_carregando.gif"
+													 style="height: 20px;width: 20px;margin-top: 8px;"/>
+												<md-tooltip id="tool_tip_btn_receber" md-direction="bottom">
+													<span class="h4">Confirmar o recebimento desta parcela</span>
+												</md-tooltip>
+											</md-button>
+
+											<md-button class="md-raised md-accent" id="btn_cancelar_recebimento"
+													   ng-click="cancelarRecebimento()" ng-disabled="action">
+												Cancelar
+												<md-tooltip id="tool_tip_btn_cancelar_recebimento"
+															md-direction="bottom">
+													<span class="h4">Cancelar o recebimento desta parcela, sem gravar as modificações realizadas</span>
+												</md-tooltip>
+											</md-button>
+										</div>
+
+									</md-content>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / CONTENT -->
+	</div>
+</div>

@@ -1,0 +1,68 @@
+<md-dialog aria-label="Editar pagamentos" style="width: 800px">
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Alterar pagamentos</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: white !important;"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+
+		<md-dialog-content>
+			<div class="md-dialog-content md-dialog-content-body" layout="column">
+				<div flex layout="row">
+					<form name="FormDialog" novalidate>
+						<md-input-container flex="35">
+							<label for="lbl_numero_pagamentos">Pagamentos selecionados</label>
+							<input class="text-left" id="lbl_numero_pagamentos" name="numero-pagamentos"
+								   ng-disabled="true" type="text" value="{{object.quantidadesPagamentos}}">
+						</md-input-container>
+
+						<md-input-container flex="40">
+							<label id="lbl_documento">Documento para pagamento</label>
+							<md-select id="combo_documento" name="combo_documento"
+									   ng-model="object.tipoDocumentoPagamento">
+								<md-option ng-value="null"></md-option>
+								<md-option ng-repeat="item in listTipoDoc" ng-value="item">{{item}}</md-option>
+							</md-select>
+							<div ng-messages="FormDialog.combo_documento.$error"
+								 ng-show="FormDialog.combo_documento.$touched">
+								<div ng-message="required">
+									Obrigatório.
+								</div>
+							</div>
+						</md-input-container>
+
+						<md-input-container flex="25">
+							<label id="lbl_pagamento">Pagamento</label>
+							<input id="pagamento_input" name="pagamento" ng-model="object.dataPagamento" tt-date-picker
+								   type="text">
+							<div ng-messages="FormDialog.pagamento.$error" ng-show="FormDialog.pagamento.$touched">
+								<div ng-message="required">
+									Obrigatório.
+								</div>
+							</div>
+						</md-input-container>
+					</form>
+				</div>
+			</div>
+
+		</md-dialog-content>
+
+		<md-dialog-actions layout="row">
+			<md-button class="md-raised md-accent" id="btn_salvar_confirmar" ng-click="confirm()"
+					   ng-disabled="(object.dataPagamento == '' && object.tipoDocumentoPagamento == null) || action">
+				<img ng-show="action" src="../img/gray_carregando.gif"
+					 style="height: 20px;width: 20px;margin-top: 8px;"/>
+				CONFIRMAR
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_cancelar_remover" ng-click="cancel()" ng-disabled="action">
+				Fechar
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

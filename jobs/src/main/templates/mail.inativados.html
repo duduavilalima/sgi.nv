@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+</head>
+<body>
+<body>
+<p>Prezado,</p>
+<p>O lote <strong th:text="${#emailBean.codigoLoteFormatado}">LT/0000</strong>
+	com o arquivo "<span th:text="${#emailBean.nomeArquivo}">arquivoSemNome.txt</span>"
+	para inativação de usuários <strong>
+		<span th:if="${not #emailBean.sucesso and #emailBean.motivoErro eq 'ARQUIVO_VAZIO'}">não foi importado, pois o arquivo não possui registros.</span>
+		<span th:if="${not #emailBean.sucesso and #emailBean.motivoErro eq 'CPF_NAO_NUMERICO'}">não foi importado, pois o arquivo possui um CPF a ser inativado não numérico.</span>
+		<span th:if="${not #emailBean.sucesso and #emailBean.motivoErro eq 'NOME_VAZIO'}">não foi importado, pois o arquivo possui um nome a ser inativado em branco.</span>
+		<span th:if="${not #emailBean.sucesso and #emailBean.motivoErro eq 'FORMATO_LINHA_INVALIDO'}">não foi importado, pois o arquivo não corresponde ao padrão definido.</span>
+		<span th:if="${not #emailBean.sucesso and #emailBean.motivoErro.empty}">não foi importado.</span>
+		<span th:if="${#emailBean.sucesso}">foi importado.</span>
+	</strong>
+</p>
+<p th:if="${#emailBean.sucesso}">
+<ul>
+	<li>Total de registros: <span th:text="${#emailBean.totalRegistros}">0!</span></li>
+	<li>Não cadastrados: <span th:text="${#emailBean.totalNaoLocalizado}">0!</span></li>
+	<li>Inativos com prestação de contas: <span th:text="${#emailBean.totalImportadoComPc}">0!</span></li>
+	<li>Inativos sem prestação de contas: <span th:text="${#emailBean.totalImportadoSemPc}">0!</span></li>
+	<li>Já inativos: <span th:text="${#emailBean.totalJaInativado}">0!</span></li>
+	<li>Não inativados pelo perfil: <span th:text="${#emailBean.totalIgnorado}">0!</span></li>
+</ul>
+</p>
+<p>Equipe Araujo Abreu</p>
+<p><i>Esta mensagem foi gerada automaticamente pelo Sistema de Gestão Integrada da Araujo Abreu.</i></p>
+</body>
+</body>
+</html>

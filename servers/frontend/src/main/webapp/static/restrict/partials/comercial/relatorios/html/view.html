@@ -1,0 +1,152 @@
+<div class="page-layout simple fullwidth">
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<span class="parent" id="modulo">Comercial</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">Relatórios</span>
+				<!-- <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="subtitulo">Pesquisar</span> -->
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+			<div class="content" flex>
+
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">Relatórios - Filtros de pesquisa</div>
+							</header>
+							<div class="content">
+								<form name="form" novalidate>
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_relatorios">Relatório</label>
+											<md-select id="combo_relatorios" name="relatorios"
+												ng-model="$ctrl.object.relatorios" ng-required="true" required>
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in $ctrl.listRelatorios" ng-value="item"
+													>{{ item.nome }}
+												</md-option>
+											</md-select>
+											<div ng-messages="form.relatorios.$error" ng-show="form.relatorios.$touched"
+												role="alert">
+												<div ng-message="required">
+													Obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex>
+											<label id="lbl_formato">Formato</label>
+											<md-select id="combo_formato" name="formato"
+												ng-model="$ctrl.object.tipoFormato"
+												ng-model-options="{trackBy: '$value.codigo'}">
+												<md-option ng-repeat="formato in $ctrl.tiposFormatos"
+													ng-value="formato">{{formato.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex>
+											<label id="combo_empresa_label">Matriz / Filial</label>
+											<md-select id="combo_empresa" multiple name="empresa"
+												ng-change="marcarOpcao()" ng-model="$ctrl.object.unidade" ng-required="false">
+												<div ng-repeat="unidade in empresaList">
+													<div style="padding-top: 10px;
+														padding-left: 5px;
+														background: rgba(128, 128, 128, 0.53);
+														color: #fff;
+														font-weight: bold;">
+														<md-checkbox aria-label="Todos"
+															ng-change="todos(unidade.todos, unidade)"
+															ng-model="unidade.todos">
+															<div>{{unidade.empresa}}</div>
+														</md-checkbox>
+													</div>
+													<md-option
+														ng-repeat="filial in unidade.filiais | orderBy:['tipoUnidade','codnome']"
+														ng-value="filial.codigo">{{filial.codnome}}
+													</md-option>
+												</div>
+											</md-select>
+										</md-input-container>
+
+									</div>
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_gerencia">Gerência</label>
+											<md-select id="combo_gerencia" name="gerencia"
+												ng-model="$ctrl.object.gerencia"
+												ng-disabled="$ctrl.gerenciaList.length === 1">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in $ctrl.gerenciaList" ng-value="item"
+													>{{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_situacao">Situação</label>
+											<md-select id="combo_situacao" name="situacao"
+												ng-model="$ctrl.object.situacao">
+												<md-option ng-repeat="item in $ctrl.listSituacoes" ng-value="item"
+													>{{item.nome}}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_classCliente">Classificação do cliente</label>
+											<md-select id="combo_class" name="classCliente"
+												ng-model="$ctrl.object.classCliente">
+												<md-option ng-repeat="item in $ctrl.listClassificacao" ng-value="item"
+													>{{item.nome}}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div style="margin-top: 10px">
+										<span>*</span>&nbsp;Campos obrigatórios
+									</div>
+
+									<section class="mt-15" layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_gerar" name="btn_gerar"
+												ng-click="$ctrl.gerarRelatorio()" ng-disabled="form.$invalid">
+												Gerar relatório
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+												ng-click="$ctrl.reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+										<div flex="auto" layout-wrap show-gt-sm>
+										</div>
+									</section>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+</div>

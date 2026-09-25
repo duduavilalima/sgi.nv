@@ -1,0 +1,264 @@
+<div class="page-layout simple fullwidth" ng-controller="RelatoriosCtrl">
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{::titulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+			<div class="content" flex>
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">{{ ::titulo}} - Filtro de Relatório</div>
+							</header>
+							<div class="content">
+								<form name="form" novalidate>
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_relatorios">Relatórios</label>
+											<md-select id="combo_relatorios" name="relatorios"
+													   ng-model="object.relatorios" ng-required="true" required>
+												<md-option ng-value="" value=""></md-option>
+												<md-option ng-repeat="item in listRelatorios" ng-value="item"
+														   value="{{ item }}">{{ item.nome }}
+												</md-option>
+											</md-select>
+											<div ng-messages="form.relatorios.$error" ng-show="form.relatorios.$touched"
+												 role="alert">
+												<div ng-message="required">
+													Obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25"
+															ng-if="object.relatorios.nome == 'Relação de documentos lançados'">
+											<label id="lbl_aprov">Aprov. gerente</label>
+											<md-select id="combo_aprov" name="aprov" ng-model="object.aprovGerente">
+												<md-option ng-repeat="item in listAprovaGerente" ng-value="item"
+														   value="{{ item }}">{{ item.tipo }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+										<md-input-container flex flex-gt-md="25"
+															ng-if="object.relatorios.nome == 'Relação de documentos lançados'">
+											<label id="lbl_tipo_doc">Tipo documento</label>
+											<md-select id="combo_tipo_doc" name="tipo_doc"
+													   ng-model="object.tipoDocNotaRelatorio">
+												<md-option
+													ng-repeat="item in listTipoNotaRelatorio | filter: {categoria: 'todas' }"
+													ng-value="item" value="{{ item }}">{{item.tipo}}
+												</md-option>
+												<md-optgroup label="Nota fiscal">
+													<md-option
+														ng-repeat="item in listTipoNotaRelatorio | filter: {categoria: 'nf' }"
+														ng-value="item" value="{{ item }}">{{item.tipo}}
+													</md-option>
+												</md-optgroup>
+												<md-optgroup label="Nota de pagamento">
+													<md-option
+														ng-repeat="item in listTipoNotaRelatorio | filter: {categoria: 'np' }"
+														ng-value="item" value="{{ item }}">{{item.tipo}}
+													</md-option>
+												</md-optgroup>
+											</md-select>
+										</md-input-container>
+
+
+										<md-autocomplete flex flex-gt-md="50" flex-xs="100"
+														 id="autocomplete_fornecedor"
+														 md-delay="250" md-floating-label="Fornecedor"
+														 md-input-name="autocompleteFornecedorInp"
+														 md-item-text="item.nome"
+														 md-items="item in querySearchCliente(searchTextFornecedor)"
+														 md-menu-class="autocomplete-custom-template"
+														 md-min-length="3" md-no-cache="false"
+														 md-search-text="searchTextFornecedor"
+														 md-selected-item="selectedItemFornecedor"
+														 md-selected-item-change="selectedItemChange(item, 'fornecedor')"
+														 name="autocompleteFornecedor"
+														 ng-if="object.relatorios.nome == 'Rateio de Notas Fiscais'">
+											<md-item-template>
+												<span class="item-title"><h3> <strong> <span
+													md-highlight-text="searchTextFornecedor"> {{item.documento}} </span> </strong></h3></span>
+												<span class="item-title"><h5> <strong>RAZÃO SOCIAL: </strong> <span
+													md-highlight-flags="i" md-highlight-text="searchTextFornecedor">{{item.nome}} </span> </h5></span>
+												<span class="item-title"><h5> <strong>NOME FANTASIA: </strong> <span
+													md-highlight-flags="i" md-highlight-text="searchTextFornecedor">{{item.nomeFantasia}} </span> </h5></span>
+											</md-item-template>
+
+											<div ng-if="faturamento.autocompleteClienteInp.$touched"
+												 ng-messages="form.autocompleteClienteInp.$error" role="alert">
+												<div ng-message="required">Obrigatório.</div>
+												<div ng-message="minlength">O nome informado não é suficiente.</div>
+												<div ng-message="maxlength">O nome informado é muito longo.</div>
+											</div>
+										</md-autocomplete>
+
+									</div>
+									<div class="mt-25" layout="row" layout-sm="column" layout-wrap layout-xs="column"
+										 style="margin-top: 0px">
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_emissao_de">Emissão de</label>
+											<input id="emissao_de_input" max="object.emissaoAte"
+												   max-date="object.emissaoAte" ng-model="object.emissaoDe"
+												   tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_emissao_ate">Emissão até</label>
+											<input id="emissao_ate_input" min="object.emissaoDe"
+												   min-date="object.emissaoDe" ng-model="object.emissaoAte"
+												   tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_movimento_de">Movimento de</label>
+											<input id="movimento_de_input" max-date="object.movimentoAte"
+												   ng-model="object.movimentoDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_movimento_ate">Movimento até</label>
+											<input id="movimento_ate_input" min-date="object.movimentoDe"
+												   ng-model="object.movimentoAte" tt-date-picker type="text">
+										</md-input-container>
+
+									</div>
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<!--Ajustar esse autocomplete para conta contabil-->
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_pagamento_de">Pagamento de</label>
+											<input id="pagamento_de_input" max-date="object.pagamentoAte"
+												   ng-model="object.pagamentoDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_pagamento__ate">Pagamento até</label>
+											<input id="pagamento__ate_input" min-date="object.pagamentoDe"
+												   ng-model="object.pagamentoAte" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_situacao">Situação</label>
+											<md-select id="combo_situacao" name="situacao" ng-model="object.situacao">
+												<md-option ng-value="" value=""></md-option>
+
+												<md-option
+													ng-repeat="item in listSituacaoPagamentoRelatorio | filter: {categoria: 'todas' }"
+													ng-value="item" value="{{ item }}">{{item.tipo}}
+												</md-option>
+
+												<md-optgroup label="____________________________">
+													<md-option
+														ng-repeat="item in listSituacaoPagamentoRelatorio | filter: {categoria: '2' }"
+														ng-value="item" value="{{ item }}">{{item.tipo}}
+													</md-option>
+												</md-optgroup>
+												<md-optgroup label="____________________________">
+													<md-option
+														ng-repeat="item in listSituacaoPagamentoRelatorio | filter: {categoria: '3' }"
+														ng-value="item" value="{{ item }}">{{item.tipo}}
+													</md-option>
+												</md-optgroup>
+												<md-optgroup label="____________________________">
+													<md-option
+														ng-repeat="item in listSituacaoPagamentoRelatorio | filter: {categoria: '4' }"
+														ng-value="item" value="{{ item }}">{{item.tipo}}
+													</md-option>
+												</md-optgroup>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<!--Ajustar esse autocomplete para conta contabil-->
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_numero">Número</label>
+											<input id="input_numero" name="numero" ng-model="object.numero" type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_empresa">Empresa</label>
+											<md-select id="combo_empresa" name="empresa" ng-model="object.unidade">
+												<md-option ng-value="" value=""></md-option>
+												<md-option ng-repeat="item in listEmpresas" ng-value="item"
+														   value="{{item}}">{{ item.codnome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50" ng-if="renderedGerencia">
+											<label id="lbl_gerencia">Gerência</label>
+											<md-select id="combo_gerencia" name="gerencia" ng-change="changeGerencia()"
+													   ng-model="object.gerencia">
+												<md-option ng-value="" value=""></md-option>
+												<md-option ng-repeat="item in gerenciaList" ng-value="item"
+														   value="{{ item }}">{{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div class="p-8" flex layout layout layout-sm="column">
+
+										<picklist id="pickListCcCl" name="pickListCcCl" pick-flex="100"
+												  pick-label-src="CC/CL" pick-model="tselected"
+												  pick-options="cl.name for cl in toptions" size="10"/>
+
+									</div>
+
+									<div ng-hide="object.relatorios.relatorio == 'Relação de documentos lançados'"
+										 style="margin-top: 10px">
+										<span>*</span>&nbsp;Campos obrigatórios / É obrigatório informar, pelo menos, um
+										período de datas
+									</div>
+
+									<div ng-show="object.relatorios.relatorio == 'Relação de documentos lançados'"
+										 style="margin-top: 10px">
+										<span>*</span>&nbsp;Campos obrigatórios / Os lançamentos de Tesouraria só serão
+										listados se houver filtro pelo "Pagamento"
+									</div>
+
+									<section class="mt-15" layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_gerar" name="btn_gerar"
+													   ng-click="gerarRelatorio()" ng-disabled="form.$invalid">
+												Gerar relatório
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+										<div flex="auto" layout-wrap show-gt-sm>
+										</div>
+									</section>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+</div>

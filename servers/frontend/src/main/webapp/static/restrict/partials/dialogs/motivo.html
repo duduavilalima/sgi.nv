@@ -1,0 +1,123 @@
+<md-dialog aria-label="{{titulo}}" id="dialog_motivo" style="width: 900px;">
+	<form name="form_etapa">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_motivo" md-autofocus>{{titulo}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" id="bt_cancelar_dialog_motivo" ng-click="cancel()"
+						   style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="white-bg" role="document">
+			<form name="form">
+				<div class="padding-16">
+					<div flex layout layout-sm="row" style="margin-top: -8px">
+						<md-input-container flex="100" flex md-no-float>
+							<label id="lbl_motivos">Motivo</label>
+							<md-select id="combo_motivos" name="combo_motivos" ng-change="$emit('changeComboMotivo')"
+									   ng-disabled="listMotivos.length == 0"
+									   ng-model="object.motivoSelecionado" ng-model-options="{trackBy: '$value.codigo'}"
+									   placeholder="{{ msg }}" value="{{ motivoSelecionado }}">
+								<md-option ng-repeat="item in listMotivos" ng-value="item" value="item">{{ item.motivo
+									}}
+								</md-option>
+							</md-select>
+						</md-input-container>
+					</div>
+					<div class="simple-table-container md-whiteframe-1dp">
+						<table class="tabela_exibicao row-border hover md-caption tabela_exibicao" id="table_motivos"
+							   ms-responsive-table>
+							<thead>
+							<tr class="md-grey-200-bg">
+								<th id="head_motivo_table" width="40%">Motivo</th>
+								<th id="head_solucao_table">Solução</th>
+								<th class="text-right" id="head_opcao_table" width="60px">Opção</th>
+							</tr>
+							</thead>
+
+							<tbody ng-show="listMotivosSelecionados != null && listMotivosSelecionados.length > 0">
+							<tr ng-animate="'animate'" ng-repeat="item in listMotivosSelecionados">
+								<td id="td_motivo_{{$index}}">{{ item.motivo }}</td>
+								<td id="td_solucao_{{$index}}">{{ item.solucao }}</td>
+								<td style="padding-top: 0px; padding-bottom: 0px; padding-right: 0px;">
+									<div style="text-align: center;">
+										<md-button class="md-icon-button" id="btn_excluir_motivo_{{$index}}"
+												   name="btn_excluir_motivo_{{$index}}" ng-click="removeMotivo(item)"
+												   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+											<md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+											<md-tooltip class="h3" id="tooltip_excluir_motivo_{{$index}}"
+														md-direction="bottom">
+												Remover motivo
+											</md-tooltip>
+										</md-button>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+
+							<tbody ng-show="listMotivosSelecionados == null || listMotivosSelecionados.length == 0">
+							<tr>
+								<td class="text-center msg-empty-list" colspan="3" id="msg_nao_motivos_inf">Não existem
+									MOTIVOS informados.
+								</td>
+							</tr>
+							</tbody>
+
+						</table>
+					</div>
+					<div layout layout-sm="column" style="margin-top: 15px">
+						<md-input-container flex>
+							<label id="lbl_observacao">Observação</label>
+							<textarea columns="10" id="input_observacao" maxlength="2000" md-maxlength="2000"
+									  name="input_observacao" ng-maxlength="2000" ng-model="object.observacao"
+									  ng-required="listMotivosSelecionados.length === 0" title=" ">
+                            </textarea>
+							<div ng-messages="form.input_observacao.$error" ng-show="form.input_observacao.$touched"
+								 role="alert">
+								<div id="msg_req_obs" ng-message="required">Obrigatório.</div>
+								<div id="msg_max_obs" ng-message="maxlength">Texto Parte final é muito longo.</div>
+							</div>
+						</md-input-container>
+					</div>
+					<div flex layout layout-sm="row" ng-if="showDataCancelamento">
+						<md-input-container flex="25">
+							<label id="lbl_data_cancelamento">Cancelamento</label>
+							<input id="input_data_cancelamento" name="input_data_cancelamento"
+								   ng-model="object.dataCancelamento" ng-required="true" title=" " tt-date-picker
+								   type="text"/>
+							<div ng-messages="form.input_data_cancelamento.$error"
+								 ng-show="form.input_data_cancelamento.$touched" role="alert">
+								<div id="msg_req_data_cancelamento" ng-message="required">Obrigatório.</div>
+							</div>
+						</md-input-container>
+					</div>
+				</div>
+			</form>
+			<md-divider></md-divider>
+		</md-dialog-content>
+
+		<md-dialog-actions layout="row">
+			<md-button class="md-raised md-accent" id="btn_salvar_motivo" ng-click="confirm()"
+					   ng-disabled="(listMotivosSelecionados.length == 0 && (object.observacao === null || object.observacao === undefined)) || form.$invalid || action"
+					   ng-if="showDataCancelamento === undefined">
+				CONFIRMAR
+				<img ng-show="action" src="../img/gray_carregando.gif"
+					 style="height: 20px;width: 20px;margin-top: 8px;"/>
+			</md-button>
+			<md-button class="md-raised md-accent" id="btn_salvar_motivo" ng-click="confirm()"
+					   ng-disabled="(listMotivosSelecionados.length === 0 && !object.observacao) || (showDataCancelamento !== undefined && object.dataCancelamento === undefined ) || form.$invalid || action"
+					   ng-if="showDataCancelamento">
+				CONFIRMAR
+				<img ng-show="action" src="../img/gray_carregando.gif"
+					 style="height: 20px;width: 20px;margin-top: 8px;"/>
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_fechar_motivo" ng-click="cancel()" ng-disabled="action">
+				CANCELAR
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

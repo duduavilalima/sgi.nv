@@ -1,0 +1,70 @@
+<md-content class="md-padding" layout="column">
+
+	<div ng-if="!$ctrl.object.listaAssinaturas || $ctrl.object.listaAssinaturas.length <= 0">
+		<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+			<span class="h4 p-32">Não existem <b>assinaturas</b> associadas.</span>
+		</md-whiteframe>
+	</div>
+
+	<div ng-if="$ctrl.object.listaAssinaturas && $ctrl.object.listaAssinaturas.length > 0">
+		<table class="tabela_exibicao hover md-caption" ms-responsive-table width="100%" style="border: 1px;">
+			<thead>
+			<tr class="grey-200-bg">
+				<th style="border: 1px solid #c4c4c4;" width="25%">
+					<div class="table-header text-center"><span class="column-title">Etapa</span></div>
+				</th>
+				<th style="border: 1px solid #c4c4c4;" width="53%">
+					<div class="table-header text-center"><span class="column-title">Responsável</span></div>
+				</th>
+				<th style="border: 1px solid #c4c4c4;" width="12%">
+					<div class="table-header text-center"><span class="column-title">Data/hora</span></div>
+				</th>
+				<th style="border: 1px solid #c4c4c4;" width="10%">
+					<div class="table-header text-center"><span class="column-title">Opções</span></div>
+				</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="assinatura in $ctrl.object.listaAssinaturas" style="border-bottom: 1px solid #c4c4c4;">
+				<td class="text-left celula"> {{ assinatura.etapaFluxo.nome }}</td>
+				<td class="text-left celula pl-5"> {{ assinatura.colaborador.nome }}</td>
+				<td class="text-center celula pl-5"> {{ assinatura.dataRealizacao | date:'dd/MM/yyyy HH:mm' }}</td>
+				<td class="text-center celula pl-5">
+
+					<md-button class="md-icon-button" id="btn_retornar_etapa_{{$index}}"
+							   name="btn_retornar_etapa_{{$index}}" ng-click="$ctrl.retornarAssinatura($event, assinatura)"
+							   ng-if="$ctrl.assinaturaRetornoObrigatorio(assinatura) && $ctrl.renderizarRetornoAssinatura(assinatura)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="green-500-fg" md-font-icon="icon-arrow-left-bold"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Retornar para a etapa anterior
+						</md-tooltip>
+					</md-button>
+
+					<md-button class="md-icon-button" id="btn_retornar_etapa_{{$index}}"
+							   name="btn_retornar_etapa_{{$index}}"
+							   ng-click="confirmarRetornoAssinatura($event, assinatura)"
+							   ng-if="!$ctrl.assinaturaRetornoObrigatorio(assinatura) && $ctrl.renderizarRetornoAssinatura(assinatura)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="green-500-fg" md-font-icon="icon-arrow-left-bold"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Retornar para a etapa anterior
+						</md-tooltip>
+					</md-button>
+
+					<md-button class="md-icon-button" id="btn_enviar_etapa_{{$index}}"
+							   name="btn_enviar_etapa_{{$index}}" ng-click="$ctrl.assinar(assinatura)"
+							   ng-if="$ctrl.renderizarAssinatura(assinatura)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="green-500-fg" md-font-icon="icon-arrow-right-bold"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Assinar e enviar para a próxima etapa
+						</md-tooltip>
+					</md-button>
+
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</md-content>

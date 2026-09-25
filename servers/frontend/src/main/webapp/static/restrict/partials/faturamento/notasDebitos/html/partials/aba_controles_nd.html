@@ -1,0 +1,144 @@
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_cadastramento_nf">Cadastramento</label>
+		<input class="text-left" id="input_cadastramento_nf" name="input_cadastramento_nf" ng-disabled="true"
+			   ng-model="object.criador" type="text">
+	</md-input-container>
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_cadastramento_nf">Data/hora</label>
+		<input class="text-left" id="input_data_hora_cadastramento_nf" name="input_data_hora_cadastramento_nf"
+			   ng-disabled="true" type="text" value="{{ object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_ultima_alteracao_nf">Última alteração</label>
+		<input class="text-left" id="input_ultima_alteracao_nf" name="ultima_alteracao_faturamento" ng-disabled="true"
+			   ng-model="object.atualizador" type="text" value="{{ object.atualizador }}">
+	</md-input-container>
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_ultima_alteracao_nf">Data/hora</label>
+		<input class="text-left" id="input_data_hora_ultima_alteracao_nf" name="input_data_hora_ultima_alteracao_nf"
+			   ng-disabled="true" type="text" value="{{ object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_numeracao_nf">Numeração</label>
+		<input class="text-left" id="input_numeracao_nf" name="input_numeracao_nf" ng-disabled="true"
+			   ng-model="object.responsavelNumeracao.nome" type="text" value="{{ object.responsavelNumeracao.nome }}">
+	</md-input-container>
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_numeracao_nf">Data/hora</label>
+		<input class="text-left" id="input_data_hora_numeracao_nf" name="input_data_hora_numeracao_nf"
+			   ng-disabled="true" type="text" value="{{ object.dataResponsavelNumeracao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_cancelamento_numeracao_nf">Cancelamento da numeração</label>
+		<input class="text-left" id="input_cancelamento_numeracao_nf" name="input_cancelamento_numeracao_nf"
+			   ng-disabled="true" ng-model="object.responsavelCancelarNumeracao.nome" type="text"
+			   value="{{ object.responsavelCancelarNumeracao.nome }}">
+	</md-input-container>
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_cancelamento_numeracao_nf">Data/hora</label>
+		<input class="text-left" id="input_data_hora_cancelamento_numeracao_nf"
+			   name="input_data_hora_cancelamento_numeracao_nf" ng-disabled="true" type="text"
+			   value="{{ object.dataResponsavelCancelarNumeracao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_cancelamento_nf">Último cancelamento</label>
+		<input class="text-left" id="input_cancelamento_nf" name="input_cancelamento_nf" ng-disabled="true"
+			   ng-model="object.responsavelCancelamento.nome" type="text"
+			   value="{{ object.responsavelCancelamento.nome }}">
+	</md-input-container>
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_cancelamento_nf">Data/hora</label>
+		<input class="text-left" id="input_data_hora_cancelamento_nf" name="input_data_hora_cancelamento_nf"
+			   ng-disabled="true" type="text" value="{{ object.dataResponsavelCancelamento | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_reversao_cancelamento_nf">Última reversão do cancelamento</label>
+		<input class="text-left" id="input_reversao_cancelamento_nf" name="input_reversao_cancelamento_nf"
+			   ng-disabled="true" ng-model="object.responsavelReverterCancelamento.nome" type="text"
+			   value="{{ object.responsavelReverterCancelamento.nome }}">
+	</md-input-container>
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_reversao_cancelamento_nf">Data/hora</label>
+		<input class="text-left" id="input_data_hora_reversao_cancelamento_nf"
+			   name="input_data_hora_reversao_cancelamento_nf" ng-disabled="true" type="text"
+			   value="{{ object.dataResponsavelReverterCancelamento | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+
+<div layout-gt-xs="row" ng-if="object.responsavelCadastroPrefeitura === null">
+	<md-input-container class="md-block" flex flex-gt-sm="20">
+		<label id="lbl_lote_envio_numero_nf">Lote de envio para a Prefeitura</label>
+		<input class="text-left" id="input_lote_envio_numero_nf" name="input_lote_envio_numero_nf"
+			   ng-disabled="true" ng-model="object.loteEnvio.numero" type="text"
+			   value="{{ object.loteEnvio.numero }}">
+	</md-input-container>
+
+	<md-input-container class="md-block" flex flex-gt-sm="20">
+		<label id="lbl_lote_envio_situacao_nf">Situação</label>
+		<input class="text-left" id="input_lote_envio_situacao_nf" name="input_lote_envio_situacao_nf"
+			   ng-disabled="true" ng-model="situacaoLoteEnvio" type="text" value="{{ situacaoLoteEnvio }}">
+	</md-input-container>
+
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_lote_envio_responsavel_nf">Responsável</label>
+		<input class="text-left" id="input_lote_envio_responsavel_nf" name="input_lote_envio_responsavel_nf"
+			   ng-disabled="true" ng-model="object.loteEnvio.responsavel.nome" type="text"
+			   value="{{ object.loteEnvio.responsavel.nome }}">
+	</md-input-container>
+
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_lote_envio_nf">Data/hora</label>
+		<input class="text-left" id="input_data_hora_lote_envio_nf" name="input_data_hora_lote_envio_nf"
+			   ng-disabled="true" type="text"
+			   value="{{ object.loteEnvio.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+	</md-input-container>
+</div>
+
+
+<div layout-gt-xs="row" ng-if="object.responsavelCadastroPrefeitura === null">
+	<md-input-container class="md-block" flex flex-gt-sm="20">
+		<label id="lbl_lote_cancelamento_numero_nf">Lote de cancelamento na Prefeitura</label>
+		<input class="text-left" id="input_lote_cancelamento_numero_nf" name="input_lote_cancelamento_numero_nf"
+			   ng-disabled="true" ng-model="object.loteCancelamento.numero" type="text"
+			   value="{{ object.loteCancelamento.numero }}">
+	</md-input-container>
+
+	<md-input-container class="md-block" flex flex-gt-sm="20">
+		<label id="lbl_lote_cancelamento_situacao_nf">Situação</label>
+		<input class="text-left" id="input_lote_cancelamento_situacao_nf" name="input_lote_cancelamento_situacao_nf"
+			   ng-disabled="true" ng-model="object.loteCancelamento.situacao" type="text"
+			   value="{{ object.loteCancelamento.situacao }}">
+	</md-input-container>
+
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_lote_cancelamento_responsavel_nf">Responsável</label>
+		<input class="text-left" id="input_lote_cancelamento_responsavel_nf"
+			   name="input_lote_cancelamento_responsavel_nf" ng-disabled="true"
+			   ng-model="object.loteCancelamento.responsavel.nome" type="text"
+			   value="{{ object.loteCancelamento.responsavel.nome }}">
+	</md-input-container>
+
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_lote_cancelamento_nf">Data/hora</label>
+		<input class="text-left" id="input_data_hora_lote_cancelamento_nf" name="input_data_hora_lote_cancelamento_nf"
+			   ng-disabled="true" type="text"
+			   value="{{ object.loteCancelamento.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+	</md-input-container>
+</div>

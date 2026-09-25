@@ -1,0 +1,138 @@
+<div class="page-layout simple fullwidth" ng-controller="RubricasCtrl as $ctrl">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+                      id="modulo">Custos</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+                      id="modulo">Cadastros</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+                      id="titulo">Rubricas</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+                      id="titulo_subtitulo">Edição</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+        <!-- CONTENT -->
+        <div class="content" flex>
+            <div layout="row" layout-wrap>
+                <div class="about" flex="100" layout="column">
+                    <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+                        <header class="md-accent-bg">
+                            <div class="title" id="title_panel">Rubricas - Dados Gerais</div>
+                        </header>
+
+                        <div class="text-center"><img ng-if="!$ctrl.object"
+                                 src="../img/carregando.gif"
+                                 style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px" /></div>
+
+                            <div ng-if="$ctrl.object">
+                                <div class="white-500-bg">
+                                    <form name="form" novalidate>
+                                        <div flex layout="column">
+                                            <div class="p-16" flex layout="column">
+                                                <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                    <md-input-container flex flex-gt-md="50">
+                                                        <label id="lbl_descricao">Descrição</label>
+                                                        <input id="input_descricao" name="input_descricao" ng-maxlength="50" maxlength="50" md-maxlength="50" ng-model="$ctrl.object.descricao" ng-required="true" type="text">
+                                                        <div ng-messages="form.input_descricao.$error" ng-show="form.input_descricao.$touched">
+                                                            <div ng-message="required">Obrigatório.</div>
+                                                        </div>
+                                                    </md-input-container>
+
+                                                    <md-input-container flex flex-gt-md="50">
+                                                        <label id="lbl_rubrica_pai">Rubrica pai</label>
+                                                        <md-select id="combo_rubrica_pai" name="combo_rubrica_pai" ng-model="$ctrl.object.pai.codigo">
+                                                            <md-option value=""></md-option>
+                                                            <md-option ng-repeat="item in $ctrl.rubricasPaiList" ng-value="item.codigo">{{item.descricao}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+
+                                                    <md-input-container flex flex-gt-md="25">
+                                                        <label id="lbl_ordem">Ordem</label>
+                                                        <input id="input_ordem" name="input_ordem" ng-model="$ctrl.object.ordem" min="0" ng-required="true" type="number">
+                                                        <div ng-messages="form.input_ordem.$error" ng-show="form.input_ordem.$touched">
+                                                            <div ng-message="required">Obrigatório.</div>
+                                                        </div>
+                                                    </md-input-container>
+
+                                                    <md-input-container flex="25" flex-sm="100">
+                                                        <label id="lbl_situacao">Situação</label>
+                                                        <md-select id="combo_situacao" name="combo_situacao" ng-model="$ctrl.object.situacao" ng-required="true">
+                                                            <md-option ng-repeat="item in $ctrl.situacaoList" ng-value="item.code">{{item.desc}}</md-option>
+                                                        </md-select>
+                                                        <div ng-messages="form.combo_situacao.$error" ng-show="form.combo_situacao.$touched">
+                                                            <div ng-message="required">Obrigatório.</div>
+                                                        </div>
+                                                    </md-input-container>
+
+                                                    <md-input-container flex="25" flex-sm="100">
+                                                        <label id="lbl_tipo">Tipo</label>
+                                                        <md-select id="combo_tipo" name="combo_tipo" ng-model="$ctrl.object.tipo" ng-required="true">
+                                                            <md-option ng-repeat="item in $ctrl.tipoList" ng-value="item.code">{{item.desc}}</md-option>
+                                                        </md-select>
+                                                        <div ng-messages="form.combo_tipo.$error" ng-show="form.combo_tipo.$touched">
+                                                            <div ng-message="required">Obrigatório.</div>
+                                                        </div>
+                                                    </md-input-container>
+
+                                                    <md-input-container flex="25" flex-sm="100">
+                                                        <label id="lbl_operacao">Operação</label>
+                                                        <md-select id="combo_operacao" name="combo_operacao" ng-model="$ctrl.object.operacao" ng-required="true">
+                                                            <md-option ng-repeat="item in $ctrl.operacaoList" ng-value="item.code">{{item.desc}}</md-option>
+                                                        </md-select>
+                                                        <div ng-messages="form.combo_operacao.$error" ng-show="form.combo_operacao.$touched">
+                                                            <div ng-message="required">Obrigatório.</div>
+                                                        </div>
+                                                    </md-input-container>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <md-divider></md-divider>
+
+                                        <div class="p-8" flex layout="row" layout-align="start start">
+                                            <md-button class="md-raised md-accent" id="btn_salvar" ng-click="$ctrl.salvar()" ng-disabled="form.$invalid || $ctrl.action">
+                                                Salvar
+                                                <img ng-if="action"
+                                                 src="../img/gray_carregando.gif"
+                                                 style="height: 20px;width: 20px;margin-top: 8px;" />
+                                                <md-tooltip class="h4">Salvar as alterações realizadas nesta rubrica
+                                                </md-tooltip>
+                                            </md-button>
+
+                                            <md-button class="md-raised md-accent" id="btn_cancelar" ng-click="$ctrl.cancelar()" ng-disabled="!$ctrl.object || $ctrl.action">
+                                                Cancelar
+                                                <md-tooltip class="h4">Sair desta rubrica, sem gravar as modificações
+                                                    realizadas
+                                                </md-tooltip>
+                                            </md-button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+    </div>

@@ -1,0 +1,111 @@
+<div layout layout-sm="column" layout-wrap>
+
+	<md-input-container flex flex-gt-md="25">
+		<label>Tributos (excluir, considerar alíquota 0%)</label>
+		<md-select data-md-container-class="selectdemoSelectHeader" id="combo_tributo" md-on-close="clearSearchTerm()"
+				   multiple ng-model="object.tributoExcluidosLista">
+			<md-optgroup label="Tributos">
+				<md-option ng-repeat="item in listTributosExcluidos" ng-value="item" value="{{ item }}">{{item.nome}}
+				</md-option>
+			</md-optgroup>
+		</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25">
+		<label>Tributos (incluir)</label>
+		<md-select data-md-container-class="selectdemoSelectHeader" id="combo_tributo" md-on-close="clearSearchTerm()"
+				   multiple ng-change="changeTributos(object.tributoLista)" ng-model="object.tributoLista">
+			<md-optgroup label="Tributos">
+				<md-option ng-repeat="item in listTributos" ng-value="item" value="{{ item }}">{{item.nome}}</md-option>
+			</md-optgroup>
+		</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="50">
+		<label id="lbl_categoria_inss">Categoria do INSS</label>
+		<md-select id="combo_categoria_inss" name="categoria_inss" ng-change="$emit('changeInss')"
+				   ng-disabled="desabilitarInss"
+				   ng-model="object.categoriaInss"
+				   ng-required="(object.tipoRelatorio.chave === 'relacao_duplicatas_valores_retidos' || object.tipoRelatorio.chave === 'nf_emitidas_por_cnpj') && contemTributo('INSS')">
+			<md-option ng-repeat="categoria in categoriaInssList" ng-value="categoria">
+				<div ng-if="categoria.codigo > 0"> {{getPercentualAliquota(categoria) | currency : '' : 2 }}% -
+					{{categoria.descricao}}
+				</div>
+				<div ng-if="categoria.codigo <= 0"></div>
+			</md-option>
+		</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="50">
+		<label id="lbl_categoria_irff">Categoria do IRRF</label>
+		<md-select id="combo_categoria_irff" name="categoria_irff" ng-change="$emit('changeIrrf')"
+				   ng-disabled="desabilitarIrrf"
+				   ng-model="object.categoriaIrff"
+				   ng-required="(object.tipoRelatorio.chave === 'relacao_duplicatas_valores_retidos' || object.tipoRelatorio.chave === 'nf_emitidas_por_cnpj') && contemTributo('IRRF')">
+			<md-option ng-repeat="categoria in categoriaIrrfList" ng-value="categoria">
+				<div ng-if="categoria.codigo > 0"> {{getPercentualAliquota(categoria) | currency : '' : 2 }}% -
+					{{categoria.descricao}}
+				</div>
+				<div ng-if="categoria.codigo <= 0"></div>
+			</md-option>
+		</md-select>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="50">
+		<label id="lbl_categoria_pis">Categoria do PIS/COFINS/CSLL</label>
+		<md-select id="combo_categoria_pis" name="categoria_pis" ng-change="$emit('changePis')"
+				   ng-disabled="desabilitarPis"
+				   ng-model="object.categoriaPis"
+				   ng-required="(object.tipoRelatorio.chave === 'relacao_duplicatas_valores_retidos' || object.tipoRelatorio.chave === 'nf_emitidas_por_cnpj') && contemTributo('PIS/COFINS/CSLL')">
+			<md-option ng-repeat="categoria in categoriaPisList" ng-value="categoria">
+				<div ng-if="categoria.codigo > 0"> {{getPercentualAliquota(categoria) | currency : '' : 2 }}% -
+					{{categoria.descricao}}
+				</div>
+				<div ng-if="categoria.codigo <= 0"></div>
+			</md-option>
+		</md-select>
+	</md-input-container>
+
+	<md-autocomplete
+		flex flex-gt-md="50" id="autocomplete_cidade_iss"
+		md-delay="250"
+		md-floating-label="Cidade do ISS"
+		md-input-name="autocomplete_cidade_iss"
+		md-item-text="getNomeCidade(item)"
+		md-items="item in querySearchCidadeIss(searchTextCidadeIss)"
+		md-menu-class="autocomplete-custom-template"
+		md-min-length="3"
+		md-no-cache="true"
+		md-require-match="true"
+		md-search-text="searchTextCidadeIss"
+		md-selected-item="selectedCidadeIss"
+		md-selected-item-change="selectedCidadeIssChange(item)"
+		ng-disabled="desabilitarIss"
+		ng-required="object.tipoRelatorio.chave === 'relacao_duplicatas_valores_retidos' && contemTributo('ISS')">
+
+		<md-item-template>
+			<span class="item-title"><h5> <span md-highlight-flags="i" md-highlight-text="searchTextCidadeIss"> {{item.uf}}/{{item.nome}} </span> </h5></span>
+		</md-item-template>
+
+		<div ng-if="form.autocomplete_cidade_iss.$touched" ng-messages="form.autocomplete_cidade_iss.$error"
+			 role="alert">
+			<div ng-message="md-require-match">Seleção obrigatória.</div>
+		</div>
+
+	</md-autocomplete>
+
+	<md-input-container flex flex-gt-md="50">
+		<label id="lbl_categoria_iss">Cidade / Categoria do ISS</label>
+		<md-select id="categoria_iss" name="categoria_iss" ng-change="$emit('changeIss')" ng-disabled="desabilitarIss"
+				   ng-model="object.categoriaIss"
+				   ng-required="(object.tipoRelatorio.chave === 'relacao_duplicatas_valores_retidos' || object.tipoRelatorio.chave === 'nf_emitidas_por_cnpj') && contemTributo('ISS')">
+			<md-option ng-repeat="categoria in categoriaIssList" ng-value="categoria">
+				<div ng-if="categoria.codigo > 0"> {{getPercentualAliquota(categoria) | currency : '' : 2 }}% -
+					{{categoria.descricao}}
+				</div>
+				<div ng-if="categoria.codigo <= 0"></div>
+			</md-option>
+		</md-select>
+	</md-input-container>
+
+</div>

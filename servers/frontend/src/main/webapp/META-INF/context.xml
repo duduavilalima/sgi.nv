@@ -1,0 +1,4 @@
+<Context reloadable="false">
+	<ResourceLink name="jdbc/SGIDB" type="javax.sql.DataSource"
+				  global="jdbc/SGIDB"/>
+</Context>

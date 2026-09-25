@@ -1,0 +1,191 @@
+<div class="page-layout simple fullwidth" ng-controller="FaturamentoInterfacesCadastroCtrl" ng-init="initDatepicker();" ng-show="object && object != null">
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent">Faturamento</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent">{{titulo == 'Lote' ? 'Interfaces' : titulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent">{{ ::subtitulo }}</span>
+            </div>
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+    <div class="content" md-background-bg>
+        <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+            <!-- CONTENT -->
+            <div class="content" flex>
+                <div layout="row" layout-wrap>
+                    <div class="p-16" flex="100" layout="column">
+                        <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+                            <header class="md-accent-bg">
+                                <div class="title" id="title_panel">{{::titulo}} - {{::subtitulo}}</div>
+                            </header>
+                            <div class="text-center"><img ng-show="action" src="../img/carregando.gif" style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px" />
+                            </div>
+                                <div ng-show="!action">
+                                    <div class="white-500-bg">
+                                        <form name="form" novalidate>
+                                            <div layout="row" layout-wrap>
+                                                <div class="p-16" flex="100">
+                                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_numero">Número</label>
+                                                            <input id="input_numero" name="numero_lote" ng-disabled="true" type="text" value="{{object.codigo == null ? '' : 'LC/' + object.codigo}}">
+                                                        </md-input-container>
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_situacao">Situação</label>
+                                                            <input id="input_situacao" name="situacao" ng-disabled="true" type="text" value="{{ object.situacao == 'Importado na contabilidade' ? 'Importado na Prefeitura' :  object.situacao}}">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25" ng-show="screenMode != 'VIEW'">
+                                                            <label id="lbl_tipo">Tipo</label>
+                                                            <md-select id="combo_tipo" name="tipo" ng-change="$emit('changeTipoLoteInterface')" ng-disabled="screenMode === 'VIEW'" ng-model="object.tipoLoteInterface" ng-required="true">
+                                                                <md-option ng-disabled="tipo.desabilitado" ng-repeat="tipo in enumTipo track by $index" ng-value="tipo.tipo">{{ tipo.tipo }}
+                                                                </md-option>
+                                                            </md-select>
+                                                            <div ng-messages="form.tipo.$error" role="alert">
+                                                                <div ng-message="required">Obrigatório.</div>
+                                                            </div>
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25" ng-show="screenMode === 'VIEW'">
+                                                            <label id="lbl_tipo_exibicao">Tipo</label>
+                                                            <input id="input_tipo_exibicao" name="tipo_exibicao" ng-disabled="true" ng-model="object.tipoLoteInterface" type="text" value="{{ object.tipoLoteInterface }}">
+                                                            <md-tooltip id="tool_tip_tipo" md-direction="bottom">
+                                                                <span class="h4">{{:: object.tipoLoteInterface }}</span>
+                                                            </md-tooltip>
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25" ng-show="screenMode != 'VIEW'">
+                                                            <label id="lbl_empresa">Matriz / Filial</label>
+                                                            <md-select id="combo_empresa" name="empresa" ng-disabled="screenMode === 'VIEW'" ng-model="object.unidade.codigo" ng-required="true">
+                                                                <md-option ng-repeat="unidade in empresaListComFiltro" ng-value="unidade.codigo">{{ unidade.codnome }}
+                                                                </md-option>
+                                                            </md-select>
+                                                            <div ng-messages="form.empresa.$error" role="alert">
+                                                                <div ng-message="required">Obrigatório.</div>
+                                                            </div>
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25" ng-show="screenMode === 'VIEW'">
+                                                            <label id="lbl_empresa_exibicao">Matriz / Filial</label>
+                                                            <input id="input_empresa_exibicao" name="empresa_exibicao" ng-disabled="true" ng-model="object.unidade.codnome" type="text">
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div layout="row">
+                                                        <md-input-container flex flex-gt-md="25" ng-show="!renderizarLblDataCancelamento() && screenMode != 'VIEW'">
+                                                            <label id="lbl_emissao">Emissão</label>
+                                                            <input id="emissao" name="emissao" ng-change="changeDataEmissao()" ng-disabled="screenMode === 'VIEW'" ng-model="object.dataEvento" ng-required="!renderizarLblDataCancelamento()" tt-date-picker type="text">
+                                                            <div ng-messages="form.emissao.$error" ng-show="form.emissao.$touched" role="alert">
+                                                                <div class="msg_datapicker" ng-message="required">
+                                                                    Obrigatório.
+                                                                </div>
+                                                            </div>
+                                                        </md-input-container>
+                                                        <md-input-container flex flex-gt-md="25" ng-show="renderizarLblDataCancelamento() && screenMode != 'VIEW'">
+                                                            <label id="lbl_cancelamento_de">Cancelamento</label>
+                                                            <input id="cancelamento" name="cancelamento" ng-model="object.dataEvento" ng-required="renderizarLblDataCancelamento()" tt-date-picker type="text">
+                                                            <div ng-messages="form.cancelamento.$error" ng-show="form.cancelamento.$touched" role="alert">
+                                                                <div class="msg_datapicker" ng-message="required">
+                                                                    Obrigatório.
+                                                                </div>
+                                                            </div>
+                                                        </md-input-container>
+                                                        <md-input-container flex ng-show="!renderizarLblDataCancelamento() && screenMode === 'VIEW'">
+                                                            <label id="lbl_emissao_exibicao">Emissão</label>
+                                                            <input id="emissao_exibicao" name="emissao_exibicao" ng-disabled="true" type="text" value="{{ object.dataEvento | date: 'dd/MM/yyyy' }}">
+                                                        </md-input-container>
+                                                        <md-input-container flex ng-show="renderizarLblDataCancelamento() && screenMode === 'VIEW'">
+                                                            <label id="lbl_cancelamento_exibicao">Cancelamento</label>
+                                                            <input id="cancelamento_exibicao" name="cancelamento_exibicao" ng-disabled="true" type="text" value="{{ object.dataEvento | date: 'dd/MM/yyyy' }}">
+                                                        </md-input-container>
+                                                        <md-input-container flex>
+                                                            <label id="lbl_execucao">Execução</label>
+                                                            <input id="evento" type="text" ng-disabled="true" value="{{ object.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss' }}" name="execucao"></input>
+                                                        </md-input-container>
+                                                        <md-input-container flex flex-gt-md="50">
+                                                            <label id="lbl_responsavel">Responsável</label>
+                                                            <input id="input_responsavel" type="text" ng-disabled="true" name="responsavel" ng-model="object.criador"></input>
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div layout="row">
+                                                        <md-input-container flex flex-gt-md="25" layout="row" ng-if="screenMode == 'VIEW'" style="height: auto !important">
+                                                            <label id="lbl_mensagem">Mensagem</label>
+                                                            <textarea id="input_mensagem" ng-disabled="true" name="mensagem_lote" ng-maxlength="2000" maxlength="2000" max-rows="5" md-no-resize="true" md-detect-hidden="true" ng-model="object.mensagemErro">{{ object.mensagemErro }}</textarea>
+                                                        </md-input-container>
+                                                        <md-input-container flex flex-gt-md="25" layout="row" ng-if="screenMode == 'VIEW'" style="height: auto !important">
+                                                            <label id="lbl_confirmacao">Confirmação da importação</label>
+                                                            <input id="input_confirmacao" ng-disabled="true" name="confirmacao" value="{{ object.dataImportacao | date: 'dd/MM/yyyy HH:mm:ss' }}"></input>
+                                                        </md-input-container>
+                                                        <md-input-container flex flex-gt-md="50" layout="row" ng-if="screenMode == 'VIEW'" style="height: auto !important">
+                                                            <label id="lbl_responsavel">Responsável</label>
+                                                            <input id="input_responsavel" ng-disabled="true" name="responsavel" value="{{ object.colaborador.nome }}"></input>
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div layout layout-sm="column" style="margin-top: -0px" ng-if="screenMode != 'VIEW'">
+                                                        <span>*</span>&nbsp;Campos obrigatórios
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <md-divider></md-divider>
+                                    <div class="navigation padding-8" flex layout="row">
+                                        <md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvarLote()" ng-disabled="form.$invalid || action" ng-hide="screenMode === 'VIEW'">
+                                            Salvar
+                                            <md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+                                                <span class="h4">Salvar as alterações realizadas neste lote</span>
+                                            </md-tooltip>
+                                        </md-button>
+                                        <md-button class="md-raised md-accent" id="btn_cancelar" ng-click="listar()" ng-disabled="action" ng-hide="screenMode === 'VIEW'">
+                                            Cancelar
+                                            <md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+                                                <span class="h4">Sair deste lote contábil, sem gravar as modificações realizadas</span>
+                                            </md-tooltip>
+                                        </md-button>
+                                        <md-button class="md-raised md-accent" ng-click="download()" ng-disabled="object.situacao !== 'Arquivo gerado'"
+                                            ng-show="screenMode === 'VIEW' && object.situacao !== 'Aguardando geração do arquivo' && (object.tipoLoteInterface === 'Nota carioca' || object.tipoLoteInterface === 'Portal Oi' || object.tipoLoteInterface === 'Boletos (Itaú)')">
+                                            Download
+                                            <md-tooltip md-direction="bottom">
+                                                <span class="h4">Realizar o download do arquivo deste lote</span>
+                                            </md-tooltip>
+                                        </md-button>
+                                        <md-button class="md-raised md-accent" ng-click="reprocessarLote()" ng-show="screenMode === 'VIEW' && (object.situacao === 'Arquivo gerado' || object.situacao === 'Processado com erros')">
+                                            Reprocessar
+                                            <md-tooltip md-direction="bottom">
+                                                <span class="h4">Reprocessar este lote</span>
+                                            </md-tooltip>
+                                        </md-button>
+										<md-button class="md-raised md-accent" ng-click="processarLote()" ng-show="screenMode === 'VIEW' && (object.situacao === 'Aguardando geração do arquivo') && exibirProcessar()">
+											Processar
+											<md-tooltip md-direction="bottom">
+												<span class="h4">Processar este lote</span>
+											</md-tooltip>
+										</md-button>
+                                        <md-button class="md-raised md-accent" id="btn_retornar" ng-click="listar()" ng-disabled="action" ng-show="screenMode === 'VIEW'">
+                                            Retornar
+                                            <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+                                                <span class="h4">Sair desta tela e retornar para a tela anterior</span>
+                                            </md-tooltip>
+                                        </md-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="exibirTabelaNotaCarioca && object !== null && (object.tipoLoteInterface === 'Nota carioca' || object.tipoLoteInterface === 'Nota Norte (Belém)' || object.tipoLoteInterface === 'Nota Paulistana' || object.tipoLoteInterface === 'Nota BH' || object.tipoLoteInterface === 'Nota Brasília' || object.tipoLoteInterface === 'NF/Material' ) " ng-include="'partials/faturamento/faturamentoInterfaces/html/partials/tabela_prefeitura.html'"></div>
+
+            <div ng-if="exibirTabelaPortalOi && object !== null && object.tipoLoteInterface === 'Portal Oi'" ng-include="'partials/faturamento/faturamentoInterfaces/html/partials/tabela_portal.oi.html'"></div>
+
+            <div ng-if="exibirTabelaBoletoItau && object !== null && object.tipoLoteInterface === 'Boletos (Itaú)'" ng-include="'partials/faturamento/faturamentoInterfaces/html/partials/tabela_boleto_itau.html'"></div>
+        </div>
+    </div>
+</div>

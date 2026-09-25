@@ -1,0 +1,170 @@
+<div flex layout="column" ng-if="screenMode !== 'VIEW'">
+    <div class="p-16" flex layout="column">
+        <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_numero">Número</label>
+                <input id="input_numero" name="input_numero" ng-disabled="true" ng-model="object.numero" type="text">
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_situacao_novo">Situação</label>
+                <input id="input_situacao_novo" name="input_situacao" ng-disabled="true" type="text" value="{{ object.status }}">
+            </md-input-container>
+
+            <md-input-container flex="50" flex-sm="100" flex-xs="100">
+                <label id="lbl_criador">Criador</label>
+                <input id="input_criador" name="input_criador" ng-disabled="true" ng-model="object.criador" type="text" value="{{ object.criador }}">
+            </md-input-container>
+        </div>
+
+        <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+            <md-input-container flex flex-gt-md="25" ng-if="screenMode === 'NEW'">
+                <label id="lbl_empresa_edicao">Empresa</label>
+                <md-select id="combo_empresa" name="empresa" ng-change="$emit('changeEmpresa')" ng-model="object.unidade" ng-model-options="{trackBy: '$value.codigo'}" ng-required="true">
+                    <md-option ng-repeat="item in empresaList | orderBy: 'codnome'" ng-value="item">{{ item.codnome }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25" ng-if="screenMode === 'EDIT'">
+                <label id="lbl_empresa">Empresa</label>
+                <input id="input_empresa_edicao" name="input_empresa" ng-disabled="true" type="text" value="{{ object.unidade.codnome }}">
+            </md-input-container>
+
+
+            <md-input-container flex flex-gt-md="25">
+                <label id="lbl_banco">Banco</label>
+                <md-select id="combo_banco" name="banco" ng-change="$emit('changeBanco')" ng-disabled="bancoList === undefined || bancoList.length === 0" ng-model="object.contaCorrente.banco" ng-model-options="{trackBy: '$value.codigo'}" ng-required="true">
+                    <md-option ng-repeat="item in bancoList | unique: 'codigo' | orderBy: 'nome'" ng-value="item" value="item">{{item.nome}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25">
+                <label id="lbl_agencia_conta">Agência/Conta</label>
+                <md-select id="combo_agencia_conta" name="agencia_conta" ng-disabled="agenciaContaList === undefined || agenciaContaList.length === 0" ng-model="object.contaCorrente" ng-model-options="{trackBy: '$value.codigo'}" ng-required="true">
+                    <md-option ng-repeat="agenciaConta in agenciaContaList | orderBy: 'agencia' | orderBy: 'conta'" ng-value="agenciaConta">
+                        {{ montarLabelAgenciaConta(agenciaConta) }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25" ng-if="object.contaCorrente.internetBanking">
+                <label id="lbl_meio_pagamento_1">Meio de pagamento</label>
+                <md-select id="combo_meio_pagamento_1" name="meio_pagamento" ng-change="$emit('changeMeioPagamento')" ng-disabled="object.unidade.codigo === undefined || object.contaCorrente.banco.codigo === undefined || object.contaCorrente.codigo 	== undefined" ng-model="object.meioPagamento" ng-required="true" required>
+                    <md-option ng-repeat="item in listMeiosPgto" ng-value="item" value="{{ item }}">{{item}}
+                    </md-option>
+                </md-select>
+                <div ng-if="RelacaoForm.meio_pagamento.$touched" ng-messages="RelacaoForm.meio_pagamento.$error">
+                    <div ng-message="required">
+                        Obrigatório.
+                    </div>
+                </div>
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25" ng-if="!object.contaCorrente.internetBanking">
+                <label id="lbl_meio_pagamento_2">Meio de pagamento</label>
+                <md-select id="combo_meio_pagamento_2" name="meio_pagamento" ng-change="$emit('changeMeioPagamento')" ng-disabled="object.unidade.codigo === undefined || object.contaCorrente.banco.codigo === undefined || object.contaCorrente.codigo 	== undefined" ng-model="object.meioPagamento"
+                    ng-required="true" required>
+                    <md-option ng-repeat="item in listMeiosPgtoSemInternet" ng-value="item" value="{{ item }}">{{item}}
+                    </md-option>
+                </md-select>
+                <div ng-if="RelacaoForm.meio_pagamento.$touched" ng-messages="RelacaoForm.meio_pagamento.$error">
+                    <div ng-message="required">
+                        Obrigatório.
+                    </div>
+                </div>
+            </md-input-container>
+        </div>
+
+        <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_cheque">Cheque anterior</label>
+                <input id="cheque" name="chequeAnteriorInput" ng-blur="atualizarChequesItensRelacaoFn()" ng-disabled="object.meioPagamento != 'Cheque'" ng-model="object.chequeAnterior" ng-required="object.meioPagamento === 'Cheque'" type="number">
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100" ng-if="object.meioPagamento !== 'Cheque'">
+                <label id="lbl_pgt_individual">Pagamento individual</label>
+                <input id="pgt_individual" name="pgt_individual" ng-disabled="true" type="text" value="{{ object.pagamentoIndividual ? 'Sim' : 'Não'}}">
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100" ng-if="object.meioPagamento === 'Cheque'">
+                <label id="lbl_pgt_combo">Pagamento individual</label>
+                <md-select id="pgt_individual" name="pgt_individual" ng-disabled="object.meioPagamento != 'Cheque'" ng-model="object.pagamentoIndividual">
+                    <md-option ng-repeat="item in listPgtoIndividual" ng-value="item.value">{{item.desc }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25">
+                <label id="lbl_pag">Pagamento</label>
+                <input id="lbl_paga" name="dataPagamento" ng-model="object.dataPagamento" ng-required="true" required tt-date-picker type="text">
+                <div ng-if="RelacaoForm.dataPagamento.$touched" ng-messages="RelacaoForm.dataPagamento.$error">
+                    <div ng-message="required">
+                        Obrigatório.
+                    </div>
+                </div>
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_total">Total</label>
+                <input id="pgt_total" name="total" ng-disabled="true" style="font-weight: bold;" type="text" value="{{ object.total | currency:'':2}}">
+            </md-input-container>
+
+        </div>
+
+        <div layout="row" layout-sm="column" layout-wrap layout-xs="column" ng-if="object.meioPagamento === 'Cheque'">
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_impressao_cheque">Impressão do(s) cheque(s)</label>
+                <input id="impressao_cheque" name="impressao" ng-disabled="true" type="text" value="{{ object.impressaoCheque ? 'Sim' : 'Não' }}">
+                <md-tooltip class="h4">Indica se a impressão de cheques foi
+                    realizada
+                </md-tooltip>
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_endosso_cheque">Impressão do(s) endosso(s)</label>
+                <input id="pgt_endosso_cheque" name="endosso" ng-disabled="true" type="text" value="{{ object.impressaoEndosso ? 'Sim' : 'Não' }}">
+                <md-tooltip class="h4">Indica se a impressão do endosso de cheques
+                    foi realizada
+                </md-tooltip>
+            </md-input-container>
+
+            <md-input-container flex flex-gt-md="25">
+                <label id="lbl_segunda_cheque">Impressão da(s) 2ª via(s)</label>
+                <input id="segunda_cheque" name="segunda" ng-disabled="true" type="text" value="{{ object.impressao2via ? 'Sim' : 'Não' }}">
+                <md-tooltip class="h4">Indica se a impressão da 2ª via de cheques
+                    foi realizada
+                </md-tooltip>
+            </md-input-container>
+
+            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                <label id="lbl_num_pagamentos_cheque">Nº pagamentos</label>
+                <input id="num_pagamentos_cheque" name="num_pagamentos" ng-disabled="true" type="text" value="{{ object.qtdPagamentos }}">
+            </md-input-container>
+        </div>
+    </div>
+
+
+    <md-tabs md-border-bottom md-dynamic-height>
+        <!-- ABA PAGAMENTOS -->
+        <div class="padding-16" ng-include="'partials/tesouraria/relacao_bancaria/html/partials/aba_pagamentos.html'"></div>
+
+        <md-tab label="Observações">
+            <md-content class="md-padding">
+                <md-input-container class="md-block">
+                    <label>Observações</label>
+                    <textarea md-maxlength="2000" md-select-on-focus ng-model="object.observacao" rows="5"></textarea>
+                </md-input-container>
+            </md-content>
+        </md-tab>
+    </md-tabs>
+
+    <div class="p-16" flex layout="row" layout-align="start start">
+        <span class="red-fg">*&nbsp;</span> Campos obrigatórios
+    </div>
+
+</div>

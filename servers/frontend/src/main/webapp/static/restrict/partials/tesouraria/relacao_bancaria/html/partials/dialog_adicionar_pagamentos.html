@@ -1,0 +1,228 @@
+<md-dialog aria-label="Relação bancária: Adicionar Pagamentos" id="dialog_titulo_popup_adicionar_pagamento"
+		   style="width: 1400px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_tesouraria_confirmacao" md-autofocus>Relação bancária: Adicionar Pagamentos</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+	<md-dialog-content class="white-bg">
+		<div class="md-dialog-content" md-theme="sgi" style="padding-bottom: 0px;">
+			<form name="DialogAdicionarPgRbForm">
+				<div flex-gt-xs="100" flex-xs layout="column">
+					<md-card class="p-8"
+							 style="margin-left: -10px;margin-right: -10px;margin-top: -10px;background-color: rgb(255, 255, 255);">
+						<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_numero">Número</label>
+								<input id="input_numero" name="numero" ng-model="object.pesquisaPagamentoRBTO.numero"
+									   type="text">
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_banco">Banco</label>
+								<md-select id="combo_banco" name="banco"
+										   ng-model="object.pesquisaPagamentoRBTO.codigoBanco">
+									<md-option ng-repeat="item in listaBancos" ng-value="item.codigo"
+											   value="{{ item.codigo }}">{{item.nome}}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="50">
+								<label id="lbl_credor_dialog">Credor</label>
+								<input id="credor_dialog_input" ng-model="object.pesquisaPagamentoRBTO.nomeCredor"
+									   type="text">
+							</md-input-container>
+						</div>
+						<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_pagamento_de">Pagamento de</label>
+								<input id="pagamento_de_input" ng-model="object.pesquisaPagamentoRBTO.dataPagamentoDe"
+									   tt-date-picker type="text" value="object.pesquisaPagamentoRBTO.dataPagamentoDe">
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_pagamento__ate">Pagamento até</label>
+								<input id="pagamento__ate_input"
+									   ng-model="object.pesquisaPagamentoRBTO.dataPagamentoAte" tt-date-picker
+									   type="text" value="object.pesquisaPagamentoRBTO.dataPagamentoAte">
+							</md-input-container>
+
+							<md-input-container flex="25" flex-sm="100" flex-xs="100">
+								<label id="lbl_valor_de">Valor de (R$)</label>
+								<input class="text-left" id="input_valor_de" maxlength="18" name="valor_de"
+									   ng-model="object.pesquisaPagamentoRBTO.valorDe" type="text" ui-number-mask="2"
+									   value="object.pesquisaPagamentoRBTO.valorDe">
+							</md-input-container>
+
+							<md-input-container flex="25" flex-sm="100" flex-xs="100">
+								<label id="lbl_valor_ate">Valor até (R$)</label>
+								<input class="text-left" id="input_valor_ate" maxlength="18" name="valor_ate"
+									   ng-model="object.pesquisaPagamentoRBTO.valorAte" type="text" ui-number-mask="2"
+									   value="object.pesquisaPagamentoRBTO.valorAte">
+							</md-input-container>
+
+						</div>
+
+						<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+							<md-input-container flex flex-gt-md="50">
+								<label id="lbl_gerencia">Gerência</label>
+								<md-select id="combo_gerencia" name="gerencia"
+										   ng-model="object.pesquisaPagamentoRBTO.codigoGerencia">
+									<md-option ng-repeat="item in listaGerencias" ng-value="item.codigo"
+											   value="{{ item.codigo }}">{{ item.nome }}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="25">
+								<label id="lbl_doc">Doc. pagamento</label>
+								<md-select id="combo_doc" name="doc"
+										   ng-model="object.pesquisaPagamentoRBTO.tipoDocPagamento"
+										   value="object.pesquisaPagamentoRBTO.tipoDocPagamento">
+									<md-option ng-repeat="item in listaTipoDoc" ng-value="item" value="{{ item }}">
+										{{item}}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+							<md-input-container flex="25" flex-sm="100" flex-xs="100">
+								<label id="lbl_empresa">Empresa</label>
+								<input id="empresa" name="empresa_dialog" ng-disabled="true" type="text"
+									   value="{{ object.unidade.codnome }}">
+							</md-input-container>
+
+						</div>
+
+						<div flex layout="row" layout-align="start start" style="margin-top: -10px;">
+							<md-button class="md-raised md-accent" id="btn_pesquisar" ng-click="mostrarPesquisa()"
+									   ng-disabled="action">
+								Pesquisar
+								<img ng-show="action" src="../img/gray_carregando.gif"
+									 style="height: 20px;width: 20px;margin-top: 8px;"/>
+							</md-button>
+							<md-button class="md-raised md-default" id="btn_limpar" ng-click="limpar()"
+									   ng-disabled="action">
+								Limpar
+							</md-button>
+						</div>
+					</md-card>
+				</div>
+
+				<div flex-gt-xs="100" flex-xs layout="column">
+					<md-card style="margin-left: -10px;margin-right: -10px;background-color: rgb(255, 255, 255);">
+						<div class="border-bottom md-accent-bg white-fg" layout="row" style="height: 40px;">
+							<h2 class="p-8" style="margin-top: -1px;font-size: 18px;">Resultado da pesquisa</h2>
+						</div>
+						<div layout="row">
+							<div style="overflow: auto !important; max-height: 300px !important;width: 100%;">
+
+								<div class="text-center"
+									 ng-show="object.pesquisaPagamentosVO.length == 0 || object.pesquisaPagamentosVO.length == null"
+									 style="width: 100%;padding: 10px;">
+									<div class="text-center">A pesquisa por <b>Pagamentos</b> não retornou resultados.
+									</div>
+								</div>
+
+								<table class="simple row-border hover text-center font-size-12" id="table-list2"
+									   ms-responsive-table
+									   ng-show="pesquisa == true && object.pesquisaPagamentosVO.length > 0"
+									   width="100%">
+									<thead>
+									<tr ng-show="listPagamentosDialog.length == 0">
+										<th class="secondary-text" colspan="9"></th>
+									</tr>
+									<tr>
+										<th class="titulo_colunas" width="10%">
+											<div class="table-header text-left" style="margin-left: 20px;"><span
+												class="column-title">Número</span></div>
+										</th>
+										<th class="titulo_colunas" width="10%">
+											<div class="table-header text-center"><span
+												class="column-title">Pagamento</span></div>
+										</th>
+										<th class="titulo_colunas" width="45%">
+											<div class="table-header text-center"><span class="column-title">Credor (nome fantasia) / Favorecido</span>
+											</div>
+										</th>
+										<th class="titulo_colunas" width="10%">
+											<div class="table-header text-center"><span
+												class="column-title">Banco</span>
+											</div>
+										</th>
+										<th class="titulo_colunas" width="15%">
+											<div class="table-header text-center">
+												<md-tooltip class="h4">Documento para pagamento</md-tooltip>
+												<span class="column-title">Documento para pagamento</span>
+											</div>
+										</th>
+										<th class="titulo_colunas" width="5%">
+											<div class="table-header text-center"><span
+												class="column-title">A pagar</span></div>
+										</th>
+										<th class="titulo_colunas" width="10%">
+											<div class="table-header text-center"><span class="column-title">N° pagamento</span>
+											</div>
+										</th>
+										<th class="titulo_colunas" width="5%">
+											<div class="table-header text-center" style="height: 18px;">
+												<md-checkbox aria-label="Selecionar todos"
+															 ng-change="selecionarTodos(selecionar)"
+															 ng-model="selecionar"></md-checkbox>
+											</div>
+										</th>
+									</tr>
+									</thead>
+
+									<tbody>
+									<tr ng-repeat="item in object.pesquisaPagamentosVO">
+										<td class="text-left" ng-show="item.qtdadePagamentos == 1">{{ ::item.numero}}
+										</td>
+										<td class="text-center" ng-show="item.qtdadePagamentos > 1">{{ ::item.numero}}
+										</td>
+										<td class="text-center">{{ ::item.dataPagamento | date : 'dd/MM/yyyy' }}</td>
+										<td class="text-left"
+											ng-show="item.credor.nome != null || item.credor.nomeFantasia != null">
+											{{ ::item.credor.tipoPessoa == 'Pessoa Jurídica' ? item.credor.nomeFantasia
+											: item.credor.nome | limitTo : 50}}
+											<md-tooltip class="h4">{{item.credor.tipoPessoa == 'Pessoa Jurídica' ?
+												item.credor.nomeFantasia : item.credor.nome}}
+											</md-tooltip>
+										</td>
+										<td class="text-left" ng-show="item.tributo != null">{{ ::item.tributo}}</td>
+										<td class="text-left">{{ ::item.bancoSelecionado.nome}}</td>
+										<td class="text-left">{{ ::item.tipoDocumentoPagamento}}</td>
+										<td class="text-right">{{ ::item.valorAPagar | currency : '' : 2}}</td>
+										<td class="text-center">{{ ::item.qtdadePagamentos}}</td>
+										<td class="text-center">
+											<md-checkbox aria-label="Selecionar pagamento"
+														 ng-model="item.selecionado"></md-checkbox>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</md-card>
+				</div>
+			</form>
+		</div>
+		<md-divider></md-divider>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar_remover_etapa" ng-click="adicionarPagamentos()"
+				   ng-disabled="object.pesquisaPagamentosVO.length == null || object.pesquisaPagamentosVO.length == 0">
+			Adicionar pagamentos
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar_remover_etapa" ng-click="cancel()"
+				   ng-disabled="action">
+			Fechar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

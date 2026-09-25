@@ -1,0 +1,722 @@
+<div class="page-layout simple fullwidth">
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{::titulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+			<div class="content" flex>
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">{{ ::titulo}}</div>
+							</header>
+							<div class="content">
+								<form name="form" novalidate>
+
+									<div class="mt-25" layout="row" layout-sm="column" layout-wrap layout-xs="column"
+										 style="margin-top: 0px">
+
+										<md-input-container flex flex-gt-md="25" flex-xs="100">
+											<label id="lbl_empresa">Empresa</label>
+											<md-select id="combo_empresa" name="empresa" ng-change="changeEmpresa()"
+													   ng-model="object.unidade">
+												<md-option ng-repeat="item in listEmpresas" ng-value="item"
+														   value="{{item}}">{{ item.codnome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50" flex-xs="100">
+											<label id="banco">Conta corrente</label>
+											<md-select id="combo_conta_corrente" name="conta_corrente"
+													   ng-model="object.contaCorrente" ng-required="true">
+												<md-option ng-repeat="item in listaContaCorrente | unique: 'codigo'"
+														   ng-value="item">{{ montarTextoContaCorrente(item) }}
+												</md-option>
+											</md-select>
+											<div ng-messages="form.conta_corrente.$error" ng-show="form.banco.$touched">
+												<div ng-message="required">
+													Obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25" flex-xs="100">
+											<label id="lbl_conciliacao">Lançamento(s)</label>
+											<input id="conciliacao_de_input" name="conciliacao"
+												   ng-model="object.conciliacao" ng-required="true" tt-date-picker
+												   type="text"/>
+											<div ng-messages="form.conciliacao.$error"
+												 ng-show="form.conciliacao.$touched">
+												<div ng-message="required">
+													Obrigatório.
+												</div>
+											</div>
+										</md-input-container>
+
+									</div>
+
+
+									<div layout="column" layout-wrap style="margin-top: -35px;">
+
+										<section layout="row" layout-sm="row" layout-wrap>
+											<div flex="100" flex-sm="100" layout="row" layout-align="start center">
+												<p style="margin-top: 20px;margin-bottom: 20px">
+													<strong>Observação: </strong>O(s) tipo(s) de arquivo(s) permitido(s)
+													é(são): <strong>{{tipoArquivoAnexo}}</strong></p>
+											</div>
+										</section>
+
+										<div class="mt-5">
+											<fieldset>
+												<div flex layout="row">
+													<choose-file flex="100" layout="row" layout-sm="column">
+														<div flex="70" layout="row" layout-align="start center">
+															<md-button class="md-raised md-accent mt-15"
+																	   id="uploadButton"
+																	   ng-disabled="codConciliacaoBancaria">
+																<md-icon class="white-fg"
+																		 md-font-icon="icon-plus"></md-icon>
+																Selecionar arquivo
+															</md-button>
+															<input class="ng-hide" id="fileInput" type="file">
+															<div flex="30">
+																<md-input-container flex flex-gt-md="100"
+																					style="margin-bottom: 0px; height: 45px; padding-left: 10px;">
+																	<input aria-label="Nome do arquivo"
+																		   ng-disabled="true" ng-model="fileName"
+																		   type="text">
+																</md-input-container>
+
+																<div ng-if="file"
+																	 style="width: 500px; margin-left: 10px;">
+																	<h4>Importação realizada com sucesso.</h4>
+																</div>
+															</div>
+														</div>
+
+													</choose-file>
+
+													<div flex="30" layout="row" layout-align="end center">
+														<md-button class="md-raised md-accent mt-15" id="uploadButton"
+																   ng-click="limpar()">
+															<md-icon class="white-fg"
+																	 md-font-icon="icon-close"></md-icon>
+															Limpar tudo
+														</md-button>
+													</div>
+
+												</div>
+											</fieldset>
+										</div>
+									</div>
+
+									<div class="mt-30" flex layout="row" layout-align="start center">
+										<div flex layout="row" layout-align="start center">
+											<md-button aria-label="Processar arquivo" class="md-raised md-accent"
+													   ng-click="processar()"
+													   ng-disabled="desabilitarBotaoProcessar || codConciliacaoBancaria">
+												Processar arquivo
+											</md-button>
+
+											<p><strong>(Necessário para processar o arquivo importado)</strong></p>
+										</div>
+									</div>
+
+								</form>
+							</div>
+
+							<div ng-show="mostrarResultado" style="overflow: auto: max-height: 500px;">
+
+								<md-table-container>
+									<table md-table style="border: 1px solid #c4c4c4;">
+
+										<tbody md-body>
+										<tr md-row>
+											<td class="md-grey-500-bg" colspan="3" md-cell></td>
+											<td class="text-right md-grey-500-bg celula-borda-direita" md-cell
+												style="border-left: 1px solid #818181; padding: 8px !important;"
+												width="15%">
+												<b>SALDO INICIAL</b>
+											</td>
+											<td class="text-right md-grey-500-bg celula-borda-direita" md-cell
+												style="text-align: right;padding: 8px !important;" width="11%">
+												<b>{{ saldoInicial | currency:'':2 }}</b>
+											</td>
+											<td class="text-center md-grey-500-bg celula-borda-direita" md-cell
+												style="text-align: center;" width="2%">
+													<span>
+														<b>{{ situacaoInicial }}</b>
+														<md-tooltip md-direction="bottom">
+															<span class="h4">{{ situacaoInicial === 'C' ? 'Crédito' : 'Débito' }}</span>
+														</md-tooltip>
+													</span>
+											</td>
+											<td class="md-grey-500-bg" md-cell width="8%"></td>
+											<td class="md-grey-500-bg" md-cell width="7%"></td>
+										</tr>
+										</tbody>
+
+										<tbody class="grey-200-bg" md-body>
+										<tr md-row ng-repeat-start="item in listaTipoDebito">
+											<td class="borda_celula" colspan="3" md-cell
+												ng-click="item.expanded = !item.expanded">
+												<button ng-if="item.expanded">
+													<md-icon md-font-icon="icon-menu-up"></md-icon>
+												</button>
+												<button ng-if="!item.expanded">
+													<md-icon md-font-icon="icon-menu-down"></md-icon>
+												</button>
+												<b>{{ ::item.nome}}</b>
+											</td>
+											<td class="borda_celula" md-cell style="text-align: right" width="15%"><b>{{
+												::item.qtd}}</b></td>
+											<td class="borda_celula" md-cell style="text-align: right" width="11%"><b>{{
+												::item.valor | currency:'':2}}</b></td>
+											<td class="borda_celula" md-cell width="2%"></td>
+											<td class="borda_celula" md-cell width="8%"></td>
+											<td class="borda_celula" md-cell width="7%"></td>
+										</tr>
+										<tr md-row ng-if="item.expanded && item.qtd > 0" ng-repeat-end="">
+											<td class="borda_avaliador" colspan="8" md-cell style="padding: 0px;">
+												<div>
+													<table class="simple row-border hover text-center white-bg"
+														   id="table-list-debito" ms-responsive-table width="100%">
+														<thead>
+														<tr ng-show="item.listaConciliacaoLancamento.length == 0">
+															<th class="secondary-text" colspan="8"></th>
+														</tr>
+														<tr class="grey-500-bg titulo">
+															<th class="titulo" width="8%">
+																<div class="table-header text-center"><span
+																	class="column-title">Nº registro</span></div>
+															</th>
+															<th class="titulo" width="7%">
+																<div class="table-header text-center"><span
+																	class="column-title">Natureza</span></div>
+															</th>
+															<th class="titulo" width="9%">
+																<div class="table-header text-center"><span
+																	class="column-title">Lançamento</span></div>
+															</th>
+															<th class="titulo" width="48%">
+																<div class="table-header text-center"><span
+																	class="column-title">Histórico</span></div>
+															</th>
+															<th class="titulo" width="11%">
+																<div class="table-header text-center"><span
+																	class="column-title">Valor</span></div>
+															</th>
+															<th class="titulo" width="2%"></th>
+															<th class="titulo" width="8%">
+																<div class="table-header text-center">
+																	<span class="column-title">
+																		{{item.tipoAcao === 'Lançamento de tesouraria' ? 'Lançamento' : ''}}
+																		{{item.tipoAcao === 'Pagamento' || item.tipoAcao === 'Pagamento (cheque)' ? 'Pagamento' : ''}}
+																	</span>
+																</div>
+															</th>
+															<th class="titulo" width="7%">
+																<div class="table-header text-center">
+																	<span class="column-title">
+																		{{item.tipoAcao === 'Nenhuma ação' ? '' : 'Opções'}}
+																	</span>
+																</div>
+															</th>
+														</tr>
+														</thead>
+
+														<tbody>
+														<tr ng-show="item.listaConciliacaoLancamento == null || item.listaConciliacaoLancamento.length == 0">
+															<td class="text-center" colspan="8"><b>Não há
+																pagamentos.</b></td>
+														</tr>
+														<tr ng-repeat="itemCL in item.listaConciliacaoLancamento">
+															<td class="text-center celula">{{
+																montarNumeroRegistro(itemCL.registro) }}
+															</td>
+															<td class="text-center celula">
+																		<span>
+																			{{ ::itemCL.natureza}}
+																			<md-tooltip md-direction="bottom">
+																				<span class="h4">{{ montarNaturezaToolTip(itemCL.natureza) }}</span>
+																			</md-tooltip>
+																		</span>
+															</td>
+															<td class="text-center celula">{{ ::itemCL.lancamento |
+																date:'dd/MM/yyyy' }}
+															</td>
+															<td class="text-left celula">{{ ::itemCL.historico}}</td>
+															<td class="text-right celula  {{ (itemCL.cheque != null && itemCL.cheque.valor != itemCL.valor) || (itemCL.objLancamento && itemCL.objLancamento.valor != itemCL.valor) || (itemCL.objPagamento && itemCL.totalPagamentosSelecionados != itemCL.valor) ? 'red-700-fg' : '' }} ">
+																{{ ::itemCL.valor | currency:'':2 }}
+																<md-tooltip md-direction="bottom"
+																			ng-if="itemCL.cheque != null && itemCL.cheque.valor != itemCL.valor">
+																	<span class="h4">Valor conciliado é diferente do valor do cheque</span>
+																</md-tooltip>
+															</td>
+															<td class="text-center celula">
+																		<span>
+																			D
+																			<md-tooltip md-direction="bottom">
+																				<span class="h4">Débito</span>
+										 									</md-tooltip>
+																		</span>
+															</td>
+
+															<td class="text-center celula">
+																{{ (itemCL.objLancamento == null) ? '' :
+																(itemCL.objLancamento.codigo ?
+																itemCL.objLancamento.numero : 'LT/novo' ) }}
+																{{ !itemCL.objPagamento ? '' :
+																(itemCL.objPagamento.length > 1 ? 'Vários' :
+																(itemCL.objPagamento.length == 1 ?
+																(itemCL.objPagamento[0].qtdadePagamentos > 1 ? 'Vários'
+																: itemCL.objPagamento[0].numero) : '' ) ) }}
+															</td>
+															<td class="text-center celula"
+																style="padding-top: 3px;padding-bottom: 3px; padding-left: 0px; padding-right: 0px;">
+
+																<div ng-if="!codConciliacaoBancaria">
+
+																	<div
+																		ng-if="item.tipoAcao === 'Lançamento de tesouraria'">
+																		<div ng-show="itemCL.objLancamento == null"
+																			 style="display: inline-flex;">
+																			<md-button aria-label="adicionar"
+																					   class="md-icon-button"
+																					   ng-click="criarAssociacaoLancamento($event, itemCL, item.codHistorico)"
+																					   style="margin: 0px;">
+																				<md-icon class="green-400-fg"
+																						 md-font-icon="icon-plus"></md-icon>
+																				<md-tooltip md-direction="bottom">
+																					<span
+																						class="h4">Criar lançamento</span>
+																				</md-tooltip>
+																			</md-button>
+
+																			<md-button aria-label="adicionar"
+																					   class="md-icon-button"
+																					   ng-click="adicionarAssociacaoLancamento($event, itemCL)"
+																					   style="margin: 0px;">
+																				<md-icon class="green-400-fg"
+																						 md-font-icon="icon-plus-circle"></md-icon>
+																				<md-tooltip md-direction="bottom">
+																					<span class="h4">Adicionar lançamento</span>
+																				</md-tooltip>
+																			</md-button>
+																		</div>
+
+																		<div ng-show="itemCL.objLancamento != null"
+																			 style="display: inline-flex;">
+																			<md-button aria-label="editar"
+																					   class="md-icon-button"
+																					   ng-click="editarAssociacao($event, itemCL)"
+																					   ng-show="!itemCL.objLancamento.codigo"
+																					   style="margin: 0px;">
+																				<md-icon class="green-400-fg"
+																						 md-font-icon="icon-pencil"></md-icon>
+																				<md-tooltip md-direction="bottom">
+																					<span
+																						class="h4">Editar lançamento</span>
+																				</md-tooltip>
+																			</md-button>
+
+																			<md-button aria-label="remover"
+																					   class="md-icon-button"
+																					   ng-click="removerAssociacaoLancamento($event, itemCL)"
+																					   style="margin: 0px;">
+																				<md-icon class="red-400-fg"
+																						 md-font-icon="icon-close"></md-icon>
+																				<md-tooltip md-direction="bottom">
+																					<span
+																						class="h4">Remover lançamento</span>
+																				</md-tooltip>
+																			</md-button>
+																		</div>
+																	</div>
+
+																	<div
+																		ng-if="item.tipoAcao === 'Pagamento' || item.tipoAcao === 'Pagamento (cheque)'">
+																		<md-button aria-label="adicionar"
+																				   class="md-icon-button"
+																				   ng-click="adicionarAssociacao($event, itemCL)"
+																				   ng-show="!itemCL.objPagamento">
+																			<md-icon class="green-400-fg"
+																					 md-font-icon="icon-plus"></md-icon>
+																			<md-tooltip md-direction="bottom">
+																				<span
+																					class="h4">Adicionar pagamento(s)</span>
+																			</md-tooltip>
+																		</md-button>
+
+																		<md-button aria-label="remover"
+																				   class="md-icon-button"
+																				   ng-click="removerAssociacao($event, itemCL)"
+																				   ng-show="itemCL.objPagamento">
+																			<md-icon class="red-400-fg"
+																					 md-font-icon="icon-close"></md-icon>
+																			<md-tooltip md-direction="bottom">
+																				<span
+																					class="h4">Remover pagamento(s)</span>
+																			</md-tooltip>
+																		</md-button>
+																	</div>
+
+																</div>
+
+															</td>
+														</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+										</tr>
+										</tbody>
+
+										<tbody md-body>
+										<tr md-row>
+											<td class="md-grey-500-bg" colspan="3" md-cell></td>
+											<td class="text-right md-grey-500-bg celula-borda-direita" md-cell
+												style="border-left: 1px solid #818181; padding: 8px !important;"
+												width="15%">
+												<b>Total de débitos</b>
+											</td>
+											<td class="text-right md-grey-500-bg celula-borda-direita" md-cell
+												style="text-align: right; padding: 8px;" width="11%">
+												<b> {{ totalDebito | currency:'':2 }}</b>
+											</td>
+											<td class="text-left md-grey-500-bg celula-borda-direita" md-cell
+												style="text-align: center;border-right: 1px solid #818181; border-top: rgb(158, 158, 158);"
+												width="2%">
+																<span>
+																	<b>D</b>
+																	<md-tooltip md-direction="bottom">
+																		<span class="h4">Débito</span>
+																	</md-tooltip>
+																</span>
+											</td>
+											<td class="md-grey-500-bg" md-cell style="border-top: rgb(158, 158, 158);"
+												width="8%"></td>
+											<td class="md-grey-500-bg" md-cell style="border-top: rgb(158, 158, 158);"
+												width="7%"></td>
+										</tr>
+										</tbody>
+
+										<tbody class="grey-200-bg" md-body>
+										<tr md-row ng-repeat-start="item in listaTipoCredito">
+											<td class="borda_celula" colspan="3" md-cell
+												ng-click="item.expanded = !item.expanded">
+												<button ng-if="item.expanded">
+													<md-icon md-font-icon="icon-menu-up"></md-icon>
+												</button>
+												<button ng-if="!item.expanded">
+													<md-icon md-font-icon="icon-menu-down"></md-icon>
+												</button>
+												<b>{{ ::item.nome}}</b>
+											</td>
+											<td class="borda_celula" md-cell style="text-align: right" width="15%"><b>{{
+												::item.qtd}}</b></td>
+											<td class="borda_celula" md-cell style="text-align: right" width="11%"><b>{{
+												::item.valor | currency:'':2}}</b></td>
+											<td class="borda_celula" md-cell width="2%">
+											<td md-cell width="8%"></td>
+											<td md-cell width="7%"></td>
+											</td>
+										</tr>
+										<tr md-row ng-if="item.expanded && item.qtd > 0" ng-repeat-end="">
+											<td class="borda_avaliador" colspan="8" md-cell style="padding: 0px;">
+												<table class="simple row-border hover text-center white-bg"
+													   id="table-list-credito" ms-responsive-table width="100%">
+													<thead>
+													<tr ng-show="item.listaConciliacaoLancamento.length == 0">
+														<th class="secondary-text" colspan="8"></th>
+													</tr>
+													<tr class="grey-500-bg titulo">
+														<th class="titulo" width="8%">
+															<div class="table-header text-center"><span
+																class="column-title">Nº registro</span></div>
+														</th>
+														<th class="titulo" width="7%">
+															<div class="table-header text-center"><span
+																class="column-title">Natureza</span></div>
+														</th>
+														<th class="titulo" width="9%">
+															<div class="table-header text-center"><span
+																class="column-title">Lançamento</span></div>
+														</th>
+														<th class="titulo" width="48%">
+															<div class="table-header text-center"><span
+																class="column-title">Histórico</span></div>
+														</th>
+														<th class="titulo" width="11%">
+															<div class="table-header text-center"><span
+																class="column-title">Valor</span></div>
+														</th>
+														<th class="titulo" width="2%"></th>
+														<th class="titulo" width="8%">
+															<div class="table-header text-center">
+																<span class="column-title">
+																	{{item.tipoAcao === 'NF/Saída (faturamento)' ? 'NF/Saída' : ''}}
+																	{{item.tipoAcao === 'Outros recebimentos' ? 'Outros' : ''}}
+																</span>
+															</div>
+														</th>
+														<th class="titulo" width="7%">
+															<div class="table-header text-center">
+																<span class="column-title">
+																	{{item.tipoAcao === 'Nenhuma ação' ? '' : 'Opções'}}
+																</span>
+															</div>
+														</th>
+													</tr>
+													</thead>
+
+													<tbody>
+													<tr ng-show="item.listaConciliacaoLancamento == null || item.listaConciliacaoLancamento.length == 0">
+														<td class="text-center" colspan="8"><b>Não há pagamentos.</b>
+														</td>
+													</tr>
+													<tr ng-repeat="itemCL in item.listaConciliacaoLancamento">
+														<td class="text-center celula">{{
+															montarNumeroRegistro(itemCL.registro) }}
+														</td>
+														<td class="text-center celula">
+																<span>
+																	{{ ::itemCL.natureza}}
+																	<md-tooltip md-direction="bottom">
+																		<span class="h4">{{ montarNaturezaToolTip(itemCL.natureza) }}</span>
+																	</md-tooltip>
+																</span>
+														</td>
+														<td class="text-center celula">{{ ::itemCL.lancamento |
+															date:'dd/MM/yyyy' }}
+														</td>
+														<td class="text-left celula">{{ ::itemCL.historico}}</td>
+														<td class="text-right celula  {{ (itemCL.cheque != null && itemCL.cheque.valor != itemCL.valor) || (itemCL.objLancamento && itemCL.objLancamento.valor != itemCL.valor) || (itemCL.objPagamento && itemCL.totalPagamentosSelecionados != itemCL.valor) ? 'red-700-fg' : '' }} ">
+															{{ ::itemCL.valor | currency:'':2 }}
+															<md-tooltip md-direction="bottom"
+																		ng-if="itemCL.cheque != null && itemCL.cheque.valor != itemCL.valor">
+																<span class="h4">Valor conciliado é diferente do valor do cheque</span>
+															</md-tooltip>
+														</td>
+														<td class="text-center celula">
+																<span>
+																	C
+																	<md-tooltip md-direction="bottom">
+																		<span class="h4">Crédito</span>
+																	</md-tooltip>
+																</span>
+														</td>
+														<td class="text-center celula">
+															{{ (itemCL.objLancamento == null) ? '' :
+															(itemCL.objLancamento.codigo ? itemCL.objLancamento.numero :
+															'LT/novo' ) }}
+															{{ !itemCL.objPagamento ? '' : (itemCL.objPagamento.length >
+															1 ? 'Vários' : (itemCL.objPagamento.length == 1 ?
+															(itemCL.objPagamento[0].qtdadePagamentos > 1 ? 'Vários' :
+															itemCL.objPagamento[0].numero) : '' ) ) }}
+														</td>
+														<td class="text-center celula"
+															style="padding-top: 3px;padding-bottom: 3px; padding-left: 0px; padding-right: 0px;">
+
+															<div ng-if="!codConciliacaoBancaria">
+
+																<div
+																	ng-if="item.tipoAcao === 'Lançamento de tesouraria'">
+																	<div ng-show="itemCL.objLancamento == null"
+																		 style="display: inline-flex;">
+																		<md-button aria-label="adicionar"
+																				   class="md-icon-button"
+																				   ng-click="criarAssociacaoLancamento($event, itemCL, item.codHistorico)"
+																				   style="margin: 0px;">
+																			<md-icon class="green-400-fg"
+																					 md-font-icon="icon-plus"></md-icon>
+																			<md-tooltip md-direction="bottom">
+																				<span class="h4">Criar lançamento</span>
+																			</md-tooltip>
+																		</md-button>
+
+																		<md-button aria-label="adicionar"
+																				   class="md-icon-button"
+																				   ng-click="adicionarAssociacaoLancamento($event, itemCL)"
+																				   style="margin: 0px;">
+																			<md-icon class="green-400-fg"
+																					 md-font-icon="icon-plus-circle"></md-icon>
+																			<md-tooltip md-direction="bottom">
+																				<span
+																					class="h4">Adicionar lançamento</span>
+																			</md-tooltip>
+																		</md-button>
+																	</div>
+
+																	<div ng-show="itemCL.objLancamento != null"
+																		 style="display: inline-flex;">
+																		<md-button aria-label="editar"
+																				   class="md-icon-button"
+																				   ng-click="editarAssociacao($event, itemCL)"
+																				   ng-show="!itemCL.objLancamento.codigo"
+																				   style="margin: 0px;">
+																			<md-icon class="green-400-fg"
+																					 md-font-icon="icon-pencil"></md-icon>
+																			<md-tooltip md-direction="bottom">
+																				<span
+																					class="h4">Editar lançamento</span>
+																			</md-tooltip>
+																		</md-button>
+
+																		<md-button aria-label="remover"
+																				   class="md-icon-button"
+																				   ng-click="removerAssociacaoLancamento($event, itemCL)"
+																				   style="margin: 0px;">
+																			<md-icon class="red-400-fg"
+																					 md-font-icon="icon-close"></md-icon>
+																			<md-tooltip md-direction="bottom">
+																				<span
+																					class="h4">Remover lançamento</span>
+																			</md-tooltip>
+																		</md-button>
+																	</div>
+																</div>
+
+																<div
+																	ng-if="item.tipoAcao === 'Pagamento' || item.tipoAcao === 'Pagamento (cheque)'">
+																	<md-button aria-label="adicionar"
+																			   class="md-icon-button"
+																			   ng-click="adicionarAssociacao($event, itemCL)"
+																			   ng-show="!itemCL.objPagamento">
+																		<md-icon class="green-400-fg"
+																				 md-font-icon="icon-plus"></md-icon>
+																		<md-tooltip md-direction="bottom">
+																			<span
+																				class="h4">Adicionar pagamento(s)</span>
+																		</md-tooltip>
+																	</md-button>
+
+																	<md-button aria-label="remover"
+																			   class="md-icon-button"
+																			   ng-click="removerAssociacao($event, itemCL)"
+																			   ng-show="itemCL.objPagamento">
+																		<md-icon class="red-400-fg"
+																				 md-font-icon="icon-close"></md-icon>
+																		<md-tooltip md-direction="bottom">
+																			<span class="h4">Remover pagamento(s)</span>
+																		</md-tooltip>
+																	</md-button>
+																</div>
+
+															</div>
+
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										</tbody>
+
+										<tfoot class="md-grey-500-bg" md-foot>
+										<tr md-row>
+											<td colspan="3"></td>
+											<td class="text-right celula-borda-direita" md-cell
+												style="border-left: 1px solid #818181; padding: 8px !important;"
+												width="15%">
+												<b>Total de créditos</b>
+											</td>
+											<td class="text-right celula-borda-direita" md-cell
+												style="text-align: right; padding: 8px;" width="11%">
+												<b>{{ totalCredito | currency:'':2 }}</b>
+											</td>
+											<td class="celula-borda-direita" md-cell style="text-align: center;">
+																<span>
+																	<b>C</b>
+																	<md-tooltip md-direction="bottom">
+																		<span class="h4">Crédito</span>
+																	</md-tooltip>
+																</span>
+											</td>
+											<td md-cell></td>
+											<td md-cell></td>
+										</tr>
+										<tr md-row>
+											<td colspan="3" md-cell></td>
+											<td class="celula-borda-direita" md-cell
+												style="border-left: 1px solid #818181; padding: 8px !important;"
+												width="15%">
+												<div class="table-header text-left"><span class="column-title"><b>SALDO FINAL</b></span>
+												</div>
+											</td>
+											<td class="celula-borda-direita" md-cell width="11%">
+												<div class="table-header text-left"
+													 style="text-align: right; padding: 8px;"><span
+													class="column-title"><b>{{ saldoFinal | currency:'':2 }}</b></span>
+												</div>
+											</td>
+											<td class="celula-borda-direita" md-cell width="2%">
+												<div class="table-header text-center">
+													<span class="column-title">
+														<b>{{ situacaoFinal }}</b>
+														<md-tooltip md-direction="bottom">
+															<span class="h4">{{ situacaoFinal === 'C' ? 'Crédito' : 'Débito' }}</span>
+														</md-tooltip>
+													</span>
+												</div>
+											</td>
+											<td md-cell width="8%"></td>
+											<td md-cell width="7%"></td>
+										</tr>
+										</tfoot>
+
+									</table>
+								</md-table-container>
+
+
+								<div class="mt-30" flex layout="row">
+									<div>
+										<md-button aria-label="Salvar" class="md-raised md-accent" ng-click="salvar()"
+												   ng-disabled="codConciliacaoBancaria">
+											Salvar
+										</md-button>
+									</div>
+
+									<div>
+										<md-button aria-label="Cancelar" class="md-raised md-accent"
+												   ng-click="cancelar()" ng-disabled="codConciliacaoBancaria">
+											Cancelar
+										</md-button>
+									</div>
+								</div>
+								<div class="mt-30" flex layout="row" layout-align="start center">
+									<div flex layout="row" layout-align="start center">
+										<md-button aria-label="Imprimir" class="md-raised md-accent"
+												   ng-click="imprimir()" ng-disabled="!codConciliacaoBancaria">
+											Imprimir
+										</md-button>
+									</div>
+								</div>
+
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+</div>

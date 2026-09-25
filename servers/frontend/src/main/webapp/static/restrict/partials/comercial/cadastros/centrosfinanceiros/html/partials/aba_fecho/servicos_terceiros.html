@@ -1,0 +1,98 @@
+<md-content class="pt-16" layout="column">
+
+	<md-table-container ng-if="screenMode === 'VIEW'">
+
+		<table class="tabela_exibicao hover md-caption" ms-responsive-table width="100%" style="border: 1px;" >
+			<thead>
+			<tr class="md-grey-200-bg">
+				<th class="text-center" style="border: 1px solid #c4c4c4;">Descrição</th>
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="12%">Quantidade</th>
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="12%">Valor unitário</th>
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="12%">Valor total</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr class="linha-borda-cinza" ng-repeat="item in $ctrl.listaFechoServicosTercerizados.slice().reverse()">
+				<td class="text-left">{{ item.descricaoCategoriaDespesaGeral }}</td>
+				<td class="text-right">{{ item.quantidade | currency: '':3 }}</td>
+				<td class="text-right">{{ item.valorUnitario | currency: '':2 }}</td>
+				<td class="text-right">{{ item.quantidade * item.valorUnitario | currency: '':2 }}</td>
+			</tr>
+
+			<tr class="md-grey-500-bg" style="border: 1px solid #c4c4c4;">
+				<td colspan="3" class="text-right"><strong>Total</strong></td>
+				<td class="text-right"><strong>{{ $ctrl.totalFechoServicosTercerizados | currency: '':2 }}</strong></td>
+			</tr>
+
+			</tbody>
+		</table>
+
+	</md-table-container>
+
+	<md-table-container ng-if="screenMode !== 'VIEW'">
+
+		<table class="tabela_exibicao hover md-caption" ms-responsive-table width="100%" style="border: 1px;">
+			<thead>
+			<tr class="md-grey-200-bg">
+				<th class="text-center" style="border: 1px solid #c4c4c4;">Descrição</th>
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="12%">Quantidade</th>
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="12%">Valor unitário</th>
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="12%">Valor total</th>
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="9%">Opções</th>
+			</tr>
+			</thead>
+
+			<tbody>
+
+			<tr class="linha-borda-cinza" ng-repeat="fechoServicosTercerizados in $ctrl.listaFechoServicosTercerizados">
+				<td class="text-left">
+					<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+						<input class="text-left" aria-label="valor_parcela" type="text" ng-model="fechoServicosTercerizados.descricao" 
+							maxlength="255" style="width: 98%;">
+					</md-input-container>
+				</td>
+				<td class="text-right">
+					<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+						<input class="text-right" aria-label="valor_parcela" type="text" ng-model="fechoServicosTercerizados.quantidade"
+								ui-number-mask="4" maxlength="12" style="width: 98%;" ng-change="$ctrl.atualizarTotalFechoServicosTercerizados()"> 
+					</md-input-container>
+				</td>
+				<td class="text-right">
+					<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+						<input class="text-right" aria-label="valor_parcela" type="text" ng-model="fechoServicosTercerizados.valorUnitario"
+								ui-number-mask="2" maxlength="14" style="width: 98%;" ng-change="$ctrl.atualizarTotalFechoServicosTercerizados()">
+					</md-input-container>
+				</td>
+				<td class="text-right">
+					{{ fechoServicosTercerizados.quantidade * fechoServicosTercerizados.valorUnitario | currency: '':2 }}
+				</td>
+				<td class="text-center">
+					<md-button class="md-icon-button" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;" ng-click="$ctrl.removerServicoTerceiro($index)">
+						<md-icon md-font-icon="icon-close" class="red-400-fg"></md-icon>
+						<md-tooltip md-direction="bottom" class="h3">
+							Remover
+						</md-tooltip>
+					</md-button>
+					<md-button name="btn_add_novo_tributo_iss" class="md-icon-button" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;" 
+							ng-if="$last" ng-click="$ctrl.adicionarServicoTerceiro(fechoServicosTercerizados)">
+						<md-icon md-font-icon="icon-plus" class="green-400-fg"></md-icon>
+	
+						<md-tooltip md-direction="bottom" class="h3">
+							Adicionar novo serviço
+						</md-tooltip>
+					</md-button>
+				</td>
+			</tr>
+
+			<tr class="md-grey-500-bg" style="border: 1px solid #c4c4c4;">
+				<td colspan="3" class="text-right"><strong>Total</strong></td>
+				<td class="text-right"><strong>{{ $ctrl.totalFechoServicosTercerizados | currency: '':2 }}</strong></td>
+				<td class="text-right"></td>
+			</tr>
+
+			</tbody>
+		</table>
+
+	</md-table-container>
+
+</md-content>

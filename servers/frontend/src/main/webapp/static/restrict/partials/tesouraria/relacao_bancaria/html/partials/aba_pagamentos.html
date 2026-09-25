@@ -1,0 +1,229 @@
+<md-tab label="Pagamentos">
+	<md-content>
+		<table class="simple row-border hover text-center font-size-12" id="table-list2" ms-responsive-table width="100%">
+			<thead class="cabecalho-borda-cinza">
+			<tr ng-show="object.relacaoBancariaPagamentosVO.length == 0">
+				<th class="secondary-text" colspan="10"></th>
+			</tr>
+			<tr>
+				<th class="titulo_colunas_rb" width="11%">
+					<div class="table-header text-center"><span class="column-title">Número</span></div>
+				</th>
+				<th class="titulo_colunas_rb">
+					<div class="table-header text-center"><span
+						class="column-title">Credor (nome fantasia) / Favorecido</span></div>
+				</th>
+				<th class="titulo_colunas_rb" width="13%">
+					<div class="table-header text-center"><span class="column-title">Banco</span></div>
+				</th>
+				<th class="titulo_colunas_rb" width="14%">
+					<div class="table-header text-center"><span class="column-title">Documento para pagamento</span>
+					</div>
+				</th>
+				<th class="titulo_colunas_rb" width="5%">
+					<div class="table-header text-center"><span class="column-title">Pagamento</span></div>
+				</th>
+				<th class="titulo_colunas_rb" width="3%">
+					<div class="table-header text-center"><span class="column-title">N° pgto</span>
+						<md-tooltip>
+							<span class="h4">Número de pagamentos</span>
+						</md-tooltip>
+					</div>
+				</th>
+				<th class="titulo_colunas_rb" width="9%">
+					<div class="table-header text-center"><span class="column-title">A pagar</span></div>
+				</th>
+				<th class="titulo_colunas_rb" width="5%">
+					<div class="table-header text-center"><span class="column-title">Cheque</span></div>
+				</th>
+				<th class="titulo_colunas_rb" width="9%">
+					<div class="table-header text-center"><span class="column-title">Situação</span></div>
+				</th>
+				<th class="titulo_colunas_rb" ng-if="screenMode == 'NEW' || screenMode == 'EDIT'" style="padding: 0px;"
+					width="5%">
+					<div class="table-header text-center"><span class="column-title">Opções</span></div>
+				</th>
+			</tr>
+			</thead>
+
+			<tbody>
+			<tr class="text-center"
+				ng-show="object.relacaoBancariaPagamentosVO !== null && object.relacaoBancariaPagamentosVO.length === 0">
+				<td colspan="10">
+					<b>Não há pagamentos.</b>
+				</td>
+			</tr>
+			<tr class="text-center" ng-show="object.relacaoBancariaPagamentosVO === null && screenMode !== 'NEW'">
+				<td colspan="10">
+					<div layout="row" layout-align="space-around" layout-sm="column">
+						<!--<md-progress-circular id="toolbar-progress" class="md-accent" md-mode="indeterminate" md-diameter="30"></md-progress-circular>-->
+						<img src="../img/carregando.gif" style="height: 30px;width: 30px;"/>
+					</div>
+				</td>
+			</tr>
+
+			<tr class="linha-borda-cinza" ng-class="{'grey-300-bg': hover}" ng-mouseleave="hover = false" ng-mouseover="hover = true"
+				ng-repeat="(key, item) in object.relacaoBancariaPagamentosVO"
+				ng-show="object.relacaoBancariaPagamentosVO && object.relacaoBancariaPagamentosVO.length > 0">
+				<td class="{{item.numero === '—' ? 'text-center' : 'text-left'}} table-truncate" id="item_{{key}}" ng-if="item.qtdadePagamentos == 1"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;' : ''}}">
+					{{ ::item.numero }}
+					<md-tooltip class="h3" md-direction="bottom">{{ ::item.numero }}</md-tooltip>
+				</td>
+
+				<td class="text-center" id="item_{{key}}" ng-if="item.qtdadePagamentos > 1"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;' : ''}}">
+					<md-button aria-label="Detalhes Pagamentos" class="md-icon-button" id="btn_info_pagamentos_{{$index + 1}}" ng-click="exibirListaPagamentos(item, $event)" style="margin-right: -5px;margin-left: -10px;">
+						<md-icon class="s16" md-font-icon="icon-information-outline"></md-icon>
+						<md-tooltip id="btn_info_pag_{{$index + 1}}_tool_tip" md-direction="bottom">
+							<span class="h4">Clique para ver detalhes</span>
+						</md-tooltip>
+					</md-button>
+				</td>
+
+				<td class="text-left table-truncate" id="item_{{key}}" ng-if="item.credor && !item.tributo"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;padding: 0px 8px;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;padding: 0px 8px;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;padding: 0px 8px;' : 'padding: 0px 8px;'}}">
+					<md-button aria-label="Detalhes" class="md-icon-button"
+							   id="btn_info_credor_{{$index + 1}}" ng-click="exibirDetalhePessoa(item.credor, $event)"
+							   style="margin-right: -5px;margin-left: -10px;">
+						<md-icon class="s16" md-font-icon="icon-information-outline"></md-icon>
+						<md-tooltip id="btn_info_result_{{$index + 1}}_tool_tip" md-direction="bottom">
+							<span class="h4">Clique para ver detalhes</span>
+						</md-tooltip>
+					</md-button>
+					{{ item.credor.nomeFantasia == null || item.credor.nomeFantasia == '' ? item.credor.nome : item.credor.nomeFantasia}}
+					<md-tooltip class="h3" md-direction="bottom">{{ item.credor.nomeFantasia == null || item.credor.nomeFantasia == '' ? item.credor.nome : item.credor.nomeFantasia}}</md-tooltip>
+				</td>
+
+				<td class="text-left" id="item_{{key}}" ng-if="item.tributo"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;' : ''}}">
+					{{ item.tributo }}
+				</td>
+
+				<td class="text-left table-truncate" id="item_{{key}}"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white; padding: 0px 8px;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;padding: 0px 8px;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;padding: 0px 8px;' : 'padding: 0px 8px;'}}">
+					<md-button aria-label="Detalhes" class="md-icon-button" id="btn_info_result_{{$index + 1}}"
+							   ng-click="exibirDetalheContas(item, $event)"
+							   ng-if="!item.tributo" ng-show="item.bancoSelecionado.id != null && item.tipoDocumentoPagamento != 'Boleto'"
+							   style="margin-right: -5px;margin-left: -10px;">
+						<md-icon class="s16" md-font-icon="icon-information-outline"
+								 style="{{item.listDadosBancarios.length > 1 && object.status === 'Aberta' ? 'color: blue !important' : ''}}"></md-icon>
+						<md-tooltip id="btn_info_credor_{{$index + 1}}_tool_tip" md-direction="bottom">
+							<span class="h4">Clique para ver detalhes</span>
+						</md-tooltip>
+					</md-button>
+					{{ item.bancoSelecionado.nome }}
+				</td>
+
+				<td class="text-left table-truncate" id="item_{{key}}"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;padding: 0px 8px;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;padding: 0px 8px;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;padding: 0px 8px;' : 'padding: 0px 8px;'}}">
+					{{ item.tipoDocumentoPagamento }}
+					<md-tooltip id="btn_info_doc_pag_{{$index + 1}}_tool_tip" md-direction="bottom"
+								ng-if="item.tipoDocumentoPagamento === 'Guia' || item.tipoDocumentoPagamento === 'Boleto' || item.tipoDocumentoPagamento === 'Concessionária'">
+						<span class="h4">
+							<div ng-if="item.tipoDocumentoPagamento === 'Boleto'">{{item.linhaDigitavel == null || item.linhaDigitavel === '' ? 'Não informado' : formatarLinhaDigitavel(item.linhaDigitavel)}}</div>
+							<div ng-if="item.tipoDocumentoPagamento !== 'Boleto'">{{item.codigoBarras == null || item.codigoBarras === '' ? 'Não informado' : item.codigoBarras}}</div>
+						</span>
+					</md-tooltip>
+					<md-icon class="red-400-fg" md-font-icon="icon-checkbox-marked-outline"
+							 ng-if="item.bancoSelecionado.homologado"
+							 style="margin-top: -5px;font-size: 24px !important;color: green !important;float: right;">
+						<md-tooltip class="h3" md-direction="bottom">
+							Dados bancários homologados
+						</md-tooltip>
+					</md-icon>
+				</td>
+
+				<td class="text-center" id="item_{{key}}"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;' : ''}}">
+					{{ item.dataPagamento | date:'dd/MM/yyyy' }}
+				</td>
+
+				<td class="text-right" id="item_{{key}}"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;' : ''}}">
+					{{ item.qtdadePagamentos }}
+				</td>
+
+				<td id="item_{{key}}"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;padding: 0px 8px;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;padding: 0px 8px;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;padding: 0px 8px;' : 'padding: 0px 8px;'}}">
+					<div style="float: left">
+						<md-button aria-label="Detalhes" class="md-icon-button" id="btn_info_result_{{$index + 1}}"
+								   ng-click="exibirDetalhePagamento(item, $event)" ng-if="item.qtdadePagamentos === 1 && screenMode === 'VIEW'" style="margin-left: -10px;">
+							<md-icon class="s16 text-left" md-font-icon="icon-information-outline"></md-icon>
+						</md-button>
+					</div>
+					<span
+						style="float: right; {{item.qtdadePagamentos === 1 && screenMode === 'VIEW' ? 'margin-top: 9px;' : ''}}">{{ item.valorAPagar | currency:'':2 }}</span>
+				</td>
+
+				<td class="text-right" id="item_{{key}}"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;' : ''}}">
+					{{ item.cheque }}
+				</td>
+
+				<td class="text-left table-truncate" id="item_{{key}}"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white;padding: 0px 8px;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white;padding: 0px 8px;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white;padding: 0px 8px;' : 'padding: 0px 8px;'}}">
+					<md-button
+						class="md-icon-button"
+						id="btn_download_{{$index}}" ng-if="item.statusPagamento === 'Inválido/Estornado' && item.retornoBancario.identificacaoErro != null"
+						style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="s16 text-left" md-font-icon="icon-information-outline"></md-icon>
+						<md-tooltip id="tool_tip_btn_download" md-direction="bottom">
+							<span class="h4">{{item.retornoBancario.identificacaoErro + " - " + item.retornoBancario.descricao}}</span>
+						</md-tooltip>
+					</md-button>
+					{{ ::item.statusPagamento }}
+					<md-tooltip class="h3" md-direction="bottom">{{::item.statusPagamento}}</md-tooltip>
+					<md-button class="md-icon-button"
+							   id="btn_download_{{$index}}"
+							   ng-click="downloadComprovante(item)"
+							   ng-if="item.statusPagamento == 'Pago' && item.caminhoComprovante != null" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="h3" md-font-icon="icon-download">
+						</md-icon>
+						<md-tooltip id="tool_tip_btn_download" md-direction="bottom">
+							<span class="h4">Realizar o download do comprovante</span>
+						</md-tooltip>
+					</md-button>
+				</td>
+
+				<td class="text-center" id="item_{{key}}"
+					ng-if="screenMode == 'NEW' || screenMode == 'EDIT'"
+					style="{{item.dadosBancariosSelecionadoNaoHomolog ? 'background-color: red;color: white; padding-left: 16px; padding-right: 16px;' : item.pagamentoSemNumeroBoleto ? 'background-color: #d89257;color: white; padding-left: 16px; padding-right: 16px;' : item.erroValorLinhaDigitavel ? 'background-color: #f5700e;color: white; padding-left: 16px; padding-right: 16px; ' : 'padding-left: 16px; padding-right: 16px;'}}">
+					<div layout="line">
+						<md-button aria-label="Editar pagamento" class="md-icon-button" id="btn_editar_pagamento"
+								   ng-click="editarPagamento($event, item, $index)"
+								   ng-disabled="item.statusPagamento != 'Aberto' || action"
+								   ng-if="item.qtdadePagamentos == 1"
+								   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+							<md-icon md-font-icon="icon-pencil"></md-icon>
+							<md-tooltip class="h3" md-direction="bottom">
+								Editar os dados deste pagamento
+							</md-tooltip>
+						</md-button>
+						<md-button class="md-icon-button" id="removerPgto"
+								   ng-click="removerPagamento(item, $index)"
+								   ng-disabled="item.statusPagamento != 'Aberto' || action || screenMode == 'VIEW'"
+								   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+							<md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+							<md-tooltip class="h3" md-direction="bottom">
+								Remover este{{::item.qtdadePagamentos > 1 ? 's' : ''}}
+								pagamento{{::item.qtdadePagamentos > 1 ? 's' : ''}} desta relação bancária
+							</md-tooltip>
+						</md-button>
+					</div>
+				</td>
+
+			</tr>
+			</tbody>
+		</table>
+		<md-divider></md-divider>
+
+		<md-button aria-label="Adicionar pagamentos" class="md-raised md-accent" id="btn_adicionar_pagamentos"
+				   ng-click="adicionar(object)"
+				   ng-disabled="object.status != 'Aberta' || action || (object.unidade == null || object.contaCorrente == null || object.meioPagamento == null)" ng-if="screenMode !== 'VIEW'"
+				   style="float: right;">
+			ADICIONAR PAGAMENTOS
+		</md-button>
+
+	</md-content>
+</md-tab>

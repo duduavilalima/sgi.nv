@@ -1,0 +1,147 @@
+<div layout layout-sm="column" layout-wrap>
+	<md-input-container flex flex-gt-md="50">
+		<label id="lbl_situacao">Situação</label>
+		<md-select id="combo_situacao" name="situacao" ng-change="$emit('changeSituacao')" ng-model="object.situacao"
+				   value="{{ object.situacao }}">
+			<md-option ng-repeat="status in enumStatus" ng-value="status" value="{{ status }}">{{ status.nome }}
+			</md-option>
+		</md-select>
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_tipo">Tipo</label>
+		<md-select id="combo_tipo" name="combo_tipo" ng-model="object.tipoFaturamento"
+				   value="{{ object.tipoFaturamento }}">
+			<md-option ng-repeat="tipoFaturamento in tipoList" ng-value="tipoFaturamento" value="{{ tipoFaturamento }}">
+				{{ tipoFaturamento.nome }}
+			</md-option>
+		</md-select>
+		<div ng-messages="form.combo_tipo.$error" role="alert">
+			<div id="msg_obrig_tipo" ng-message="required">Obrigatório.</div>
+		</div>
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_numero">Número</label>
+		<input id="input_numero" maxlength="9" name="numero" ng-model="object.codigo" type="text" ui-hide-group-sep
+			   ui-number-mask="0" value="{{ object.codigo }}">
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_periodo_de_input">Período de</label>
+		<input id="periodo_de_input" max-date="object.periodoAte" ng-model="object.periodoDe" tt-date-picker
+			   type="text">
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_periodo_ate_input">Período até</label>
+		<input id="periodo_ate_input" min-date="object.periodoDe" ng-model="object.periodoAte" tt-date-picker
+			   type="text">
+	</md-input-container>
+
+
+	<!--<md-content class="md-datepicker-custom" style="overflow:hidden;" flex="25">-->
+	<!--<label class="md-caption label_datapicker" ng-if="object.periodoDe != null">Período de</label>-->
+	<!--<md-datepicker id="periodo_de" flex name="periodode" ng-model="object.periodoDe" md-placeholder="Período de" flex md-max-date="object.periodoAte" name="emissao_de"></md-datepicker>-->
+	<!--<div ng-messages="form.periodode.$error" ng-show="faturamento.periodode.$touched" role="alert">-->
+	<!--<div id="msg_obrig_periodo_de" ng-message="required" class="msg_datapicker">"Obrigatório.</div>-->
+	<!--</div>-->
+	<!--</md-content>-->
+
+	<!--<md-content class="md-datepicker-custom" style="overflow:hidden;" flex="25">-->
+	<!--<label class="md-caption label_datapicker" ng-if="object.periodoAte != null">Período até</label>-->
+	<!--<md-datepicker id="periodo_ate" flex name="periodoate" ng-model="object.periodoAte" md-placeholder="Período até" md-min-date="object.periodoDe" flex name="emissao_ate"></md-datepicker>-->
+	<!--<div ng-messages="form.periodoate.$error" ng-show="faturamento.periodoate.$touched" role="alert">-->
+	<!--<div id="msg_obrig_periodo_ate" ng-message="required" class="msg_datapicker">"Obrigatório.</div>-->
+	<!--</div>-->
+	<!--</md-content>-->
+
+	<span class="width-20"></span>
+
+	<md-input-container flex="25" flex-sm="25">
+		<label id="lbl_valorDe">Valor de (R$)</label>
+		<input class="text-left" flex flex id="input_valorDe" maxlength="18" name="valor_de" ng-model="object.valorDe"
+			   type="text" ui-number-mask="2" value="{{ object.totalDe }}">
+	</md-input-container>
+	<div ng-messages="form.valorDe.$error" ng-show="faturamento.valorDe.$touched" role="alert">
+		<div id="msg_obrig_valor_de" ng-message="required">Obrigatório.</div>
+	</div>
+	<div ng-messages="form.valorDe" ng-show="validaValorDeAte()" role="alert">
+		<div id="msg_valor_de" ng-message="required">O valor do campo "Valor de" deve ser menor que o valor do campo
+			"Valor até.".
+		</div>
+	</div>
+
+	<span class="width-20"></span>
+
+	<md-input-container flex="25" flex-sm="25">
+		<label id="lbl_valorAte">Valor até (R$)</label>
+		<input class="text-left" flex id="input_valorAte" maxlength="18" name="valor_ate" ng-model="object.valorAte"
+			   type="text" ui-number-mask="2" value="{{ object.totalAte }}">
+	</md-input-container>
+	<div ng-messages="form.valorAte.$error" ng-show="faturamento.valorAte.$touched" role="alert">
+		<div id="msg_obrig_valor_ate" ng-message="required">Obrigatório.</div>
+	</div>
+	<div ng-messages="form.valorAte" ng-show="validaValorDeAte()" role="alert">
+		<div id="msg_valor_ate" ng-message="required">O valor do campo "Valor até" deve ser maior que o valor do campo
+			"Valor de.".
+		</div>
+	</div>
+</div>
+
+<span class="width-20"></span>
+
+<div layout layout="column">
+	<md-autocomplete flex id="autocomplete_nome_cliente" md-delay="250" md-floating-label="Cliente"
+					 md-input-name="autocompleteClienteInp" md-item-text="item.nome"
+					 md-items="item in querySearchCliente(searchTextCliente)"
+					 md-menu-class="autocomplete-custom-template" md-min-length="3" md-no-cache="false"
+					 md-search-text="searchTextCliente" md-selected-item="selectedItemCliente"
+					 md-selected-item-change="selectedItemChange(item, 'cliente')" name="autocompleteCliente"
+					 value="{{ object.cliente.nome }}">
+		<md-item-template>
+			<span class="item-title"><h3> <strong> <span
+				md-highlight-text="searchTextCliente"> {{item.documento}} </span> </strong></h3></span>
+			<span class="item-title"><h5> <strong>RAZÃO SOCIAL: </strong> <span md-highlight-flags="i"
+																				md-highlight-text="searchTextCliente">{{item.nome}} </span> </h5></span>
+			<span class="item-title"><h5> <strong>NOME FANTASIA: </strong> <span md-highlight-flags="i"
+																				 md-highlight-text="searchTextCliente">{{item.nomeFantasia}} </span> </h5></span>
+		</md-item-template>
+
+		<div ng-if="faturamento.autocompleteClienteInp.$touched" ng-messages="form.autocompleteClienteInp.$error"
+			 role="alert">
+			<div ng-message="required">Obrigatório.</div>
+			<div ng-message="minlength">O nome informado não é suficiente.</div>
+			<div ng-message="maxlength">O nome informado é muito longo.</div>
+		</div>
+	</md-autocomplete>
+
+	<span class="width-20"></span>
+
+	<md-input-container flex flex-gt-xs="50">
+		<label id="lbl_centro_lucro_aba_dados">Centro de lucro</label>
+		<md-select id="combo_cl_aba_dados" name="centro_lucro" ng-change="$emit('changeCentroLucro')"
+				   ng-disabled="object.cliente.nome == null" ng-model="object.centroFinanceiro"
+				   ng-model-options="{trackBy: '$value.codigo'}"
+				   value="{{ object.centroFinanceiro.identificadorFinal }} - {{ object.centroFinanceiro.nome }}">
+			<md-option ng-value="null"></md-option>
+			<md-option ng-repeat="cfTO in centros | orderBy: 'identificadorFinal'" ng-value="cfTO">{{
+				cfTO.identificadorFinal }} - {{ cfTO.nome }}
+			</md-option>
+		</md-select>
+		<div ng-messages="form.centro_lucro.$error" role="alert">
+			<div id="msg_obrig_cf" ng-message="required">Obrigatório.</div>
+		</div>
+	</md-input-container>
+
+</div>
+<!-- / CONTENT -->
+</div>

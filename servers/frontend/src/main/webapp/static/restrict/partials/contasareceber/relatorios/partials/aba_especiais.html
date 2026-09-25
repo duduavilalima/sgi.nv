@@ -1,0 +1,129 @@
+<div class="p-4" flex layout-xs="column">
+
+	<!--FILTROS DE RELATORIO-->
+	<div flex layout layout="column">
+		<md-input-container flex="25" flex-sm="100">
+			<label id="lbl_cliente">
+				Cliente "pai"
+			</label>
+			<input id="input_cliente" name="ident" ng-model="object.cliente.nome" type="text">
+			<md-tooltip md-direction="bottom">
+				<span class="h4">Informe o CNPJ/CPF ou a razão social/nome do cliente "pai" do cliente da NF (para o qual a NF foi emitida</span>
+			</md-tooltip>
+		</md-input-container>
+
+		<md-input-container style="right: 25px;">
+			<md-icon md-font-icon="icon-question-mark-circle" style="color: #8e112e !important;cursor: pointer;font-size: 20px;">
+				<md-tooltip class="h3" md-direction="bottom">
+					Caso deseje o filtro para todos as NFs dos clientes/subclientes relacionados à OI, informe o texto "CLIENTE OI". Para as NFs dos clientes/subclientes relacionados à TIM, informe "CLIENTE TIM".
+				</md-tooltip>
+			</md-icon>
+		</md-input-container>
+
+
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl_calssificacao_cliente">Classificação do cliente da NF</label>
+			<md-select id="combo_classificacao" name="classificacao" ng-model="object.classificacaoCliente"
+					   ng-model-options="{trackBy: '$value.codigo'}">
+				<md-option ng-repeat="item in listClassificacao | orderBy: 'codigo'" ng-value="item" value="{{ item}}">
+					{{ item.nome }}
+				</md-option>
+			</md-select>
+		</md-input-container>
+
+		<md-input-container flex flex-gt-md="25"
+							ng-show="object.tipoRelatorio.chave === 'duplicatas' || 
+							object.tipoRelatorio.chave === 'duplicatas_auditoria_externa' || 
+							object.tipoRelatorio.chave === 'duplicatas_recebidas' || 
+							object.tipoRelatorio.chave === 'duplicatas_baixadas'">
+			<label id="lbl_cliente_cobranca">Excluir clientes (cobrança)</label>
+			<md-select id="combo_cliente_cobranca" name="cobranca" ng-model="object.faturamentoCobranca">
+				<md-option ng-value="" value=""></md-option>
+				<md-option ng-value="true" value="true">Sim</md-option>
+				<md-option ng-value="false" value="false">Apenas os excluídos</md-option>
+			</md-select>
+		</md-input-container>
+
+		<md-input-container flex flex-gt-md="25"
+							ng-hide="object.tipoRelatorio.chave !== 'duplicatas' &&
+							object.tipoRelatorio.chave !== 'duplicatas_auditoria_externa' &&
+							object.tipoRelatorio.chave !== 'fluxo_de_caixa' && 
+							object.tipoRelatorio.chave !== 'duplicatas_aberto_filial' && 
+							object.tipoRelatorio.chave !== 'duplicatas_aberto_gerencia' && 
+							object.tipoRelatorio.chave !== 'duplicatas_aberto_centro_de_lucro'">
+			<label id="lbl_cobranca_cronica">Cobrança crônica</label>
+			<md-select id="combo_cobranca_cronica" name="cobranca" ng-model="object.cobrancaCronica">
+				<md-option ng-value="" value=""></md-option>
+				<md-option ng-value="true" value="true">Só as cobranças crônicas</md-option>
+				<md-option ng-value="false" value="false">Exceto as cobranças crônicas</md-option>
+			</md-select>
+		</md-input-container>
+	</div>
+
+
+	<div flex layout layout="column">
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl_banco">Banco
+			</label>
+			<md-select id="combo_banco" name="combo_banco" ng-change="changeBanco()"
+					   ng-disabled="desabilitarCampo('banco')" ng-model="object.contaCorrente.banco"
+					   ng-model-options="{trackBy: '$value.codigo'}">
+				<md-option ng-value="null"></md-option>
+				<md-option ng-repeat="cc in bancoList | unique:'banco.nome' | orderBy: 'banco.nome'"
+						   ng-value="cc.banco">{{cc.banco.nome}}
+				</md-option>
+			</md-select>
+		</md-input-container>
+
+		<md-input-container flex flex-gt-md="25">
+			<label id="lbl_agencia_conta">Agência/Conta
+			</label>
+			<md-select id="combo_agencia_conta" name="agencia_conta" ng-change="$emit('changeAgencia')"
+					   ng-disabled="desabilitarCampo('contaCorrente')" ng-model="object.contaCorrente"
+					   ng-model-options="{trackBy: '$value.codigo'}">
+				<md-option ng-repeat="agenciaConta in agenciaContaList | orderBy: 'agencia' | orderBy: 'conta'"
+						   ng-value="agenciaConta">
+					{{ montarLabelAgenciaConta(agenciaConta) }}
+				</md-option>
+			</md-select>
+		</md-input-container>
+
+		<md-input-container flex="25" flex-sm="25">
+			<label id="lbl_valorDe">Valor bruto de</label>
+			<input class="text-left" flex flex id="input_valorDe" maxlength="18" name="valor_de"
+				   ng-model="object.valorDe" type="text" ui-number-mask="2" value="{{ object.totalDe }}">
+			<div ng-messages="form.valorDe.$error" ng-show="faturamento.valorDe.$touched" role="alert">
+				<div id="msg_obrig_valor_de" ng-message="required">Obrigatório.</div>
+			</div>
+			<div ng-messages="form.valorDe" ng-show="validaValorDeAte()" role="alert">
+				<div id="msg_valor_de" ng-message="required">O valor do campo "Valor de" deve ser menor que o valor do
+					campo "Valor até.".
+				</div>
+			</div>
+		</md-input-container>
+
+
+		<md-input-container flex="25" flex-sm="25">
+			<label id="lbl_valorAte">Valor bruto até</label>
+			<input class="text-left" flex id="input_valorAte" maxlength="18" name="valor_ate" ng-model="object.valorAte"
+				   type="text" ui-number-mask="2" value="{{ object.totalAte }}">
+			<div ng-messages="form.valorAte.$error" ng-show="faturamento.valorAte.$touched" role="alert">
+				<div id="msg_obrig_valor_ate" ng-message="required">Obrigatório.</div>
+			</div>
+			<div ng-messages="form.valorAte" ng-show="validaValorDeAte()" role="alert">
+				<div id="msg_valor_ate" ng-message="required">O valor do campo "Valor até" deve ser maior que o valor do
+					campo "Valor de.".
+				</div>
+			</div>
+		</md-input-container>
+
+		
+	</div>
+
+	<!-- / CONTENT -->
+
+	<div ng-if="screenMode != 'VIEW'" style="margin-top: 20px">
+		<span>*</span>&nbsp;Campos obrigatórios / É obrigatório informar, pelo menos, um período de datas
+	</div>
+
+</div>

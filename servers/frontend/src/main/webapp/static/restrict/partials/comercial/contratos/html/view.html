@@ -1,0 +1,78 @@
+<div class="page-layout simple fullwidth" ng-controller="ContratosDetailCtrl as $ctrl">
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">Comercial</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo">Contratos
+                </span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+                    id="titulo_subtitulo">Exibição</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+        <!-- CONTENT -->
+        <div class="content" flex>
+            <div layout="row" layout-wrap>
+                <div class="about" flex="100" layout="column">
+                    <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+                        <header class="md-accent-bg">
+                            <div class="title" id="title_panel">Contratos - Dados Gerais</div>
+                        </header>
+
+                        <div class="text-center">
+                            <img ng-if="!$ctrl.object && !$ctrl.object.codigo" src="../img/carregando.gif"
+                                style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px" />
+                        </div>
+
+                        <div class="white-500-bg" ng-if="$ctrl.object || $ctrl.object.codigo">
+
+                            <form name="ContratosForm">
+                                <md-content class="padding-16">
+                                    <div flex="100" ng-include="'partials/comercial/contratos/html/partials/exibicao.html'"></div>
+                                    <div flex="100" ng-include="'partials/comercial/contratos/html/partials/abas.html'"></div>
+                                </md-content>
+
+                                <md-divider></md-divider>
+                                <div class="navigation pt-8 pb-16 pl-16 pr-16"
+                                    layout="row" layout-align="center center" flex="100"
+                                    ng-include="'partials/comercial/contratos/html/partials/exibicao_button.html'">
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / CONTENT -->
+    </div>
+
+    <!-- BOTÕES DE NAVEGAÇÃO [INICIO] -->
+
+    <md-button aria-label="Botão Descer tela" class="md-fab md-raised md-accent md-mini btn-descer" ng-click="$ctrl.top()" ng-if="$ctrl.btnFab">
+        <md-icon md-font-icon="icon-chevron-down" style="color: white !important;"></md-icon>
+        <md-tooltip class="h4" md-direction="top">
+            Rolar a tela para o fim
+        </md-tooltip>
+    </md-button>
+
+    <md-button aria-label="Botão Descer tela" class="md-fab md-raised md-accent md-mini btn-descer" ng-click="$ctrl.bottom()" ng-if="$ctrl.btnBottom">
+        <md-icon md-font-icon="icon-chevron-up" style="color: white !important;"></md-icon>
+        <md-tooltip class="h4" md-direction="top">
+            Rolar a tela para o início
+        </md-tooltip>
+    </md-button>
+
+    <!-- BOTÕES DE NAVEGAÇÃO [FIM] -->
+
+</div>

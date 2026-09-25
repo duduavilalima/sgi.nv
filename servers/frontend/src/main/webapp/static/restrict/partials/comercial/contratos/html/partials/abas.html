@@ -1,0 +1,608 @@
+<md-tabs id="abas_contratos_exibir" md-border-bottom md-dynamic-height md-selected="index" name="abas_contratos_exibir">
+    <md-tab id="aba_centros_de_lucro_exibir" label="Centros de Lucro" name="aba_centros_de_lucro_exibir">
+        <form name="wizardStep1">
+            <md-content class="pt-16">
+                <table class="tabela_exibicao row-border hover md-caption" id="table_cl_exibir" ms-responsive-table>
+                    <thead class="cabecalho-borda-cinza" ng-if="$ctrl.listCentroLucro.length > 0">
+                        <tr>
+                            <th class="text-center" width="4%">CL</th>
+                            <th class="text-center" width="30%">Nome</th>
+                            <th class="text-center" width="13%">Situação</th>
+                            <th class="text-center">Gerência</th>
+                            <th class="text-center" width="8%">Valor mensal</th>
+                            <th class="text-center" width="5%">
+                                <span>
+                                    Prazo
+                                    <md-tooltip class="h3" md-direction="bottom">
+                                        Prazo do CL (em meses)
+                                    </md-tooltip>
+                                </span>
+                            </th>
+                            <th class="text-center" width="8%">Valor total</th>
+                            <th class="text-center" width="5%">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table_tbody_cl_list_exibir">
+                        <tr ng-if="$ctrl.listCentroLucro === undefined">
+                            <td colspan="10">
+                                <div layout="row" layout-align="space-around" layout-sm="column">
+                                    <md-progress-circular class="md-accent" id="toolbar-progress" md-diameter="30" md-mode="indeterminate">
+                                    </md-progress-circular>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="linha-borda-cinza" ng-if="$ctrl.listCentroLucro.length > 0" ng-repeat="item in $ctrl.listCentroLucro" >
+                            <td class="text-center">
+                                <a href="/sgi/nv/app/main.html#!/comercial/cadastros/centrosfinanceiros/{{item.codigo}}?from=contrato"
+                               target="_blank">{{item.identificadorFinal}}</a>
+                            </td>
+                            <td class="text-left" style="{{ $ctrl.conjSituacaoInativo.has(item.situacao) ? 'color: #c5c5c5' : ''}}">{{item.nome}}</td>
+                            <td class="text-left" style="{{ $ctrl.conjSituacaoInativo.has(item.situacao) ? 'color: #c5c5c5' : ''}}">
+                                <div style="height: 16px; width: 98%; overflow: hidden;">
+                                    {{item.situacao}}
+                                </div>
+                            </td>
+                            <td class="text-left" style="{{ $ctrl.conjSituacaoInativo.has(item.situacao) ? 'color: #c5c5c5' : ''}}">
+                                <div style="height: 16px; width: 98%; overflow: hidden;">
+                                   <span>
+                                        {{item.pai.nome}}
+                                        <md-tooltip class="h3" md-direction="bottom">
+                                            {{item.pai.nome}}
+                                        </md-tooltip>
+                                   </span>
+                                </div>
+                            </td>
+                            <td class="text-right" style="{{ $ctrl.conjSituacaoInativo.has(item.situacao) ? 'color: #c5c5c5' : ''}}">{{item.valorMensalCentroFinanceiro | currency:'':2 }}</td>
+                            <td class="text-right" style="{{ $ctrl.conjSituacaoInativo.has(item.situacao) ? 'color: #c5c5c5' : ''}}">{{item.prazo}}</td>
+                            <td class="text-right" style="{{ $ctrl.conjSituacaoInativo.has(item.situacao) ? 'color: #c5c5c5' : ''}}">{{item.valorTotalCentroFinanceiro | currency:'':2 }}</td>
+                            <td class="text-center" style="padding-top: 0px; padding-bottom: 0px;">
+                                <div>
+                                    <md-button class="md-icon-button" id="btn_editar_CL" name="btn_editar_CL" ng-click="$ctrl.exibirCentroLucro(item)" ng-if="true"
+                                        style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                        <md-icon md-font-icon="icon-eye"></md-icon>
+                                        <md-tooltip class="h3" md-direction="bottom">
+                                            Exibir centro financeiro
+                                        </md-tooltip>
+                                    </md-button>
+                                    <md-button class="md-icon-button" id="btn_editar_CL" name="btn_editar_CL" ng-click="$ctrl.editarCentroLucro(item)" ng-if="(item.situacao === 'Ativo' || item.situacao === 'Em elaboração' || item.situacao === 'Em revisão')"
+                                        style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                        <md-icon md-font-icon="icon-pencil"></md-icon>
+                                        <md-tooltip class="h3" md-direction="bottom">
+                                            Editar centro financeiro
+                                        </md-tooltip>
+                                    </md-button>
+                                    <md-button class="md-icon-button" id="btn_excluir_CL" name="btn_excluir_CL" ng-click="$ctrl.removerCentroLucro(item)" ng-if="(item.situacao === 'Em elaboração' || item.situacao === 'Em revisão')" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                        <md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+                                        <md-tooltip class="h3" md-direction="bottom">
+                                            Excluir centro financeiro
+                                        </md-tooltip>
+                                    </md-button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot id="table_tfoot_tributos" ng-if="$ctrl.listCentroLucro.length > 0">
+                        <tr class="md-grey-300-bg">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"><strong>Total (ativos)</strong></td>
+                            <td class="text-right"><strong style="margin-right: -5px;">{{ $ctrl.totalValorMensalCF | currency : '' : 2 }}</strong></td>
+                            <td></td>
+                            <td class="text-right"><strong style="margin-right: -5px;">{{ $ctrl.totalValorTotalCF | currency : '' : 2 }}</strong></td>
+                            <td></td>
+
+                        </tr>
+                    </tfoot>
+                </table>
+                <md-divider></md-divider>
+            </md-content>
+
+            <div id="idMensagemCentroLucro" ng-if="(($ctrl.listCentroLucro.length == 0))">
+                <md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+                    <span class="h4 p-32">Não existe <b>centro lucro</b> associado a este contrato.</span>
+                </md-whiteframe>
+            </div>
+
+            <div class="pt-8 pb-8" layout="row" layout-sm="row" layout-wrap layout-align="end center">
+                <md-button class="md-raised md-accent" id="btn_add_CL" name="btn_add_CL" ng-click="$ctrl.novoCentroLucro()" ng-if="$ctrl.listCentroLucro !== undefined">
+                    Novo CL
+                </md-button>
+            </div>
+        </form>
+    </md-tab>
+
+    <md-tab id="aba_resumo_exibir" label="Resumo" name="aba_resumo_exibir">
+        <md-content>
+            <div layout="row" layout-sm="column" layout-wrap layout-xs="column" style="height: 200px;">
+                <md-input-container flex flex-gt-md="100" style="margin: 10px;">
+                    <textarea id="input_resumo_exibir" name="resumo_exibir" ng-disabled="true" ng-model="$ctrl.object.resumo" rows="2" type="text" aria-label="resumo: objeto do contrato">
+            </textarea>
+                </md-input-container>
+            </div>
+        </md-content>
+    </md-tab>
+
+    <md-tab id="aba_info_complementares" label="Info. complementares" name="aba_info_complementares">
+        <md-content class="pt-16 pb-8">
+            <form name="wizardStep7">
+
+                <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+                    <md-input-container flex flex-gt-md="25">
+                        <label id="lbl_proposta_exibir">Proposta</label>
+                        <input id="input_proposta_exibir" name="proposta_exibir" ng-disabled="true" type="text" value="{{ $ctrl.object.proposta }}">
+                    </md-input-container>
+
+                    <md-input-container flex flex-gt-md="25">
+                        <label id="lbl_forma_contratual_exibir">Forma de contratação</label>
+                        <input id="combo_forma_contratual_exibir" name="forma_contratual_exibir" disabled="true" type="text" value="{{ $ctrl.object.formaContratacao.descricao }}">
+                    </md-input-container>
+
+                    <md-input-container flex flex-gt-md="25">
+                        <label id="lbl_estcomercial_exibir">Estágio comercial</label>
+                        <input id="combo_estcomercial_exibir" name="estcomercial_exibir" ng-disabled="true" type="text" value="{{ $ctrl.object.estagioComercial }}">
+                    </md-input-container>
+
+                    <md-input-container flex flex-gt-md="25">
+                        <label id="lbl_prorrogacao_exibir">Prorrogação</label>
+                        <input id="combo_prorrogacao_exibir" name="prorrogacao_exibir" ng-disabled="true" value="{{ $ctrl.object.prorrogacao }}">
+                    </md-input-container>
+
+                    <md-input-container flex flex-gt-md="25">
+                        <label id="lbl_reajuste_exibir">Reajuste</label>
+                        <input id="combo_reajuste_exibir" name="reajuste_exibir" ng-disabled="true" value="{{ $ctrl.object.periodoReajuste }}">
+                    </md-input-container>
+
+                    <md-input-container flex flex-gt-md="25">
+                        <label id="lbl_n_contrato_forn_exibir">
+                            Nº do contrato do cliente
+                            <md-tooltip>
+                                <span class="h4">Número de contrato original do cliente</span>
+                            </md-tooltip>
+                        </label>
+                        <input id="input_n_contrato_forn_exibir" name="n_contrato_forn_exibir" ng-disabled="true" type="text" value="{{ $ctrl.object.contratoOriginal }}">
+                    </md-input-container>
+
+                    <md-input-container flex flex-gt-md="50">
+                        <label id="lbl_indice_exibir">Índice</label>
+                        <input id="input_indice_exibir" name="indice_exibir" ng-disabled="true" type="text" value="{{ $ctrl.object.indiceReajuste }}">
+                    </md-input-container>
+
+                </div>
+
+            </form>
+        </md-content>
+    </md-tab>
+
+    <md-tab id="aba_contato_exibir" label="Contatos" name="aba_contato_exibir">
+        <md-content class="pt-16 pb-8" ng-if="$ctrl.listContato.length > 0">
+            <table class="tabela_exibicao row-border hover md-caption" id="table_contatos_exibir" ms-responsive-table>
+                <thead class="cabecalho-borda-cinza">
+                    <tr>
+                        <th class="text-center" width="25%">Nome</th>
+                        <th class="text-center" width="10%">1º Telefone</th>
+                        <th class="text-center" width="10%">2º Telefone</th>
+                        <th class="text-center" width="25%">E-mail</th>
+                        <th class="text-center" width="20%">Relacionamento</th>
+                        <th class="text-center" width="10%">Opções</th>
+                    </tr>
+                </thead>
+                <tbody id="table_tbody_contatos_exibir_list">
+                    <tr class="linha-borda-cinza" ng-repeat="item in $ctrl.listContato">
+                        <td class="text-left"> {{ item.contato.nome }}</td>
+                        <td class="text-center"> {{ item.contato.telefone1.dddTelefoneRamal }}
+                        </td>
+                        <td class="text-center"> {{ item.contato.telefone2.dddTelefoneRamal }}
+                        </td>
+                        <td class="text-left"> {{ item.contato.email }}</td>
+                        <td class="text-left"> {{ item.contato.relacionamentoContato.nome }}
+                        </td>
+                        <td class="text-center" style="padding-top: 0px; padding-bottom: 0px;">
+                            <md-button class="md-icon-button" id="btn_edit_endereco" ng-click="$ctrl.adicionarNovoContato(item)" ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' ||  $ctrl.object.situacao === 'Em revisão')"
+                                style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                <md-icon md-font-icon="icon-pencil" style="!important;"></md-icon>
+                                <md-tooltip class="h3" md-direction="bottom">
+                                    Editar
+                                </md-tooltip>
+                            </md-button>
+                            <md-button class="md-icon-button" id="btn_excluir_endereco" name="btn_excluir_endereco" ng-click="$ctrl.excluirContato(item)" ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' || $ctrl.object.situacao === 'Em revisão')"
+                                style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                <md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+                                <md-tooltip class="h3" md-direction="bottom">
+                                    Remover
+                                </md-tooltip>
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <md-divider></md-divider>
+        </md-content>
+
+        <div id="idMensagemContato" ng-if="(($ctrl.listContato === undefined || $ctrl.listContato.length === 0))">
+            <md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+                <span class="h4 p-32">Não existe <b>contato</b> associado a este contrato.</span>
+            </md-whiteframe>
+        </div>
+
+        <div class="pb-16" layout="row" layout-sm="row" layout-wrap layout-align="end center">
+            <md-button class="md-raised md-accent" id="btn_add_CL" name="btn_add_CL" ng-click="$ctrl.adicionarNovoContato($index)"
+            ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' || $ctrl.object.situacao === 'Em revisão')">
+                Novo contato
+            </md-button>
+        </div>
+    </md-tab>
+    <md-tab id="aba_enderecos_exibir" label="Endereços" name="aba_enderecos_exibir">
+
+        <md-content class="pt-16 pb-8" ng-if="$ctrl.listContratoEndereco.length > 0">
+            <table class="row-border md-caption tabela_exibicao" id="table_endereco_exibir" ms-responsive-table>
+                <thead class="cabecalho-borda-cinza">
+                    <tr>
+                        <th class="titulo_colunas_rb" width="20%">
+                            <div class="table-header text-center"><span class="column-title">Tipo</span></div>
+                        </th>
+                        <th class="titulo_colunas_rb" width="50%">
+                            <div class="table-header text-center"><span class="column-title">Endereço</span></div>
+                        </th>
+                        <th class="titulo_colunas_rb" width="20%">
+                            <div class="table-header text-center"><span class="column-title">Cidade</span></div>
+                        </th>
+                        <th class="titulo_colunas_rb" width="10%">
+                            <div class="table-header text-center"><span class="column-title">Opções</span></div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="table_tbody_enderecos_exibir_list">
+                    <tr class="linha-borda-cinza" ng-repeat="item in $ctrl.listContratoEndereco">
+                        <td>{{ item.tipo }}</td>
+                        <td>{{ item.endereco.enderecoCompleto }}</td>
+                        <td>{{ item.endereco.cidade.cidadeUf }}</td>
+                        <td class="text-center" style="padding-top: 0px; padding-bottom: 0px;">
+                            <md-button class="md-icon-button" id="btn_edit_endereco" ng-click="$ctrl.adicionarNovoEndereco(item)" ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' || $ctrl.object.situacao === 'Em revisão')"
+                                style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                <md-icon md-font-icon="icon-pencil" style="!important;"></md-icon>
+                                <md-tooltip class="h3" md-direction="bottom">
+                                    Editar
+                                </md-tooltip>
+                            </md-button>
+                            <md-button class="md-icon-button" id="btn_excluir_endereco" name="btn_excluir_endereco" ng-click="$ctrl.excluirEndereco(item)" ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' || $ctrl.object.situacao === 'Em revisão')"
+                                style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                <md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+                                <md-tooltip class="h3" md-direction="bottom">
+                                    Remover
+                                </md-tooltip>
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <md-divider></md-divider>
+        </md-content>
+
+        <div id="idMensagemEndereco" ng-if="(($ctrl.listContratoEndereco === undefined || $ctrl.listContratoEndereco.length === 0))">
+            <md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+                <span class="h4 p-32">Não existe <b>endereço</b> associado a este contrato.</span>
+            </md-whiteframe>
+        </div>
+
+        <div class="pb-16" layout="row" layout-sm="row" layout-wrap layout-align="end center">
+            <md-button class="md-raised md-accent" ng-click="$ctrl.adicionarNovoEndereco($index)" ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' || $ctrl.object.situacao === 'Em revisão')">
+                Novo endereço
+            </md-button>
+        </div>
+    </md-tab>
+    <md-tab id="aba_aditivos_exibir" label="Aditivos" name="aba_aditivos_exibir">
+
+        <md-content class="pt-16 pb-8" ng-if="$ctrl.listAditivos.length > 0">
+            <table class="tabela_exibicao row-border hover md-caption" id="table_aditivos_exibir" ms-responsive-table>
+                <thead class="cabecalho-borda-cinza">
+                    <tr>
+                        <th class="text-center" width="3%">Nº</th>
+                        <th class="text-center" width="6%">Assinatura</th>
+                        <th class="text-center" width="8%">Início da vigência</th>
+                        <th class="text-center" width="8%">Fim da vigência</th>
+                        <th class="text-center" width="6%">Prazo (meses)</th>
+                        <th class="text-center" width="5%">Reajuste</th>
+                        <th class="text-center">Índice</th>
+                        <th class="text-center" width="4%">Resumo</th>
+                        <th class="text-center" width="5%">Opções</th>
+                    </tr>
+                </thead>
+                <tbody id="table_tbody_aditivos_exibir_list">
+                    <tr class="linha-borda-cinza" ng-repeat="item in $ctrl.listAditivos">
+                        <td class="text-center">{{ $ctrl.listAditivos.indexOf(item) === 0 ? '—' : $ctrl.listAditivos.indexOf(item) }}
+                        </td>
+                        <td class="text-center">{{ item.dataAssinatura | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td class="text-center">{{ item.dataInicioVigencia | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td class="text-center">{{ item.dataFimVigencia | date:'dd/MM/yyyy' }}
+                        </td>
+                        <td class="text-center">{{ item.prazoAtual }}</td>
+                        <td class="text-left">{{ item.periodoReajuste }}</td>
+                        <td class="text-left">{{ item.indiceReajuste }}</td>
+                        <td class="text-center">
+                            <md-button aria-label="resumo" class="md-icon-button" id="btn_resumo_{{$index + 1}}" ng-click="$ctrl.exibirResumoAditivo(item, $event)" style="margin-top: -12px;margin-left: -10px;">
+                                <md-icon class="s16" md-font-icon="icon-information-outline" style="margin-top: 9px;"></md-icon>
+                                <md-tooltip id="btn_info_resumo_{{$index + 1}}_tool_tip" md-direction="bottom">
+                                    <span class="h4">Clique para ver detalhes</span>
+                                </md-tooltip>
+                            </md-button>
+                        </td>
+                        <td class="text-center">
+                            <md-button class="md-icon-button" id="btn_edit_aditivo" ng-click="$ctrl.adicionarNovoAditivo(item)" ng-if="$ctrl.listAditivos.length > 1 && $ctrl.listAditivos.length-1 === $index" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                <md-icon md-font-icon="icon-pencil" style="!important;"></md-icon>
+                                <md-tooltip class="h3" md-direction="bottom">
+                                    Editar
+                                </md-tooltip>
+                            </md-button>
+                            <md-button class="md-icon-button" id="btn_excluir_aditivo" name="btn_excluir_aditivo" ng-click="$ctrl.excluirAditivo(item)" ng-if="$ctrl.listAditivos.length > 1 && $ctrl.listAditivos.length-1 === $index" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                <md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+                                <md-tooltip class="h3" md-direction="bottom">
+                                    Remover
+                                </md-tooltip>
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <md-divider></md-divider>
+        </md-content>
+
+        <div class="pb-8" layout="row" layout-sm="row" layout-wrap layout-align="end center">
+            <md-button class="md-raised md-accent" ng-click="$ctrl.adicionarNovoAditivo($index)" ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' || $ctrl.object.situacao === 'Em revisão')">
+                Novo aditivo
+            </md-button>
+        </div>
+    </md-tab>
+
+
+    <md-tab id="aba_anexos" label="Anexos" name="aba_anexos">
+        <md-content class="pt-16 pb-8">
+            <table class="tabela_exibicao row-border hover md-caption" id="table_anexos" ms-responsive-table>
+                <thead class="cabecalho-borda-cinza" ng-if="$ctrl.listAnexos.length > 0 ">
+                    <tr>
+                        <th class="text-center" width="5%">Nº</th>
+                        <th class="text-center">Arquivo</th>
+                        <th class="text-center" width="10%">Tipo</th>
+                        <th class="text-center" width="6%">Aditivo</th>
+                        <th class="text-center" width="20%">Descrição</th>
+                        <th class="text-center" width="15%">Responsável</th>
+                        <th class="text-center" width="13%">Data/hora</th>
+                        <th class="text-center" width="9%">Opções</th>
+                    </tr>
+                </thead>
+                <tbody id="table_tbody_anexos_list">
+                    <tr ng-if="$ctrl.listAnexos.length === undefined">
+                        <td colspan="10">
+                            <div layout="row" layout-align="space-around" layout-sm="column">
+                                <md-progress-circular class="md-accent" id="toolbar-progress" md-diameter="30" md-mode="indeterminate"></md-progress-circular>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="linha-borda-cinza" ng-if="$ctrl.listAnexos.length > 0 " ng-repeat="item in $ctrl.listAnexos">
+						<td class="text-center">{{ $index + 1 }}</td>
+                        <td class="text-left"><a href
+                           ng-click="$ctrl.downloadAnexo(item)"> {{ item.anexo.nome }}</a></td>
+                        <td class="text-left">{{ item.tipo }}</td>
+                        <td class="text-center">{{ item.aditivo !== undefined ? item.aditivo.resumo : '—' }}
+                        </td>
+                        <td class="text-left">{{ item.anexo.descricao }}</td>
+                        <td class="text-left">
+							<div style="height: 16px; width: 98%; overflow: hidden;">
+								{{ item.anexo.criador }}
+								<md-tooltip class="h3" md-direction="bottom">
+									{{ item.anexo.criador }}
+								</md-tooltip>
+							</div>
+                        </td>
+                        <td class="text-center">{{ item.anexo.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}
+                        </td>
+                        <td class="text-center">
+                            <md-button class="md-icon-button" id="btn_edit_anexo" ng-click="$ctrl.adicionarNovoAnexo(item)" ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' || $ctrl.object.situacao === 'Em revisão')"
+                                style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                <md-icon md-font-icon="icon-pencil"></md-icon>
+                                <md-tooltip class="h3" md-direction="bottom">
+                                    Editar
+                                </md-tooltip>
+                            </md-button>
+                            <md-button class="md-icon-button" id="btn_excluir_anexo" name="btn_excluir_anexo" ng-click="$ctrl.excluirAnexo(item)" ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' || $ctrl.object.situacao === 'Em revisão')"
+                                style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                <md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+                                <md-tooltip class="h3" md-direction="bottom">
+                                    Remover
+                                </md-tooltip>
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <md-divider></md-divider>
+        </md-content>
+
+        <div id="idMensagemAnexos" ng-if="($ctrl.listAnexos.length === 0)">
+            <md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+                <span class="h4 p-32">Não existe <b>anexo</b> associado a este contrato.</span>
+            </md-whiteframe>
+        </div>
+
+        <div class="pb-8" layout="row" layout-sm="row" layout-wrap layout-align="end center">
+            <md-button class="md-raised md-accent" id="btn_add_anexo" name="btn_add_anexo" ng-click="$ctrl.adicionarNovoAnexo($index)" ng-if="($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' || $ctrl.object.situacao === 'Em revisão')">
+                Novo Anexo
+            </md-button>
+        </div>
+    </md-tab>
+
+    <md-tab id="aba_motivos_retorno" label="Motivos de retorno" name="aba_motivos_retorno" ng-if="$ctrl.listaMotivoRetornoDocContrato.length > 0">
+        <div class="content" flex>
+            <div layout="row" layout-wrap>
+                <div class="about" flex="100" layout="column">
+                    <div class="profile-box info-box general md-whiteframe-1dp" layout="column" ng-if="$ctrl.listaMotivoRetornoDocContrato !== undefined && $ctrl.listaMotivoRetornoDocContrato.length > 0" ng-repeat="itemMotivo in $ctrl.listaMotivoRetornoDocContrato">
+                        <header class="md-accent-bg">
+                            <div class="title" id="title_panel2">
+                                {{itemMotivo.motivoRetornoDocumento.pessoa.nome}} - {{itemMotivo.motivoRetornoDocumento.dataCriacao | date : 'dd/MM/yyyy hh:mm:ss'}}
+                            </div>
+                        </header>
+                        <div class="pt-16 pb-8">
+                            <div class="simple-table-container md-whiteframe-1dp">
+                                <table class="tabela_exibicao row-border hover md-caption tabela_exibicao" id="table_motivos_{{$index}}" ms-responsive-table>
+                                    <thead>
+                                        <tr class="md-grey-200-bg">
+                                            <th width="40%">Motivo</th>
+                                            <th>Solução</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr ng-repeat="item in itemMotivo.motivoRetornoDocumento.listaMotivoRetorno">
+                                            <td id="td_motivo_{{$index}}">{{ item.motivoRetorno.motivo }}
+                                            </td>
+                                            <td id="td_solucao_{{$index}}">{{ item.motivoRetorno.solucao }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                    <tbody>
+                                        <tr ng-if="$ctrl.listaMotivoRetornoDocContrato === undefined || $ctrl.listaMotivoRetornoDocContrato.length === 0">
+                                            <td class="text-center msg-empty-list" colspan="3">Não existem <strong>Motivos
+                                                de Retorno</strong> informados.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div layout layout-sm="column" style="margin-top: 15px">
+                                <md-input-container flex>
+                                    <label id="lbl_observacao_{{$index}}">Observação</label>
+                                    <textarea columns="10" id="input_observacao_{{$index}}" name="input_observacao" ng-disabled="true" ng-model="$ctrl.itemMotivo.motivoRetornoDocumento.observacao">
+                                    </textarea>
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <md-divider></md-divider>
+    </md-tab>
+    <md-tab id="aba_controles" label="Controles" name="aba_controles">
+        <md-content class="pt-16 pb-8">
+            <form name="wizardStep6">
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex flex-gt-sm="70">
+                        <label id="lbl_cadastramento_contrato">Cadastramento</label>
+                        <input class="text-left" id="input_cadastramento_contrato" name="cadastramento_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.criador }}">
+                    </md-input-container>
+
+                    <span class="width-20"></span>
+
+                    <md-input-container class="md-block" flex flex-gt-sm="30">
+                        <label id="lbl_data_hora_cadastramento_contrato">Data/hora</label>
+                        <input class="text-left" id="input_data_hora_cadastramento_contrato" name="data_hora_cadastramento_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                    </md-input-container>
+                </div>
+                <span class="width-20"></span>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex flex-gt-sm="70">
+                        <label id="lbl_ultima_alteracao_contrato">Última
+                            alteração</label>
+                        <input class="text-left" id="input_ultima_alteracao_contrato" name="ultima_alteracao_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.atualizador }}">
+                    </md-input-container>
+
+                    <span class="width-20"></span>
+
+                    <md-input-container class="md-block" flex flex-gt-sm="30">
+                        <label id="lbl_data_hora_ultima_alteracao_contrato">Data/hora</label>
+                        <input class="text-left" id="input_data_hora_ultima_alteracao_contrato" name="data_hora_ultima_alteracao_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex flex-gt-sm="70">
+                        <label id="lbl_envio_contrato">Envio para análise</label>
+                        <input class="text-left" id="input_envio_contrato" name="envio_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.envioAnalise }}">
+                    </md-input-container>
+
+                    <span class="width-20"></span>
+
+                    <md-input-container class="md-block" flex flex-gt-sm="30">
+                        <label id="lbl_data_hora_envio_contrato">Data/hora</label>
+                        <input class="text-left" id="input_data_hora_envio_contrato" name="data_hora_envio_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.dataEnvioAnalise | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex flex-gt-sm="70">
+                        <label id="lbl_ativacao_contrato">Ativação</label>
+                        <input class="text-left" id="input_ativacao_contrato" name="ativacao_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.ativacao }}">
+                    </md-input-container>
+
+                    <span class="width-20"></span>
+
+                    <md-input-container class="md-block" flex flex-gt-sm="30">
+                        <label id="lbl_data_hora_ativacao_contrato">Data/hora</label>
+                        <input class="text-left" id="input_data_hora_ativacao_contrato" name="data_hora_ativacao_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.dataAtivacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex flex-gt-sm="70">
+                        <label id="lbl_encerramento_contrato">Encerramento</label>
+                        <input class="text-left" id="input_encerramento_contrato" name="encerramento_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.encerramento }}">
+                    </md-input-container>
+
+                    <span class="width-20"></span>
+
+                    <md-input-container class="md-block" flex flex-gt-sm="30">
+                        <label id="lbl_data_hora_encerramento_contrato">Data/hora</label>
+                        <input class="text-left" id="input_data_hora_encerramento_contrato" name="data_hora_encerramento_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.dataEncerramento | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                    </md-input-container>
+                </div>
+
+                <span class="width-20"></span>
+
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex flex-gt-sm="70">
+                        <label id="lbl_paralisacao_contrato">Paralisação</label>
+                        <input class="text-left" id="input_paralisacao_contrato" name="paralisacao_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.paralizacao }}">
+                    </md-input-container>
+
+                    <span class="width-20"></span>
+
+                    <md-input-container class="md-block" flex flex-gt-sm="30">
+                        <label id="lbl_data_hora_paralisacao_contrato">Data/hora</label>
+                        <input class="text-left" id="input_data_hora_paralisacao_contrato" name="data_hora_paralisacao_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.dataParalizacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex flex-gt-sm="70">
+                        <label id="lbl_reativacao_contrato">Reativação</label>
+                        <input class="text-left" id="input_reativacao_contrato" name="reativacao_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.reativacao }}">
+                    </md-input-container>
+
+                    <span class="width-20"></span>
+
+                    <md-input-container class="md-block" flex flex-gt-sm="30">
+                        <label id="lbl_data_hora_reativacao_contrato">Data/hora</label>
+                        <input class="text-left" id="input_data_hora_reativacao_contrato" name="data_hora_reativacao_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.dataReativacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex flex-gt-sm="70">
+                        <label id="lbl_cancelamento_contrato">Cancelamento</label>
+                        <input class="text-left" id="input_cancelamento_contrato" name="cancelamento_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.cancelamento }}">
+                    </md-input-container>
+
+                    <span class="width-20"></span>
+
+                    <md-input-container class="md-block" flex flex-gt-sm="30">
+                        <label id="lbl_data_hora_cancelamento_contrato">Data/hora</label>
+                        <input class="text-left" id="input_data_hora_cancelamento_contrato" name="data_hora_cancelamento_contrato" ng-disabled="true" type="text" value="{{$ctrl.object.dataCancelamento | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                    </md-input-container>
+                </div>
+            </form>
+        </md-content>
+    </md-tab>
+</md-tabs>

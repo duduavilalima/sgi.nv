@@ -1,0 +1,200 @@
+<div class="page-layout simple fullwidth">
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">Custos</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo">Gráfico comparativo anual</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+    <!-- CONTENT -->
+    <div class="content" md-background-bg>
+        <div class="page-layout simple" id="profile" layout="row" layout-padding>
+            <div class="content" flex>
+                <!-- CAMPOS DE PESQUISA -->
+                <div layout="row" layout-wrap>
+                    <div class="about" flex="100" layout="column">
+                        <div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+                            <header class="md-accent-bg">
+                                <div class="title" id="titulo_filtro">Gráfico comparativo anual - Filtros inicias</div>
+                            </header>
+                            <section class="content">
+                                <form name="form" novalidate>
+
+                                    <div class="mt-25" layout="row" layout-sm="column" layout-wrap layout-xs="column" style="margin-top: 0px">
+
+                                        <md-input-container flex="25" flex-xs="100">
+                                            <label id="lbl_periodo">Ano</label>
+                                            <md-select id="periodo" name="periodo" ng-model="$ctrl.object.ano" ng-required="true">
+                                                <md-option ng-repeat="item in $ctrl.listAnos" ng-value="item" value="{{item}}">{{ item }}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="form.periodo.$error" ng-show="form.periodo.$touched">
+                                                <div ng-message="required">
+                                                    <span>Obrigatório.</span>
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+
+										<md-input-container flex="25" flex-xs="100">
+											<label id="lbl_periodo_minutos">Atualização (minutos)</label>
+											<input id="input_numero" maxlength="2" name="numero"
+												   ng-model="$ctrl.object.tempoMinutos" type="text" ui-hide-group-sep
+												   ui-number-mask="0">
+											<small>(0 = sem atualização)</small>
+										</md-input-container>
+
+                                    </div>
+                                    <section layout="row" layout-sm="row" layout-wrap>
+                                        <div flex="30" flex-sm="10" layout="row" layout-align="start center">
+                                            <md-button class="md-raised md-accent" id="btn_gerar" name="btn_gerar" ng-click="$ctrl.gerarGrafico()">
+                                                Gerar gráfico
+                                            </md-button>
+                                            <md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar" ng-click="$ctrl.reset()">
+                                                Limpar
+                                            </md-button>
+                                        </div>
+                                    </section>
+                                </form>
+                            </section>
+
+                        </div>
+
+                        <div class="profile-box info-box general md-whiteframe-2dp fullscreen"  id="div-graficos" layout="column" ng-show="$ctrl.mostraGrafico" only-watched-property>
+
+                            <header class="md-accent-bg header-graficos" layout="row" style="align-items: center;">
+
+                                <div class="title" id="titulo_demostracao" layout-align="start center">Gráfico comparativo anual
+                                </div>
+								<md-button aria-label="Icone full" class="md-icon-button btn-full" ng-click="$ctrl.refresh()" style="margin-right: 60px">
+									<md-icon class="icone-full" md-font-icon="icon-refresh"></md-icon>
+									<md-tooltip class="h4">Atualizar gráfico</md-tooltip>
+								</md-button>
+
+                                <md-button aria-label="Icone full" class="md-icon-button btn-full" ng-click="$ctrl.fullscreenCharts()">
+                                    <md-icon class="icone-full" md-font-icon="icon-fullscreen"></md-icon>
+                                    <md-tooltip class="h4">Tela cheia</md-tooltip>
+                                </md-button>
+                            </header>
+                            <div class="content grey-300-bg" style="height: 100%;">
+
+                                <div class="mb-15" flex layout="column">
+                                    <div class="white-bg br-5" flex layout="column">
+                                        <header class="md-accent-bg">
+                                            <div class="title">Filtros</div>
+                                        </header>
+                                        <section>
+                                            <form>
+                                                <div class="p-8 select-chart" flex layout="row" layout-xs="column">
+                                                    <div flex>
+                                                        <md-input-container flex flex-gt-md="100" style="width: 100%;">
+                                                            <label id="combo_empresa_label">Matriz / Filial</label>
+                                                            <md-select id="combo_empresa" multiple name="empresa" md-on-close="$ctrl.marcarOpcao()" ng-model="$ctrl.object.unidade" ng-required="false">
+                                                                <div ng-repeat="unidade in $ctrl.empresaList">
+                                                                    <div style="padding-top: 10px;padding-left: 5px;background: rgba(128, 128, 128, 0.53);color: #fff;font-weight: bold;">
+                                                                        <md-checkbox aria-label="Todos" ng-change="$ctrl.todos(unidade.todos, unidade)" md-on-close="$ctrl.changeEmpresa()" ng-model="unidade.todos">
+                                                                            <div>{{unidade.empresa}}</div>
+                                                                        </md-checkbox>
+                                                                    </div>
+                                                                    <md-option ng-repeat="filial in unidade.filiais | orderBy:['tipoUnidade','codnome']" ng-value="filial.codigo">
+																		{{filial.codnome | uppercase}}
+																	</md-option>
+                                                                </div>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                    </div>
+
+                                                    <span class="width-5"></span>
+
+                                                    <div class="select" flex>
+                                                        <select class="select-text" id="combo_diretoria" name="diretoria" ng-change="$ctrl.changeRegional()" ng-model="$ctrl.object.regional">
+                                                            <option ng-value=""></option>
+															<option ng-repeat="item in $ctrl.listRegional" ng-value="item">{{ item.descricao }}</option>
+                                                        </select>
+                                                        <span class="select-highlight"></span>
+                                                        <span class="select-bar"></span>
+                                                        <label class="select-label">Regional</label>
+                                                    </div>
+
+                                                    <span class="width-5"></span>
+
+                                                    <div class="select" flex>
+                                                        <select class="select-text" id="combo_gerencia" name="gerencia" ng-change="$ctrl.changeGerencia()" ng-model="$ctrl.object.gerencia">
+															<option ng-value=""></option>
+                                                            <option ng-repeat="item in $ctrl.listGerenciasAtivas | orderBy: 'nome'" ng-value="item">{{ item.nome }}</option>
+															<option ng-disabled="true">------------------------------------------------------------------------------------</option>
+															<option ng-repeat="item in $ctrl.listGerenciasInativas | orderBy: 'nome'" ng-value="item">{{ item.nome }}</option>
+                                                        </select>
+                                                        <span class="select-highlight"></span>
+                                                        <span class="select-bar"></span>
+                                                        <label class="select-label">Gerência</label>
+                                                    </div>
+
+                                                    <span class="width-5"></span>
+
+                                                    <div class="select" flex>
+                                                        <select class="select-text" id="combo_cl" ng-change="$ctrl.changeCLs()" ng-model="$ctrl.object.cl" ng-disabled="$ctrl.listCls.length === 0">
+															<option ng-value=""></option>
+															<option ng-repeat="item in $ctrl.listCls" ng-value="item" style=" color: {{ item.cor }}">
+																 {{ item.identificadorFinal }} - {{ item.nome }}
+                                                            </option>
+                                                        </select>
+                                                        <span class="select-highlight"></span>
+                                                        <span class="select-bar"></span>
+                                                        <label class="select-label">CL</label>
+                                                    </div>
+													<md-button aria-label="Detalhes"
+															   class="md-icon-button" id="btn_info_result_{{$index + 1}}"
+															   ng-click="$ctrl.exibirDialogCls()"
+															   style="margin-top: 20px;">
+														<md-icon class="s16 text-left" md-font-icon="icon-information-outline"></md-icon>
+													</md-button>
+                                                </div>
+                                            </form>
+                                        </section>
+                                    </div>
+                                </div>
+
+                                <div class="mb-15" flex layout="row">
+                                    <div class="white-bg mr-20 br-5" flex layout="column">
+                                        <h2 class="text-center">
+											Faturamento (NF emitidas) <img ng-if="$ctrl.progress_chart1" src="../img/carregando.gif" style="height: 25px;width: 25px;margin-left: 10px;"/>
+										</h2>
+                                        <div class="chart-custos" id="chart"></div>
+                                    </div>
+                                    <div class="white-bg br-5" flex layout="column">
+                                        <h2 class="text-center">
+											Receita Líquida <img ng-if="$ctrl.progress_chart2" src="../img/carregando.gif" style="height: 25px;width: 25px;margin-left: 10px;"/>
+										</h2>
+                                        <div class="chart-custos" id="chart2"></div>
+                                    </div>
+                                </div>
+                                <div flex layout="row">
+                                    <div class="white-bg mr-20 br-5" flex layout="column">
+                                        <h2 class="text-center">
+											Despesas <img ng-if="$ctrl.progress_chart3" src="../img/carregando.gif" style="height: 25px;width: 25px;margin-left: 10px;"/>
+										</h2>
+                                        <div class="chart-custos" id="chart3"></div>
+                                    </div>
+                                    <div class="white-bg br-5" flex layout="column">
+                                        <h2 class="text-center">Margem (BDI) <img ng-if="$ctrl.progress_chart4" src="../img/carregando.gif" style="height: 25px;width: 25px;margin-left: 10px;"/>
+										</h2>
+                                        <div class="chart-custos" id="chart4"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / CONTENT -->
+</div>

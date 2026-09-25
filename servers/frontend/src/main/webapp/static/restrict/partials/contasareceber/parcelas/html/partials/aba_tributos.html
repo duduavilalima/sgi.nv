@@ -1,0 +1,228 @@
+<div layout layout-sm="column">
+
+	<md-input-container flex ng-if="screenMode === 'VIEW'">
+		<label id="lbl_iss_retido_exibicao">ISS será retido pelo cliente</label>
+		<input id="input_iss_retido_exibicao" name="input_iss_retido_exibicao" ng-disabled="true" type="text"
+			   value="{{ object.notaSaida.faturamentoEtapaTO.faturamento.issRetidoCliente ? 'Sim' : 'Não' }}">
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container class="md-input-has-value flex md-sgi-theme" flex ng-if="screenMode === 'VIEW'">
+		<label id="lbl_cidade_iss">Cidade ISS</label>
+		<input id="input_cidade_iss" name="input_cidade_iss" ng-disabled="true" type="text" value="{{cidadeIss}}">
+	</md-input-container>
+
+</div>
+
+<br><br>
+
+<div class="simple-table-container md-whiteframe-1dp" ng-if="listaTributos">
+
+	<table class="tabela_exibicao row-border hover md-caption" id="table_tributos" ms-responsive-table>
+		<thead id="table_thead_tributos">
+		<tr class="md-grey-200-bg">
+			<th width="120px">Tributo</th>
+			<th>Categoria</th>
+			<th width="150px">Base de cálculo</th>
+			<th class="text-right" width="60px">%</th>
+			<th class="text-right" width="80px">Valor</th>
+			<th class="text-right" ng-hide="screenMode === 'VIEW'" width="120px">Opções</th>
+		</tr>
+		</thead>
+
+		<tbody id="table_tbody_tributos_list" ng-show="screenMode === 'VIEW' && listaTemTributo">
+		<tr ng-repeat="item in listaTributos | filter : {categoriaTributo : {tributoTO : {nome: '!' + 'ISS' } } }">
+			<td>{{::item.categoriaTributo.tributoTO.nome}}</td>
+			<td>
+				<div class="over-flow-hidden">
+					{{::item.categoriaTributo.descricao}} - {{::item.aliquota.percentual | currency : '' : 2 }}%
+				</div>
+				<md-tooltip md-direction="bottom">
+					<span class="h4">{{::item.categoriaTributo.descricao}} - {{::item.aliquota.percentual | currency : '' : 2 }}%</span>
+				</md-tooltip>
+			</td>
+			<td>{{::item.baseCalculo | currency : '' : 2 }}</td>
+			<td>{{::item.aliquota.percentual | currency : '' : 2 }}</td>
+			<td>{{::item.valor | currency : '' : 2 }}</td>
+			<td ng-hide="screenMode === 'VIEW'" style="padding-top: 0px; padding-bottom: 0px; padding-right: 0px;">
+				<div>
+					<md-button class="md-icon-button" id="btn_editar_tributo_{{$index}}"
+							   name="btn_editar_tributo_{{$index}}" ng-click="editarFaturamentoAliquota($event, item)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon md-font-icon="icon-pencil"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Editar tributo
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" id="btn_excluir_tributo_{{$index}}"
+							   name="btn_excluir_tributo_{{$index}}"
+							   ng-click="excluirFaturamentoAliquota($event, item, false)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Excluir tributo
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" id="btn_add_novo_tributo" name="btn_add_novo_tributo"
+							   ng-click="novoFaturamentoAliquota($event, false)"
+							   ng-if="$last && (listaTributos | filter : {aliquota : {categoriaTributo : {tributoTO : {nome: '!' + 'ISS' } } } }).length < 3"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="green-400-fg" md-font-icon="icon-plus"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Adicionar tributo
+						</md-tooltip>
+
+					</md-button>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+
+		<tbody id="table_tbody_tributos_novo" ng-hide="screenMode === 'VIEW'">
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>
+				<md-button class="md-icon-button" id="btn_add_novo_tributo" name="btn_add_novo_tributo"
+						   ng-click="novoFaturamentoAliquota($event, false)"
+						   style="padding: 0px 0px 0px 0px; margin: -10px -10px -10px -10px;">
+					<md-icon class="green-400-fg" md-font-icon="icon-plus"></md-icon>
+
+					<md-tooltip class="h3" md-direction="bottom">
+						Adicionar tributo
+					</md-tooltip>
+				</md-button>
+			</td>
+		</tr>
+		</tbody>
+
+		<tbody id="table_tbody_tributos_empty"
+			   ng-hide="screenMode === 'NEW' || screenMode === 'EDIT' || listaTemTributo">
+		<tr>
+			<td class="text-center msg-empty-list" colspan="6">Não existem tributos associadas a este faturamento.</td>
+		</tr>
+		</tbody>
+
+		<tfoot id="table_tfoot_tributos">
+		<tr class="md-grey-300-bg">
+			<td></td>
+			<td></td>
+			<td style="padding-left: 8px;"><strong>Subtotal</strong>
+			</td>
+			<td style="padding-left: 8px;"><strong>{{subtotalPercentualTributos | currency : '' : 2 }}</strong>
+			</td>
+			<td style="padding-left: 8px;"><strong>{{subtotalValorTributos | currency : '' : 2 }}</strong>
+			</td>
+			<td ng-hide="screenMode === 'VIEW'"></td>
+		</tr>
+		</tfoot>
+
+	</table>
+
+</div>
+
+<p></p>
+
+<div class="simple-table-container md-whiteframe-1dp">
+
+	<table class="tabela_exibicao row-border hover md-caption tabela_exibicao" id="table_tributosIss"
+		   ms-responsive-table>
+		<thead id="table_thead_iss">
+		<tr class="md-grey-200-bg">
+			<th width="60px">Tributo</th>
+			<th width="60px">UF</th>
+			<th>Cidade - Categoria</th>
+			<th width="150px">Base de cálculo</th>
+			<th class="text-right" width="60px">%</th>
+			<th class="text-right" width="80px">Valor</th>
+			<th class="text-right" ng-hide="screenMode === 'VIEW'" width="120px">Opções</th>
+		</tr>
+		</thead>
+
+		<tbody id="table_tbody_iss_list" ng-show="screenMode === 'VIEW' || listaTemTributoComIss">
+		<tr ng-repeat="item in listaTributos | filter : {categoriaTributo : {tributoTO : {nome: 'ISS' } } }">
+			<td>ISS</td>
+			<td>{{::item.categoriaTributo.cidade.uf}}</td>
+			<td>{{::item.categoriaTributo.cidade.nome}} - {{::item.aliquota.percentual | currency : '' : 2 }}% -
+				{{::item.categoriaTributo.descricao}}
+			</td>
+			<td>{{::item.baseCalculo | currency : '' : 2 }}</td>
+			<td>{{::item.aliquota.percentual | currency : '' : 2 }}</td>
+			<td>{{::item.valor | currency : '' : 2 }}</td>
+			<td ng-hide="screenMode === 'VIEW'" style="padding-top: 0px; padding-bottom: 0px; padding-right: 0px;">
+				<div>
+					<md-button class="md-icon-button" id="btn_editar_tributo_iss_{{$index}}"
+							   name="btn_editar_tributo_iss_{{$index}}"
+							   ng-click="editarFaturamentoAliquota($event, item)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon md-font-icon="icon-pencil"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Editar tributo
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-icon-button" id="btn_excluir_tributo_iss_{{$index}}"
+							   name="btn_excluir_tributo_iss_{{$index}}"
+							   ng-click="excluirFaturamentoAliquota($event, item, true)"
+							   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+						<md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+						<md-tooltip class="h3" md-direction="bottom">
+							Excluir tributo
+						</md-tooltip>
+					</md-button>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+
+		<tbody id="table_tbody_iss_novo" ng-hide="screenMode === 'VIEW' || listaTemTributoComIss">
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>
+				<md-button class="md-icon-button" id="btn_add_novo_tributo_iss" name="btn_add_novo_tributo_iss"
+						   ng-click="novoFaturamentoAliquotaISS($event, true)"
+						   style="padding: 0px 0px 0px 0px; margin: -10px -10px -10px -10px;">
+					<md-icon class="green-400-fg" md-font-icon="icon-plus"></md-icon>
+
+					<md-tooltip class="h3" md-direction="bottom">
+						Adicionar ISS
+					</md-tooltip>
+				</md-button>
+			</td>
+		</tr>
+		</tbody>
+
+		<tbody id="table_tbody_iss_empty"
+			   ng-hide="screenMode === 'NEW' || screenMode === 'EDIT' || listaTemTributoComIss">
+		<tr>
+			<td class="text-center msg-empty-list" colspan="7">Não existem tributo ISS associadas a este faturamento.
+			</td>
+		</tr>
+		</tbody>
+
+		<tfoot id="table_tfoot_iss">
+		<tr class="md-grey-300-bg">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td style="padding-left: 8px;"><strong>Total (Subtotal + ISS)</strong>
+			</td>
+			<td style="padding-left: 8px;"><strong>{{totalPercentualTributos | currency : '' : 2 }}</strong>
+			</td>
+			<td style="padding-left: 8px;"><strong>{{totalValorTributos | currency : '' : 2 }}</strong>
+			</td>
+			<td ng-hide="screenMode === 'VIEW'"></td>
+		</tr>
+		</tfoot>
+
+	</table>
+
+</div>

@@ -1,0 +1,137 @@
+<div class="page-layout simple fullwidth">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+                      id="modulo">Custos</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+                      id="titulo">Cadastros</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+                      id="titulo">Rubricas</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content" md-background-bg>
+
+        <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+            <div class="content" flex>
+
+                <!-- CAMPOS DE PESQUISA -->
+                <div layout="row" layout-wrap>
+                    <div class="about" flex="100" layout="column">
+                        <div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+                            <header class="md-accent-bg">
+                                <div class="title" id="titulo_filtro">Rubricas - Filtros de Pesquisa</div>
+                            </header>
+
+                            <div class="content">
+                                <form name="form" ui-keypress="{13:'buscar(1)'}">
+                                    <div layout layout-sm="column" layout-wrap>
+                                        <md-input-container flex="50" flex-sm="100">
+                                            <label id="lbl_descricao">Descrição</label>
+                                            <input id="input_descricao" maxlength="50" name="descricao" ng-model="object.descricao" type="text">
+                                        </md-input-container>
+
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_ordem">Ordem</label>
+                                            <input id="input_ordem" name="ordem" ng-model="object.ordem" type="number" min="0">
+                                        </md-input-container>
+
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_situacao">Situação</label>
+                                            <md-select id="combo_situacao" name="situacao" ng-model="object.situacao">
+                                                <md-option ng-repeat="item in $ctrl.situacaoList" ng-value="item.code">{{item.desc}}</md-option>
+                                            </md-select>
+                                        </md-input-container>
+
+                                        <md-input-container flex="50" flex-sm="100">
+                                            <label id="lbl_tipo">Tipo</label>
+                                            <md-select id="combo_tipo" name="tipo" ng-model="object.tipo">
+                                                <md-option ng-repeat="item in $ctrl.tipoList" ng-value="item.code">{{item.desc}}</md-option>
+                                            </md-select>
+                                        </md-input-container>
+
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_operacao">Operação</label>
+                                            <md-select id="combo_operacao" name="operacao" ng-model="object.operacao">
+                                                <md-option ng-repeat="item in $ctrl.operacaoList" ng-value="item.code">{{item.desc}}</md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+
+
+
+
+                                    <section layout="row" layout-sm="row" layout-wrap>
+                                        <div flex="30" flex-sm="10" layout="row" layout-align="start center">
+                                            <md-button class="md-raised md-accent" id="btn_pesquisar" type name="btn_pesquisar" ng-click="$ctrl.buscar(1)" ng-disabled="isAction">
+                                                Pesquisar
+                                            </md-button>
+                                            <md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar" ng-click="$ctrl.reset()" ng-disabled="isAction">
+                                                Limpar
+                                            </md-button>
+                                        </div>
+                                        <div flex="auto" layout-wrap show-gt-sm>
+                                        </div>
+                                        <div flex="30" flex-sm="10" layout="row" layout-align="end center">
+                                            <md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction" ng-click="$ctrl.novo()">
+                                                Nova rubrica
+                                            </md-button>
+                                        </div>
+                                    </section>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- / CAMPOS DE PESQUISA -->
+
+                <!-- DATATABLE - RESULTADO DA PESQUISA -->
+                <div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result" ng-if="result && result != null">
+                    <header class="md-accent-bg">
+                        <div class="title" id="titulo_resultado">Rubricas - Resultado da Pesquisa</div>
+                    </header>
+
+                    <div class="sgiUiGridPesquisa" id="idGridrubricass" ng-if="exibirGrid(gridPesquisa)" ng-style="ajustarAlturaTabela(gridPesquisa)" ui-grid="gridPesquisa" ui-grid-auto-resize ui-grid-pinning></div>
+
+                    <div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+                        <md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+                            <span class="h4 p-32">{{mensagemPesquisa()}}</span>
+                        </md-whiteframe>
+                    </div>
+
+                    <section class="p-8" layout="row" layout-align="space-between center" layout-sm="row" layout-wrap>
+                        <div></div>
+
+                        <div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+
+                        <div layout="row" layout-align="end center" layout-sm="row" layout-wrap>
+                            <md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction" ng-click="$ctrl.novo()"> Nova rubrica
+                            </md-button>
+                        </div>
+                    </section>
+
+                </div>
+                <!-- / DATATABLE - RESULTADO DA PESQUISA -->
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

@@ -1,0 +1,128 @@
+<div class="page-layout simple fullwidth">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+					  id="titulo">Faturamento</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+					  id="subtitulo">{{ ::titulo}}</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content" md-background-bg>
+        <form name="form" novalidate>
+            <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+                <div class="content" flex>
+
+                    <!-- CAMPOS DE PESQUISA -->
+                    <div layout="row" layout-wrap>
+                        <div class="about" flex="100" layout="column">
+                            <div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+                                <header class="md-accent-bg">
+                                    <div class="title" id="titulo_filtro">{{ ::titulo}} - Filtros de relatório</div>
+                                </header>
+                                <div class="white-500-bg" flex>
+
+                                    <div class="p-16" layout layout-sm="column" layout-wrap>
+                                        <md-input-container flex flex-gt-md="50">
+                                            <label id="lbl_relatorio">Relatório</label>
+                                            <md-select id="combo_relatorio" name="relatorio" ng-change="$emit('changeComboRelatorio')" ng-model="object.tipoRelatorio" ng-required="true" required>
+                                                <md-option ng-disabled="relatorio.chave === '-'" ng-repeat="relatorio in tiposRelatorios track by relatorio.id" ng-value="relatorio">{{
+													relatorio.nome }}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="form.relatorio.$error" role="alert">
+                                                <div ng-message="required">Relatório é um campo de preenchimento
+                                                    obrigatório.
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+
+                                        <md-input-container flex>
+                                            <label id="lbl_formato">Formato</label>
+                                            <md-select id="combo_formato" name="formato" ng-model="object.tipoFormato" ng-model-options="{trackBy: '$value.codigo'}">
+                                                <md-option ng-repeat="formato in tiposFormatos" ng-value="formato">{{
+													formato.nome }}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+
+                                        <md-input-container flex>
+                                            <label id="combo_empresa_label">Matriz / Filial</label>
+                                            <md-select id="combo_empresa" multiple name="empresa" ng-change="marcarOpcao()" ng-model="object.unidade" ng-required="false">
+                                                <div ng-repeat="unidade in empresaList">
+                                                    <div style="padding-top: 10px;
+																padding-left: 5px;
+																background: rgba(128, 128, 128, 0.53);
+																color: #fff;
+																font-weight: bold;">
+                                                        <md-checkbox aria-label="Todos" ng-change="todos(unidade.todos, unidade)" ng-model="unidade.todos">
+                                                            <div>{{unidade.empresa}}</div>
+                                                        </md-checkbox>
+                                                    </div>
+                                                    <md-option ng-repeat="filial in unidade.filiais | orderBy:['tipoUnidade','codnome']" ng-value="filial.codigo">{{filial.codnome}}
+                                                    </md-option>
+                                                </div>
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+
+                                    <md-content style="margin-top: -20px;">
+                                        <md-tabs id="abas_relatorios" md-border-bottom md-center-tabs="false" md-dynamic-height md-selected="index" name="abas_relatorios">
+
+                                            <md-tab id="aba_notas_fiscais" label="Nota Fiscal" name="aba_notas_fiscais" ng-disabled="false">
+                                                <div class="padding-16" ng-include="'partials/faturamento/relatorios/partials/aba_notas_fiscais.html'">
+                                                </div>
+                                            </md-tab>
+
+                                            <md-tab id="aba_tributos" label="Tributos" name="aba_tributos" ng-disabled="false">
+                                                <div class="padding-16" ng-include="'partials/faturamento/relatorios/partials/aba_tributos.html'">
+                                                </div>
+                                            </md-tab>
+
+                                        </md-tabs>
+                                    </md-content>
+
+                                    <div class="p-16" ng-if="screenMode != 'VIEW' && !desabilitarCampo('lote')" style="margin-top: -30px">
+                                        <span>*</span>&nbsp;Campos obrigatórios / É obrigatório informar, pelo menos, um
+                                        período de datas
+                                    </div>
+
+                                    <div class="p-16" ng-if="screenMode != 'VIEW' && desabilitarCampo('lote')" style="margin-top: -30px">
+                                        <span>*</span>&nbsp;Campos obrigatórios / É obrigatório informar um lote
+                                    </div>
+
+                                    <md-divider></md-divider>
+
+                                    <section layout="row" layout-sm="row" layout-wrap>
+                                        <div class="p-8" flex="100" flex-sm="30" layout="row" layout-align="start center">
+                                            <md-button class="md-raised md-accent" id="btn_novo" ng-click="gerarRelatorio()" ng-disabled="form.$invalid">Gerar
+                                                relatório
+                                            </md-button>
+
+                                            <md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar" ng-click="reset(form)" ng-disabled="isAction">
+                                                Limpar
+                                            </md-button>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- / CONTENT -->
+    </div>
+</div>

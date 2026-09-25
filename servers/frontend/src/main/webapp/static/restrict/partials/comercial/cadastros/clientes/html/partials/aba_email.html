@@ -1,0 +1,42 @@
+<div ng-if="screenMode === 'VIEW'">
+	<div layout="row" layout-sm="column" layout-wrap
+		 layout-xs="column" style="margin-top: -5px;">
+
+		<md-input-container flex="50" flex-sm="100"
+							flex-xs="100">
+			<label id="lbl_emailV">Principal</label>
+			<input id="input_emailV" name="input_email"
+				   ng-disabled="true" type="text"
+				   value="{{$ctrl.object.email}}">
+		</md-input-container>
+
+		<md-input-container flex="50" flex-sm="100"
+							flex-xs="100">
+			<label id="lbl_outroEmailV">Secundário</label>
+			<input id="input_outroEmailV"
+				   name="input_outroEmail" ng-disabled="true"
+				   type="text" value="{{$ctrl.object.emailContato}}">
+		</md-input-container>
+	</div>
+</div>
+<!-----Edit------->
+<div ng-if="screenMode !== 'VIEW'">
+	<div layout="row" layout-sm="column" layout-wrap
+		 layout-xs="column" style="margin-top: -5px;">
+
+		<md-input-container flex="50" flex-sm="100"
+							flex-xs="100">
+			<label id="lbl_email">Principal</label>
+			<input id="input_email" name="input_email"
+				   ng-model="$ctrl.object.email" type="email">
+		</md-input-container>
+
+		<md-input-container flex="50" flex-sm="100"
+							flex-xs="100">
+			<label id="lbl_outroEmail">Secundário</label>
+			<input id="input_outroEmail" name="input_outroEmail"
+				   ng-disabled="$ctrl.tipoCliente === 'clientePF'"
+				   ng-model="$ctrl.object.emailContato" type="email">
+		</md-input-container>
+	</div>
+</div>

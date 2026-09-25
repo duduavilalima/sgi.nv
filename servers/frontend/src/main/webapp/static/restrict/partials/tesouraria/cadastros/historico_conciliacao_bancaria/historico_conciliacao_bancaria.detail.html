@@ -1,0 +1,313 @@
+<div class="page-layout simple fullwidth" ng-controller="HistoricoConciliacaoBancariaDetailCtrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ ::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ screenMode === 'VIEW' ? 'Exibição' : (screenMode === 'EDIT' ? 'Edição' : 'Novo') }}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">{{ ::titulo }} - Dados Gerais</div>
+						</header>
+
+						<div class="text-center"><img ng-show="object == null" src="../img/carregando.gif"
+													  style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/>
+						</div>
+
+						<div ng-show="object != null">
+							<div class="white-500-bg">
+								<form name="HistoricoConciliacaoForm" novalidate>
+									<div flex layout="column" ng-if="screenMode !== 'VIEW'">
+										<div class="p-16" flex layout="column">
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex>
+													<label id="lbl_descricao">Descrição (início)</label>
+													<input id="input_descricao" name="descricao"
+														   ng-model="object.descricao" ng-required="true" required
+														   type="text">
+													<div ng-messages="HistoricoConciliacaoForm.descricao.$error"
+														 ng-show="HistoricoConciliacaoForm.descricao.$touched">
+														<div ng-message="required">
+															Obrigatório.
+														</div>
+													</div>
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25" ng-if="screenMode === 'EDIT'">
+													<label id="lbl_situacao">Situação</label>
+													<md-select id="combo_situacao" name="situacao"
+															   ng-model="object.situacao">
+														<md-option ng-repeat="item in situacaoList | orderBy: 'nome'"
+																   ng-value="item.nome">{{ item.nome }}
+														</md-option>
+													</md-select>
+												</md-input-container>
+
+												<md-input-container flex="25" ng-if="screenMode === 'NEW'">
+													<label id="lbl_situacao_new">Situação</label>
+													<input id="input_situacao_new" name="input_situacao_exibir"
+														   ng-disabled="true" type="text" value="{{object.situacao}}">
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_tipo">Tipo de ação</label>
+													<md-select id="combo_tipo" name="tipo" ng-model="object.tipoAcao"
+															   ng-required="true" required>
+														<md-option ng-repeat="item in listTipoAcao" ng-value="item"
+																   value="{{ item }}">{{item}}
+														</md-option>
+													</md-select>
+													<div ng-messages="HistoricoConciliacaoForm.tipo.$error"
+														 ng-show="HistoricoConciliacaoForm.tipo.$touched">
+														<div ng-message="required">
+															Obrigatório.
+														</div>
+													</div>
+												</md-input-container>
+
+											</div>
+										</div>
+
+										<div class="p-16" flex layout="row" layout-align="start start"
+											 style="margin-top: -30px;">
+											<span class="red-fg">*&nbsp;</span> Campos obrigatórios
+										</div>
+
+									</div>
+
+									<div flex layout="column" ng-if="screenMode === 'VIEW'">
+										<div class="p-16" flex layout="column">
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex>
+													<label id="lbl_descricao_exibir">Descrição (início)</label>
+													<input id="input_descricao_exibir" name="input_descricao_exibir"
+														   ng-disabled="true" type="text"
+														   value="{{::object.descricao}}">
+													<md-tooltip id="tool_tip_input_descricao_exibir"
+																md-direction="bottom">
+														<span class="h4">{{::object.descricao}}</span>
+													</md-tooltip>
+												</md-input-container>
+
+												<md-input-container flex="25">
+													<label id="lbl_situacao_exibir">Situação</label>
+													<input id="input_situacao_exibir" name="input_situacao_exibir"
+														   ng-disabled="true" type="text" value="{{object.situacao}}">
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="30">
+													<label id="lbl_tipo_exibir">Tipo de ação</label>
+													<input id="input_tipo_exibir" name="input_tipo_exibir"
+														   ng-disabled="true" type="text" value="{{object.tipoAcao}}">
+												</md-input-container>
+
+											</div>
+
+										</div>
+										<md-tabs md-border-bottom md-dynamic-height>
+
+											<!-- ABA DADOS CONTÁBEIS -->
+											<md-tab label="Dados contábeis"
+													ng-if="object.tipoAcao == 'Lançamento de tesouraria'">
+
+												<md-content class="md-padding"
+															ng-if="listaContaContabil.length > 0 && screenMode == 'VIEW'">
+													<table class="row-border md-caption tabela_exibicao"
+														   id="table-listaDadosContabeis" ms-responsive-table
+														   width="100%">
+														<thead class="cabecalho-borda-cinza">
+														<tr>
+															<th class="titulo_colunas_rb" width="15%">
+																<div class="table-header text-center"><span
+																	class="column-title">Empresa</span></div>
+															</th>
+															<th class="titulo_colunas_rb" width="50%">
+																<div class="table-header text-center"><span
+																	class="column-title">Conta contábil</span></div>
+															</th>
+															<th class="titulo_colunas_rb" width="5%">
+																<div class="table-header text-center"><span
+																	class="column-title">Opções</span></div>
+															</th>
+														</tr>
+														</thead>
+
+														<tbody>
+														<tr class="linha-borda-cinza"
+															ng-repeat="item in listaContaContabil | orderBy: 'unidade.codnome'">
+															<td class="text-left"> {{item.unidade.codnome}}</td>
+															<td class="text-left"> {{item.numeroContaContabil}}</td>
+															<td class="text-center"
+																style="padding-top: 0px; padding-bottom: 0px;">
+																<md-button class="md-icon-button"
+																		   id="btn_excluir_excluirContabeis_{{$index}}"
+																		   name="btn_excluir_dadosContabeis_{{$index}}"
+																		   ng-click="excluirDadosContabeis(item)"
+																		   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+																	<md-icon class="red-400-fg"
+																			 md-font-icon="icon-close"></md-icon>
+																	<md-tooltip class="h3" md-direction="bottom">
+																		Remover esta associação entre a conta contábil e
+																		o histórico da conciliação bancária
+																	</md-tooltip>
+																</md-button>
+																<md-button class="md-icon-button"
+																		   id="btn_add_dadosContabeis"
+																		   ng-click="novaContaContabil(item)"
+																		   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+																	<md-icon md-font-icon="icon-pencil"
+																			 style="!important;"></md-icon>
+																	<md-tooltip class="h3" md-direction="bottom">
+																		Editar
+																	</md-tooltip>
+																</md-button>
+															</td>
+														</tr>
+														</tbody>
+													</table>
+													<md-divider></md-divider>
+												</md-content>
+
+												<!-- ABA CONTROLES -->
+												<div id="idMensagemDadosContabeis"
+													 ng-if="((listaContaContabil == null || listaContaContabil.length == 0) && screenMode == 'VIEW')">
+													<md-whiteframe class="md-whiteframe-1dp" flex="100" layout
+																   layout-align="center center">
+														<span class="h4 p-32">Não existe(m) <b>contas contábeis</b> cadastrada(s).</span>
+													</md-whiteframe>
+												</div>
+
+												<div class="p-8" flex flex layout="row" layout-align="end center"
+													 layout-xs="column">
+													<md-button class="md-raised md-accent" id="btn_salvar"
+															   ng-click="novaContaContabil($index)"
+															   ng-disabled="desabilitarBotaoNovaCC">
+														NOVA CONTA CONTÁBIL
+														<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+															<span class="h4">Adicionar uma associação com conta contábil para este histórico da conciliação bancária</span>
+														</md-tooltip>
+													</md-button>
+												</div>
+												<md-divider></md-divider>
+
+											</md-tab>
+
+											<md-tab label="Controles">
+												<md-content class="md-padding">
+													<div flex layout="row" layout-sm="row" layout-xs="column">
+														<md-input-container flex="70" flex-xs="100">
+															<label>Cadastramento</label>
+															<input id="cadastramento" name="cadastramento"
+																   ng-disabled="true" type="text"
+																   value="{{ ::object.criador }}">
+														</md-input-container>
+
+														<md-input-container flex="30" flex-xs="100">
+															<label>Data/hora</label>
+															<input id="data_hora" name="data_hora" ng-disabled="true"
+																   type="text"
+																   value="{{ ::object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+														</md-input-container>
+													</div>
+
+													<div flex layout="row" layout-sm="row" layout-xs="column">
+														<md-input-container flex="70" flex-xs="100">
+															<label>Última alteração</label>
+															<input id="alteracao" name="alteracao" ng-disabled="true"
+																   type="text" value="{{ object.atualizador }}">
+														</md-input-container>
+
+														<md-input-container flex="30" flex-xs="100">
+															<label>Data/hora</label>
+															<input id="data_hora2" name="data_hora2" ng-disabled="true"
+																   type="text"
+																   value="{{ object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+														</md-input-container>
+													</div>
+												</md-content>
+											</md-tab>
+										</md-tabs>
+
+									</div>
+									<md-divider></md-divider>
+									<div class="p-8" flex layout="row" layout-align="start start" layout-xs="column"
+										 ng-if="screenMode !== 'VIEW'">
+										<md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvar()"
+												   ng-disabled="!HistoricoConciliacaoForm.$valid || action">
+											Salvar
+											<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+												<span class="h4">Salvar as alterações realizadas neste histórico da conciliação bancária</span>
+											</md-tooltip>
+										</md-button>
+
+										<md-button class="md-raised md-accent" id="btn_cancelar"
+												   ng-click="cancelarEdit()" ng-disabled="action">
+											Cancelar
+											<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+												<span class="h4">Sair deste histórico da conciliação bancária, sem gravar as modificações realizadas</span>
+											</md-tooltip>
+										</md-button>
+									</div>
+
+									<div class="p-8" flex layout="row" layout-xs="column" ng-if="screenMode === 'VIEW'">
+										<div flex layout="row" layout-align="start start">
+											<md-button aria-label="Editar" class="md-raised md-accent" id="btn_editar"
+													   ng-click="editar()" ng-disabled="action">
+												Editar
+												<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+													<span class="h4">Editar os dados deste histórico da conciliação bancária</span>
+												</md-tooltip>
+											</md-button>
+
+											<md-button aria-label="Retornar" class="md-raised md-accent"
+													   id="btn_retornar" ng-click="retornar()" ng-disabled="action">
+												Retornar
+												<md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+													<span
+														class="h4">Sair desta tela e retornar para a tela anterior</span>
+												</md-tooltip>
+											</md-button>
+
+										</div>
+
+										<div flex layout="row" layout-align="end center">
+											<md-button aria-label="Remover" class="md-raised md-accent" id="btn_remover"
+													   ng-click="removerH($event)" ng-disabled="action">
+												Remover
+												<md-tooltip id="tool_tip_btn_remover" md-direction="bottom">
+													<span class="h4">Remover este histórico da conciliação bancária (esta operação não poderá ser cancelada)</span>
+												</md-tooltip>
+											</md-button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / CONTENT -->
+	</div>
+</div>
+

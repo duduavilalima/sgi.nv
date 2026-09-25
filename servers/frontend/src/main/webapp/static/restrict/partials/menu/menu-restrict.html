@@ -1,0 +1,69 @@
+<span ng-controller="MenuCtrl as menuCtrl">
+
+	<md-toolbar class="navigation-header md-whiteframe-1dp" layout="row" layout-align="start center">
+		<div class="logo" layout="row" layout-align="start center">
+			<span class="logo-image">
+				<img src="../img/ico_aa.png">
+			</span>
+			<span class="logo-text">
+				<img src="../img/logo_titulo_aa.png">
+			</span>
+		</div>
+	</md-toolbar>
+
+	<md-progress-linear md-mode="query" class="md-accent" ng-if="menu === null"></md-progress-linear>
+	<ms-nav class="scrollable" ms-scroll="vm.msScrollOptions" ng-repeat="item in menu" ng-if="menu !== null">
+		<ms-nav-item ms-nav-toggle style="margin-left: -12px;">
+			<a id="menu_{{item.nome}}" md-ink-ripple ms-nav-button>
+				<i class="{{item.contexto}} s16"></i>
+				<span class="ms-nav-title-top">{{item.nome}}</span>
+				<i class="icon-chevron-down s16 arrow"></i>
+			</a>
+
+			<ms-nav-toggle-items style="margin-left: -30px;">
+				<div ng-repeat="item_child in item.children">
+					<ms-nav-item ng-if="item_child.children.length === 0">
+						<a id="menu_sub_{{item_child.link}}" md-ink-ripple ms-nav-button ui-sref="{{item_child.link}}"
+						   ui-sref-active="active md-accent-bg">
+							<span class="ms-nav-label">{{item_child.nome}}</span>
+						</a>
+					</ms-nav-item>
+
+					<ms-nav class="scrollable" ms-scroll="vm.msScrollOptions" ng-if="item_child.children.length > 0">
+						<ms-nav-item ms-nav-toggle>
+							<a id="menu_{{item_child.link}}" md-ink-ripple ms-nav-button style="font-weight: bold;">
+								<i class="{{item_child.contexto}} s16"></i>
+								<span class="ms-nav-label" style="margin-left: -32px;">{{item_child.nome}}</span>
+								<i class="icon-chevron-down s16 arrow"></i>
+							</a>
+
+							<ms-nav-toggle-items>
+								<div ng-repeat="sub_item_child in item_child.children">
+									<ms-nav-item ng-if="sub_item_child.children.length === 0">
+										<a id="menu_sub_{{sub_item_child.link}}" md-ink-ripple ms-nav-button
+										   ui-sref="{{sub_item_child.link}}" ui-sref-active="active md-accent-bg">
+											<span class="ms-nav-label">{{sub_item_child.nome}}</span>
+										</a>
+									</ms-nav-item>
+
+									<ms-nav class="scrollable" ms-scroll="vm.msScrollOptions"
+											ng-if="sub_item_child.children.length > 0">
+										<ms-nav-item ms-nav-toggle>
+											<a id="menu_{{sub_item_child.link}}" md-ink-ripple ms-nav-button>
+												<i class="{{sub_item_child.contexto}} s16"></i>
+												<span class="ms-nav-label">{{sub_item_child.nome}}</span>
+												<i class="icon-chevron-down s16 arrow"></i>
+											</a>
+										</ms-nav-item>
+									</ms-nav>
+								</div>
+							</ms-nav-toggle-items>
+						</ms-nav-item>
+					</ms-nav>
+				</div>
+			</ms-nav-toggle-items>
+
+		</ms-nav-item>
+	</ms-nav>
+</span>
+

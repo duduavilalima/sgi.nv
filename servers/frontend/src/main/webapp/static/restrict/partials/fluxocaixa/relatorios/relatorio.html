@@ -1,0 +1,196 @@
+<div class="page-layout simple fullwidth" ng-controller="FluxoCaixaRelatoriosCtrl">
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{::titulo}}</span>
+			</div>
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+			<div class="content" flex>
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">{{ ::modulo}} - Filtro de Relatório</div>
+							</header>
+							<div class="content">
+								<form name="form" novalidate>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_pagamento_de">Pagamento de</label>
+											<input id="pagamento_de_input" max-date="object.pagamentoAte"
+												   name="pagamento_de" ng-change="verificarPagamentoDe()"
+												   ng-model="object.pagamentoDe" ng-required="true" required
+												   tt-date-picker type="text">
+											<div ng-messages="form.pagamento_de.$error"
+												 ng-show="form.pagamento_de.$touched">
+												<div ng-message="required">
+													<span>Obrigatório.</span>
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_pagamento__ate">Pagamento até</label>
+											<input id="pagamento__ate_input" min-date="object.pagamentoDe"
+												   ng-disabled="true" ng-model="object.pagamentoAte" tt-date-picker
+												   type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_saldo_inicial">Saldo inicial</label>
+											<input class="text-left" id="input_saldo_inicial" maxlength="18"
+												   name="saldo_inicial" ng-model="object.saldoInicial"
+												   ng-required="true" required
+												   type="text" ui-number-mask="2">
+										</md-input-container>
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_empresa">Empresa</label>
+											<md-select id="combo_empresa" name="empresa" ng-change="changeEmpresa()"
+													   ng-model="object.empresa">
+												<md-option ng-value="" value=""></md-option>
+												<md-option ng-repeat="item in listEmpresas" ng-value="item"
+														   value="{{item}}">{{ item.codnome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_diretoria">Diretoria</label>
+											<md-select id="combo_diretoria" name="diretoria"
+													   ng-model="object.diretoria">
+												<md-option ng-value="" value=""></md-option>
+												<md-option ng-repeat="item in listDiretorias" ng-value="item"
+														   value="{{item}}">{{ item.descricao }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_regional">Regional</label>
+											<md-select id="combo_regional" name="regional" ng-model="object.regional">
+												<md-option ng-value="" value=""></md-option>
+												<md-option ng-repeat="item in listRegionais" ng-value="item"
+														   value="{{item}}">{{ item.descricao }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_gerencia">Gerência</label>
+											<md-select id="combo_gerencia" name="gerencia" ng-change="changeGerencia()"
+													   ng-model="object.gerencia">
+												<md-option ng-value="" value=""></md-option>
+												<md-option ng-repeat="item in listGerencias" ng-value="item"
+														   value="{{item}}">{{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_cl">CL</label>
+											<md-select id="combo_cl" name="cl" ng-model="object.cl">
+												<md-option ng-value="" value=""></md-option>
+												<md-option ng-repeat="item in listCl" ng-value="item" value="{{item}}">
+													{{ item.identificadorFinal }} - {{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_nivel_receitas">Nível precisão das receitas</label>
+											<md-select id="combo_nivel_receitas" name="nivel_receitas"
+													   ng-model="object.nivelReceitas">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listaNivelReceitas" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_nivel_fornecedores">Nível precisão fornecedores</label>
+											<md-select id="combo_nivel_fornecedores" name="nivel_fornecedores"
+													   ng-model="object.nivelFornecedor">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listaNivelFornecedores" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_nivel_prestacao_contas">Nível precisão da prestação de
+												contas</label>
+											<md-select id="combo_nivel_prestacao_contas" name="nivel_prestacao_contas"
+													   ng-model="object.nivelPrestacaoContas">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listaNivelPrestacaoContas" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_nivel_tributos">Nível precisão de tributos</label>
+											<md-select id="combo_nivel_tributos" name="nivel_tributos"
+													   ng-model="object.nivelTributos">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listNiveisTributos" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div ng-hide="object.relatorios.relatorio == 'Relação de documentos lançados'"
+										 style="margin-top: 10px">
+										<span>*</span>&nbsp;Campos obrigatórios / É obrigatório informar um período de
+										datas
+									</div>
+
+									<section class="mt-15" layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_gerar" name="btn_gerar"
+													   ng-click="gerarRelatorio()" ng-disabled="form.$invalid">
+												Gerar relatório
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+									</section>
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+</div>

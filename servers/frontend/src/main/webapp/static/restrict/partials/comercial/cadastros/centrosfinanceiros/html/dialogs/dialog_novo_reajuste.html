@@ -1,0 +1,104 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_novo_reajuste" style="width: 600px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_novo_reajuste" md-autofocus> {{ ::title }} </h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content class="md-background-bg md-hue-3" role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<form name="DialogNovoReajusteForm">
+
+				<div flex-gt-xs="100" flex-xs layout="column">
+					<md-card md-theme-watch style="margin-left: -10px; margin-right: -10px; margin-top: -10px;">
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex flex-gt-md="100">
+								<label id="lbl_indice">Índice</label>
+								<input id="input_indice" name="indice" ng-model="object.indiceRajuste" type="text">
+							</md-input-container>
+
+						</div>
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex flex-gt-md="50">
+								<label id="lbl_escopo">Escopo</label>
+								<md-select id="combo_escopo" name="escopo" ng-change="$emit('changeEscopo')"
+										   ng-model="escopo">
+									<md-option ng-repeat="item in escopos" ng-value="item">{{item}}</md-option>
+								</md-select>
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="50">
+								<label id="lbl_reajuste">% Reajuste</label>
+								<input id="input_reajuste" maxlength="5" name="reajuste"
+									   ng-change="$emit('changeReajuste')" ng-disabled="escopo !== 'Total'"
+									   ng-model="reajuste" type="text" ui-hide-group-sep ui-number-mask>
+							</md-input-container>
+
+						</div>
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex flex-gt-md="50">
+								<label id="lbl_mao_de_obra">% Mão de obra</label>
+								<input id="input_mao_de_obra" maxlength="5" name="mao_de_obra"
+									   ng-disabled="escopo === 'Total'" ng-model="object.percentualReajusteMaoDeObra"
+									   type="text" ui-hide-group-sep ui-number-mask>
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="50">
+								<label id="lbl_gastos_gerais">% Gastos gerais</label>
+								<input id="input_gastos_gerais" maxlength="5" name="gastos_gerais"
+									   ng-disabled="escopo === 'Total'" ng-model="object.percentualReajusteGastosGerais"
+									   type="text" ui-hide-group-sep ui-number-mask>
+							</md-input-container>
+
+						</div>
+
+						<div class="pl-8 pr-8" layout layout-sm="column" layout-wrap>
+
+							<md-input-container flex flex-gt-md="50">
+								<label id="lbl_materiais">% Materiais</label>
+								<input id="input_materiais" maxlength="5" name="materiais"
+									   ng-disabled="escopo === 'Total'" ng-model="object.percentualReajusteMateriais"
+									   type="text" ui-hide-group-sep ui-number-mask>
+							</md-input-container>
+
+							<md-input-container flex flex-gt-md="50">
+								<label id="lbl_serv_terceiros">% Serv. terceiros</label>
+								<input id="input_serv_terceiros" maxlength="5" name="serv_terceiros"
+									   ng-disabled="escopo === 'Total'" ng-model="object.percentualReajusteServicos"
+									   type="text" ui-hide-group-sep ui-number-mask>
+							</md-input-container>
+
+						</div>
+
+						<div class="p-8" layout layout-sm="column" layout-wrap>
+							<span class="red-fg">*&nbsp;</span> Campos obrigatórios
+						</div>
+
+					</md-card>
+				</div>
+
+			</form>
+		</div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar" ng-click="confirm()" ng-disabled="action">
+			Aplicar reajuste
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar" ng-click="cancel()" ng-disabled="action">
+			Cancelar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

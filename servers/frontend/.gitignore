@@ -1,0 +1,7 @@
+node/
+node-bin/
+node_modules/
+bower_components/
+src/main/webapp/static/public/lib/
+**/public/lib/
+#**/public/img/

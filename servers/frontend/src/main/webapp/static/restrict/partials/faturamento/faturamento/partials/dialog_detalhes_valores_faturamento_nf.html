@@ -1,0 +1,119 @@
+[
+<md-dialog aria-label="Cidade para faturamento - Novo" id="dialog_titulo_popup_cidade_faturamento_novo"
+		   style="width: 400px;">
+	<form name="form_dialog_cidade" ng-controller="FaturamentoEtapaCtrl">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_cidade_faturamento_novo" md-autofocus>Nota Fiscal - {{object.numero}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" id="bt_fechar_popup_cidade_faturamento_novo" ng-click="cancel()"
+						   style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="white-bg">
+			<div class="md-dialog-content" md-theme="sgi">
+
+				<div layout="row" layout-sm="row" layout-xs="column">
+					<md-input-container flex>
+						<label id="lbl_valor_bruto">Valor bruto</label>
+						<input id="input_valor_bruto"
+							   name="input_valor_bruto"
+							   ng-disabled="true"
+							   type="text"
+							   value="{{object.valorBruto | currency: '' : 2}}">
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_tributos">Tributos (-)</label>
+						<input id="input_tributos"
+							   name="input_tributos"
+							   ng-disabled="true"
+							   type="text"
+							   value="{{object.tributos | currency: '' : 2}}">
+					</md-input-container>
+				</div>
+
+				<div layout="row" layout-sm="row" layout-xs="column">
+					<md-input-container flex>
+						<label id="lbl_retencoes">Retenções (-)</label>
+						<input id="input_retencoes"
+							   name="input_retencoes"
+							   ng-disabled="true"
+							   type="text"
+							   value="{{object.valorRetencoes | currency: '' : 2}}">
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_permuta">Permuta (-)</label>
+						<input id="input_permuta"
+							   name="input_permuta"
+							   ng-disabled="true"
+							   type="text"
+							   value="{{object.valorPermuta | currency: '' : 2}}">
+					</md-input-container>
+				</div>
+
+				<div layout="row" layout-sm="row" layout-xs="column">
+					<md-input-container flex>
+						<label id="lbl_descontos">Descontos (-)</label>
+						<input id="input_descontos"
+							   name="input_descontos"
+							   ng-disabled="true"
+							   type="text"
+							   value="{{object.descontos | currency: '' : 2}}">
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_multa">Multa (+)</label>
+						<input id="input_multa"
+							   name="input_multa"
+							   ng-disabled="true"
+							   type="text"
+							   value="{{object.multa | currency: '' : 2}}">
+					</md-input-container>
+				</div>
+
+				<div layout="row" layout-sm="row" layout-xs="column">
+					<md-input-container flex>
+						<label id="lbl_juros">Juros (+)</label>
+						<input id="input_juros"
+							   name="input_juros"
+							   ng-disabled="true"
+							   type="text"
+							   value="{{object.juros | currency: '' : 2}}">
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_valorAPagar"><b>Valor a pagar (=)</b></label>
+						<input id="input_valorAPagar"
+							   name="input_valorAPagar"
+							   ng-disabled="true"
+							   style="font-weight: bold;"
+							   type="text"
+							   value="{{object.valorPagar | currency: '' : 2}}">
+					</md-input-container>
+				</div>
+
+			</div>
+
+			<md-divider></md-divider>
+
+		</md-dialog-content>
+
+		<md-dialog-actions class="navigation padding-8 white-bg" style="padding-right: 16px;">
+			<div flex layout="row">
+
+				<div flex="100" flex-sm="100" layout="row" layout-align="center center">
+					<md-button class="md-raised md-accent" id="btn_cancelar_dialog_cidade" ng-click="cancel()">
+						FECHAR
+					</md-button>
+				</div>
+
+			</div>
+
+		</md-dialog-actions>
+	</form>
+</md-dialog>

@@ -1,0 +1,66 @@
+<md-dialog aria-label="{{ ::title }}" id="dialog_confirm" style="width: 1000px;">
+	<form name="DialogConfirmForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_tesouraria_confirmacao_remover" md-autofocus>{{ ::title }}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+
+
+		<md-dialog-content role="document">
+			<div layout="column">
+				<div class="white-bg" style="overflow: auto; max-height: 400px;">
+					<md-table-container>
+						<table md-progress="promise" md-table>
+							<thead class="grey-400-bg" md-head md-on-reorder="logOrder" md-order="query.order"
+								   ng-if="!options.decapitate">
+							<tr md-row>
+								<th md-column><span>Número</span></th>
+								<th md-column><span>Credor</span></th>
+								<th md-column><span>A pagar</span></th>
+								<th md-column style="width: 10%;"><span>Pagamento</span></th>
+							</tr>
+							</thead>
+							<tbody md-body>
+							<tr md-row ng-repeat="item in listDespesas | orderBy: '-aPagar'">
+								<td md-cell>{{item.numero}}</td>
+								<td md-cell>{{item.credor}}</td>
+								<td md-cell>{{item.aPagar}}</td>
+								<td md-cell>
+									<label id="lbl_data">Pagamento</label>
+									<input class="dataDialog" id="data" name="data" ng-model="pagamento" tt-date-picker
+										   type="text"/>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</md-table-container>
+				</div>
+			</div>
+			<md-divider></md-divider>
+		</md-dialog-content>
+
+
+		<md-dialog-actions class="white-bg" layout="row">
+			<div flex layout-align="start center">
+				<!--BOTÃO CANCELAR-->
+				<md-button aria-label="Cancelar" class="md-raised md-accent text-capitalize"
+						   id="btn_cancelar_cancelar_nregistro" ng-click="cancel()" ng-disabled="action">
+					Cancelar
+				</md-button>
+			</div>
+			<div layout-align="end center">
+				<md-button aria-label="Aplicar" class="md-raised md-default text-capitalize"
+						   id="btn_confirmar_cancelar_nregistro" ng-click="confirmar()">
+					Aplicar
+				</md-button>
+			</div>
+		</md-dialog-actions>
+	</form>
+</md-dialog>
+

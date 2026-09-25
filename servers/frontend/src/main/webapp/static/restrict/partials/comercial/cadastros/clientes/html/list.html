@@ -1,0 +1,264 @@
+<div class="page-layout simple fullwidth">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">Comercial</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">Clientes</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="subtitulo">Pesquisar</span>
+			</div>
+
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+			<div class="content" flex>
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">Clientes - Filtros de pesquisa</div>
+							</header>
+							<div class="content">
+								<form name="form" ui-keypress="{13:'$ctrl.buscar(1)'}">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_cnpj">CPF/CNPJ</label>
+											<input id="input_cnpj" name="cnpj" ng-model="object.documento" type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_situacao">Situação</label>
+											<md-select id="combo_situacao" name="situacao" ng-model="object.situacao">
+												<md-option ng-repeat="item in $ctrl.listSituacao" ng-value="item" value="{{ item }}">
+													{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_nome">Razão social/Nome</label>
+											<input id="input_nome" name="nome" ng-model="object.nome" type="text">
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<!-- Autocomplete de Ramo de negócio-->
+										<md-autocomplete flex flex
+														 flex-gt-md="50"
+														 id="autocomplete_ramo_negocio"
+														 md-delay="250"
+														 md-floating-label="Ramo de negócio"
+														 md-input-id="input_sigla_ramo_negocio"
+														 md-input-name="autocompleteRamoNegocio"
+														 md-item-text="item.descricao"
+														 md-items="item in $ctrl.querySearchRamoNegocio(searchTextRamoNegocio)"
+														 md-menu-class="autocomplete-custom-template"
+														 md-min-length="3"
+														 md-no-cache="true"
+														 md-no-cache="false"
+														 md-search-text="searchTextRamoNegocio"
+														 md-selected-item="selectedItemRamoNegocio"
+														 md-selected-item-change="$ctrl.selectedItemChange(item)"
+														 name="autocompleteRamoNegocio"
+														 value="{{ object.ramoNegocio }}">
+
+											<md-item-template>
+												<span class="item-title" style="margin-top: -20px">
+                                                            <h5> <strong>SIGLA: </strong>
+                                                                <span md-highlight-flags="i"
+																	  md-highlight-text="searchTextRamoNegocio">{{item.sigla}} </span>
+                                                            </h5>
+                                                        </span>
+
+												<span class="item-title" style="margin-top: -20px;margin-bottom: -20px">
+                                                            <h5> <strong>NOME: </strong>
+                                                                <span md-highlight-flags="i"
+																	  md-highlight-text="searchTextRamoNegocio">{{item.descricao}} </span>
+                                                            </h5>
+                                                        </span>
+											</md-item-template>
+
+											<div ng-messages="wizardStep1.autocompleteRamoNegocio.$error"
+												 ng-show="wizardStep1.autocompleteRamoNegocio.$touched" role="alert">
+												<div id="msg_min_client" ng-message="minlength">O nome informado não é
+													suficiente.
+												</div>
+												<div id="msg_max_client" ng-message="maxlength">O nome informado é muito
+													longo.
+												</div>
+											</div>
+										</md-autocomplete>
+
+										<!-- Autocomplete de Cidade-->
+										<md-autocomplete flex flex
+														 flex-gt-md="25"
+														 id="autocomplete_cidade"
+														 md-delay="250"
+														 md-floating-label="Cidade"
+														 md-input-id="input_nome_cidade"
+														 md-input-name="autocompleteCidade"
+														 md-item-text="item.nome + ' / ' + item.uf"
+														 md-items="item in $ctrl.querySearchCidade(searchTextCidade)"
+														 md-menu-class="autocomplete-custom-template"
+														 md-min-length="3"
+														 md-no-cache="true"
+														 md-no-cache="false"
+														 md-search-text="searchTextCidade"
+														 md-selected-item="selectedItemCidade"
+														 md-selected-item-change="$ctrl.selectedItemCidadeChange(item)"
+														 name="autocompleteCidade"
+														 value="{{ object.cidade }}">
+
+											<md-item-template>
+												<span class="item-title" style="margin-top: -20px;margin-bottom: -20px">
+													<h5>
+														<span md-highlight-flags="i" md-highlight-text="searchTextCidade">{{item.nome}}/{{item.uf}}</span>
+													</h5>
+												</span>
+											</md-item-template>
+										</md-autocomplete>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_tipo">Tipo</label>
+											<md-select id="combo_tipo" name="tipo" ng-model="object.tipo">
+												<md-option ng-repeat="item in $ctrl.tipoList" ng-value="item" value="{{ item }}">
+													{{item}}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_classificacao">Classificação</label>
+											<md-select id="combo_classificacao" name="classificacao" ng-model="object.classificacaoCliente">
+												<md-option ng-repeat="item in $ctrl.listClassificacao" ng-value="item" value="{{item}}">
+													{{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_exclCobr">Excluir (Cobrança)</label>
+											<md-select id="combo_exclCob" name="exclui" ng-model="object.faturamentoCobranca"
+													   value="{{ object.faturamentoCobranca }}">
+												<md-option ng-repeat="item in $ctrl.listExcluir" ng-value="item.value" value="{{ item.value }}">
+													{{ item.label }}
+												</md-option>
+											</md-select>
+											<md-tooltip id="tool_tip_excluir" md-direction="top">
+												<span class="h4">Indica se o cliente será excluído no relatório de cobrança ou não</span>
+											</md-tooltip>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_contrato">Possui contrato</label>
+											<md-select id="combo_contrato" name="contrato" ng-model="object.possuiContrato"
+													   value="{{ object.possuiContrato}}">
+												<md-option ng-repeat="item in $ctrl.listExcluir" ng-value="item.value" value="{{ item.value }}">
+													{{ item.label }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_conta">Conta contábil</label>
+											<md-select id="combo_conta" name="conta" ng-model="object.conta"
+													   value="{{ object.contaContaContabil}}">
+												<md-option ng-disabled="item.valor === '-'" ng-repeat="item in $ctrl.listConta" ng-value="item.valor" value="{{ item.valor }}">
+													{{item.nome}}
+												</md-option>
+											</md-select>
+											<md-tooltip id="tool_tip_conta" md-direction="top">
+												<span class="h4">Indica se o cliente possui conta contábil associada para a empresa</span>
+											</md-tooltip>
+										</md-input-container>
+
+									</div>
+
+									<section layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_pesquisar"
+													   name="btn_pesquisar" ng-click="$ctrl.buscar()" ng-disabled="isAction">
+												Pesquisar
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="$ctrl.reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+										<div flex="auto" layout-wrap show-gt-sm></div>
+										<div flex="30" flex-sm="10" layout="row" layout-align="end center">
+											<md-button class="md-raised md-default" id="btn_novo_cliente_pf"
+													   ng-click="$ctrl.novo('clientePF')" ng-disabled="isAction">
+												Novo cliente pf
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_novo_cliente_pj"
+													   ng-click="$ctrl.novo('clientePJ')" ng-disabled="isAction">
+												Novo cliente pj
+											</md-button>
+										</div>
+									</section>
+								</form>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- / CAMPOS DE PESQUISA -->
+
+				<!-- DATATABLE - RESULTADO DA PESQUISA -->
+				<div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result"
+					 ng-if="result">
+					<header class="md-accent-bg">
+						<div class="title" id="titulo_resultado">Clientes - Resultado da pesquisa</div>
+					</header>
+					<div class="sgiUiGridPesquisa" id="idGridFaturamentos" ng-if="exibirGrid(gridPesquisa)"
+						 ng-style="ajustarAlturaTabela(gridPesquisa)" ui-grid="gridPesquisa" ui-grid-auto-resize
+						 ui-grid-pinning></div>
+					<div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+						<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+							<span class="h4 p-32">{{mensagemPesquisa()}}</span>
+						</md-whiteframe>
+					</div>
+
+					<section class="p-8" layout="row" layout-align="space-between center" layout-sm="row" layout-wrap>
+						<div></div>
+
+						<div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+
+						<div layout="row" layout-align="end center" layout-sm="row" layout-wrap>
+							<md-button class="md-raised md-default" id="btn_novo_cliente_pf"
+									   ng-click="$ctrl.novo('clientePF')" ng-disabled="isAction">
+								Novo cliente pf
+							</md-button>
+							<md-button class="md-raised md-default" id="btn_novo_cliente_pj"
+									   ng-click="$ctrl.novo('clientePJ')" ng-disabled="isAction">
+								Novo cliente pj
+							</md-button>
+						</div>
+					</section>
+				</div>
+				<!-- / DATATABLE - RESULTADO DA PESQUISA -->
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+</div>

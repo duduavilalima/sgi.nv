@@ -1,0 +1,41 @@
+<md-dialog aria-label="Nota de Débito - Cancelar numeração: Confirmação" id="dialog_titulo_popup_nota_debito_numeracao"
+		   style="width: 700px;">
+	<form name="DialogNumerarForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_nota_debito_numeracao" md-autofocus>Nota de Débito - Cancelar numeração:
+					Confirmação</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="md-dialog-content" id="dialog_54" role="document" tabindex="-1">
+			<div class="md-dialog-content-body ng-scope" ng-if="::!dialog.mdHtmlContent">
+				<p class="ng-binding" id="msg_popup_nota_fiscal_numeracao">Deseja realmente cancelar a numeração desta
+					nota de débito (esta operação não poderá ser desfeita)?</p>
+			</div>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<md-button class="md-raised md-default" id="btn_confirmar_dialog_numerar"
+					   ng-click="confirm()" ng-disabled="DialogNumerarForm.$invalid || action">
+				CONFIRMAR
+				<img ng-show="action" src="../img/gray_carregando.gif"
+					 style="height: 20px;width: 20px;margin-top: 8px;"/>
+				<md-tooltip id="tool_tip_btn_confirmar_dialog_numerar" md-direction="bottom">
+					<span class="h4">Confirmar numeração para esta nota de débito</span>
+				</md-tooltip>
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_cancelar_dialog_numerar" ng-click="cancel()"
+					   ng-disabled="action">
+				CANCELAR
+				<md-tooltip id="tool_tip_btn_cancelar_dialog_numerar" md-direction="bottom">
+					<span class="h4">Cancelar as alterações realizadas na numeração desta nota de débito</span>
+				</md-tooltip>
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

@@ -1,0 +1,232 @@
+<div class="page-layout simple fullwidth" ng-controller="FaturamentoListarCtrl">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">{{::modulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo">{{::titulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="subtitulo">{{::subtitulo}}</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content" md-background-bg>
+
+        <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+            <div class="content" flex>
+
+                <!-- CAMPOS DE PESQUISA -->
+                <div layout="row" layout-wrap>
+                    <div class="about" flex="100" layout="column">
+                        <div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+                            <header class="md-accent-bg">
+                                <div class="title" id="titulo_filtro">{{ ::titulo}} - Filtros de Pesquisa</div>
+                            </header>
+
+                            <div class="content">
+                                <form name="form" ui-keypress="{13:'buscar(1)'}">
+
+                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+                                        <md-input-container flex flex-sm="100">
+                                            <label id="lbl_numero">Número</label>
+                                            <input id="input_numero" maxlength="9" name="numero"
+                                                ng-model="object.codigo" type="text" ui-hide-group-sep
+                                                ui-number-mask="0">
+                                        </md-input-container>
+
+                                        <md-input-container flex flex-sm="100">
+                                            <label id="lbl_situacao">Situação</label>
+                                            <md-select id="combo_situacao" name="situacao"
+                                                ng-change="$emit('changeSituacao')" ng-model="object.situacao">
+                                                <md-option value=""></md-option>
+                                                <md-option ng-repeat="status in enumStatus" ng-value="status"
+                                                    value="{{ status }}">{{ status }}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+
+                                        <md-input-container flex flex-sm="100">
+                                            <label id="lbl_tipo">Tipo</label>
+                                            <md-select id="combo_tipo" name="tipo" ng-change="$emit('changeTipo')"
+                                                ng-model="object.tipo">
+                                                <md-option ng-repeat="tipo in enumTipo" ng-value="tipo">{{ tipo }}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+
+                                        <md-input-container flex flex-sm="100">
+                                            <label id="lbl_itentificacao">Identificação</label>
+                                            <input id="input_identificacao" maxlength="50" md-maxlength="50"
+                                                name="identificacao" ng-model="object.identificacao" type="text">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_cliente_sub">Cliente/subcliente</label>
+                                            <input id="input_cliente_sub" maxlength="200" name="ident"
+                                                ng-maxlength="200" ng-model="object.nomeCliente" type="text">
+                                            <md-tooltip md-direction="bottom">
+                                                <span class="h4">Informe o CNPJ, razão social ou o nome fantasia do
+                                                    cliente ou do subcliente</span>
+                                            </md-tooltip>
+                                        </md-input-container>
+
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_cc_cl">Centro de lucro</label>
+                                            <input class="text-left" id="input_cc_cl" maxlength="4" name="cc_cl"
+                                                ng-model="object.numCentroFinanceiro" type="text" ui-hide-group-sep
+                                                ui-number-mask="0" value="{{ object.numCentroFinanceiro }}">
+                                        </md-input-container>
+
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_contrato">Contrato</label>
+                                            <input class="text-left" id="input_contrato" maxlength="9" name="contrato"
+                                                ng-model="object.codigoContrato" type="text" ui-hide-group-sep
+                                                ui-number-mask="0">
+                                        </md-input-container>
+
+                                        <!-- Autocomplete de Cidade-->
+										<div flex="25">
+											<md-autocomplete flex flex
+															flex-gt-md="100"
+															id="autocomplete_cidade"
+															md-delay="250"
+															md-floating-label="Cidade/UF"
+															md-input-id="input_nome_cidade"
+															md-input-name="autocompleteCidade"
+															md-item-text="item.nome + ' / ' + item.uf"
+															md-items="item in querySearchCidade(searchTextCidade)"
+															md-menu-class="autocomplete-custom-template"
+															md-min-length="3"
+															md-no-cache="true"
+															md-no-cache="false"
+															md-search-text="searchTextCidade"
+															md-selected-item="selectedItemCidade"
+															md-selected-item-change="selectedItemCidadeChange(item)"
+															name="autocompleteCidade"
+															value="{{ object.cidade }}">
+
+												<md-item-template>
+													<span class="item-title" style="margin-top: -20px;margin-bottom: -20px">
+														<h5>
+															<span md-highlight-flags="i" md-highlight-text="searchTextCidade">{{item.nome}}/{{item.uf}}</span>
+														</h5>
+													</span>
+												</md-item-template>
+
+											</md-autocomplete>
+											<md-tooltip md-direction="bottom">
+												<span class="h4">Cidade/UF da prestação dos serviços</span>
+											</md-tooltip>
+										</div>
+                                    </div>
+
+                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_tipo_itens_nf">Tipo de itens</label>
+                                            <md-select id="combo_tipo_itens_nf" name="tipoFornecimento"
+											     ng-change="$emit('changeTipoFornecimento')" ng-model="object.tipoFornecimento">
+                                                <md-option ng-repeat="tipoItens in enumTipoItens" ng-value="tipoItens">{{ tipoItens }}</md-option>
+
+                                            </md-select>
+                                        </md-input-container>
+
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_totalDe">Total de (R$)</label>
+                                            <input class="text-left" id="input_totalDe" maxlength="18" name="total_de"
+                                                ng-model="object.totalDe" type="text" ui-number-mask="2">
+                                        </md-input-container>
+
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_totalAte">Total até (R$)</label>
+                                            <input class="text-left" id="input_totalAte" maxlength="18" name="total_ate"
+                                                ng-model="object.totalAte" type="text" ui-number-mask="2">
+                                        </md-input-container>
+
+                                        <md-input-container flex="25" flex-sm="100">
+                                            <label id="lbl_descricao_item">Descrição do item</label>
+                                            <input id="input_descricao_item" maxlength="200" md-maxlength="200"
+                                                name="desc_item" ng-maxlength="200" ng-model="object.descricaoItem"
+                                                type="text">
+                                        </md-input-container>
+                                    </div>
+
+                                    <section layout="row" layout-sm="row" layout-wrap>
+                                        <div flex="30" flex-sm="10" layout="row" layout-align="start center">
+                                            <md-button class="md-raised md-accent" id="btn_pesquisar" type
+                                                name="btn_pesquisar" ng-click="buscar(1)" ng-disabled="isAction">
+                                                Pesquisar
+                                            </md-button>
+                                            <md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+                                                ng-click="reset()" ng-disabled="isAction">
+                                                Limpar
+                                            </md-button>
+                                        </div>
+                                        <div flex="auto" layout-wrap show-gt-sm>
+                                        </div>
+                                        <div flex="30" flex-sm="10" layout="row" layout-align="end center">
+                                            <md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction"
+                                                ui-sref="faturamento.novo">
+                                                Novo faturamento
+                                            </md-button>
+                                        </div>
+                                    </section>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- / CAMPOS DE PESQUISA -->
+
+                <!-- DATATABLE - RESULTADO DA PESQUISA -->
+                <div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result"
+                    ng-if="result && result != null">
+                    <header class="md-accent-bg">
+                        <div class="title" id="titulo_resultado">{{ ::titulo}} - Resultado da Pesquisa</div>
+                    </header>
+
+                    <div class="sgiUiGridPesquisa" id="idGridFaturamentos" ng-if="exibirGrid(gridPesquisa)"
+                        ng-style="ajustarAlturaTabela(gridPesquisa)" ui-grid="gridPesquisa" ui-grid-auto-resize
+                        ui-grid-pinning></div>
+
+                    <div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+                        <md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+                            <span class="h4 p-32">{{mensagemPesquisa()}}</span>
+                        </md-whiteframe>
+                    </div>
+
+                    <section class="p-8" layout="row" layout-align="space-between center" layout-sm="row" layout-wrap>
+                        <div></div>
+
+                        <div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+
+                        <div layout="row" layout-align="end center" layout-sm="row" layout-wrap>
+                            <md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction"
+                                ui-sref="faturamento.novo"> Novo faturamento
+                            </md-button>
+                        </div>
+                    </section>
+
+                </div>
+                <!-- / DATATABLE - RESULTADO DA PESQUISA -->
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

@@ -1,0 +1,254 @@
+<div layout="row" layout-sm="row" layout-xs="column">
+    <md-input-container flex md-no-float>
+       <label id="lbl_numero_aba_dados">Número</label>
+       <input id="input_numero_aba_dados" name="numero" ng-disabled="true" type="text" value="{{ object.numero }}">
+    </md-input-container>
+
+    <md-input-container flex>
+       <label id="lbl_situacao_aba_dados1">Situação</label>
+       <input id="input_situacao_aba_dados" name="situacao" ng-disabled="true" type="text" value="{{ object.situacao }}">
+    </md-input-container>
+
+    <md-input-container flex ng-if="screenMode != 'VIEW'">
+       <label id="lbl_tipo_aba_dados">Tipo</label>
+       <md-select id="combo_tipo" name="combo_tipo" ng-if="screenMode != 'VIEW'" ng-model="object.tipo" ng-required="true" required value="{{ object.tipo }}">
+          <md-option ng-repeat="tipo in tipoList" ng-value="tipo">{{tipo}}</md-option>
+       </md-select>
+       <div ng-messages="wizardStep1.combo_tipo.$error" role="alert">
+          <div id="msg_req_tipo" ng-message="required">Obrigatório.</div>
+       </div>
+    </md-input-container>
+
+    <md-input-container flex ng-if="screenMode === 'VIEW'">
+       <label id="lbl_tipo_aba_dados_exibicao">Tipo</label>
+       <input id="input_tipo_aba_dados_exibicao" name="cl" ng-disabled="true" ng-if="screenMode === 'VIEW'" type="text" value="{{object.tipo}}">
+    </md-input-container>
+
+    <md-input-container flex>
+       <label id="lbl_identificacao_aba_dados">Identificação</label>
+       <input id="input_identificacao_aba_dados" maxlength="100" name="ident" ng-disabled="screenMode === 'VIEW'" ng-model="object.identificacao" ng-required="false" type="text" value="{{ object.identificacao }}">
+       <div ng-messages="wizardStep1.ident.$error" role="alert">
+          <div id="msg_max_ident" ng-message="maxlength">Máximo de 100 caracteres.</div>
+       </div>
+    </md-input-container>
+
+ </div>
+
+ <div layout="row" layout-sm="row" layout-xs="column">
+	<!-- Ordem -->
+    <md-input-container flex="25" flex-xs="100" ng-if="screenMode !== 'VIEW' && object.situacao === 'Aberto'">
+       <label id="combo_ordem_edicao">Ordem</label>
+       <md-select id="combo_ordem" name="combo_ordem" ng-change="changeOrdem()" ng-model="object.ordem">
+          <md-option ng-repeat="ordem in ordemList" ng-value="ordem">{{ordem}}</md-option>
+       </md-select>
+    </md-input-container>
+
+    <md-input-container flex="25" flex flex-xs="100" ng-if="screenMode === 'VIEW' || object.situacao !== 'Aberto'">
+       <label id="combo_ordem_exibicao">Ordem</label>
+       <input id="input_ordem_exibicao" name="input_ordem_exibicao" ng-disabled="true" type="text" value="{{object.ordem}}">
+    </md-input-container>
+
+    <!-- Cliente -->
+    <md-autocomplete flex="50" flex-xs="100" id="autocomplete_nome_cliente_aba_dados" md-delay="250" md-floating-label="Cliente"
+       md-input-id="input_nome_cliente_aba_dados" md-input-name="autocompleteCliente" md-item-text="item.nome" md-items="item in querySearchCliente(searchTextCliente)"
+       md-menu-class="autocomplete-custom-template" md-min-length="3" md-no-cache="false" md-require-match="" md-search-text="searchTextCliente"
+       md-selected-item="selectedItemCliente" md-selected-item-change="selectedItemChange(item, 'cliente')" name="autocompleteCliente"
+       ng-disabled="screenMode === 'VIEW'" ng-if="(screenMode != 'VIEW' && object.ordem === 'Cliente/Centro de lucro') && object.situacao === 'Aberto'"
+       ng-required="true" title=" " value="{{ object.cliente.nome }}">
+       <md-item-template>
+          <span class="item-title" style="margin-top: -20px">
+             <h5> <strong> <span md-highlight-flags="i" md-highlight-text="searchTextCliente"> {{item.documento}} </span> </strong></h5>
+          </span>
+          <span class="item-title" style="margin-top: -25px">
+             <h5> <strong style="color: gray;">RAZÃO SOCIAL: </strong> <span md-highlight-flags="i" md-highlight-text="searchTextCliente">{{item.nome}} </span> </h5>
+          </span>
+          <span class="item-title" style="margin-top: -25px; margin-bottom: -20px">
+             <h5> <strong style="color: gray;">NOME FANTASIA: </strong> <span md-highlight-flags="i" md-highlight-text="searchTextCliente">{{item.nomeFantasia}} </span> </h5>
+          </span>
+       </md-item-template>
+       <div ng-if="wizardStep1.autocompleteCliente.$touched" ng-messages="wizardStep1.autocompleteCliente.$error" role="alert">
+          <div id="msg_req_match_client" ng-message="md-require-match">O cliente informado não é válido</div>
+          <div id="msg_req_client" ng-message="required">Obrigatório.</div>
+          <div id="msg_min_client" ng-message="minlength">O nome informado não é suficiente.</div>
+          <div id="msg_max_client" ng-message="maxlength">O nome informado é muito longo.</div>
+       </div>
+    </md-autocomplete>
+
+
+    <!-- Centro de Lucro -->
+    <md-autocomplete flex="25" flex-xs="100" id="autocomplete_nome_centroLucro_aba_dados" md-delay="250" md-floating-label="Centro de lucro"
+            md-input-id="input_nome_centroLucro_aba_dados" md-input-name="autocompleteCentroLucro" md-item-text="item.identificadorFinal + ' - ' + item.nome"
+            md-items="item in querySearchCentroLucro(searchTextCentroLucro)" md-menu-class="autocomplete-custom-template" md-min-length="3" md-no-cache="false"
+            md-require-match="" md-search-text="searchTextCentroLucro" md-selected-item="selectedItemCentroLucro"
+            md-selected-item-change="fnSelectedItemCentroLucro(item)" name="autocompleteCentroLucro" ng-disabled="screenMode === 'VIEW' || possuiNfNd()"
+            ng-if="screenMode != 'VIEW' && object.ordem === 'Centro de lucro/Cliente'" ng-required="!possuiNfNd()" title=" " value="{{ object.centroFinanceiro.nome }}">
+       <md-item-template>
+          <span class="item-title" style="margin-top: -20px">
+             <h5>
+                <span md-highlight-flags="i" md-highlight-text="searchTextCentroLucro">{{item.identificadorFinal}} - </span>
+                <span md-highlight-flags="i" md-highlight-text="searchTextCentroLucro">{{item.nome}} </span>
+             </h5>
+          </span>
+       </md-item-template>
+       <div ng-if="wizardStep1.autocompleteCentroLucro.$touched" ng-messages="wizardStep1.autocompleteCentroLucro.$error" role="alert">
+          <div id="msg_req_match" ng-message="md-require-match">O centro de lucro informado não é válido</div>
+          <div id="msg_req_centroLucro" ng-message="required">Obrigatório.</div>
+          <div id="msg_min_centroLucro" ng-message="minlength">O nome informado não é suficiente.</div>
+          <div id="msg_max_centroLucro" ng-message="maxlength">O nome informado é muito longo.</div>
+       </div>
+    </md-autocomplete>
+
+	 <md-input-container flex="50" ng-if="(screenMode != 'VIEW' && object.ordem === 'Centro de lucro/Cliente') && object.situacao === 'Aberto' && !object.centroFinanceiro.permiteClienteLivre">
+		 <label id="lbl_situacao_aba_dados">Cliente</label>
+		 <input id="input_nome_cliente_aba_dado_centro_cliente" name="autocompleteCliente"
+				ng-disabled="true" type="text" value="{{ object.cliente.nome }}">
+	 </md-input-container>
+
+	 <md-autocomplete flex="50" flex-xs="100" id="autocomplete_nome_cliente_aba_dados" md-delay="250" md-floating-label="Cliente"
+					  md-input-id="input_nome_cliente_aba_dados" md-input-name="autocompleteCliente" md-item-text="item.nome" md-items="item in querySearchCliente(searchTextCliente)"
+					  md-menu-class="autocomplete-custom-template" md-min-length="3" md-no-cache="false" md-require-match="" md-search-text="searchTextCliente"
+					  md-selected-item="object.cliente" name="autocompleteCliente"
+					  ng-disabled="screenMode === 'VIEW'" ng-if="(screenMode != 'VIEW' && object.ordem === 'Centro de lucro/Cliente') && object.situacao === 'Aberto' && object.centroFinanceiro.permiteClienteLivre"
+					  ng-required="true" title=" " value="{{ object.cliente.nome }}">
+		 <md-item-template>
+          <span class="item-title" style="margin-top: -20px">
+             <h5> <strong> <span md-highlight-flags="i" md-highlight-text="searchTextCliente"> {{item.documento}} </span> </strong></h5>
+          </span>
+			 <span class="item-title" style="margin-top: -25px">
+             <h5> <strong style="color: gray;">RAZÃO SOCIAL: </strong> <span md-highlight-flags="i" md-highlight-text="searchTextCliente">{{item.nome}} </span> </h5>
+          </span>
+			 <span class="item-title" style="margin-top: -25px; margin-bottom: -20px">
+             <h5> <strong style="color: gray;">NOME FANTASIA: </strong> <span md-highlight-flags="i" md-highlight-text="searchTextCliente">{{item.nomeFantasia}} </span> </h5>
+          </span>
+		 </md-item-template>
+		 <div ng-if="wizardStep1.autocompleteCliente.$touched" ng-messages="wizardStep1.autocompleteCliente.$error" role="alert">
+			 <div id="msg_req_match_client" ng-message="md-require-match">O cliente informado não é válido</div>
+			 <div id="msg_req_client" ng-message="required">Obrigatório.</div>
+			 <div id="msg_min_client" ng-message="minlength">O nome informado não é suficiente.</div>
+			 <div id="msg_max_client" ng-message="maxlength">O nome informado é muito longo.</div>
+		 </div>
+	 </md-autocomplete>
+
+    <span class="width-5"></span>
+
+    <md-input-container flex="25" ng-if="(screenMode != 'VIEW' && object.ordem === 'Cliente/Centro de lucro') && object.situacao === 'Aberto'">
+       <label id="lbl_centro_lucro_aba_dados">Centro de lucro</label>
+       <md-select id="combo_cl_aba_dados" name="centro_lucro" ng-change="$emit('changeCentroLucro')" ng-disabled="screenMode === 'VIEW'" ng-model="object.centroFinanceiro" ng-model-options="{trackBy: '$value.codigo'}" ng-required="true"
+          value="{{ object.centroFinanceiro.identificadorFinal }} - {{ object.centroFinanceiro.nome }}">
+          <md-option ng-repeat="cfTO in centros | orderBy: 'identificadorFinal'" ng-value="cfTO" value="{{ cfTO.identificadorFinal }} - {{ cfTO.nome }}">{{ cfTO.identificadorFinal }} - {{cfTO.nome }}
+          </md-option>
+       </md-select>
+       <div ng-messages="wizardStep1.centro_lucro.$error" role="alert">
+          <div id="msg_req_centro_lucro" ng-message="required">Obrigatório.</div>
+       </div>
+    </md-input-container>
+
+    <md-input-container flex="25" ng-if="screenMode === 'VIEW'">
+       <label id="lbl_cl_exibicao">Centro de lucro</label>
+       <input id="input_cl_exibicao" name="cl" ng-disabled="true" style="{{object.centroFinanceiro.situacao !== 'Ativo' ? 'font-weight: bold;' : ''}}" type="text"
+          value="{{ object.centroFinanceiro.identificadorFinal }} - {{ object.centroFinanceiro.nome }}{{ object.centroFinanceiro.situacao !== 'Ativo' ? (' (' + object.centroFinanceiro.situacao + ')') : '' }}">
+       <md-tooltip id="tool_tip_periodo" md-direction="top" ng-if="screenMode === 'VIEW' && object.cliente.nome !== null ">
+          <span
+             class="h4">{{ object.centroFinanceiro.identificadorFinal }} - {{ object.centroFinanceiro.nome }}</span><span
+             class="h4" style="{{object.centroFinanceiro.situacao !== 'Ativo' ? 'font-weight: bold;' : ''}}">{{ object.centroFinanceiro.situacao !== 'Ativo' ? (' (' + object.centroFinanceiro.situacao + ')') : '' }}</span>
+       </md-tooltip>
+    </md-input-container>
+
+    <span style="width: 2.5px;"></span>
+
+
+    <div flex layout="column" ng-if="screenMode === 'VIEW' || (object.situacao !== 'Aberto') " style="height: 52px;width: 98%;overflow: hidden;border-bottom: dotted;display: inline-block;border-bottom-color: transparent;background-image: linear-gradient(90deg, rgba(0,0,0,0.98) 0, rgba(0,0,0,0.98) 38%, transparent 0);
+       background-image: -ms-linear-gradient(left, transparent 0, rgba(0,0,0,0.38) 100%);background-position: bottom -1px left 0;background-size: 4px 1px;background-repeat: repeat-x;">
+       <label id="lbl_numero" style="margin-top: -4px;">Cliente</label>
+       <div>
+          <span class="link-contrato"
+             ng-click="exibirDetalheCliente(object.cliente.codigo, object.cliente.tipoPessoa, object.cliente.tipoPessoa, $event);"
+             style="margin-top: 5px;">{{::object.cliente.nome}}</span>
+          <md-tooltip id="tool_tip_periodo" md-direction="top" ng-if="screenMode === 'VIEW' && object.cliente.nome !== null ">
+             <span class="h4">{{object.cliente.nome}}</span>
+          </md-tooltip>
+       </div>
+    </div>
+ </div>
+ <div layout layout-sm="column">
+    <md-autocomplete flex id="autocomplete_nome_subcliente" md-floating-label="Subcliente" md-input-name="autocompleteSubCliente" md-item-text="item.nome" md-items="item in querySearchSubCliente(searchTextSubCliente)" md-menu-class="autocomplete-custom-template subClienteClass" md-min-length="2"
+       md-no-cache="true" md-require-match="" md-search-text="searchTextSubCliente" md-selected-item="selectedItemSubCliente" md-selected-item-change="selectedItemChange(item, 'subcliente')" name="autocompleteSubCliente"
+       ng-if="screenMode !== 'VIEW' && object.centroFinanceiro && object.cliente && object.situacao === 'Aberto' && !object.centroFinanceiro.permiteClienteLivre" ng-required="false">
+       <md-item-template>
+          <span class="item-title" style="margin-top: -20px">
+             <h4>
+                <strong> <span md-highlight-flags="i"
+                   md-highlight-text="searchTextCliente"> {{item.documento}} </span> </strong>
+                - <strong>RAZÃO SOCIAL: </strong> <span md-highlight-flags="i"
+                   md-highlight-text="searchTextCliente">{{item.nome}} </span>
+                <strong
+                   ng-if="item.nomeFantasia != null && item.nomeFantasia != ''"> - NOME FANTASIA: </strong> <span
+                   md-highlight-flags="i" md-highlight-text="searchTextCliente"
+                   ng-if="item.nomeFantasia != null && item.nomeFantasia != ''">{{item.nomeFantasia}} </span>
+             </h4>
+          </span>
+       </md-item-template>
+       <div ng-messages="wizardStep1.autocompleteSubCliente.$error" role="alert">
+          <div id="msg_req_match_subclient" ng-message="md-require-match">O subcliente informado não é válido</div>
+          <div id="msg_req_subclient" ng-message="required">Obrigatório.</div>
+          <div id="msg_min_subclient" ng-message="minlength">O nome informado não é suficiente.</div>
+          <div id="msg_max_subclient" ng-message="maxlength">O nome informado é muito longo.</div>
+       </div>
+    </md-autocomplete>
+
+    <md-input-container flex ng-if="screenMode !== 'VIEW' && object.situacao !== 'Aberto' || !object.centroFinanceiro || (screenMode !== 'VIEW' && object.centroFinanceiro.permiteClienteLivre)">
+       <label id="lbl_sucliente_off">Subcliente</label>
+       <input id="input_sucliente_off" name="subcliente" ng-disabled="true" ng-model="object.subcliente.nome" type="text">
+    </md-input-container>
+
+    <!-- VIEW SUBCLIENTE -->
+    <div flex layout="column" ng-if="screenMode === 'VIEW' && object.subcliente.nome" style="height: 52px;width: 98%;overflow: hidden;border-bottom: dotted;display: inline-block;border-bottom-color: transparent;background-image: linear-gradient(90deg, rgba(0,0,0,0.98) 0, rgba(0,0,0,0.98) 38%, transparent 0);
+       background-image: -ms-linear-gradient(left, transparent 0, rgba(0,0,0,0.38) 100%);background-position: bottom -1px left 0;background-size: 4px 1px;background-repeat: repeat-x;">
+       <label id="lbl_subcliente" style="margin-top: -4px;">Subcliente</label>
+       <div>
+          <span class="link-contrato"
+             ng-click="exibirDetalheCliente(object.subcliente.codigo, object.subcliente.tipoPessoa, 'Subcliente', $event);"
+             style="margin-top: 5px;">{{::object.subcliente.nome}}</span>
+          <md-tooltip id="tool_tip_periodo" md-direction="top" ng-if="screenMode === 'VIEW' && object.subcliente.nome !== null ">
+             <span class="h4">{{object.subcliente.nome}}</span>
+          </md-tooltip>
+       </div>
+    </div>
+    <md-input-container flex="50" ng-if="screenMode === 'VIEW' && !object.subcliente.nome">
+       <label>Subcliente</label>
+       <input ng-disabled="true" type="text">
+    </md-input-container>
+    <md-input-container flex="25" ng-if="screenMode === 'VIEW'">
+       <label id="lbl_gerencia">Gerência</label>
+       <input id="input_gerencia_aba_dados" maxlength="100" name="ident" ng-disabled="true" ng-model="object.gerencia" ng-required="false" type="text" value="{{ object.gerencia }}">
+    </md-input-container>
+    <md-input-container flex="25" ng-if="screenMode === 'VIEW'">
+       <label id="lbl_gerente">Gerente</label>
+       <input id="input_gerente_aba_dados" maxlength="100" name="ident" ng-disabled="true" ng-model="object.gerente" ng-required="false" type="text" value="{{ object.gerente }}">
+    </md-input-container>
+    <span style="width: 2.5px;"></span>
+ </div>
+ <div layout layout-sm="column" ng-if="screenMode != 'VIEW'">
+    <span>*</span>&nbsp;Campos obrigatórios
+ </div>
+ <div class="navigation padding-8" flex layout="row" ng-hide="screenMode === 'NEW'" ng-if="object.situacao !== 'Cancelado' && habilitarBotoesFaturamento" style="margin-top: -0px;margin-left: -15px;">
+    <md-button class="md-raised md-accent" id="btn_editar_dados_principais" ng-click="editarDadosPrincipais()" ng-disabled="action" ng-hide="modeDadosPrincipais === true" ng-if="screenMode === 'VIEW'">
+       Editar
+       <img ng-if="action" src="../img/gray_carregando.gif" style="height: 20px;width: 20px;margin-top: 8px;"/>
+       <md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+          <span class="h4">Editar Dados Principais</span>
+       </md-tooltip>
+    </md-button>
+    <md-button class="md-raised md-accent" id="btn_salvar_editar_dados_principais" ng-click="salvarDadosPrincipais(wizardStep1)" ng-disabled="wizardStep1.$invalid || action" ng-if="modeDadosPrincipais == true || modeEdicaoPosAberta == true">
+       Salvar
+       <md-tooltip id="tool_tip_btn_salvar_editar" md-direction="bottom">
+          <span class="h4">Salvar as alterações realizadas nesta tela do faturamento</span>
+       </md-tooltip>
+    </md-button>
+    <md-button class="md-raised md-accent" id="btn_cancelar_dados_principais" ng-click="cancelarDadosPrincipais(wizardStep1)" ng-disabled="false" ng-if="modeDadosPrincipais == true || modeEdicaoPosAberta == true">
+       Cancelar
+       <md-tooltip id="tool_tip_btn_cancelar_dados_principais" md-direction="bottom">
+          <span class="h4">Sair deste faturamento, sem gravar as modificações realizadas</span>
+       </md-tooltip>
+    </md-button>
+ </div>

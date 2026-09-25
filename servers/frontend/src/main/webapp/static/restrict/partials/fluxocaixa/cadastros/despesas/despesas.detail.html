@@ -1,0 +1,219 @@
+<div class="page-layout simple fullwidth" ng-controller="DespesasDetailCtrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ screenMode === 'VIEW' ? 'Exibição' : (screenMode === 'EDIT' ? 'Edição' : 'Novo') }}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">{{ titulo }} - Dados Gerais</div>
+						</header>
+						<div>
+							<div class="white-500-bg">
+								<form name="DespesasForm">
+									<div flex layout="column" ng-if="screenMode !== 'VIEW'">
+										<div class="p-16" flex layout="column">
+
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex flex-gt-md="50">
+													<label id="lbl_agencia">Descrição</label>
+													<input id="input_agencia" maxlength="30"
+														   md-maxlength="30" name="input_descricao"
+														   ng-model="object.descricao" ng-required="true" type="text">
+													<div ng-messages="ContaForm.input_agencia.$error"
+														 ng-show="ContaForm.input_agencia.$touched">
+														<div ng-message="required">
+															Obrigatório.
+														</div>
+													</div>
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_dv">Subconta</label>
+													<input id="input_dv" maxlength="2" md-maxlength="2"
+														   name="input_sigla" ng-maxlength="2" ng-model="object.sigla"
+														   ng-required="true" style="text-transform: uppercase;"
+														   type="text">
+													<div ng-messages="ContaForm.input_dv.$error"
+														 ng-show="ContaForm.input_dv.$touched">
+														<div ng-message="required">
+															Obrigatório.
+														</div>
+													</div>
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25" ng-if="screenMode === 'EDIT'">
+													<label id="lbl_situacao">Situação</label>
+													<md-select id="combo_situacao" name="situacao"
+															   ng-model="object.situacao">
+														<md-option ng-repeat="item in situacaoList | orderBy: 'nome'"
+																   ng-value="item.nome">{{ item.nome }}
+														</md-option>
+													</md-select>
+												</md-input-container>
+
+												<md-input-container flex="25" ng-if="screenMode === 'NEW'">
+													<label id="lbl_situacao_new">Situação</label>
+													<input id="input_situacao_new" name="input_situacao_new"
+														   ng-disabled="true" type="text" value="{{object.situacao}}">
+												</md-input-container>
+
+											</div>
+										</div>
+
+										<div class="p-16">
+											<div layout layout-sm="column" ng-if="screenMode != 'VIEW'"
+												 style="margin-top: -5px">
+												<span class="red-fg">*&nbsp;</span> Campos obrigatórios
+											</div>
+										</div>
+
+									</div>
+
+									<div flex layout="column" ng-if="screenMode === 'VIEW'">
+										<div class="p-16" flex layout="column">
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex="50" flex-sm="100" flex-xs="100">
+													<label id="lbl_descricao_exibir">Descrição</label>
+													<input id="input_descricao_exibir" name="descricao_exibir"
+														   ng-disabled="true" type="text"
+														   value="{{ object.descricao }}">
+												</md-input-container>
+
+												<md-input-container flex="25" flex-sm="100" flex-xs="100">
+													<label id="lbl_subconta_exibir">Subconta</label>
+													<input id="input_subconta_exibir" name="input_subconta"
+														   ng-disabled="true" type="text" value="{{ object.sigla}}">
+												</md-input-container>
+
+												<md-input-container flex="25" flex-sm="100" flex-xs="100">
+													<label id="lbl_situacao_exibir">Situação</label>
+													<input id="situcao_exibir" name="situcao_exibir" ng-disabled="true"
+														   type="text" value="{{object.situacao}}">
+												</md-input-container>
+
+											</div>
+										</div>
+
+										<md-tabs md-border-bottom md-dynamic-height>
+											<!-- ABA CONTROLES -->
+											<md-tab label="Controles" ng-if="screenMode === 'VIEW'">
+												<div class="p-16">
+													<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+														 style="margin-top: -5px;">
+
+														<md-input-container flex="50" flex-sm="100" flex-xs="100">
+															<label id="lbl_cadastramento">Cadastramento</label>
+															<input id="input_cadastramento" name="cadastramento"
+																   ng-disabled="true" type="text"
+																   value="{{object.criador}}">
+														</md-input-container>
+
+														<md-input-container flex="50" flex-sm="100" flex-xs="100">
+															<label id="lbl_data_hora">Data/hora</label>
+															<input id="input_data_hora" name="input_data_hora"
+																   ng-disabled="true" type="text"
+																   value="{{ object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+														</md-input-container>
+													</div>
+													<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+														 style="margin-top: -5px;">
+
+														<md-input-container flex="50" flex-sm="100" flex-xs="100">
+															<label id="lbl_ultima_alteracao">Última alteração</label>
+															<input id="input_ultima_alteracao"
+																   name="input_ultima_alteracao" ng-disabled="true"
+																   type="text" value="{{object.atualizador}}">
+														</md-input-container>
+
+														<md-input-container flex="50" flex-sm="100" flex-xs="100">
+															<label id="lbl_data_hora2">Data/hora</label>
+															<input id="input_data_hora2" name="data_hora2"
+																   ng-disabled="true" type="text"
+																   value="{{ object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+														</md-input-container>
+													</div>
+												</div>
+											</md-tab>
+										</md-tabs>
+
+									</div>
+
+									<md-divider></md-divider>
+									<div class="p-8" flex layout="row" layout-align="start start"
+										 ng-if="screenMode !== 'VIEW'">
+										<md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvar()"
+												   ng-disabled="DespesasForm.$invalid">
+											Salvar
+											<md-tooltip class="h4">Salvar as alterações realizadas nesta despesa
+											</md-tooltip>
+										</md-button>
+
+										<md-button class="md-raised md-accent" id="btn_cancelar"
+												   ng-click="cancelar()">
+											Cancelar
+											<md-tooltip class="h4">Sair desta despesa, sem gravar as modificações
+												realizadas
+											</md-tooltip>
+										</md-button>
+									</div>
+
+									<div class="p-8" flex layout="row" ng-if="screenMode === 'VIEW'">
+										<div flex layout="row" layout-align="start start">
+											<md-button aria-label="Editar" class="md-raised md-accent" id="btn_editar"
+													   ng-click="editar()">
+												Editar
+												<md-tooltip class="h4">Editar os dados desta despesa</md-tooltip>
+											</md-button>
+
+											<md-button aria-label="Retornar" class="md-raised md-accent"
+													   id="btn_retornar" ng-click="retornar()">
+												Retornar
+												<md-tooltip class="h4">Sair desta tela e retornar para a tela anterior
+												</md-tooltip>
+											</md-button>
+
+										</div>
+
+										<div flex layout="row" layout-align="end center">
+											<md-button aria-label="Remover" class="md-raised md-accent" id="btn_remover"
+													   ng-click="remover($event)">
+												Remover
+												<md-tooltip class="h4">Remover esta despesa (esta operação não poderá
+													ser desfeita)
+												</md-tooltip>
+											</md-button>
+
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / CONTENT -->
+	</div>
+</div>

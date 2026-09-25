@@ -1,0 +1,42 @@
+<md-content class="pt-16" layout="column">
+
+	<md-table-container>
+
+		<table class="tabela_exibicao hover md-caption" ms-responsive-table width="100%" style="border: 1px;">
+			<thead>
+			<tr class="md-grey-200-bg">
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="70%">Descrição</th>
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="15%">%</th>
+				<th class="text-center" style="border: 1px solid #c4c4c4;" width="15%">Valor</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr class="linha-borda-cinza" ng-repeat="item in $ctrl.listaFechoBdi">
+				<td class="text-left">{{item.bdi}}</td>
+
+				<td class="text-right" ng-if="screenMode === 'VIEW'">{{ item.valor | currency: '':4 }}</td>
+
+				<td class="text-center" ng-if="screenMode !== 'VIEW'">
+					<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+						<input aria-label="valor_parcela" class="text-right" max="99" maxlength="7"
+							   min="0.0001" name="input_valor_parcela"
+							   ng-keyup="$ctrl.atualizarBdi()" ng-model="item.valor" style="width: 98%;" type="text"
+							   ui-number-mask="4">
+					</md-input-container>
+				</td>
+
+				<td class="text-right">{{ item.valorTotal | currency: '':2 }}</td>
+			</tr>
+
+			<tr class="md-grey-500-bg" style="border: 1px solid #c4c4c4;">
+				<td class="text-right"><strong>Total</strong></td>
+				<td class="text-right"><strong>{{ $ctrl.totalPercentualBdi | currency: '':4 }}</strong></td>
+				<td class="text-right"><strong>{{ $ctrl.object.fecho.bdi | currency: '':2 }}</strong></td>
+			</tr>
+
+			</tbody>
+		</table>
+
+	</md-table-container>
+
+</md-content>

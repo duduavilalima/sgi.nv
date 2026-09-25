@@ -1,0 +1,194 @@
+<div class="page-layout simple fullwidth" ng-controller="notasDebitoCRCtrl">
+	<!--ng-show="object && object != undefined && object.codigo != undefined"-->
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ ::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ subtitulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">{{ ::titulo }} - {{subtitulo}}</div>
+						</header>
+
+						<div class="text-center">
+							<img ng-if="object.codigo == undefined" src="../img/carregando.gif" style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/>
+						</div>
+
+						<div ng-show="object.codigo">
+							<div class="white-500-bg">
+
+								<div class="padding-16">
+
+									<form>
+										<div layout layout-sm="column" layout-wrap>
+											<div flex="25" flex-sm="100" layout="column"
+												 style="padding-left: 6px; margin-top: -4px;">
+												<label id="lbl_numero">Número</label>
+												<span class="link-contrato" ng-click="openNewTargetNF()"><b>{{ object.numero }}</b></span>
+											</div>
+											<span style="width: 2.5px;"></span>
+
+											<md-input-container flex="25" flex-sm="100"
+																ng-hide="object.situacao == 'Em recebimento' && object.cobrancaCronica">
+												<label id="lbl_situacao">Situação</label>
+												<input id="input_situacao" name="input_situacao" ng-disabled="true"
+													   type="text"
+													   value="{{object.situacao == 'Aberta (NF não processada)' ? 'Aberta' : object.situacao == 'Finalizada (recebida)' ? 'Recebida' : object.situacao}}">
+											</md-input-container>
+
+											<md-input-container flex="10" flex-sm="100"
+																ng-show="object.situacao == 'Em recebimento' && object.cobrancaCronica">
+												<label id="lbl_situacaoR">Situação</label>
+												<input id="input_situacaoR" name="input_situacao" ng-disabled="true"
+													   ng-model="object.situacao" type="text">
+											</md-input-container>
+											<div cr flex="15" flex-sm="100" layout="column"
+												 ng-show="object.situacao == 'Em recebimento' && object.cobrancaCronica"
+												 style="margin-top: -4px; margin-left: -3px;">
+												<label id="lbl_numeroR">&nbsp;&nbsp;</label>
+												<span class="text-red"><b>(cobrança crônica)</b></span>
+												<md-tooltip id="tool_input_cobranca_cronica" md-direction="bottom">
+													<span class="h4">Indica se este é um recebimento com problema crônico de cobrança</span>
+												</md-tooltip>
+											</div>
+
+											<md-input-container flex>
+												<label id="lbl_empresa">Matriz/Filial</label>
+												<input id="input_empresa" name="input_empresa" ng-disabled="true"
+													   ng-model="object.empresa.codnome" type="text">
+											</md-input-container>
+
+											<md-input-container flex>
+												<label id="lbl_tipo_itens">Tipo itens</label>
+												<input id="input_itens" name="input_empresa" ng-disabled="true"
+													   ng-model="object.faturamentoEtapaTO.faturamento.tipoFornecimento" type="text">
+											</md-input-container>
+										</div>
+
+										<div layout layout-sm="column" layout-wrap>
+
+											<div flex layout="column"
+												 style="height: 52px;width: 98%;overflow: hidden;border-bottom: dotted;display: inline-block;border-bottom-color: transparent;background-image: linear-gradient(90deg, rgba(0,0,0,0.98) 0, rgba(0,0,0,0.98) 38%, transparent 0);
+											background-image: -ms-linear-gradient(left, transparent 0, rgba(0,0,0,0.38) 100%);background-position: bottom -1px left 0;background-size: 4px 1px;background-repeat: repeat-x;">
+												<label id="lbl_cliente_aba_faturamento"
+													   style="margin-top: -4px;">Cliente</label>
+												<div>
+													<span class="link-contrato" style="margin-top: 5px;"
+														  ng-click="exibirDetalheCliente(object.cliente.codigo, object.cliente.tipoPessoa, object.cliente.tipoPessoa, $event);">
+														{{ object.cliente.nome }}
+													</span>
+												</div>
+											</div>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_centro_lucro">Centro de lucro</label>
+												<input id="input_centro_lucro" name="input_centro_lucro"
+													   ng-disabled="true" type="text"
+													   value="{{object.centroFinanceiro.identificadorFinal + ' - ' + object.centroFinanceiro.nome}}">
+												<md-tooltip id="tool_input_centro_lucro" md-direction="bottom">
+													<span class="h4">{{ object.centroFinanceiro.identificadorFinal + ' - ' + object.centroFinanceiro.nome }}</span>
+												</md-tooltip>
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_tipo_faturamento">Tipo de faturamento</label>
+												<input id="input_tipo_faturamento" name="input_tipo_faturamento"
+													   ng-disabled="true" type="text"
+													   value="{{ object.faturamentoEtapaTO.faturamento.tipo }}">
+											</md-input-container>
+
+										</div>
+									</form>
+
+									<md-content>
+										<md-tabs id="abas_parcelas" md-border-bottom md-dynamic-height
+												 md-selected="index" name="abas_parcelas" ng-show="object && object != undefined && object.codigo != undefined">
+
+											<md-tab id="aba_recebimento" label="Recebimento" name="aba_recebimento">
+												<form name="wizardStep1">
+													<div class="padding-16"
+														 ng-include="'partials/contasareceber/notasdebito/html/partials/aba_recebimento_exibicao.html'">
+													</div>
+												</form>
+											</md-tab>
+
+											<md-tab id="aba_controles" label="Controles" name="aba_controles">
+												<form name="wizardStep5">
+													<div
+														class="padding-16"
+														ng-include="'partials/contasareceber/notasdebito/html/partials/aba_controles.html'">
+													</div>
+												</form>
+											</md-tab>
+										</md-tabs>
+										<md-divider></md-divider>
+										<div class="navigation padding-8" flex layout="row">
+											<div flex="100" flex-sm="100" layout="row" layout-align="start center">
+												<md-button class="md-raised md-accent" id="btn_retornar"
+														   ng-click="retornar()" ng-disabled="action">
+													Retornar
+													<md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+														<span
+															class="h4">Sair desta tela e retornar para a tela anterior</span>
+													</md-tooltip>
+												</md-button>
+
+												<md-button class="md-raised md-accent" id="btn_receber"
+														   ng-click="receber()" ng-disabled="action"
+														   ng-if="temPerfilAnalista || !temPerfilFaturamentoCnsGerencia"
+														   ng-show="object.situacao == 'Em recebimento'">
+													Receber
+													<md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+														<span class="h4">Receber esta nota de débito</span>
+													</md-tooltip>
+												</md-button>
+											</div>
+
+											<div flex="100" flex-sm="100" layout="row" layout-align="end center">
+
+												<md-button class="md-raised md-accent" id="btn_cancelar_recebimento"
+														   layout-align="end center"
+														   ng-click="cancelarRecebimentoMotivoRetorno($event)"
+														   ng-disabled="desabilitarCancelamentoRecebimento && !temPerfilGestorFaturamento"
+														   ng-show="object.situacao == 'Recebida' && !temPerfilFaturamentoCnsGerencia">
+													Cancelar recebimento
+													<md-tooltip id="tool_tip_btn_cancelar_recebimento"
+																md-direction="bottom">
+														<span class="h4">Cancelar o recebimento desta nota de débito</span>
+													</md-tooltip>
+												</md-button>
+
+											</div>
+										</div>
+									</md-content>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / CONTENT -->
+	</div>
+</div>

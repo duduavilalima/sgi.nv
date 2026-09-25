@@ -1,0 +1,198 @@
+<div layout
+	 layout-sm="column">
+	<div flex
+		 layout="column"
+		 ng-if="exibirBotoes">
+		<label id="lbl_numero"
+			   style="margin-top: -4px;">Número</label>
+		<span class="link-contrato"
+			  ng-click="openNewTargetFaturamento()"
+			  ng-disabled="true"><b>{{ object.faturamentoEtapaTO.faturamento.numero }}</b></span>
+		<span style="width: 2.5px;"></span>
+	</div>
+
+	<md-input-container flex ng-if="!exibirBotoes">
+		<label id="lbl_situacao_aba_faturamento">Situação</label>
+		<input id="input_situacao_aba_faturamento"
+				name="input_situacao_aba_faturamento"
+				ng-disabled="true"
+				type="text"
+				value="{{ object.faturamentoEtapaTO.faturamento.numero }}">
+	</md-input-container>
+
+	<md-input-container flex>
+		<label id="lbl_situacao_aba_faturamento">Situação</label>
+		<input id="input_situacao_aba_faturamento"
+			   name="input_situacao_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.faturamentoEtapaTO.faturamento.situacao}}">
+	</md-input-container>
+
+	<md-input-container flex>
+		<label id="lbl_tipo_aba_faturamento">Tipo</label>
+		<input id="input_tipo_aba_faturamento"
+			   name="input_tipo_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.faturamentoEtapaTO.faturamento.tipo}}">
+	</md-input-container>
+
+
+	<md-input-container flex>
+		<label id="lbl_periodo_aba_faturamento">Período</label>
+		<input id="input_periodo_aba_faturamento"
+			   name="input_periodo_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.faturamentoEtapaTO.faturamento.periodo}}">
+	</md-input-container>
+</div>
+
+<div layout
+	 layout-sm="column">
+	<div flex
+		 layout="column"
+		 style="height: 52px;width: 98%;overflow: hidden;border-bottom: dotted;display: inline-block;border-bottom-color: transparent;background-image: linear-gradient(90deg, rgba(0,0,0,0.98) 0, rgba(0,0,0,0.98) 38%, transparent 0);
+    background-image: -ms-linear-gradient(left, transparent 0, rgba(0,0,0,0.38) 100%);background-position: bottom -1px left 0;background-size: 4px 1px;background-repeat: repeat-x;">
+		<label id="lbl_cliente_aba_faturamento"
+			   style="margin-top: -4px;">Cliente</label>
+		<div>
+			<span class="link-contrato"
+				  ng-click="exibirDetalheCliente(object.faturamentoEtapaTO.faturamento.cliente.codigo, object.faturamentoEtapaTO.faturamento.cliente.tipoPessoa, object.faturamentoEtapaTO.faturamento.cliente.tipoPessoa, $event);"
+				  style="margin-top: 5px;">{{ object.faturamentoEtapaTO.faturamento.cliente.nome}}</span>
+			<md-tooltip id="tool_tip_cliente"
+						md-direction="top"
+						ng-if="screenMode === 'VIEW' && object.faturamentoEtapaTO.faturamento.cliente.nome !== null ">
+				<span class="h4">{{object.faturamentoEtapaTO.faturamento.cliente.nome}}</span>
+			</md-tooltip>
+		</div>
+	</div>
+	<span style="width: 2.5px;"></span>
+
+	<md-input-container flex>
+		<label id="lbl_cl_aba_faturamento">Centro de lucro</label>
+		<input id="input_cl_aba_faturamento"
+			   name="input_cl_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.centroLucro}}">
+	</md-input-container>
+</div>
+
+<div layout
+	 layout-sm="column">
+	<div flex
+		 layout="column"
+		 style="height: 52px;width: 98%;overflow: hidden;border-bottom: dotted;display: inline-block;border-bottom-color: transparent;background-image: linear-gradient(90deg, rgba(0,0,0,0.98) 0, rgba(0,0,0,0.98) 38%, transparent 0);
+    background-image: -ms-linear-gradient(left, transparent 0, rgba(0,0,0,0.38) 100%);background-position: bottom -1px left 0;background-size: 4px 1px;background-repeat: repeat-x;">
+		<label id="lbl_subcliente_aba_faturamento"
+			   style="margin-top: -4px;">Subcliente</label>
+		<div>
+			<span class="link-contrato"
+				  ng-click="exibirDetalheCliente(object.faturamentoEtapaTO.faturamento.subcliente.codigo, object.faturamentoEtapaTO.faturamento.subcliente.tipoPessoa, object.faturamentoEtapaTO.faturamento.subcliente.tipoPessoa, $event);"
+				  style="margin-top: 5px;">{{ object.faturamentoEtapaTO.faturamento.subcliente.nome}}</span>
+			<md-tooltip id="tool_tip_subcliente"
+						md-direction="top"
+						ng-if="screenMode === 'VIEW' && object.faturamentoEtapaTO.faturamento.subcliente.nome !== null ">
+				<span class="h4">{{object.faturamentoEtapaTO.faturamento.subcliente.nome}}</span>
+			</md-tooltip>
+		</div>
+	</div>
+
+	<md-input-container flex
+						flex-gt-sm="25">
+		<label id="lbl_identificacao_aba_faturamento">Identificação</label>
+		<input id="input_identificacao_aba_faturamento"
+			   name="input_identificacao_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.faturamentoEtapaTO.faturamento.identificacao}}">
+	</md-input-container>
+
+	<md-input-container flex
+						flex-gt-sm="25">
+		<label id="lbl_tipo_cobranca_aba_faturamento">Tipo de cobrança</label>
+		<input id="input_tipo_cobranca_aba_faturamento"
+			   name="input_tipo_cobranca_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.faturamentoEtapaTO.faturamento.tipoCobrancaFaturamento.descricao}}">
+	</md-input-container>
+</div>
+
+<div layout
+	 layout-sm="column">
+	<md-input-container flex
+						flex-gt-sm="25">
+		<label id="lbl_combo_banco_aba_faturamento">Banco</label>
+		<input id="input_combo_banco_aba_faturamento"
+			   name="input_combo_banco_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.faturamentoEtapaTO.faturamento.contaCorrente.banco.nome}}">
+	</md-input-container>
+
+	<md-input-container flex
+						flex-gt-sm="50">
+		<label id="lbl_agencia_conta_aba_faturamento">Agência/Conta</label>
+		<input id="input_agencia_conta_aba_faturamento"
+			   name="input_agencia_conta_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.agenciaConta}}">
+	</md-input-container>
+
+	<md-input-container flex
+						flex-gt-sm="25">
+		<label id="lbl_combo_doc_pagamento_aba_faturamento">Documento para o pagamento</label>
+		<input id="input_combo_doc_pagamento_aba_faturamento"
+			   name="input_combo_doc_pagamento_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.faturamentoEtapaTO.faturamento.tipoDocumentoPagamento}}">
+	</md-input-container>
+</div>
+
+<div layout
+	 layout-sm="column">
+	<md-input-container flex>
+		<label id="lbl_combo_iss_retido_aba_faturamento">ISS será retido pelo cliente</label>
+		<input id="input_combo_iss_retido_aba_faturamento"
+			   name="input_combo_iss_retido_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.faturamentoEtapaTO.faturamento.issRetidoCliente ? 'Sim' : 'Não'}}">
+	</md-input-container>
+
+	<md-input-container flex>
+		<label id="lbl_cidade_iss_">Cidade/UF do ISS</label>
+		<input id="input_cidade_iss"
+			   name="input_cidade_iss"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ cidadeIss}}">
+	</md-input-container>
+
+	<md-input-container flex>
+		<label id="lbl_cidade_iss_aba_faturamento">Cidade/UF da prestação de serviços</label>
+		<input id="input_cidade_iss_aba_faturamento"
+			   name="input_cidade_iss_aba_faturamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ object.cidadeUF }}">
+	</md-input-container>
+
+	<md-input-container flex>
+		<label id="lbl_pracapagamento">Praça de pagamento</label>
+		<input id="id_pracapagamento"
+			   name="pracapagamento"
+			   ng-disabled="true"
+			   type="text"
+			   value="{{ contratoCidade }}">
+		<md-tooltip id="lbl_pracapagamento"
+					md-direction="bottom">
+			<span class="h4">Cidade/UF do endereço da matriz/filial do contrato</span>
+		</md-tooltip>
+	</md-input-container>
+</div>

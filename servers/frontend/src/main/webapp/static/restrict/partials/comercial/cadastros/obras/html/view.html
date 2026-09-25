@@ -1,0 +1,473 @@
+<div class="page-layout simple fullwidth" ng-controller="ObrasDetailCtrl as $ctrl">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">Comercial</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo">Obras</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo_subtitulo">Exibição</span>
+            </div>
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+        <!-- CONTENT -->
+        <div class="content" flex>
+            <div layout="row" layout-wrap>
+                <div class="about" flex="100" layout="column">
+                    <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+                        <header class="md-accent-bg">
+                            <div class="title" id="title_panel">Obra - Dados gerais</div>
+                        </header>
+
+                        <md-progress-linear class="md-warn" md-mode="query" ng-show="$ctrl.object === undefined">
+                        </md-progress-linear>
+
+                        <div class="white-500-bg">
+                            <form name="DialogForm" novalidate>
+
+                                <div>
+                                    <md-content>
+
+                                        <md-divider></md-divider>
+
+                                        <div class="p-16">
+                                            <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                <md-input-container flex="50" flex-sm="100" flex-xs="100">
+                                                    <label id="lbl_nomeV">Nome</label>
+                                                    <input id="nomeV" name="nome" disabled="true"
+                                                        ng-value="$ctrl.object.nome" type="text">
+                                                </md-input-container>
+
+                                                <md-input-container flex="25" flex-gt-md="25">
+                                                    <label id="lbl_situacaoV">Situação</label>
+                                                    <input id="situacaoV" name="situacao" disabled="true"
+                                                        ng-value="$ctrl.object.situacao">
+                                                </md-input-container>
+
+                                                <md-input-container flex flex-gt-md="25">
+                                                    <label id="lbl_setorV">Setor</label>
+                                                    <input id="setorV" name="setor" disabled="true"
+                                                        ng-value="$ctrl.object.setor">
+                                                </md-input-container>
+
+                                            </div>
+
+                                            <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                <md-input-container flex flex-gt-md="25">
+                                                    <label id="lbl_vigencia_deV">Início vigência</label>
+                                                    <input id="vigencia_deV" disabled="true" type="text"
+                                                        value="{{ $ctrl.object.inicioVigencia | date: 'dd/MM/yyyy' }}">
+                                                </md-input-container>
+
+                                                <md-input-container flex flex-gt-md="25">
+                                                    <label id="lbl_vigencia_ateV">Fim vigência</label>
+                                                    <input id="vigencia_ateV" disabled="true" type="text"
+                                                        value="{{ $ctrl.object.fimVigencia | date: 'dd/MM/yyyy' }}">
+                                                </md-input-container>
+
+                                                <md-input-container flex flex-gt-md="25">
+                                                    <label id="lbl_prazoV">Prazo (meses)</label>
+                                                    <input id="prazoV" name="prazo" disabled="true" ng-disabled="true"
+                                                        ng-value="$ctrl.object.prazo" type="text">
+                                                </md-input-container>
+
+                                                <md-input-container flex flex-gt-md="25">
+                                                    <label id="lbl_tipoV">Tipo</label>
+                                                    <input id="tipoV" name="tipo" disabled="true"
+                                                        ng-value="$ctrl.object.tipoObra.nome">
+                                                </md-input-container>
+
+                                            </div>
+
+                                            <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                <md-input-container flex flex-gt-md="25">
+                                                    <label id="lbl_m2totalV">M² total</label>
+                                                    <input id="m2totalV" name="m2total" disabled="true"
+                                                        ng-value="$ctrl.object.m2Total" type="text-left">
+                                                </md-input-container>
+
+                                                <md-input-container flex flex-gt-md="25">
+                                                    <label id="lbl_num_pavimentosV">Nº pavimentos</label>
+                                                    <input id="num_pavimentosV" name="num_pavimentos" disabled="true"
+                                                        ng-value="$ctrl.object.numPavimentos" type="text-left">
+                                                </md-input-container>
+
+                                                <md-input-container flex flex-gt-md="25">
+                                                    <label id="lbl_num_salasV">Nº de salas</label>
+                                                    <input id="num_salasV" name="num_salas" disabled="true"
+                                                        ng-value="$ctrl.object.numSalas" type="text-left">
+                                                </md-input-container>
+
+                                                <md-input-container flex flex-gt-md="25">
+                                                    <label id="lbl_num_lojasV">Nº de lojas</label>
+                                                    <input id="num_lojasV" name="num_lojas" disabled="true"
+                                                        ng-value="$ctrl.object.numLojas" type="text-left">
+                                                </md-input-container>
+
+                                            </div>
+
+                                            <!-- TERMINAR ESTA TELA -->
+
+                                            <div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+                                                ng-if="$ctrl.object.tipoObra != 'NP'">
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <md-tabs class="p-16" md-border-bottom md-dynamic-height>
+
+                                            <!-- Aba Endereços -->
+                                            <md-tab id="aba_enderecos" label="Endereço" name="aba_enderecos">
+
+                                                <div class="p-16">
+
+                                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_CEPV">CEP</label>
+                                                            <input id="CEPV" name="CEP" disabled="true"
+                                                                ng-value="$ctrl.object.endereco.cep" type="text-left">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="50">
+                                                            <label id="lbl_cidadeV">Cidade</label>
+                                                            <input id="cidadeV" name="cidade" disabled="true"
+                                                                ng-value="$ctrl.object.endereco.cidade.nome"
+                                                                type="text-left">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_UFV">UF</label>
+                                                            <input id="UFV" name="UF" disabled="true"
+                                                                ng-value="$ctrl.object.endereco.cidade.uf"
+                                                                type="text-left">
+                                                        </md-input-container>
+
+                                                    </div>
+
+                                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_tipo_logradouroV">Tipo Logr.</label>
+                                                            <input id="tipo_logradouro" name="tipo_logradouro"
+                                                                disabled="true"
+                                                                ng-value="$ctrl.object.endereco.tipoLogradouro.nome"
+                                                                type="text-left">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="50">
+                                                            <label id="lbl_logradouroV">Logradouro</label>
+                                                            <input id="logradouroV" name="logradouro" disabled="true"
+                                                                ng-value="$ctrl.object.endereco.endereco"
+                                                                type="text-left">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="25">
+                                                            <label id="lbl_numeroV">Nº</label>
+                                                            <input id="numeroV" name="numero" disabled="true"
+                                                                ng-value="$ctrl.object.endereco.numero"
+                                                                type="text-left">
+                                                        </md-input-container>
+
+                                                    </div>
+
+                                                    <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                        <md-input-container flex flex-gt-md="50">
+                                                            <label id="lbl_complementoV">Complemento</label>
+                                                            <input id="complementoV" name="complemento" disabled="true"
+                                                                ng-value="$ctrl.object.endereco.complemento"
+                                                                type="text-left">
+                                                        </md-input-container>
+
+                                                        <md-input-container flex flex-gt-md="50">
+                                                            <label id="lbl_bairroV">Bairro</label>
+                                                            <input id="bairroV" name="bairro" disabled="true"
+                                                                ng-value="$ctrl.object.endereco.bairro"
+                                                                type="text-left">
+                                                        </md-input-container>
+
+                                                    </div>
+                                                </div>
+                                            </md-tab>
+
+
+                                            <!-- Aba Descrição -->
+                                            <md-tab label="Descrição">
+
+                                                <div layout layout-sm="column"
+                                                    style="padding-left: 30px; padding-right: 30px">
+                                                    <md-input-container flex>
+                                                        <label id="descricaoV">Descrição</label>
+                                                        <textarea id="lbl_descricaoV" name="objeto_contrato_exibicao"
+                                                            disabled="true" ng-maxlength="2000"
+                                                            ng-model="$ctrl.object.descricao" ng-trim="true"></textarea>
+                                                    </md-input-container>
+                                                </div>
+
+                                            </md-tab>
+
+                                            <md-tab label="Cliente principal">
+                                                <md-content>
+
+                                                    <div class="p-16">
+                                                        <div layout="row" layout-sm="column" layout-wrap
+                                                            layout-xs="column">
+
+                                                            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                                <label id="lbl_cnpjV">CNPJ</label>
+                                                                <input id="cnpjV" name="input_cnpj" disabled="true"
+                                                                    ng-value="$ctrl.object.clientePrincipal.pessoa.documento"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="50" flex-gt-md="50">
+                                                                <label id="lbl_razao_socialV">Razão social</label>
+                                                                <input id="razao_socialV" name="input_razao_social"
+                                                                    disabled="true"
+                                                                    ng-value="$ctrl.object.clientePrincipal.pessoa.nome"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex flex-gt-md="25">
+                                                                <label id="lbl_perc_fatV">% faturamento</label>
+                                                                <input id="faturamentoV" name="input_faturamento"
+                                                                    disabled="true"
+                                                                    ng-value="$ctrl.object.clientePrincipal.percFaturamento"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                        </div>
+
+                                                        <div layout="row" layout-sm="column" layout-wrap
+                                                            layout-xs="column">
+
+                                                            <md-input-container flex="50" flex-sm="100" flex-xs="100">
+                                                                <label id="lbl_nome_fantasiaV">Nome fantasia</label>
+                                                                <input id="nome_fantasiaV" name="input_nome_fantasia"
+                                                                    disabled="true"
+                                                                    ng-value="$ctrl.object.clientePrincipal.pessoa.nomeFantasia"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="50" flex-gt-md="50">
+                                                                <label id="lbl_ramo_negocioV">Ramo de negócio</label>
+                                                                <input id="ramo_negocioV" name="input_ramo_negocio"
+                                                                    disabled="true"
+                                                                    ng-value="$ctrl.object.clientePrincipal.pessoa.cnaeTO.descricao"
+                                                                    type="text"><!-- FALTA -->
+                                                            </md-input-container>
+                                                        </div>
+
+
+                                                        <div layout="row" layout-sm="column" layout-wrap
+                                                            layout-xs="column">
+
+                                                            <md-input-container flex="25" flex-sm="25" flex-xs="25">
+                                                                <label id="lbl_classificacaoV">Classificação</label>
+                                                                <input id="classificacaoV" name="input_classificacao"
+                                                                    disabled="true"
+                                                                    ng-value="$ctrl.object.clientePrincipal.pessoa.classificacaoClienteTO.nome"
+                                                                    type="text"><!-- FALTA -->
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="25" flex-gt-md="25">
+                                                                <label id="lbl_uf_insc_estadualV">UF ins.
+                                                                    estadual</label>
+                                                                <input id="uf_insc_estadualV"
+                                                                    name="input_uf_insc_estadual" disabled="true"
+                                                                    ng-value="$ctrl.object.clientePrincipal.pessoa.ufInscricaoEstadual"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="25" flex-sm="25" flex-xs="25">
+                                                                <label id="lbl_insc_estadualV">Ins. estadual</label>
+                                                                <input id="insc_estadualV" name="input_insc_estadual"
+                                                                    disabled="true"
+                                                                    ng-value="$ctrl.object.clientePrincipal.pessoa.inscricaoEstadual"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="25" flex-gt-md="25">
+                                                                <label id="lbl_insc_municipalV">Ins. municipal</label>
+                                                                <input id="insc_municipalV" name="input_insc_municipal"
+                                                                    disabled="true"
+                                                                    ng-value="$ctrl.object.clientePrincipal.pessoa.inscricaoMunicipal"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                        </div>
+
+                                                        <div layout="row" layout-sm="column" layout-wrap
+                                                            layout-xs="column" ng-if="$ctrl.object.tipoObra != 'NP'">
+
+
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </md-content>
+                                            </md-tab>
+
+                                            <md-tab label="Cliente secundário"
+                                                ng-disabled="$ctrl.object.clientePrincipal.percFaturamento == '100'">
+                                                <md-content>
+
+                                                    <div class="p-16">
+                                                        <div layout="row" layout-sm="column" layout-wrap
+                                                            layout-xs="column">
+
+                                                            <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                                <label id="lbl_cnpj_secV">CNPJ</label>
+                                                                <input id="cnpj_secV" name="input_cnpj_sec"
+                                                                    disabled="true"
+                                                                    ng-value="$ctrl.object.clienteSecundario.pessoa.documento"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="50" flex-gt-md="50">
+                                                                <label id="lbl_razao_social_secV">Razão social</label>
+                                                                <input id="razao_social_secV"
+                                                                    name="input_razao_social_sec" ng-disabled="true"
+                                                                    ng-value="$ctrl.object.clienteSecundario.pessoa.nome"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex flex-gt-md="25">
+                                                                <label id="lbl_perc_fat_secV">% faturamento</label>
+                                                                <input id="faturamento_secV"
+                                                                    name="input_faturamento_sec" disabled="true"
+                                                                    ng-value="$ctrl.object.clienteSecundario.percFaturamento"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                        </div>
+
+                                                        <div layout="row" layout-sm="column" layout-wrap
+                                                            layout-xs="column">
+
+                                                            <md-input-container flex="50" flex-sm="100" flex-xs="100">
+                                                                <label id="lbl_nome_fantasia_secV">Nome fantasia</label>
+                                                                <input id="nome_fantasia_secV"
+                                                                    name="input_nome_fantasia_sec" disabled="true"
+                                                                    ng-value="$ctrl.object.clienteSecundario.pessoa.nomeFantasia"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="50" flex-gt-md="50">
+                                                                <label id="lbl_ramo_negocio_secV">Ramo de
+                                                                    negócio</label>
+                                                                <input id="ramo_negocio_secV"
+                                                                    name="input_ramo_negocio_sec" disabled="true"
+                                                                    ng-value="$ctrl.object.clienteSecundario.pessoa.cnaeTO.descricao"
+                                                                    type="text">
+                                                            </md-input-container>
+                                                        </div>
+
+
+                                                        <div layout="row" layout-sm="column" layout-wrap
+                                                            layout-xs="column">
+
+                                                            <md-input-container flex="25" flex-sm="25" flex-xs="25">
+                                                                <label id="lbl_classificacao_secV">Classificação</label>
+                                                                <input id="classificacao_secV"
+                                                                    name="input_classificacao_sec" disabled="true"
+                                                                    ng-value="$ctrl.object.clienteSecundario.pessoa.classificacaoClienteTO.nome"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="25" flex-gt-md="25">
+                                                                <label id="lbl_uf_insc_estadual_secV">UF ins.
+                                                                    estadual</label>
+                                                                <input id="uf_insc_estadual_secV"
+                                                                    name="input_uf_insc_estadual_sec" disabled="true"
+                                                                    ng-value="$ctrl.object.clienteSecundario.pessoa.ufInscricaoEstadual"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="25" flex-sm="25" flex-xs="25">
+                                                                <label id="lbl_insc_estadual_secV">Ins. estadual</label>
+                                                                <input id="insc_estadual_secV"
+                                                                    name="input_insc_estadual_sec" disabled="true"
+                                                                    ng-value="$ctrl.object.clienteSecundario.pessoa.inscricaoEstadual"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="25" flex-gt-md="25">
+                                                                <label id="lbl_insc_municipal_secV">Ins.
+                                                                    municipal</label>
+                                                                <input id="insc_municipal_secV"
+                                                                    name="input_insc_municipal_sec" disabled="true"
+                                                                    ng-value="$ctrl.object.clienteSecundario.pessoa.inscricaoMunicipal"
+                                                                    type="text">
+                                                            </md-input-container>
+
+                                                        </div>
+
+                                                        <div layout="row" layout-sm="column" layout-wrap
+                                                            layout-xs="column" ng-if="$ctrl.object.tipoObra != 'NP'">
+
+                                                        </div>
+
+                                                    </div>
+                                                </md-content>
+                                            </md-tab>
+
+                                        </md-tabs>
+
+                                        <md-divider></md-divider>
+
+                                        <div class="navigation padding-8" flex layout="row">
+
+                                            <md-button class="md-raised md-accent estilo_botoes"
+                                                id="btn_editar_nregistro" ng-click="$ctrl.editar()">
+                                                Editar
+                                                <md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+                                                    <span class="h4">Editar esta obra</span>
+                                                </md-tooltip>
+                                            </md-button>
+                                            <md-button class="md-raised md-primary estilo_botoes"
+                                                id="btn_retornar_nregistro" ng-click="$ctrl.retornar()">
+                                                Retornar
+                                                <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+                                                    <span class="h4">Sair desta tela e retornar para a tela
+                                                        anterior</span>
+                                                </md-tooltip>
+                                            </md-button>
+                                            <md-button class="md-raised md-primary estilo_botoes"
+                                                id="btn_retornar_nregistro" ng-click="$ctrl.remover($event)"
+                                                style="position: absolute; right: 0;">
+                                                Remover
+                                                <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+                                                    <span class="h4">Remover essa obra (esta operação não poderá ser
+                                                        desfeita)</span>
+                                                </md-tooltip>
+                                            </md-button>
+
+                                        </div>
+                                    </md-content>
+                                </div>
+                            </form>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+    </div>
+</div>

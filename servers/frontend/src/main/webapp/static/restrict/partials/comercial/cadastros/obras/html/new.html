@@ -1,0 +1,546 @@
+<div class="page-layout simple fullwidth" ng-controller="ObrasDetailCtrl as $ctrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">Comercial</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">Obras</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">Novo</span>
+			</div>
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">Obra - Dados gerais</div>
+						</header>
+
+						<md-progress-linear class="md-warn" md-mode="query"
+											ng-show="$ctrl.object === undefined"></md-progress-linear>
+
+						<div class="white-500-bg">
+							<form name="DialogForm" novalidate>
+								<div class="p-16">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_nome">Nome</label>
+											<input id="input_nome" name="input_nome" ng-model="$ctrl.object.nome"
+												   required="true" type="text">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_situacao">Situação</label>
+											<md-select id="combo_situacao" name="situacao" ng-model="$ctrl.object.situacao"
+													   required="true">
+												<md-option ng-repeat="item in $ctrl.listSituacao" ng-value="item"
+														   value="{{ item }}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_setor">Setor</label>
+											<md-select id="combo_setor" name="setor" ng-model="$ctrl.object.setor"
+													   required="true">
+												<md-option ng-repeat="item in $ctrl.listSetores" ng-value="item"
+														   value="{{ item }}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_vigencia_de">Início vigência</label>
+											<input id="vigencia_de_input" ng-change="$ctrl.calcularPrazo()"
+												   ng-model="$ctrl.object.inicioVigencia" required="true" tt-date-picker
+												   type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_vigencia_ate">Fim vigência</label>
+											<input id="vigencia_ate_input" ng-change="$ctrl.calcularPrazo()"
+												   ng-model="$ctrl.object.fimVigencia" required="true" tt-date-picker
+												   type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_prazo">Prazo (meses)</label>
+											<input id="input_prazo" name="prazo" disabled="true"
+												   ng-model="$ctrl.object.prazo" type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_tipo">Tipo</label>
+											<md-select ng-model="$ctrl.object.tipoObra.codigo" required="true">
+												<md-option ng-repeat="item in $ctrl.listTipos" ng-value="item.codigo">
+													{{item.nome}}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_m2total">M² total</label>
+											<input id="input_m2total" name="m2total" ng-model="$ctrl.object.m2Total"
+												   type="text-left" ui-number-mask="0" value="{{object.m2Total}}">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_num_pavimentos">Nº pavimentos</label>
+											<input id="input_num_pavimentos" name="num_pavimentos"
+												   ng-model="$ctrl.object.numPavimentos" type="text-left" ui-number-mask="0"
+												   value="{{object.numPavimentos}}">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_num_salas">Nº de salas</label>
+											<input id="input_num_salas" name="num_salas" ng-model="$ctrl.object.numSalas"
+												   type="text-left" ui-number-mask="0" value="{{object.numSalas}}">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_num_lojas">Nº de lojas</label>
+											<input id="input_num_lojas" name="num_lojas" ng-model="$ctrl.object.numLojas"
+												   type="text-left" ui-number-mask="0" value="{{object.numLojas}}">
+										</md-input-container>
+
+									</div>
+
+									<!-- TERMINAR ESTA TELA -->
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+										 ng-if="$ctrl.object.tipo != 'NP'">
+
+									</div>
+
+								</div>
+
+								<div>
+									<md-content>
+										<md-tabs class="p-16" md-border-bottom md-dynamic-height>
+											<!-- Aba Endereços -->
+											<md-tab id="aba_enderecos" label="Endereço" name="aba_enderecos">
+												<form name="wizardStep3">
+
+													<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+														 style="margin-top: 10px">
+
+														<md-input-container flex flex-gt-md="25">
+															<label id="lbl_CEP">CEP</label>
+															<input id="CEP" name="CEP" ng-model="$ctrl.object.endereco.cep"
+																   required="true" type="text-left"
+																   ui-mask="{{'99999-999'}}">
+														</md-input-container>
+
+														<!--<md-input-container flex flex-gt-md="50">-->
+														<!--<label id="lbl_cidade">Cidade</label>-->
+														<!--<input id="cidade" name="cidade" type="text-left" required="true" ng-model="object.endereco.cidade.nome" >-->
+														<!--</md-input-container>-->
+
+														<!--<md-input-container flex flex-gt-md="25">-->
+														<!--<label id="lbl_UF">UF</label>-->
+														<!--<input id="UF" name="UF" type="text-left" ng-model="object.endereco.cidade.uf" >-->
+														<!--</md-input-container>-->
+														<md-autocomplete flex flex
+																		 flex-gt-md="50"
+																		 id="autocomplete_cidade"
+																		 md-delay="250"
+																		 md-floating-label="Cidade"
+																		 md-input-id="input_nome_cidade"
+																		 md-input-maxlength="60"
+																		 md-input-minlength="3"
+																		 md-input-name="autocompleteCidade"
+																		 md-item-text="item.nome"
+																		 md-items="item in $ctrl.querySearchCidade(searchTextCidade)"
+																		 md-menu-class="autocomplete-custom-template"
+																		 md-min-length="3"
+																		 md-no-cache="true"
+																		 md-no-cache="false"
+																		 md-search-text="searchTextCidade"
+																		 md-selected-item="selectedItemCidade"
+																		 md-selected-item-change="$ctrl.selectedItemCidadeChange(item)"
+																		 name="autocompleteCidade"
+																		 required="true"
+																		 value="{{ $ctrl.object.endereco.cidade.nome }}">
+
+															<md-item-template>
+																			<span class="item-title"
+																				  style="margin-top: -20px;margin-bottom: -20px">
+                                                            					<h5>
+                                                               						<span md-highlight-flags="i"
+																						  md-highlight-text="$ctrl.searchTextCidade">{{item.nome}}/{{item.uf}}</span>
+                                                            					</h5>
+                                                        					</span>
+															</md-item-template>
+
+															<div ng-messages="DialogForm.autocompleteCidade.$error"
+																 ng-show="DialogForm.autocompleteCidade.$touched"
+																 role="alert">
+																<div ng-message="required">Campo obrigatório.</div>
+																<div id="msg_min_client_ciade" ng-message="minlength">O
+																	nome informado não é suficiente.
+																</div>
+																<div id="msg_max_client_cidade" ng-message="maxlength">O
+																	nome informado é muito longo.
+																</div>
+															</div>
+														</md-autocomplete>
+
+														<md-input-container flex flex-gt-md="25">
+															<label id="lbl_uf">UF</label>
+															<input id="uf" name="uf" disabled="true" type="text-left"
+																   value="{{ $ctrl.object.endereco.cidade.uf }}">
+														</md-input-container>
+
+													</div>
+
+													<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+														<md-input-container flex="25" flex-gt-md="25">
+															<label id="lbl_tipoLogradouro">Tipo Logr.</label>
+															<md-select id="combo_tipoLogradouro" name="tipoLogradouro"
+																	   ng-model="$ctrl.object.endereco.tipoLogradouro"
+																	   ng-model-options="{trackBy: '$value.codigo'}">
+																<md-option ng-repeat="item in $ctrl.listTipoLogradouro"
+																		   ng-value="item">{{ item.nome }}
+																</md-option>
+															</md-select>
+														</md-input-container>
+
+														<md-input-container flex flex-gt-md="50">
+															<label id="lbl_logradouro">Logradouro</label>
+															<input id="logradouro" name="logradouro"
+																   ng-model="$ctrl.object.endereco.endereco" required="true"
+																   type="text-left">
+														</md-input-container>
+
+														<md-input-container flex flex-gt-md="25">
+															<label id="lbl_numero">Nº</label>
+															<input id="numero" name="numero"
+																   ng-model="$ctrl.object.endereco.numero" type="text-left">
+														</md-input-container>
+
+													</div>
+
+													<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+														<md-input-container flex flex-gt-md="50">
+															<label id="lbl_complemento">Complemento</label>
+															<input id="complemento" name="complemento"
+																   ng-model="$ctrl.object.endereco.complemento"
+																   type="text-left">
+														</md-input-container>
+
+														<md-input-container flex flex-gt-md="50">
+															<label id="lbl_bairro">Bairro</label>
+															<input id="bairro" name="bairro"
+																   ng-model="$ctrl.object.endereco.bairro" type="text-left">
+														</md-input-container>
+
+													</div>
+												</form>
+											</md-tab>
+
+
+											<!-- Aba Descrição -->
+											<md-tab label="Descrição">
+
+												<div layout layout-sm="column"
+													 style="padding-left: 30px; padding-right: 30px">
+													<md-input-container flex>
+														<label id="descricao_edit">Descrição</label>
+														<textarea id="lbl_descricao" md-maxlength="2000"
+																  name="objeto_contrato"
+																  ng-maxlength="2000" ng-model="$ctrl.object.descricao"
+																  ng-trim="true"></textarea>
+													</md-input-container>
+												</div>
+
+											</md-tab>
+
+
+											<!-- Aba Cliente Principal -->
+											<md-tab label="Cliente principal">
+												<md-content>
+
+													<div class="p-16">
+														<div layout="row" layout-sm="column" layout-wrap
+															 layout-xs="column">
+
+															<md-input-container flex="25" flex-sm="100" flex-xs="100">
+																<label id="lbl_cnpj">CNPJ</label>
+																<input id="input_cnpj" name="input_cnpj"
+																	   ng-blur="$ctrl.obterCamposPorDocumento($ctrl.object.clientePrincipal.pessoa.documento, 1)"
+																	   ng-model="$ctrl.object.clientePrincipal.pessoa.documento"
+																	   ng-required="true" type="text"
+																	   ui-mask="{{'99.999.999/9999-99'}}">
+															</md-input-container>
+
+															<md-input-container flex="50" flex-gt-md="50">
+																<label id="lbl_razao_social">Razão social</label>
+																<input id="input_razao_social" name="input_razao_social"
+																	   disabled="true" type="text"
+																	   value="{{ $ctrl.object.clientePrincipal.pessoa.nome }}">
+															</md-input-container>
+
+															<md-input-container flex flex-gt-md="25">
+																<label id="lbl_perc_fat">% faturamento</label>
+																<input id="input_faturamento" max="100" min="50"
+																	   name="input_faturamento"
+																	   ng-change="$ctrl.calculaPercFaturamentoSec()"
+																	   ng-max="100" ng-min="50"
+																	   ng-model="$ctrl.object.clientePrincipal.percFaturamento"
+																	   type="number">
+																<div ng-messages="DialogForm.input_faturamento.$error"
+																	 ng-show="DialogForm.input_faturamento.$touched"
+																	 role="alert">
+																	<div ng-message="required">Campo obrigatório.</div>
+																	<div ng-message="min">Percentual de faturamento do
+																		cliente principal deve ser maior ou igual a 50.
+																	</div>
+																	<div ng-message="max">Percentual de faturamento do
+																		cliente principal deve ser menor ou igual a 100.
+																	</div>
+																</div>
+															</md-input-container>
+
+														</div>
+
+														<div layout="row" layout-sm="column" layout-wrap
+															 layout-xs="column">
+
+															<md-input-container flex="50" flex-sm="100" flex-xs="100">
+																<label id="lbl_nome_fantasia">Nome fantasia</label>
+																<input id="input_nome_fantasia"
+																	   name="input_nome_fantasia" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clientePrincipal.pessoa.nomeFantasia }}">
+															</md-input-container>
+
+															<md-input-container flex="50" flex-gt-md="50">
+																<label id="lbl_ramo_negocio">Ramo de negócio</label>
+																<input id="input_ramo_negocio" name="input_ramo_negocio"
+																	   disabled="true" type="text"
+																	   value="{{ $ctrl.object.clientePrincipal.pessoa.cnaeTO.descricao }}">
+															</md-input-container>
+														</div>
+
+
+														<div layout="row" layout-sm="column" layout-wrap
+															 layout-xs="column">
+
+															<md-input-container flex="25" flex-sm="25" flex-xs="25">
+																<label id="lbl_classificacao">Classificação</label>
+																<input id="input_classificacao"
+																	   name="input_classificacao" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clientePrincipal.pessoa.classificacaoClienteTO.nome }}">
+															</md-input-container>
+
+															<md-input-container flex="25" flex-gt-md="25">
+																<label id="lbl_uf_insc_estadual">UF ins.
+																	estadual</label>
+																<input id="input_uf_insc_estadual"
+																	   name="input_uf_insc_estadual" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clientePrincipal.pessoa.ufInscricaoEstadual }}">
+															</md-input-container>
+
+															<md-input-container flex="25" flex-sm="25" flex-xs="25">
+																<label id="lbl_insc_estadual">Ins. estadual</label>
+																<input id="input_insc_estadual"
+																	   name="input_insc_estadual" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clientePrincipal.pessoa.inscricaoEstadual }}">
+															</md-input-container>
+
+															<md-input-container flex="25" flex-gt-md="25">
+																<label id="lbl_insc_municipal">Ins. municipal</label>
+																<input id="input_insc_municipal"
+																	   name="input_insc_municipal" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clientePrincipal.pessoa.inscricaoMunicipal }}">
+															</md-input-container>
+
+														</div>
+
+														<div layout="row" layout-sm="column" layout-wrap
+															 layout-xs="column" ng-if="$ctrl.object.tipo != 'NP'">
+														</div>
+													</div>
+												</md-content>
+											</md-tab>
+
+
+											<!-- Aba Cliente Secundário -->
+											<md-tab
+												label="Cliente secundário {{$ctrl.object.clientePrincipal.percFaturamento != '100' ? '*' : ''}}"
+												ng-disabled="$ctrl.object.clientePrincipal.percFaturamento === '100'"
+												ng-required="$ctrl.object.clientePrincipal.percFaturamento != '100'">
+												<md-content>
+
+													<div class="p-16">
+														<div layout="row" layout-sm="column" layout-wrap
+															 layout-xs="column">
+
+															<md-input-container flex="25" flex-sm="100" flex-xs="100">
+																<label id="lbl_cnpj_sec">CNPJ</label>
+																<input id="input_cnpj_sec" name="input_cnpj_sec"
+																	   ng-blur="$ctrl.obterCamposPorDocumento($ctrl.object.clienteSecundario.pessoa.documento, 2)"
+																	   ng-model="$ctrl.object.clienteSecundario.pessoa.documento"
+																	   type="text" ui-mask="{{'99.999.999/9999-99'}}">
+															</md-input-container>
+
+															<md-input-container flex="50" flex-gt-md="50">
+																<label id="lbl_razao_social_sec">Razão social</label>
+																<input id="input_razao_social_sec"
+																	   name="input_razao_social_sec" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clienteSecundario.pessoa.nome }}">
+															</md-input-container>
+
+															<md-input-container flex flex-gt-md="25">
+																<label id="lbl_perc_fat_sec">% faturamento</label>
+																<input id="input_faturamento_sec"
+																	   name="input_faturamento_sec" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clienteSecundario.percFaturamento }}">
+															</md-input-container>
+
+														</div>
+
+														<div layout="row" layout-sm="column" layout-wrap
+															 layout-xs="column">
+
+															<md-input-container flex="50" flex-sm="100" flex-xs="100">
+																<label id="lbl_nome_fantasia_sec">Nome fantasia</label>
+																<input id="input_nome_fantasia_sec"
+																	   name="input_nome_fantasia_sec" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clienteSecundario.pessoa.nomeFantasia }}">
+															</md-input-container>
+
+															<md-input-container flex="50" flex-gt-md="50">
+																<label id="lbl_ramo_negocio_sec">Ramo de negócio</label>
+																<input id="input_ramo_negocio_sec"
+																	   name="input_ramo_negocio_sec" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clienteSecundario.pessoa.cnaeTO.descricao }}">
+															</md-input-container>
+														</div>
+
+
+														<div layout="row" layout-sm="column" layout-wrap
+															 layout-xs="column">
+
+															<md-input-container flex="25" flex-sm="25" flex-xs="25">
+																<label id="lbl_classificacao_sec">Classificação</label>
+																<input id="input_classificacao_sec"
+																	   name="input_classificacao_sec" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clienteSecundario.pessoa.classificacaoClienteTO.nome }}">
+															</md-input-container>
+
+															<md-input-container flex="25" flex-gt-md="25">
+																<label id="lbl_uf_insc_estadual_sec">UF ins.
+																	estadual</label>
+																<input id="input_uf_insc_estadual_sec"
+																	   name="input_uf_insc_estadual_sec"
+																	   disabled="true" type="text"
+																	   value="{{ $ctrl.object.clienteSecundario.pessoa.ufInscricaoEstadual }}">
+															</md-input-container>
+
+															<md-input-container flex="25" flex-sm="25" flex-xs="25">
+																<label id="lbl_insc_estadual_sec">Ins. estadual</label>
+																<input id="input_insc_estadual_sec"
+																	   name="input_insc_estadual_sec" disabled="true"
+																	   type="text"
+																	   value="{{ $ctrl.object.clienteSecundario.pessoa.inscricaoEstadual }}">
+															</md-input-container>
+
+															<md-input-container flex="25" flex-gt-md="25">
+																<label id="lbl_insc_municipal_sec">Ins.
+																	municipal</label>
+																<input id="input_insc_municipal_sec"
+																	   name="input_insc_municipal_sec"
+																	   disabled="true" type="text"
+																	   value="{{ $ctrl.object.clienteSecundario.pessoa.inscricaoMunicipal }}">
+															</md-input-container>
+
+														</div>
+
+														<div layout="row" layout-sm="column" layout-wrap
+															 layout-xs="column" ng-if="$ctrl.object.tipo != 'NP'">
+
+														</div>
+
+													</div>
+												</md-content>
+											</md-tab>
+
+										</md-tabs>
+
+										<md-divider></md-divider>
+
+										<div class="p-16">
+											<div layout layout-sm="column"
+												 style="margin-top: -5px">
+												<span>*</span>&nbsp;Campos obrigatórios
+											</div>
+										</div>
+
+										<div class="navigation padding-8" flex layout="row" layout-align="start start">
+											 
+											<md-button class="md-raised md-accent estilo_botoes"
+													   id="btn_salvar_nregistro" ng-click="$ctrl.salvar()"
+													   ng-disabled="DialogForm.$invalid">
+												Salvar
+												<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+													<span class="h4">Salvar as alterações realizadas nesta obra</span>
+												</md-tooltip>
+											</md-button>
+											<md-button class="md-raised md-primary estilo_botoes"
+													   id="btn_cancelar_nregistro" ng-click="$ctrl.cancelarEdit()">
+												Cancelar
+												<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+													<span class="h4">Sair desta obra, sem gravar as modificações realizadas</span>
+												</md-tooltip>
+											</md-button>
+
+										</div>
+
+
+										<md-divider></md-divider>
+
+									</md-content>
+								</div>
+							</form>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- / CONTENT -->
+		</div>
+	</div>
+</div>

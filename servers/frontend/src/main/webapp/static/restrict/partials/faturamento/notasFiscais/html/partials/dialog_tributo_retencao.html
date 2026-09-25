@@ -1,0 +1,76 @@
+<md-dialog aria-label="Tributo - Retenção: Confirmação" id="dialog_titulo_popup_tributo_retencao" style="width: 800px;">
+	<form name="form_retencao_tributo">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_tributo_retencao" md-autofocus>Retenção: Confirmação</h2>
+				<span flex></span>
+			</div>
+		</md-toolbar>
+
+		<div layout layout-sm="column">
+
+			<md-dialog-content class="md-dialog-content" id="dialog_conteudo" role="document" tabindex="-1">
+				<div class="md-dialog-content-body ng-scope">
+					<p class="ng-binding" id="msg_popup_tributo_retencao">
+						O valor do(s) tributo(s) está abaixo do valor mínimo a ser recolhido. Escolha entre manter o
+						valor de retenção ou zerar o valor.
+					</p>
+				</div>
+			</md-dialog-content>
+
+		</div>
+
+		<br>
+
+		<div class="simple-table-container md-whiteframe-1dp" style="margin-top: -25px">
+
+			<table class="tabela_exibicao row-border hover md-caption" id="table_tributos_retencao" ms-responsive-table>
+				<thead>
+				<tr>
+					<th class="text-left" width="35%">Tributo</th>
+					<th class="text-right" width="25%">Valor mínimo</th>
+					<th class="text-right" width="25%">Valor</th>
+					<th class="text-center" width="15%">Zerar</th>
+				</tr>
+				</thead>
+
+				<tbody id="table_tbody_tributos_list">
+				<tr ng-repeat="item in listaTributos">
+					<td class="text-left">
+						{{item.aliquota.categoriaTributo.tributoTO.nome}}
+					</td>
+					<td class="text-right">
+						R$ {{item.aliquota.categoriaTributo.minimoGuia | currency : '' : 2}}
+					</td>
+					<td class="text-right">
+						<div ng-if="!item.zerar"> R$ {{ item.valorOriginal | currency : '' : 2}}</div>
+						<div ng-if="item.zerar"> R$ {{ zero | currency : '' : 2}}</div>
+					</td>
+					<td class="text-center" style="padding-left: 24px;">
+						<md-checkbox aria-label="Zerar item" ng-checked="item.zerar" ng-click="checkZerar(item)"
+									 style="margin-bottom: 0px;"></md-checkbox>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+
+		</div>
+
+		<b></b>
+
+
+		<md-dialog-content role="document">
+			<md-divider></md-divider>
+		</md-dialog-content>
+
+		<md-dialog-actions layout="row">
+			<md-button aria-label="Botão SIM" class="md-raised md-default" id="btn_sim" ng-click="sim()">
+				CONFIRMAR
+			</md-button>
+			<md-button aria-label="Botão NÃO" class="md-raised md-default" id="btn_nao" ng-click="nao()">
+				CANCELAR
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

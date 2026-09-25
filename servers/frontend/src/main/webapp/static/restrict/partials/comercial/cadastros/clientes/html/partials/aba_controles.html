@@ -1,0 +1,51 @@
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+	 style="margin-top: -5px;">
+
+	<md-input-container flex="50" flex-sm="100" flex-xs="100">
+		<label id="lbl_cadastramento">Cadastramento</label>
+		<input id="input_cadastramento" name="cadastramento"
+			   ng-disabled="true" type="text"
+			   value="{{$ctrl.object.nomeCriador}}">
+	</md-input-container>
+
+	<md-input-container flex="50" flex-sm="100" flex-xs="100">
+		<label id="lbl_data_hora">Data/hora</label>
+		<input id="input_data_hora" name="input_data_hora"
+			   ng-disabled="true" type="text"
+			   value="{{ $ctrl.object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+	</md-input-container>
+</div>
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+	 style="margin-top: -5px;">
+
+	<md-input-container flex="50" flex-sm="100" flex-xs="100">
+		<label id="lbl_ultima_alteracao">Última alteração</label>
+		<input id="input_ultima_alteracao"
+			   name="input_ultima_alteracao" ng-disabled="true"
+			   type="text" value="{{$ctrl.object.nomeAtualizador}}">
+	</md-input-container>
+
+	<md-input-container flex="50" flex-sm="100" flex-xs="100">
+		<label id="lbl_data_hora2">Data/hora</label>
+		<input id="input_data_hora2" name="data_hora2"
+			   ng-disabled="true" type="text"
+			   value="{{ $ctrl.object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+	</md-input-container>
+</div>
+<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+	 style="margin-top: -5px;">
+
+	<md-input-container flex="50" flex-sm="100" flex-xs="100">
+		<label id="lbl_inativacao">Inativação</label>
+		<input id="input_inativacao" name="inativacao"
+			   ng-disabled="true" type="text"
+			   value="{{$ctrl.object.nomeInativacao}}">
+	</md-input-container>
+
+	<md-input-container flex="50" flex-sm="100" flex-xs="100">
+		<label id="lbl_data_hora3">Data/hora</label>
+		<input id="input_data_hora3" name="data_hora"
+			   ng-disabled="true" type="text"
+			   value="{{ $ctrl.object.dataInativacao | date:'dd/MM/yyyy HH:mm:ss' }}">
+	</md-input-container>
+</div>

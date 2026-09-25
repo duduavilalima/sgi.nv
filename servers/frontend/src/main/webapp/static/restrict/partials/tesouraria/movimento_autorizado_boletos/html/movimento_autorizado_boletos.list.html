@@ -1,0 +1,222 @@
+<div class="page-layout simple fullwidth" ng-controller="MovimentoAutorizadoBoletosListarCtrl">
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="subtitulo">{{::subtitulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+			<div class="content" flex>
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">{{ ::titulo}} - Filtros de pesquisa</div>
+							</header>
+							<div class="content">
+								<form name="form" ui-keypress="{13:'buscar(1)'}">
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_codigo">Código de barras / linha digitável</label>
+											<md-tooltip class="h4">Selecione se o o código de barras ou linha digitável
+												deve ou não estar preenchido
+											</md-tooltip>
+											<md-select id="combo_codigo" name="codigo"
+													   ng-model="object.statusCodBarraLd"
+													   value="{{ object.statusCodBarraLd }}">
+												<md-option ng-repeat="item in enumStatusCodBarr" ng-value="item"
+														   value="{{ item }}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_empresa">Empresa</label>
+											<md-select id="combo_empresa" name="empresa" ng-model="object.empresa"
+													   value="{{ object.empresa }}">
+												<md-option ng-repeat="item in listEmpresas" ng-value="item"
+														   value="{{ item }}">{{ item.codnome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_pagamento_de">Pagamento de</label>
+											<input id="pagamento_de_input" max-date="object.pagamentoAte"
+												   ng-model="object.pagamentoDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_pagamento__ate">Pagamento até</label>
+											<input id="pagamento__ate_input" min-date="object.pagamentoDe"
+												   ng-model="object.pagamentoAte" tt-date-picker type="text">
+										</md-input-container>
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_numero">Número</label>
+											<input class="text-left" id="input_numero" name="numero"
+												   ng-model="object.numero" type="text" value="{{ object.numero }}">
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_credor">Credor</label>
+											<md-tooltip class="h4">Informe o CNPJ, a razão social ou o nome fantasia do
+												credor
+											</md-tooltip>
+											<input class="text-left" id="input_credor" name="credor"
+												   ng-model="object.nomeCredor" type="text" value="{{ object.credor }}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_banco">Banco</label>
+											<md-select id="combo_banco" name="banco" ng-model="object.banco">
+												<md-option ng-repeat="item in bancoList" ng-value="item">{{item.nome}}
+												</md-option>
+											</md-select>
+										</md-input-container>
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_valor_de">Valor de (R$)</label>
+											<input class="text-left" id="input_valor_de" maxlength="18" name="valor_de"
+												   ng-model="object.valorDe" type="text" ui-number-mask="2"
+												   value="{{ object.valorDe }}">
+										</md-input-container>
+										<div ng-messages="form.valorDe.$error" ng-show="object.valorDe.$touched"
+											 role="alert">
+											<div id="msg_obrig_valor_de" ng-message="required">Obrigatório.</div>
+										</div>
+										<div ng-messages="form.valorDe" ng-show="validaValorDeAte()" role="alert">
+											<div id="msg_valor_de" ng-message="required">O valor do campo "Valor de"
+												deve ser menor que o valor do campo "Valor até".
+											</div>
+										</div>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_valor_ate">Valor até (R$)</label>
+											<input class="text-left" id="input_valor_ate" maxlength="18"
+												   name="valor_ate" ng-model="object.valorAte" type="text"
+												   ui-number-mask="2" value="{{ object.valorAte }}">
+										</md-input-container>
+										<div ng-messages="form.valorAte.$error" ng-show="object.valorAte.$touched"
+											 role="alert">
+											<div id="msg_obrig_valor_ate" ng-message="required">Obrigatório.</div>
+										</div>
+										<div ng-messages="form.valorAte" ng-show="validaValorDeAte()" role="alert">
+											<div id="msg_valor_ate" ng-message="required">O valor do campo "Valor até"
+												deve ser maior que o valor do campo "Valor de".
+											</div>
+										</div>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_gerencia">Gerência</label>
+											<md-select id="combo_gerencia" name="gerencia" ng-model="object.gerencia"
+													   value="{{ object.gerencia }}">
+												<md-option ng-value="null"></md-option>
+												<md-option ng-repeat="item in listGerencias  | orderBy:'nome'"
+														   ng-value="item" value="{{ item }}">{{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_info_boleto">Informação sobre o número do boleto</label>
+											<md-select id="combo_info_boleto" name="info_boleto"
+													   ng-change="$emit('changeInfoBoleto')"
+													   ng-model="object.infoBoleto">
+												<md-option ng-repeat="item in enumTipoNumBoleto" ng-value="item"
+														   value="{{ item }}">{{item}}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex="75" flex-sm="100" flex-xs="100"
+															ng-if="!exibeLinhaDigitavel">
+											<label id="lbl_codigo_barras">Código de barras</label>
+											<md-tooltip class="h4">Ao preencher este campo, os campos "Pagamento de/até"
+												e "Valor de/até" serão preenchidos automaticamente.
+												Caso nenhum boleto seja localizado, use o botão "Limpar" para realizar
+												uma nova pesquisa.
+											</md-tooltip>
+											<input id="codigobarra"
+												   mask="99999999999999999999999999999999999999999999999"
+												   name="codigobarra" ng-model="object.codigoBarras" type="text"
+												   value="{{ object.codigoBarras }}">
+										</md-input-container>
+
+										<md-input-container flex="75" flex-sm="100" flex-xs="100"
+															ng-if="exibeLinhaDigitavel">
+											<label id="lbl_linha_digitavel">Linha digitável</label>
+											<input id="input_linhadigitavel"
+												   mask="99999.99999.99999.999999.99999.999999.9.99999999999999"
+												   name="input_linhadigitavel" ng-model="object.linhaDigitavel"
+												   type="text" value="{{ object.linhaDigitavel }}">
+										</md-input-container>
+
+									</div>
+									<section layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_pesquisar"
+													   name="btn_pesquisar" ng-click="buscar()" ng-disabled="isAction">
+												Pesquisar
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+										<div flex="auto" layout-wrap show-gt-sm>
+										</div>
+									</section>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- / CAMPOS DE PESQUISA -->
+				<!-- DATATABLE - RESULTADO DA PESQUISA -->
+				<div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result"
+					 ng-if="result && result != null">
+					<header class="md-accent-bg">
+						<div class="title" id="titulo_resultado">{{ ::titulo}} - Resultado da pesquisa</div>
+					</header>
+					<div class="sgiUiGridPesquisa" id="idGridFaturamentos" ng-if="exibirGrid(gridPesquisa)"
+						 ng-style="ajustarAlturaTabela(gridPesquisa)" ui-grid="gridPesquisa" ui-grid-auto-resize
+						 ui-grid-pinning></div>
+					<div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+						<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+							<span class="h4 p-32">{{mensagemPesquisa()}}</span>
+						</md-whiteframe>
+					</div>
+					<section class="p-8" layout="row" layout-align="center center" layout-sm="row" layout-wrap>
+						<div></div>
+						<div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+					</section>
+				</div>
+				<!-- / DATATABLE - RESULTADO DA PESQUISA -->
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+</div>

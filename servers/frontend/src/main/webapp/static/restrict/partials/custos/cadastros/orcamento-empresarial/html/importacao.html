@@ -1,0 +1,138 @@
+<div class="page-layout simple fullwidth" ng-controller="OrcamentoEmpresarialImportacaoCtrl as $ctrl">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">Custos</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo">Cadastros</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">Orçamento empresarial</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent"
+                          id="titulo_subtitulo">Edição</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+        <!-- CONTENT -->
+        <div class="content" flex>
+            <div layout="row" layout-wrap>
+                <div class="about" flex="100" layout="column">
+                    <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+                        <header class="md-accent-bg">
+                            <div class="title" id="title_panel">Orçamento empresarial - Dados Gerais</div>
+                        </header>
+                        <div>
+                            <div class="white-500-bg">
+                                <form name="form" novalidate>
+                                    <div flex layout="column">
+                                        <div class="p-16" flex layout="column">
+
+
+                                            
+
+
+                                            <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                <md-input-container flex="25" flex-sm="100">
+                                                    <label id="lbl_tipo">Tipo da planilha</label>
+                                                    <md-select id="combo_tipo" name="combo_tipo" ng-model="$ctrl.tipo" ng-change="$ctrl.changeTipo($ctrl.tipo)" ng-disabled="$ctrl.action" ng-required="true">
+                                                        <md-option ng-repeat="item in $ctrl.tiposList" ng-value="item.codigo">{{item.descricao}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+
+                                                <md-input-container flex="50" flex-sm="100" ng-if="!$ctrl.tipo">
+                                                    <label id="lbl_selecione">Selecione o tipo</label>
+                                                    <input id="input_selecione" name="input_selecione" value="" ng-disabled="true" type="text">
+                                                </md-input-container>
+
+                                                <md-input-container flex="50" flex-sm="100" ng-if="$ctrl.tipo === 1">
+                                                    <label id="lbl_unidade">Unidade</label>
+                                                    <md-select id="combo_unidade" name="combo_unidade" ng-required="$ctrl.tipo === 1" ng-disabled="$ctrl.action" ng-model="$ctrl.object.unidade.codigo">
+                                                        <md-option ng-repeat="item in $ctrl.unidadesList" ng-value="item.codigo">{{item.codnome}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+
+                                                <md-input-container flex="50" flex-sm="100" ng-if="$ctrl.tipo === 2">
+                                                    <label id="lbl_diretoria">Diretoria</label>
+                                                    <md-select id="combo_diretoria" name="combo_diretoria" ng-required="$ctrl.tipo === 2" ng-disabled="$ctrl.action" ng-model="$ctrl.object.diretoria.codigo">
+                                                        <md-option ng-repeat="item in $ctrl.diretoriasList" ng-value="item.codigo">{{item.descricao}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+
+                                                <md-input-container flex="50" flex-sm="100" ng-if="$ctrl.tipo === 3">
+                                                    <label id="lbl_gerencia">Gerência</label>
+                                                    <md-select id="combo_gerencia" name="combo_gerencia" ng-required="$ctrl.tipo === 3" ng-disabled="$ctrl.action" ng-model="$ctrl.object.gerencia.codigo">
+                                                        <md-option ng-repeat="item in $ctrl.gerenciasList" ng-value="item.codigo">{{item.nome}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+
+                                                <md-autocomplete ng-if="$ctrl.tipo === 4" flex="50" flex-xs="100" id="autocomplete_nome_centroLucro_aba_dados" md-delay="250" md-floating-label="Centro de lucro" md-input-id="input_nome_centroLucro_aba_dados" md-input-name="autocompleteCentroLucro"
+                                                md-item-text="item.identificadorFinal + ' - ' + item.nome" md-items="item in $ctrl.querySearchCentroLucro(searchTextCentroLucro)" md-menu-class="autocomplete-custom-template" md-min-length="3" md-no-cache="false" md-require-match=""
+                                                md-search-text="$ctrl.searchTextCentroLucro" md-selected-item="$ctrl.selectedItemCentroLucro" md-selected-item-change="$ctrl.fnSelectedItemCentroLucro(item)" name="autocompleteCentroLucro" ng-disabled="$ctrl.action" ng-required="true">
+
+                                                <md-item-template>
+                                                    <span class="item-title" style="margin-top: -20px">
+                                                        <h5>
+                                                            <span md-highlight-flags="i" md-highlight-text="$ctrl.searchTextCentroLucro">{{item.identificadorFinal}} - </span>
+                                                            <span md-highlight-flags="i" md-highlight-text="$ctrl.searchTextCentroLucro">{{item.nome}} </span>
+                                                        </h5>
+                                                    </span>
+                                                </md-item-template>
+
+                                                <div ng-if="form.autocompleteCentroLucro.$touched" ng-messages="form.autocompleteCentroLucro.$error" role="alert">
+                                                    <div id="msg_req_match" ng-message="md-require-match">O centro de lucro informado não é válido</div>
+                                                    <div id="msg_req_centroLucro" ng-message="required">Obrigatório.</div>
+                                                    <div id="msg_min_centroLucro" ng-message="minlength">O nome informado não é suficiente.</div>
+                                                    <div id="msg_max_centroLucro" ng-message="maxlength">O nome informado é muito longo.</div>
+                                                </div>
+                                            </md-autocomplete>
+
+                                                <md-input-container flex="25" flex-sm="100">
+                                                    <label id="lbl_referencia_ano">Ano de referência</label>
+                                                    <input id="input_referencia_ano" name="input_referencia_ano" ng-model="$ctrl.object.referenciaAno" ng-disabled="$ctrl.action" ng-required="true" type="number" min="1980" max="2100" maxlength="4" minlength="4" ng-maxlength="4">
+                                                    <div ng-messages="form.input_referencia_ano.$error" ng-show="form.input_referencia_ano.$touched">
+                                                        <div ng-message="required">Obrigatório.</div>
+                                                    </div>
+                                                </md-input-container>
+
+                                                <div layout="row" flex="100" flex-gt-md="100" flex-xs="100">
+                                                    <fieldset style="width: 100%;">
+                                                        <input type="file" accept=".xls,.xlsx" name="file" onchange="angular.element(this).scope().carregarArquivos(this.files)" />
+                                                    </fieldset>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <md-divider></md-divider>
+
+                                    <div class="p-8" flex layout="row" layout-align="start start">
+                                        <md-button class="md-raised md-accent" id="btn_salvar" ng-click="$ctrl.importar()" ng-disabled="form.$invalid || $ctrl.action">
+                                            Importar
+                                            <img ng-if="$ctrl.action" src="../img/gray_carregando.gif" style="height: 20px;width: 20px;margin-top: 8px;"/>
+                                            <md-tooltip class="h4">Importar orçamento empresarial</md-tooltip>
+                                        </md-button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / CONTENT -->
+    </div>
+</div>

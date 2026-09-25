@@ -1,0 +1,155 @@
+<div class="navigation padding-8" flex layout="row" layout-align="end center"
+	 ng-if="(object.situacao == 'Aberto' || object.situacao == 'Em faturamento') && object.faturamentoEtapas.length >= 15 "
+	 style="margin-top: -15px;">
+	<md-button class="md-raised md-accent" id="btn_nova_etapa"
+			   ng-click="novaEtapa($event, etapa, getTotalPercentualTributo())" ng-show="screenMode === 'VIEW'">
+		Nova etapa
+	</md-button>
+</div>
+
+<div class="simple-table-container md-whiteframe-1dp">
+
+	<table class="tabela_exibicao row-border hover md-caption text-center" id="table_etapas" ms-responsive-table
+		   style="table-layout:fixed;">
+		<thead id="table_etapas_thead" ng-if="object.faturamentoEtapas.length > 0" class="cabecalho-borda-cinza">
+		<tr class="md-grey-200-bg" class="text-center">
+			<th style="text-align: center;padding-left: 5px;" width="6%">Etapa</th>
+			<th style="text-align: center;" width="8%">Situação</th>
+			<th style="text-align: center;" width="30%">Descrição do item</th>
+			<th style="text-align: center;" width="8%">Início</th>
+			<th style="text-align: center;" width="8%">Término</th>
+			<th style="text-align: center;" width="9%">Bruto</th>
+			<th style="text-align: center;" width="9%">Líquido</th>
+			<th style="text-align: center;" width="10%">{{object.tipoDocumentoFaturamento}}</th>
+			<th style="text-align: center;padding-right: 0px;" width="12%">Opções</th>
+		</tr>
+		</thead>
+
+		<thead id="table_etapas_thead_vazio" ng-if="object.faturamentoEtapas.length == 0">
+		<tr class="md-grey-200-bg" class="text-center">
+			<th colspan="9"></th>
+		</tr>
+		</thead>
+
+		<tbody id="table_tbody_etapas_list">
+		<tr ng-repeat="etapa in object.faturamentoEtapas" class="linha-borda-cinza">
+			<td class="text-center" style="padding-left: 0px;"><a href
+				  ng-click="exibirEtapa($event, etapa, getTotalPercentualTributo(), false)"
+				  style="cursor: pointer">{{etapa.numero}}</a></td>
+			<td>{{etapa.situacao}}</td>
+			<td class="text-left" style="overflow: hidden;white-space: nowrap;">
+				{{etapa.descricao}}
+				<md-tooltip class="h3" md-direction="bottom">
+					{{etapa.descricao}}
+				</md-tooltip>
+			</td>
+			<td class="text-center">{{etapa.inicio | date : 'dd/MM/yyyy'}}</td>
+			<td class="text-center">{{etapa.termino | date : 'dd/MM/yyyy'}}</td>
+			<td class="text-right">{{etapa.valor | currency : '' : 2}}</td>
+			<td class="text-right">{{etapa.valorLiquido | currency : '' : 2}}</td>
+			<td class="text-center">{{getNumero(etapa)}}</td>
+			<td class="text-center" style="padding-top: 0px; padding-bottom: 2px; padding-right: 5px;" ng-if="habilitarBotoesFaturamento">
+				<md-button class="md-icon-button" id="btn_exibir_etapa"
+						   ng-click="exibirEtapa($event, etapa, getTotalPercentualTributo(), false)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon md-font-icon="icon-eye" md-menu-align-target></md-icon>
+					<md-tooltip class="h3" id="tool_tip_btn_exibir" md-direction="bottom">
+						Exibir os dados desta etapa
+					</md-tooltip>
+				</md-button>
+				<md-button class="md-icon-button" id="btn_editar_etapa"
+						   ng-click="editarEtapa($event, etapa, getTotalPercentualTributo(), false)"
+						   ng-if="!getNumero(etapa)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon md-font-icon="icon-pencil"></md-icon>
+					<md-tooltip class="h3" md-direction="bottom">
+						Editar os dados desta etapa
+					</md-tooltip>
+				</md-button>
+				<md-button class="md-icon-button" id="btn_emitir_nf" ng-click="editarEmitirNota($event, etapa)"
+						   ng-if="!getNumero(etapa)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon md-font-icon="icon-checkbox-marked-outline" style="color: #2EAB2E !important;"></md-icon>
+					<md-tooltip class="h3" md-direction="bottom">
+						Emitir {{object.tipoDocumentoFaturamento | lowercase}} para esta etapa
+					</md-tooltip>
+				</md-button>
+				<md-button class="md-icon-button" id="btn_remover_etapa" ng-click="excluirEtapa($event, etapa, false)"
+						   ng-if="!getNumero(etapa)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+					<md-tooltip class="h3" md-direction="bottom">
+						Remover esta etapa (esta operação não poderá ser desfeita)
+					</md-tooltip>
+				</md-button>
+			</td>
+
+		</tr>
+		</tbody>
+
+		<tbody id="table_tbody_etapas_null" ng-if="object.faturamentoEtapas === null">
+		<tr>
+			<td colspan="9">
+				<div layout="row" layout-align="space-around" layout-sm="column">
+					<img src="../img/carregando.gif" style="height: 30px;width: 30px;"/>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+
+		<tbody id="table_tbody_etapas_empty"
+			   ng-if="object != null && object.faturamentoEtapas != null && object.faturamentoEtapas.length == 0">
+		<tr>
+			<td class="text-center msg-empty-list" colspan="9">Não existem etapas associadas a este faturamento.</td>
+		</tr>
+		</tbody>
+
+		<tfoot id="table_tfoot_etapas">
+		<tr class="md-grey-300-bg" ng-if="object.faturamentoEtapas.length > 0">
+			<td class="text-right celula-direita-gray" colspan="5" style="overflow: hidden;"><strong>Total desta página</strong></td>
+			<td class="text-right celula-direita-gray"><strong>{{totalValorEtapa() | currency : '' : 2}}</strong></td>
+			<td class="text-right celula-direita-gray"><strong>{{totalValorLiquidoEtapa() | currency : '' : 2}}</strong></td>
+			<td colspan="2"></td>
+		</tr>
+		<tr class="md-grey-300-bg" ng-if="object.faturamentoEtapas.length <= 0">
+			<td colspan="9"></td>
+		</tr>
+		</tfoot>
+	</table>
+	<section layout="row" layout-align="center center" layout-sm="row" ng-if="object.faturamentoEtapas !== null">
+		<span hide-xs>
+			<md-button aria-label="Primeira anterior" class="md-accent" id="first" ng-click="getPageEtapas(0)"
+					   ng-disabled="!exibirAnteriorEtapas()"
+					   style="border: 1px solid #d4d4d4;font-size: 11px;">Primeiro</md-button>
+		</span>
+		<md-button aria-label="Página anterior" class="md-accent" id="previous"
+				   ng-click="getPageEtapasNd(paramsEtapas.pageNumber - 1)" ng-disabled="!exibirAnteriorEtapas()"
+				   style="border: 1px solid #d4d4d4;font-size: 11px;">
+			<md-icon class="s16 separator" md-font-icon="icon-chevron-double-left"></md-icon>
+		</md-button>
+		<span>
+			<md-button aria-label="Página atual" class="md-accent" id="paginate_button" ng-disabled="true"
+					   style="border: 1px solid #d4d4d4;font-size: 11px;">{{paramsEtapas.pageNumber + 1}} / {{paramsEtapas.totalPages === 0 ? 1 : paramsEtapas.totalPages}}</md-button>
+		</span>
+		<md-button aria-label="Próxima página" class="md-accent" id="next"
+				   ng-click="getPageEtapasNd(paramsEtapas.pageNumber + 1)"
+				   ng-disabled="!exibirProximoEtapas() || (paramsEtapas.totalPages === (paramsEtapas.pageNumber +1))"
+				   style="border: 1px solid #d4d4d4;font-size: 11px;">
+			<md-icon class="s16 separator" md-font-icon="icon-chevron-double-right"></md-icon>
+		</md-button>
+		<span hide-xs>
+			<md-button aria-label="Última página" class="md-accent" id="last"
+					   ng-click="getPageEtapasNd(paramsEtapas.totalPages - 1)"
+					   ng-disabled="!exibirProximoEtapas() || (paramsEtapas.totalPages === (paramsEtapas.pageNumber +1))"
+					   style="border: 1px solid #d4d4d4;font-size: 11px;">Último</md-button>
+		</span>
+	</section>
+</div>
+
+<div class="navigation padding-8" flex layout="row" layout-align="end center"
+	 ng-if="habilitarBotoesFaturamento && (object.situacao == 'Aberto' || object.situacao == 'Em faturamento')" style="margin-bottom: -15px;">
+	<md-button class="md-raised md-accent" id="btn_nova_etapa"
+			   ng-click="novaEtapa($event, etapa, getTotalPercentualTributo())" ng-show="screenMode === 'VIEW'">
+		Nova etapa
+	</md-button>
+</div>

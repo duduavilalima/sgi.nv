@@ -1,0 +1,29 @@
+<md-dialog aria-label="{{::title}}<" id="dialog_cancel_or_delete" style="width: 700px;">
+	<form name="DialoForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_confirmacao_cancelar" md-autofocus>{{::title}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" id="bt_fechar_popup_confirmacao_cancelar" ng-click="cancel()"
+						   style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="md-dialog-content" id="dialog_54" role="document" tabindex="-1">
+			<div class="md-dialog-content-body ng-scope" ng-if="::!dialog.mdHtmlContent">
+				<p class="ng-binding" id="msg_popup_confirmacao_cancelar">{{::msg}}</p>
+			</div>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<md-button class="md-raised md-default" id="btn_confirmar" ng-click="confirmar()" ng-disabled="action">
+				{{::name_ok_btn}}
+			</md-button>
+			<md-button class="md-raised md-default" id="btn_cancelar" ng-click="cancel()" ng-disabled="action">
+				{{::name_cancel_btn}}
+			</md-button>
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

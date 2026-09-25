@@ -1,0 +1,240 @@
+<div class="page-layout simple fullwidth" ng-controller="PerfilDetailCtrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ ::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ screenMode === 'VIEW' ? 'Exibição' : (screenMode === 'EDIT' ? 'Edição' : 'Novo') }}</span>
+			</div>
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">{{ ::titulo }} - Dados Gerais</div>
+						</header>
+
+						<md-progress-linear class="md-warn" md-mode="query"
+											ng-show="object == null"></md-progress-linear>
+
+						<div class="white-500-bg">
+							<form name="PerfilForm">
+
+								<!-- TELA DE EDIÇÃO / NOVO -->
+								<div class="p-16">
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex="25">
+											<label id="lbl_nome">Nome</label>
+											<input id="input_nome" name="input_nome" ng-disabled="screenMode === 'VIEW'"
+												   type="text" value="{{object.nome}}">
+										</md-input-container>
+
+										<md-input-container flex="50">
+											<label id="lbl_descricao">Descrição</label>
+											<input id="input_descricao" name="input_descricao"
+												   ng-disabled="screenMode === 'VIEW'" type="text"
+												   value="{{object.descricao}}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100" flex-xs="100">
+											<label id="lbl_tipoAcesso">Tipo de acesso</label>
+
+											<md-select id="combo_tipoAcesso" name="combo_tipoAcesso"
+													   ng-disabled="screenMode === 'VIEW'" ng-model="object.tipoAcesso">
+												<md-option ng-repeat="opcao in listTipoAcesso" ng-value="opcao">{{ opcao
+													}}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_obrigaGerencia">Obriga gerência</label>
+											<md-select id="combo_obrigaGerencia" name="combo_obrigaGerencia"
+													   ng-disabled="screenMode === 'VIEW'"
+													   ng-model="object.obrigaGerencia">
+												<md-option ng-repeat="opcao in listObrigaGerencia"
+														   ng-value="opcao.valor">{{ opcao.mensagem }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex="50" flex-sm="100" flex-xs="100">
+											<label id="lbl_obrigaDadosBancarios">Obriga Dados Bancários</label>
+											<md-select id="combo_obrigaDadosBancarios" name="combo_obrigaDadosBancarios"
+													   ng-disabled="screenMode === 'VIEW'"
+													   ng-model="object.obrigaDadosBancarios">
+												<md-option ng-repeat="opcao in listObrigaDadosBancarios"
+														   ng-value="opcao.valor">{{ opcao.mensagem }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+									</div>
+								</div>
+
+								<div class="p-16">
+									<md-tabs md-border-bottom md-dynamic-height>
+										<md-tab label="Funcionalidades">
+											<div class="p-8 layout-sm-column layout-row flex" flex="" layout=""
+												 layout-sm="column">
+
+												<picklist id="pickListFuncionalidades"
+														  name="pickListFuncionalidades"
+														  ng-if="screenMode !== 'VIEW'"
+														  pick-flex="100"
+														  pick-label-src=""
+														  pick-model="object.funcionalidades"
+														  pick-options="funcionalidade as funcionalidade.descricao for funcionalidade in listFuncionalidades"
+														  size="10"/>
+
+												<div
+													ng-if="screenMode === 'VIEW' && object.funcionalidades.length === 0">
+													<span>Nenhuma funcionalidade selecionada.</span>
+												</div>
+
+												<!-- DATATABLE - RESULTADO DA PESQUISA -->
+												<div class="simple-table-container profile-box md-whiteframe-2dp"
+													 id="div_funcionalidades"
+													 ng-if="screenMode === 'VIEW' && object.funcionalidades.length > 0"
+													 style="width: 100%">
+
+													<table class="row-border md-caption tabela_exibicao"
+														   ms-responsive-table>
+														<thead style="text-align: center">
+														<tr class="md-grey-200-bg">
+															<th width="15%">Sistema</th>
+															<th width="15%">Módulo</th>
+															<th width="40%">Descrição</th>
+															<th width="10%">Tipo</th>
+															<th width="20%">Item de Menu</th>
+														</tr>
+														</thead>
+														<tbody>
+														<tr ng-repeat="funcionalidade in object.funcionalidades">
+															<td>{{ funcionalidade.modulo.sistema.nome }}</td>
+															<td>{{ funcionalidade.modulo.nome }}</td>
+															<td>{{ funcionalidade.descricao }}</td>
+															<td>{{ funcionalidade.tipo }}</td>
+															<td>{{ funcionalidade.label }}</td>
+														</tr>
+														</tbody>
+													</table>
+
+												</div>
+												<!-- / DATATABLE - RESULTADO DA PESQUISA -->
+
+											</div>
+										</md-tab>
+
+										<md-tab label="Controles" ng-if="screenMode === 'VIEW'">
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+												<md-input-container flex="50" flex-sm="100" flex-xs="100">
+													<label id="lbl_criador">Cadastramento</label>
+													<input id="combo_criador" name="combo_criador" ng-disabled="true"
+														   ng-model="object.criador" type="text">
+												</md-input-container>
+
+												<md-input-container flex="50" flex-sm="100" flex-xs="100">
+													<label id="lbl_dataCriacao">Data/hora</label>
+													<input id="combo_dataCriacao" name="combo_dataCriacao"
+														   ng-disabled="true" ng-model="object.dataCriacao" type="text"
+														   value="{{ object.dataCriacao | date:'dd/MM/yyyy HH:mm'}}">
+												</md-input-container>
+											</div>
+
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+												<md-input-container flex="50" flex-sm="100" flex-xs="100">
+													<label id="lbl_editor">Última alteração</label>
+													<input id="combo_editor" name="combo_editor" ng-disabled="true"
+														   ng-model="object.editor" type="text">
+												</md-input-container>
+
+												<md-input-container flex="50" flex-sm="100" flex-xs="100">
+													<label id="lbl_dataAlteracao">Data/hora</label>
+													<input id="combo_dataAlteracao" name="combo_dataAlteracao"
+														   ng-disabled="true" ng-model="object.dataAlteracao"
+														   type="text"
+														   value="{{ object.dataAlteracao | date:'dd/MM/yyyy HH:mm'}}">
+												</md-input-container>
+											</div>
+										</md-tab>
+									</md-tabs>
+								</div>
+
+								<md-divider></md-divider>
+
+								<div class="p-8" flex layout="row" layout-align="start start" layout-xs="column"
+									 ng-if="screenMode !== 'VIEW'">
+									<md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvar()"
+											   ng-disabled="ContratosForm.$invalid">
+										Salvar
+										<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+											<span class="h4">Salvar as alterações realizadas neste perfil</span>
+										</md-tooltip>
+									</md-button>
+
+									<md-button class="md-raised md-accent" id="btn_cancelar"
+											   ng-click="cancelarEdicao()">
+										Cancelar
+										<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+											<span
+												class="h4">Sair deste perfil, sem gravar as modificações realizadas</span>
+										</md-tooltip>
+									</md-button>
+								</div>
+
+								<div flex layout="row" layout-align="start start" ng-if="screenMode === 'VIEW'">
+
+									<div flex layout="row" layout-align="start center">
+										<md-button aria-label="Editar" class="md-raised md-accent" id="btn_editar"
+												   ng-click="editar(object)">
+											Editar
+											<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+												<span class="h4">Editar os dados deste perfil</span>
+											</md-tooltip>
+										</md-button>
+
+										<md-button aria-label="Retornar" class="md-raised md-accent" id="btn_retornar"
+												   ng-click="retornar()">
+											Retornar
+											<md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+												<span class="h4">Sair desta tela e retornar para a tela anterior</span>
+											</md-tooltip>
+										</md-button>
+									</div>
+
+									<md-button aria-label="Remover" class="md-raised md-accent" id="btn_remover"
+											   layout-align="right" ng-click="iniciarRemover()">
+										Remover
+										<md-tooltip id="tool_tip_btn_remover" md-direction="bottom">
+											<span class="h4">Sair desta tela e retornar para a tela anterior</span>
+										</md-tooltip>
+									</md-button>
+
+								</div>
+							</form>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / CONTENT -->
+	</div>
+</div>

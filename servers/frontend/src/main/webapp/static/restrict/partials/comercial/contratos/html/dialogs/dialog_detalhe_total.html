@@ -1,0 +1,23 @@
+<md-dialog aria-label="Resumo" id="dialog_titulo_popup_resumo_aditivo" style="width: 600px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_conta_Contabil" md-autofocus>Resumo</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content class="pr-16 pl-16 pt-16 pb-16" role="document">
+		<span>{{item.resumo}}</span>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row" layout-align="center center" style="margin-top: -5px;">
+		<md-button class="md-raised md-accent" id="btn_fechar" ng-click="cancel()" ng-disabled="action">
+			Fechar
+		</md-button>
+	</md-dialog-actions>
+
+</md-dialog>

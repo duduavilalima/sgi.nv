@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    mq:
+        image: docker.fasolti.com.br/rabbitmq:3-management
+        restart: unless-stopped
+        ports:
+            - "15672:15672"
+            - "25672"
+            - "4369:4369"
+            - "5671:5671"
+            - "5672:5672"
+        environment:
+            - JAVA_OPTS=-Dlog4j.configurationFile=classpath:/log4j2-syslogng.xml
+            - RABBITMQ_HIPE_COMPILE=1
+            - RABBITMQ_DEFAULT_USER=guest
+            - RABBITMQ_DEFAULT_PASS=guest
+    mqmail:
+        image: docker.fasolti.com.br/mqmail:0.3.0
+        restart: unless-stopped
+        environment:
+            - MQ_HOST=mq
+            - APP_LOGLEVEL=INFO
+            - MQ_USER=guest
+            - MQ_PASS=guest
+            - MQ_DECLARING=true
+        depends_on:
+            - mq

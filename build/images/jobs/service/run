@@ -1,0 +1,4 @@
+#!/bin/sh
+
+. "${FASOLTI_SHELL_ROOT:=/fasolti/shell}/lib/app-run.sh"
+app_run

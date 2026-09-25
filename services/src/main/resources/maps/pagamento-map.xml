@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xmlns="http://dozer.sourceforge.net"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping>
+		<class-a>
+			br.com.araujoabreu.sgi.service.contasApagar.transfer.PagamentoTO
+		</class-a>
+		<class-b>br.com.araujoabreu.sgi.contasApagar.domain.Pagamento</class-b>
+
+		<field-exclude>
+			<a>naturezaPagamento</a>
+			<b>naturezaPagamento</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>valorPagar</a>
+			<b>valorPagar</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>valorTributo</a>
+			<b>valorTributo</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>totalOutrosDescontos</a>
+			<b>totalOutrosDescontos</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>notaFiscalTO</a>
+			<b>notaFiscalTO</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>valorFreteSeguro</a>
+			<b>valorFreteSeguro</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>notaValorIRRF</a>
+			<b>notaValorIRRF</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>notaValorISS</a>
+			<b>notaValorISS</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>notaValorINSS</a>
+			<b>notaValorINSS</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>notaValorPIS</a>
+			<b>notaValorPIS</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>issUF</a>
+			<b>issUF</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>totalValorItens</a>
+			<b>totalValorItens</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>totalValorServicos</a>
+			<b>totalValorServicos</b>
+		</field-exclude>
+
+	</mapping>
+</mappings>

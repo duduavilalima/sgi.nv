@@ -1,0 +1,69 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_contato_telefone" style="width: 700px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_cliente_telefone" md-autofocus> Pessoa para contato - Telefone</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<form name="DialogContatoTelefoneForm">
+
+				<div class="p-16">
+					<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+						<md-input-container flex="50" flex-sm="100" flex-xs="100">
+							<label id="lbl_tipoV">Tipo</label>
+							<input id="input_tipo" name="tipo" ng-disabled="true" value="{{ ::object.tipo}}">
+						</md-input-container>
+
+						<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo != 'Celular'">
+							<label id="lbl_DDDV">DDD</label>
+							<input id="input_DDDV" maxlength="2" name="DDD" ng-disabled="true" type="text"
+								   value="{{ ::object.ddd }}">
+						</md-input-container>
+
+						<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo === 'Celular'">
+							<label id="lbl_OperadoraV">Operadora</label>
+							<input id="input_OperadoraV" name="operadora" ng-disabled="true" type="text"
+								   value="{{ ::object.operadora.nome }}">
+						</md-input-container>
+					</div>
+
+					<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+						<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo === 'Celular'">
+							<label id="lbl_DDDCelV">DDD</label>
+							<input id="input_DDCelDV" maxlength="2" name="DDD" ng-disabled="true" type="text"
+								   value="{{ ::object.ddd }}">
+						</md-input-container>
+
+						<md-input-container flex="50" flex-sm="100" flex-xs="100">
+							<label id="lbl_telefoneV">Telefone</label>
+							<input id="input_telefoneV" maxlength="9" name="telefone" ng-disabled="true" type="text"
+								   value="{{ ::object.numero }}">
+						</md-input-container>
+
+						<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo != 'Celular'">
+							<label id="lbl_ramalV">Ramal</label>
+							<input id="input_ramalV" name="ramal" ng-disabled="true" type="text"
+								   value="{{ ::object.ramal }}">
+						</md-input-container>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<md-divider></md-divider>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-default" id="btn_cancelar_remover" ng-click="cancel()" ng-disabled="action">
+			Fechar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

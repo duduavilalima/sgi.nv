@@ -1,0 +1,731 @@
+<div class="page-layout simple fullwidth" ng-controller="MovimentoAutorizadoDetailCtrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ ::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo_subtitulo">{{ subtitulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">Tesouraria - Dados do pagamento</div>
+						</header>
+
+						<div class="text-center"><img ng-if="object === null" src="../img/carregando.gif"
+													  style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/>
+						</div>
+
+						<div ng-show="object != null">
+							<div class="white-500-bg">
+								<form name="DialogForm" novalidate>
+
+									<div class="p-16">
+										<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_numero">Número</label>
+												<input id="input_numero" name="input_numero" ng-disabled="true"
+													   ng-model="object.numero" type="text">
+											</md-input-container>
+
+											<md-input-container flex="50" flex-sm="100" flex-xs="100">
+												<label id="lbl_credor">Credor</label>
+												<input id="input_credor" name="input_credor" ng-disabled="true"
+													   ng-if="object.tipo != 'TA' && object.tipo != 'TR'"
+													   ng-model="object.credor.nome" type="text">
+												<input id="input_credor_tributo" name="input_credor_tributo"
+													   ng-disabled="true"
+													   ng-if="object.tipo === 'TA' || object.tipo === 'TR'"
+													   ng-model="object.tributoExibicao.nome" type="text">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_data">Vencimento</label>
+												<input id="input_data" name="input_data" ng-disabled="true" type="text"
+													   value="{{ ::object.dataVencimento | date:'dd/MM/yyyy' }}">
+											</md-input-container>
+										</div>
+
+										<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+											<md-input-container flex="50" flex-sm="100" flex-xs="100"
+																ng-if="!exibirLabelTributo">
+												<label id="lbl_gerencia">Gerência</label>
+												<input id="input_gerencia" name="input_gerencia" ng-disabled="true"
+													   ng-model="object.gerencia.nome" type="text">
+											</md-input-container>
+
+											<md-input-container flex="25">
+												<label id="lbl_pagamento">Pagamento</label>
+												<input id="pagamento_input" name="pagamento_input"
+													   ng-model="object.dataPagamento" ng-required="true" tt-date-picker
+													   type="text">
+												<div ng-messages="DialogForm.pagamento_input.$error"
+													 ng-show="DialogForm.pagamento_input.$touched">
+													<div ng-message="required">Obrigatório.</div>
+												</div>
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																ng-if="!exibirLabelTributo">
+												<label id="lbl_valor_nota">Valor da nota (R$)</label>
+												<input id="input_valor_nota" name="input_valor_nota" ng-disabled="true"
+													   ng-model="object.valor" type="text" ui-number-mask="2">
+											</md-input-container>
+
+										</div>
+
+										<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+											 ng-if="object.tipo != 'NP'">
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																ng-if="!exibirLabelTributo">
+												<label id="lbl_valor_parcela">Valor da parcela (R$)</label>
+												<input id="input_valor_parcela" name="input_valor_parcela"
+													   ng-disabled="true" ng-model="object.valor" type="text"
+													   ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																ng-if="!exibirLabelTributo">
+												<label id="lbl_tributos">Tributos (-)</label>
+												<input id="input_tributos" name="input_tributos" ng-disabled="true"
+													   ng-model="object.valorTributo"
+													   type="text" ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																ng-if="!exibirLabelTributo">
+												<label id="lbl_outros">Outros desc. (-)</label>
+												<input id="input_outros" name="input_outros" ng-disabled="true"
+													   ng-model="object.totalOutrosDescontos"
+													   type="text" ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																ng-if="!exibirLabelTributo">
+												<label id="lbl_adiantamento">Adiantamento (-)</label>
+												<input id="input_adiantamento" name="input_adiantamento"
+													   ng-disabled="true" ng-model="object.valorAdiantamento"
+													   type="text" ui-number-mask="2">
+											</md-input-container>
+
+										</div>
+
+										<!--Tipo da nota === Nota Fiscal-->
+										<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+											 ng-if="object.tipo != 'NP'">
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_devolucao">Devolução (-)</label>
+												<input id="input_devolucao" maxlength="18" name="input_devolucao"
+													   ng-disabled="true" ng-model="object.valorDevolucao" type="text"
+													   ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_valor_liquido">Valor líquido (=)</label>
+												<input id="input_valor_liquido" name="input_valor_liquido"
+													   ng-disabled="true" ng-model="object.valor_liquido"
+													   type="text" ui-number-mask="2">
+											</md-input-container>
+
+											<div flex="25" flex-sm="90" flex-xs="80" layout="row">
+												<md-input-container flex="85" flex-sm="100" flex-xs="90">
+													<label id="lbl_multa">Multa (+)</label>
+													<input id="input_multa" maxlength="18" name="input_multa"
+														   ng-change="changeValorPagar()"
+														   ng-model="object.valorMulta" type="text" ui-number-mask="2">
+												</md-input-container>
+
+												<md-button aria-label="Conta contabil" class="md-icon-button md-accent"
+														   ng-click="contaContabil('Multas')"
+														   ng-disabled="object.valorMulta <= 0"
+														   style="margin-top: 11px;">
+													<md-icon md-font-icon="icon-pencil"
+															 ng-class="{'md-accent-fg': object.valorMulta > 0}"></md-icon>
+												</md-button>
+
+											</div>
+
+											<div flex="25" flex-sm="90" flex-xs="80" layout="row">
+												<md-input-container flex="85" flex-sm="100" flex-xs="90">
+													<label id="lbl_juros">Juros (+)</label>
+													<input id="input_juros" maxlength="18" name="input_juros"
+														   ng-change="changeValorPagar()"
+														   ng-model="object.valorJuros" type="text" ui-number-mask="2">
+												</md-input-container>
+												<md-button aria-label="Conta contabil" class="md-icon-button md-accent"
+														   ng-click="contaContabil('Juros')"
+														   ng-disabled="object.valorJuros <= 0"
+														   style="margin-top: 11px;">
+													<md-icon md-font-icon="icon-pencil"
+															 ng-class="{'md-accent-fg': object.valorDesconto > 0}"></md-icon>
+												</md-button>
+
+											</div>
+
+										</div>
+
+										<!--Tipo da nota === Nota Fiscal-->
+										<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+											 ng-if="object.tipo != 'NP'">
+
+											<div flex="25" flex-sm="90" flex-xs="80" layout="row"
+												 ng-if="!exibirLabelTributo">
+												<md-input-container flex="85" flex-sm="100" flex-xs="90">
+													<label id="lbl_desconto">Desconto (-)</label>
+													<input id="input_desconto" maxlength="18" name="input_desconto"
+														   ng-change="changeValorPagar()"
+														   ng-model="object.valorDesconto" type="text"
+														   ui-number-mask="2">
+												</md-input-container>
+
+												<md-button aria-label="Conta contabil" class="md-icon-button md-accent"
+														   ng-click="contaContabil('Descontos concedidos')"
+														   ng-disabled="object.valorDesconto <= 0"
+														   style="margin-top: 11px;">
+													<md-icon md-font-icon="icon-pencil"
+															 ng-class="{'md-accent-fg': object.valorDesconto > 0}"></md-icon>
+												</md-button>
+											</div>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_a_pagar">A pagar (=)</label>
+												<input id="input_a_pagar" name="input_a_pagar" ng-disabled="true"
+													   ng-model="object.valorAPagar"
+													   type="text" ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex>
+												<label id="lbl_doc_pagamento">Documento para pagamento</label>
+												<md-select id="combo_doc_pagamento" name="doc_pagamento"
+														   ng-change="changeTipoDocPag()"
+														   ng-model="object.tipoDocumentoPagamento">
+													<md-option ng-repeat="item in listTipoDoc" ng-value="item">
+														{{item}}
+													</md-option>
+												</md-select>
+											</md-input-container>
+
+										</div>
+
+										<div layout="row" layout-sm="column" layout-wrap ng-if="object.tipo != 'NP'">
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																ng-show="!tipoGuia">
+												<label id="lbl_info_boleto">Informação sobre o número do boleto</label>
+												<md-select id="combo_info_boleto" name="info_boleto"
+														   ng-change="changeInfoBoleto()"
+														   ng-disabled="disableInfoBoleto" ng-model="object.infoBoleto">
+													<md-option ng-repeat="item in listTiposBoletos" ng-value="item"
+															   value="{{ item }}">{{item}}
+													</md-option>
+												</md-select>
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																ng-show="tipoGuia">
+												<label id="lbl_info_guia">Informação sobre o número do guia</label>
+												<md-tooltip class="h4">Informação sobre o número da guia</md-tooltip>
+												<md-select id="combo_info_guia" name="info_guia"
+														   ng-change="changeInfoBoleto()" ng-model="object.infoBoleto">
+													<md-option ng-repeat="item in listTiposBoletos" ng-value="item"
+															   value="{{ item }}">{{item}}
+													</md-option>
+												</md-select>
+											</md-input-container>
+
+
+											<!-- INPUT LINHA DIGITÁVEL OU CÓDIGO BARRAS -->
+
+											<!--BOLETO-->
+											<md-input-container flex ng-disabled="disableLDCodBarr"
+																ng-if="!exibeLinhaDigitavel && tipoBoleto">
+												<label id="lbl_codigo">Código de barras</label>
+												<md-tooltip class="h4">Código de barras do boleto</md-tooltip>
+												<input id="codigobarra"
+													   mask="99999999999999999999999999999999999999999999"
+													   name="codigobarra" ng-disabled="disableLDCodBarr"
+													   ng-model="object.codigoBarras"
+													   type="text">
+											</md-input-container>
+
+											<md-input-container flex ng-disabled="disableLDCodBarr"
+																ng-if="exibeLinhaDigitavel && tipoBoleto">
+												<label id="lbl_linha_digitavel">Linha digitável</label>
+												<md-tooltip class="h4">Linha digitável deste boleto (não informe o
+													número do código de barras)
+												</md-tooltip>
+												<input id="input_linhadigitavel"
+													   mask="99999.99999.99999.999999.99999.999999.9.99999999999999"
+													   name="input_linhadigitavel" ng-disabled="disableLDCodBarr"
+													   ng-model="object.linhaDigitavel"
+													   type="text">
+											</md-input-container>
+
+											<!--GUIA-->
+											<md-input-container flex ng-disabled="disableLDCodBarr"
+																ng-if="!exibeLinhaDigitavel && tipoGuia">
+												<label id="lbl_codigo_guia">Código de barras</label>
+												<md-tooltip class="h4">Código de barras do boleto</md-tooltip>
+												<input id="codigobarra_guia"
+													   mask="99999999999999999999999999999999999999999999"
+													   name="codigobarra" ng-disabled="disableLDCodBarr"
+													   ng-model="object.codigoBarras"
+													   type="text">
+											</md-input-container>
+
+											<md-input-container flex ng-disabled="disableLDCodBarr"
+																ng-if="exibeLinhaDigitavel && tipoGuia">
+												<label id="lbl_linha_digitavel_guia">Linha digitável</label>
+												<md-tooltip class="h4">Linha digitável desta guia</md-tooltip>
+												<input id="input_linhadigitavel_guia"
+													   mask="99999999999-9 99999999999-9 99999999999-9 99999999999-9"
+													   name="input_linhadigitavel" ng-disabled="disableLDCodBarr"
+													   ng-model="object.linhaDigitavel"
+													   type="text">
+											</md-input-container>
+
+											<!--CONCESSIONARIA-->
+											<md-input-container flex ng-disabled="disableLDCodBarr"
+																ng-if="!exibeLinhaDigitavel && tipoConc">
+												<label id="lbl_codigo_conc">Código de barras</label>
+												<md-tooltip class="h4">Código de barras do boleto</md-tooltip>
+												<input id="codigobarra_conc"
+													   mask="99999999999999999999999999999999999999999999"
+													   name="codigobarra" ng-disabled="disableLDCodBarr"
+													   ng-model="object.codigoBarras"
+													   type="text">
+											</md-input-container>
+
+											<md-input-container flex ng-disabled="disableLDCodBarr"
+																ng-if="exibeLinhaDigitavel && tipoConc">
+												<label id="lbl_linha_digitavel_conc">Linha digitável</label>
+												<md-tooltip class="h4">Linha digitável deste boleto</md-tooltip>
+												<input id="input_linhadigitavel_conc"
+													   mask="99999999999-9 99999999999-9 99999999999-9 99999999999-9"
+													   name="input_linhadigitavel" ng-disabled="disableLDCodBarr"
+													   ng-model="object.linhaDigitavel"
+													   type="text">
+											</md-input-container>
+										</div>
+
+										<!--Tipo da nota === Nota de Pagamento-->
+										<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+											 ng-if="object.tipo === 'NP'">
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_valor_parcela_np">Valor da parcela (R$)</label>
+												<input id="input_valor_parcela_np" name="input_valor_parcela"
+													   ng-disabled="true" ng-model="object.valor" type="text"
+													   ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_tributos_outros">Tributos / Outros (-)</label>
+												<input id="input_tributos_outros" name="input_tributos_outros"
+													   ng-disabled="true" ng-model="object.tributoMaisOutrosDescNP"
+													   type="text" ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_devolucao_np">Devolução (-)</label>
+												<input id="input_devolucao_np" name="input_devolucao" ng-disabled="true"
+													   ng-model="object.valorDevolucao" type="text" ui-number-mask="2">
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_valor_liquido_np">Valor líquido (=)</label>
+												<input id="input_valor_liquido_np" name="input_valor_liquido"
+													   ng-disabled="true" ng-model="object.valor_liquido" type="text"
+													   ui-number-mask="2">
+											</md-input-container>
+
+										</div>
+
+										<div layout="row" layout-sm="column" layout-wrap layout-xs="column"
+											 ng-if="object.tipo === 'NP'">
+											<div flex="25" flex-sm="90" flex-xs="80" layout="row">
+												<md-input-container flex="85" flex-sm="100" flex-xs="90">
+													<label id="lbl_multa_np">Multa (+)</label>
+													<input id="input_multa_np" name="input_multa"
+														   ng-change="changeValorPagar()" ng-model="object.valorMulta"
+														   type="text" ui-number-mask="2">
+												</md-input-container>
+
+												<md-button aria-label="Conta contabil" class="md-icon-button md-accent"
+														   ng-click="contaContabil('Multas')"
+														   ng-disabled="object.valorMulta <= 0"
+														   style="margin-top: 11px;">
+													<md-icon md-font-icon="icon-pencil"
+															 ng-class="{'md-success-fg': object.valorMulta > 0}"></md-icon>
+												</md-button>
+
+											</div>
+
+											<div flex="25" flex-sm="90" flex-xs="80" layout="row">
+												<md-input-container flex="85" flex-sm="100" flex-xs="90">
+													<label id="lbl_juros_np">Juros (+)</label>
+													<input id="input_juros_np" name="input_juros"
+														   ng-change="changeValorPagar()" ng-model="object.valorJuros"
+														   type="text" ui-number-mask="2">
+												</md-input-container>
+												<md-button aria-label="Conta contabil" class="md-icon-button md-accent"
+														   ng-click="contaContabil('Juros')"
+														   ng-disabled="object.valorJuros <= 0"
+														   style="margin-top: 11px;">
+													<md-icon md-font-icon="icon-pencil"
+															 ng-class="{'md-success-fg': object.valorJuros > 0}"></md-icon>
+												</md-button>
+
+											</div>
+
+											<div flex="25" flex-sm="90" flex-xs="80" layout="row">
+												<md-input-container flex="85" flex-sm="100" flex-xs="90">
+													<label id="lbl_desconto_np">Desconto (-)</label>
+													<input id="input_desconto_np" name="input_desconto"
+														   ng-change="changeValorPagar()"
+														   ng-model="object.valorDesconto"
+														   type="text" ui-number-mask="2">
+												</md-input-container>
+
+												<md-button aria-label="Conta contabil" class="md-icon-button md-accent"
+														   ng-click="contaContabil('Descontos concedidos')"
+														   ng-disabled="object.valorDesconto <= 0"
+														   style="margin-top: 11px;">
+													<md-icon md-font-icon="icon-pencil"
+															 ng-class="{'md-success-fg': object.valorDesconto > 0}"></md-icon>
+												</md-button>
+
+											</div>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_a_pagar_np">A pagar (=)</label>
+												<input id="input_a_pagar_np" name="input_a_pagar" ng-disabled="true"
+													   ng-model="object.valorAPagar" type="text" ui-number-mask="2">
+											</md-input-container>
+
+										</div>
+
+										<div layout="row" layout-sm="column" layout-wrap ng-if="object.tipo === 'NP'">
+											<md-input-container flex="25" flex-sm="100" flex-xs="100">
+												<label id="lbl_doc_pagamento_np">Documento para pagamento</label>
+												<md-select id="combo_doc_pagamento" name="doc_pagamento"
+														   ng-change="changeTipoDocPag()"
+														   ng-model="object.tipoDocumentoPagamento">
+													<md-option ng-repeat="item in listTipoDoc" ng-value="item">
+														{{item}}
+													</md-option>
+												</md-select>
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																ng-show="!tipoGuia">
+												<label id="lbl_info_boleto_np">Informação sobre o número do
+													boleto</label>
+												<md-select id="combo_info_boleto" name="info_boleto"
+														   ng-change="changeInfoBoleto()"
+														   ng-disabled="disableInfoBoleto" ng-model="object.infoBoleto">
+													<md-option ng-repeat="item in listTiposBoletos" ng-value="item"
+															   value="{{ item }}">{{item}}
+													</md-option>
+												</md-select>
+											</md-input-container>
+
+											<md-input-container flex="25" flex-sm="100" flex-xs="100"
+																ng-show="tipoGuia">
+												<label id="lbl_info_guia_np">Informação sobre o número do guia</label>
+												<md-select id="combo_info_guia" name="info_guia"
+														   ng-change="changeInfoBoleto()" ng-model="object.infoBoleto">
+													<md-option ng-repeat="item in listTiposBoletos" ng-value="item"
+															   value="{{ item }}">{{item}}
+													</md-option>
+												</md-select>
+											</md-input-container>
+
+											<!-- INPUT LINHA DIGITÁVEL OU CÓDIGO BARRAS -->
+
+											<!--BOLETO-->
+											<md-input-container flex="50" flex-sm="100" flex-xs="100"
+																ng-disabled="disableLDCodBarr"
+																ng-if="!exibeLinhaDigitavel && tipoBoleto">
+												<label id="lbl_codigo_np">Código de barras</label>
+												<md-tooltip class="h4">Código de barras do boleto</md-tooltip>
+												<input id="codigobarra_np"
+													   mask="99999999999999999999999999999999999999999999"
+													   name="codigobarra" ng-disabled="disableLDCodBarr"
+													   ng-model="object.codigoBarras"
+													   type="text">
+											</md-input-container>
+
+											<md-input-container flex="50" flex-sm="100" flex-xs="100"
+																ng-disabled="disableLDCodBarr"
+																ng-if="exibeLinhaDigitavel && tipoBoleto">
+												<label id="lbl_linha_digitavel_np">Linha digitável</label>
+												<md-tooltip class="h4">Linha digitável deste boleto (não informe o
+													número do código de barras)
+												</md-tooltip>
+												<input id="input_linhadigitavel_np"
+													   mask="99999.99999.99999.999999.99999.999999.9.99999999999999"
+													   name="input_linhadigitavel" ng-disabled="disableLDCodBarr"
+													   ng-model="object.linhaDigitavel"
+													   type="text">
+											</md-input-container>
+
+											<!--GUIA-->
+											<md-input-container flex="50" flex-sm="100" flex-xs="100"
+																ng-disabled="disableLDCodBarr"
+																ng-if="!exibeLinhaDigitavel && tipoGuia">
+												<label id="lbl_codigo_guia_np">Código de barras</label>
+												<md-tooltip class="h4">Código de barras do boleto</md-tooltip>
+												<input id="codigobarra_guia_np"
+													   mask="99999999999999999999999999999999999999999999"
+													   name="codigobarra" ng-disabled="disableLDCodBarr"
+													   ng-model="object.codigoBarras"
+													   type="text">
+											</md-input-container>
+
+											<md-input-container flex="50" flex-sm="100" flex-xs="100"
+																ng-disabled="disableLDCodBarr"
+																ng-if="exibeLinhaDigitavel && tipoGuia">
+												<label id="lbl_linha_digitavel_guia_np">Linha digitável</label>
+												<md-tooltip class="h4">Linha digitável desta guia</md-tooltip>
+												<input id="input_linhadigitavel_guia_np"
+													   mask="99999999999-9 99999999999-9 99999999999-9 99999999999-9"
+													   name="input_linhadigitavel" ng-disabled="disableLDCodBarr"
+													   ng-model="object.linhaDigitavel"
+													   type="text">
+											</md-input-container>
+
+											<!--CONCESSIONARIA-->
+											<md-input-container flex="50" flex-sm="100" flex-xs="100"
+																ng-disabled="disableLDCodBarr"
+																ng-if="!exibeLinhaDigitavel && tipoConc">
+												<label id="lbl_codigo_conc_np">Código de barras</label>
+												<md-tooltip class="h4">Código de barras do boleto</md-tooltip>
+												<input id="codigobarra_conc_np"
+													   mask="99999999999999999999999999999999999999999999"
+													   name="codigobarra" ng-disabled="disableLDCodBarr"
+													   ng-model="object.codigoBarras"
+													   type="text">
+											</md-input-container>
+
+											<md-input-container flex="50" flex-sm="100" flex-xs="100"
+																ng-disabled="disableLDCodBarr"
+																ng-if="exibeLinhaDigitavel && tipoConc">
+												<label id="lbl_linha_digitavel_conc_np">Linha digitável</label>
+												<md-tooltip class="h4">Linha digitável deste boleto</md-tooltip>
+												<input id="input_linhadigitavel_conc_np"
+													   mask="99999999999-9 99999999999-9 99999999999-9 99999999999-9"
+													   name="input_linhadigitavel" ng-disabled="disableLDCodBarr"
+													   ng-model="object.linhaDigitavel"
+													   type="text">
+											</md-input-container>
+										</div>
+
+									</div>
+
+
+									<div>
+										<md-content>
+											<md-tabs md-border-bottom md-dynamic-height ng-if="!exibirLabelTributo">
+												<md-tab label="Bancos">
+													<md-content ng-if="!hideBancos">
+														<div>
+															<md-table-container>
+																<table
+																	class="simple row-border hover text-center font-size-12"
+																	id="table-list2" ms-responsive-table width="100%">
+																	<tr class="text-center"
+																		ng-show="dadosbancarioList === null && screenMode !== 'NEW'">
+																		<td colspan="10">
+																			<div layout="row"
+																				 layout-align="space-around"
+																				 layout-sm="column">
+																				<!--<md-progress-circular id="toolbar-progress" class="md-accent" md-mode="indeterminate" md-diameter="30"></md-progress-circular>-->
+																				<img src="../img/carregando.gif"
+																					 style="height: 30px;width: 30px;"/>
+																			</div>
+																		</td>
+																	</tr>
+																	<thead class="cabecalho-borda-cinza"
+																		   ng-show="dadosbancarioList !== null">
+																	<tr>
+																		<th class="titulo_colunas_rb" width="10%">
+																			<div class="table-header text-center"><span
+																				class="column-title">Principal</span>
+																			</div>
+																		</th>
+																		<th class="titulo_colunas_rb" width="20%">
+																			<div class="table-header text-center"><span
+																				class="column-title">Banco</span></div>
+																		</th>
+																		<th class="titulo_colunas_rb" width="10%">
+																			<div class="table-header text-center"><span
+																				class="column-title">Agência</span>
+																			</div>
+																		</th>
+																		<th class="titulo_colunas_rb" width="5%">
+																			<div class="table-header text-center"><span
+																				class="column-title">Dígito</span></div>
+																		</th>
+																		<th class="titulo_colunas_rb" width="15%">
+																			<div class="table-header text-center"><span
+																				class="column-title">Conta</span></div>
+																		</th>
+																		<th class="titulo_colunas_rb" width="5%">
+																			<div class="table-header text-center"><span
+																				class="column-title">Dígito</span></div>
+																		</th>
+																		<th class="titulo_colunas_rb" width="10%">
+																			<div class="table-header text-center"><span
+																				class="column-title">Tipo de conta</span>
+																			</div>
+																		</th>
+																		<th class="titulo_colunas_rb" width="10%">
+																			<div class="table-header text-center"><span
+																				class="column-title">Homologação</span>
+																			</div>
+																		</th>
+																		<th class="titulo_colunas_rb" style="padding-right: 0px;"
+																			width="10%">
+																			<div class="table-header text-center"><span
+																				class="column-title">Seleção</span>
+																			</div>
+																		</th>
+																	</tr>
+																	</thead>
+
+																	<tbody ng-show="dadosbancarioList !== null">
+																	<tr class="linha-borda-cinza"
+																		ng-repeat="item in dadosbancarioList | orderBy: 'dataHomologacao' : true">
+																		<td class="text-center">{{:: item.principal ?
+																			'Sim' : ''}}</a></td>
+																		<td class="text-left">{{:: item.banco.nome }}
+																		</td>
+																		<td class="text-center">{{:: item.agencia}}</td>
+																		<td class="text-center">{{::
+																			item.digitoAgencia}}
+																		</td>
+																		<td class="text-center">{{:: item.conta}}</td>
+																		<td class="text-center">{{:: item.digito}}</td>
+																		<td class="text-center">{{:: item.tipoConta}}
+																		</td>
+																		<td class="text-center" ng-if="item.homologado">
+																			{{ item.dataHomologacao | date:'dd/MM/yyyy
+																			HH:mm'}}
+																		</td>
+																		<td class="text-center" ng-if="!item.homologado"
+																			style="padding: 0px 8px; margin: 0px;">
+																			<md-button
+																				class="md-icon-button"
+																				id="btn_editar_tributo_{{$index}}"
+																				name="btn_editar_tributo_{{$index}}"
+																				ng-click="homologarDadosBancarios(item)"
+																				ng-disabled="!habilitarHomologBanco"
+																				ng-if="item.situacao !== 'Inativo'"
+																				style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+																				<md-icon
+																					md-font-icon="icon-check-circle"
+																					style="color: green !important;"></md-icon>
+																				<md-tooltip class="h4"
+																							ng-if="item.situacao !== 'Inativo'">
+																					Homologar esta linha de dados
+																					bancários
+																				</md-tooltip>
+																			</md-button>
+																		</td>
+																		<td class="text-center"
+																			style="padding: 0px 8px;">
+																			<md-checkbox aria-label="Seleção"
+																						 id="selectBanco"
+																						 ng-change="changeSelecaoBanco(item)"
+																						 ng-if="item.situacao !== 'Inativo'"
+																						 ng-model="item.selecao"
+																						 style="margin-bottom: 0px; margin-left: 10px;">
+																			</md-checkbox>
+
+																			<div ng-if="item.situacao === 'Inativo'"
+																				 style="font-weight: bold">
+																				{{:: item.situacao}}
+																				<md-tooltip class="h3"
+																							md-direction="bottom">
+																					{{item.responsavelInativacao.nome}}
+																					| {{item.dataInativacao |
+																					date:'dd/MM/yyyy HH:mm'}}
+																				</md-tooltip>
+																			</div>
+																		</td>
+																	</tr>
+																	</tbody>
+
+																</table>
+															</md-table-container>
+														</div>
+													</md-content>
+
+
+													<div id="idMensagemBancos" ng-if="hideBancos">
+														<md-whiteframe class="md-whiteframe-1dp" flex="100" layout
+																	   layout-align="center center">
+															<span class="h4 p-32">Não existem <b>dados bancários</b> associados a este credor.</span>
+														</md-whiteframe>
+													</div>
+
+
+												</md-tab>
+											</md-tabs>
+											<md-divider></md-divider>
+											<div class="navigation padding-8" flex layout="row"
+												 layout-align="start start">
+												<md-button class="md-raised md-accent estilo_botoes"
+														   id="btn_salvar_nregistro" ng-click="salvar()"
+														   ng-disabled="action">
+													Salvar
+													<img ng-show="action" src="../img/gray_carregando.gif"
+														 style="height: 20px;width: 20px;margin-top: 8px;"/>
+													<md-tooltip id="tool_tip_btn_salvar" md-direction="bottom">
+														<span
+															class="h4">Salvar as alterações realizadas neste pagamento</span>
+													</md-tooltip>
+												</md-button>
+												<md-button class="md-raised md-primary estilo_botoes"
+														   id="btn_cancelar_nregistro" ng-click="cancelar()"
+														   ng-disabled="action">
+													Cancelar
+													<md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+														<span class="h4">Sair deste pagamento, sem gravar as modificações realizadas</span>
+													</md-tooltip>
+												</md-button>
+											</div>
+										</md-content>
+									</div>
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / CONTENT -->
+	</div>
+</div>

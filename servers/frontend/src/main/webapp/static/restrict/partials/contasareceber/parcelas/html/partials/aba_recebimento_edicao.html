@@ -1,0 +1,176 @@
+<div layout layout-sm="column" layout-wrap style="margin-top: 0px;">
+
+	<md-input-container flex="25" flex-sm="100">
+		<label id="lbl_valor_bruto">Bruto</label>
+		<input id="input_valor_bruto" maxlength="18" name="input_valor_bruto" ng-disabled="true"
+			   ng-model="object.valorBruto" type="text" ui-number-mask="2">
+	</md-input-container>
+
+
+	<md-input-container flex="25" flex-sm="100">
+		<label id="lbl_tributos">Tributos (-)</label>
+		<input id="input_tributos" maxlength="18" name="input_tributos" ng-disabled="true" ng-model="valorTributos"
+			   type="text" ui-number-mask="2">
+	</md-input-container>
+
+	<md-input-container flex="25" flex-sm="100">
+		<label id="lbl_subtotal">Subtotal</label>
+		<input id="input_subtotal" maxlength="18" name="input_subtotal" ng-disabled="true" ng-model="subtotal"
+			   type="text" ui-number-mask="2">
+		<md-tooltip id="tool_tip_input_subtotal" md-direction="bottom">
+			<span class="h4">Valor bruto menos tributos, exceto PIS/COFINS/CSLL</span>
+		</md-tooltip>
+	</md-input-container>
+
+
+	<md-input-container flex="25" flex-sm="100">
+		<label id="lbl_retencao_contratual_val">Retenção contratual (-)</label>
+		<input id="input_retencao_contratual_val" maxlength="18" name="input_retencao_contratual_val"
+			   ng-model="object.valorRetencaoRetida" type="text" ui-number-mask="2" ng-blur="zerarCampoDesconto()">
+	</md-input-container>
+
+</div>
+
+<div layout layout-sm="column" layout-wrap>
+
+	<md-input-container flex="25" flex-sm="100">
+		<label id="lbl_valor_desconto">Desconto (-)</label>
+		<input id="input_valor_desconto" maxlength="18" name="input_valor_desconto" ng-disabled="true"
+			   ng-model="object.valorDesconto" type="text" ui-number-mask="2">
+	</md-input-container>
+
+	<md-input-container flex="25" flex-sm="100">
+		<label id="lbl_devolucao">Devolução (+)</label>
+		<input id="input_devolucao" maxlength="18" name="input_devolucao" ng-disabled="true"
+			   ng-model="object.valorDevolucao" type="text" ui-number-mask="2">
+	</md-input-container>
+
+	<md-input-container flex="25" flex-sm="100">
+		<label id="lbl_valor_juros">Juros (+)</label>
+		<input id="input_valor_juros" maxlength="18" name="input_valor_juros" ng-model="object.valorJuros" type="text"
+			   ui-number-mask="2" ng-blur="zerarCampoJuros()">
+	</md-input-container>
+
+	<md-input-container flex="25" flex-sm="100">
+		<label id="lbl_valor_liquido">Líquido (=)</label>
+		<input id="input_valor_liquido" maxlength="18" name="input_valor_liquido" ng-disabled="true"
+			   ng-model="valorLiquido"
+			   style="font-weight: bold; width: 90%; {{valorLiquido < 0 ? 'color: red !important' : ''}}"
+			   type="text" ui-number-mask="2" ui-negative-number>
+	</md-input-container>
+
+</div>
+
+<div layout layout-sm="column" layout-wrap>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_emissao">Emissão</label>
+		<input id="input_emissao" ng-disabled="true" ng-model="object.notaSaida.dataEmissao" tt-date-picker type="text">
+	</md-input-container>
+
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_vencimento">Vencimento</label>
+		<input id="input_vencimento" min-date="object.notaSaida.dataEmissao" ng-disabled="true"
+			   ng-model="object.dataVencimento" tt-date-picker type="text">
+	</md-input-container>
+
+	<md-input-container flex>
+		<label id="lbl_motivo_alteracao_vencimento">Motivo de alteração da data de vencimento</label>
+		<input id="input_motivo_alteracao_vencimento" maxlength="200" name="descricao_item"
+			   ng-disabled="true" ng-maxlength="200" ng-model="object.motivoDataVencimento" type="text">
+	</md-input-container>
+
+</div>
+
+<div layout layout-sm="column" layout-wrap>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_agendamento">Agendamento</label>
+		<input id="input_agendamento" ng-disabled="true" ng-model="object.dataAgendamento" tt-date-picker type="text">
+	</md-input-container>
+
+	<md-input-container flex="50">
+		<label id="lbl_motivo_agendamento">Observações</label>
+		<input id="input_motivo_agendamento" name="input_motivo_agendamento" ng-disabled="true"
+			   ng-maxlength="2000" ng-model="object.motivoDataAgendamento" type="text">
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_pagamento">Pagamento</label>
+		<input id="input_pagamento" min-date="object.notaSaida.dataEmissao" name="input_pagamento"
+			   ng-model="object.dataPagamento" ng-required="true" tt-date-picker type="text">
+		<div ng-messages="form_etapa.input_pagamento.$error" role="alert">
+			<div id="msg_req_pagamento" ng-message="required">Pagamento é um campo de preenchimento obrigatório.</div>
+		</div>
+	</md-input-container>
+
+</div>
+
+<div layout layout-sm="column" layout-wrap>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_contabilizacao">Contabilização</label>
+		<input id="input_contabilizacao" name="input_contabilizacao" ng-model="object.dataContabilizacao"
+			   ng-required="true" tt-date-picker type="text">
+		<div ng-messages="form_etapa.dataContabilizacao.$error" role="alert">
+			<div id="msg_req_contabilizacao" ng-message="required">Contabilização é um campo de preenchimento
+				obrigatório.
+			</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25">
+		<label id="lbl_banco">Banco</label>
+		<md-select id="combo_banco" name="combo_banco" ng-change="$emit('changeBanco')"
+				   ng-disabled="bancoList.length == 0" ng-model="object.bancoSelecionado"
+				   ng-model-options="{trackBy: '$value.codigo'}" ng-required="true">
+			<md-option ng-repeat="cc in bancoList | orderBy: 'banco.nome' | unique:'banco.nome'" ng-value="cc.banco">
+				{{cc.banco.nome}}
+			</md-option>
+		</md-select>
+		<div ng-messages="form_parcela.combo_banco.$error" role="alert">
+			<div id="msg_req_banco" ng-message="required">Obrigatório.</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex="25">
+		<label id="lbl_agencia_conta">Agência / Conta</label>
+		<md-select id="combo_agencia_conta" name="agencia_conta" ng-change="$emit('changeAgenciaRecebimento')"
+				   ng-disabled="agenciaContaList == null || agenciaContaList.length == 0"
+				   ng-model="object.contaCorrente"
+				   ng-model-options="{trackBy: '$value.codigo'}" ng-required="true">
+			<md-option ng-repeat="agenciaConta in agenciaContaList | orderBy: 'agencia' | orderBy: 'conta'"
+					   ng-value="agenciaConta" value="{{ agenciaConta }}">
+				{{ montarLabelAgenciaConta(agenciaConta) }}
+			</md-option>
+		</md-select>
+		<div ng-messages="wizardStep1.agencia_conta.$error" role="alert">
+			<div id="msg_req_agencia" ng-message="required">Obrigatório.</div>
+		</div>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25" ng-if="!liberarEdicaoTipoDocumento()">
+		<label id="lbl_doc_pagamento">Tipo de documento para o pagamento do cliente</label>
+		<input id="input_doc_pagamento" name="input_doc_pagamento"
+			   ng-disabled="true" ng-model="object.tipoDocumento" type="text">
+		<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+			<span class="h4">Tipo de documento para o pagamento do cliente</span>
+		</md-tooltip>
+	</md-input-container>
+
+	<md-input-container flex flex-gt-md="25" ng-if="liberarEdicaoTipoDocumento()">
+		<label id="lbl_doc_pagamento_combo">Tipo de documento para o pagamento do cliente</label>
+		<md-select id="combo_doc_pagamento" name="doc_pagamento" ng-disabled="object.contaCorrente === null"
+				   ng-model="object.tipoDocumento" ng-required="true">
+			<md-option ng-repeat="docPagamento in enumTipoDocumentoPagamento" ng-value="docPagamento"
+					   value="{{ docPagamento }}">
+				{{ docPagamento }}
+			</md-option>
+		</md-select>
+		<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+			<span class="h4">Tipo de documento para o pagamento do cliente</span>
+		</md-tooltip>
+	</md-input-container>
+
+</div>

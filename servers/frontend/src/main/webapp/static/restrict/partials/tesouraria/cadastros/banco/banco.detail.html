@@ -1,0 +1,210 @@
+<div class="page-layout simple fullwidth" ng-controller="BancoDetailCtrl">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{ titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent"
+					  id="titulo_subtitulo">{{ screenMode === 'VIEW' ? 'Exibição' : (screenMode === 'EDIT' ? 'Edição' : 'Novo') }}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+		<!-- CONTENT -->
+		<div class="content" flex>
+			<div layout="row" layout-wrap>
+				<div class="about" flex="100" layout="column">
+					<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+						<header class="md-accent-bg">
+							<div class="title" id="title_panel">{{ titulo }} - Dados Gerais</div>
+						</header>
+
+						<div class="text-center"><img ng-show="object === null"
+													  src="../img/carregando.gif"
+													  style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/></div>
+
+						<div ng-show="object !== null">
+							<div class="white-500-bg">
+								<form name="ContaForm" novalidate>
+									<div flex layout="column">
+										<div class="p-16" flex layout="column">
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_codigo">Código</label>
+													<input id="input_codigo" name="codigo"
+														   ng-disabled="true"
+														   ng-if="screenMode === 'VIEW' || screenMode === 'EDIT'" type="text"
+														   value="{{ object.codigo < 10 ? '00' + object.codigo : (object.codigo > 9 && object.codigo < 100 ? '0' + object.codigo : object.codigo) }}">
+													<input id="input_codigo_edit" maxlength="20" name="codigo"
+														   ng-disabled="screenMode === 'EDIT'"
+														   ng-if="screenMode === 'NEW'" ng-model="object.codigo"
+														   ng-required="screenMode !== 'VIEW'"
+														   type="text" ui-hide-group-sep ui-number-mask="0">
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="50">
+													<label id="lbl_nome">Nome</label>
+													<input id="input_nome" maxlength="50" md-maxlength="50"
+														   name="nome" ng-disabled="screenMode === 'VIEW'" ng-maxlength="50"
+														   ng-model="object.nome"
+														   ng-required="screenMode !== 'VIEW'"
+														   type="text">
+												</md-input-container>
+
+												<md-input-container flex flex-gt-md="25">
+													<label id="lbl_situacao">Situação</label>
+													<md-select id="combo_situacao" name="situacao"
+															   ng-disabled="screenMode === 'VIEW'"
+															   ng-if="screenMode !== 'VIEW'"
+															   ng-model="object.situacao"
+															   ng-required="screenMode !== 'VIEW'">
+														<md-option ng-value="'Inativo'" value="Inativo">Inativo
+														</md-option>
+														<md-option ng-value="'Ativo'" value="Ativo">Ativo</md-option>
+													</md-select>
+													<input id="combo_situacao_view" name="descricao"
+														   ng-disabled="screenMode === 'VIEW'"
+														   ng-if="screenMode === 'VIEW'"
+														   ng-model="object.situacao" ng-required="screenMode !== 'VIEW'"
+														   type="text">
+												</md-input-container>
+
+											</div>
+
+											<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+												<md-input-container flex flex-gt-md="50">
+													<label id="lbl_descricao">Descrição</label>
+													<input id="input_descricao" maxlength="50"
+														   md-maxlength="50"
+														   name="descricao" ng-disabled="screenMode === 'VIEW'" ng-maxlength="50"
+														   ng-model="object.descricao" ng-required="screenMode !== 'VIEW'"
+														   type="text">
+												</md-input-container>
+											</div>
+
+										</div>
+
+										<md-tabs md-border-bottom md-dynamic-height ng-if="screenMode === 'VIEW'">
+
+											<md-tab label="Controles">
+												<md-content class="md-padding">
+													<div flex layout="row" layout-sm="row" layout-xs="column">
+														<md-input-container flex="70" flex-xs="100">
+															<label>Cadastramento</label>
+															<input id="cadastramento" name="cadastramento" ng-disabled="true"
+																   type="text"
+																   value="{{ object.criador }}"></input>
+														</md-input-container>
+
+														<md-input-container flex="30" flex-xs="100">
+															<label>Data/hora</label>
+															<input id="data_hora" name="data_hora" ng-disabled="true"
+																   type="text"
+																   value="{{ object.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss' }}"></input>
+														</md-input-container>
+													</div>
+
+													<div flex layout="row" layout-sm="row" layout-xs="column">
+														<md-input-container flex="70" flex-xs="100">
+															<label>Última alteração</label>
+															<input id="alteracao" name="alteracao" ng-disabled="true"
+																   type="text"
+																   value="{{ object.atualizador }}"></input>
+														</md-input-container>
+
+														<md-input-container flex="30" flex-xs="100">
+															<label>Data/hora</label>
+															<input id="data_hora2" name="data_hora2" ng-disabled="true"
+																   type="text"
+																   value="{{ object.dataAtualizacao | date: 'dd/MM/yyyy HH:mm:ss'}}"></input>
+														</md-input-container>
+													</div>
+												</md-content>
+											</md-tab>
+										</md-tabs>
+
+										<div class="p-16" flex layout="row" layout-align="start start"
+											 ng-if="screenMode !== 'VIEW'">
+											<span class="red-fg">*&nbsp;</span> Campos obrigatórios
+										</div>
+
+									</div>
+
+
+									<md-divider></md-divider>
+
+									<div class="p-8" flex layout="row" layout-align="start start"
+										 ng-if="screenMode !== 'VIEW' && object !== null">
+										<md-button class="md-raised md-accent" id="btn_salvar"
+												   ng-click="salvar()" ng-disabled="ContaForm.$invalid || action">
+											Salvar
+											<img ng-show="action"
+												 src="../img/gray_carregando.gif" style="height: 20px;width: 20px;margin-top: 8px;"/>
+											<md-tooltip class="h4">Salvar as alterações realizadas neste banco
+											</md-tooltip>
+										</md-button>
+
+										<md-button class="md-raised md-accent" id="btn_cancelar"
+												   ng-click="cancelar()" ng-disabled="object == null || action">
+											Cancelar
+											<md-tooltip class="h4">Sair deste banco, sem gravar as modificações
+												realizadas
+											</md-tooltip>
+										</md-button>
+									</div>
+
+									<div class="p-8" flex layout="row" ng-if="screenMode === 'VIEW' && object !== null">
+										<div flex layout="row" layout-align="start start">
+											<md-button aria-label="Editar" class="md-raised md-accent"
+													   id="btn_editar" ng-click="editar()"
+													   ng-disabled="object == null || action">
+												Editar
+												<md-tooltip class="h4">Editar os dados deste banco</md-tooltip>
+											</md-button>
+
+											<md-button aria-label="Retornar" class="md-raised md-accent"
+													   id="btn_retornar" ng-click="cancelar()"
+													   ng-disabled="object == null || action">
+												Retornar
+												<md-tooltip class="h4">Sair desta tela e retornar para a tela anterior
+												</md-tooltip>
+											</md-button>
+
+										</div>
+
+										<div flex layout="row" layout-align="end center">
+
+											<md-button aria-label="Remover" class="md-raised md-accent"
+													   id="btn_remover" ng-click="remover($event)"
+													   ng-disabled="object == null || action">
+												Remover
+												<md-tooltip class="h4">Remover este banco (esta operação não
+													poderá ser desfeita)
+												</md-tooltip>
+											</md-button>
+
+										</div>
+									</div>
+
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / CONTENT -->
+	</div>
+</div>

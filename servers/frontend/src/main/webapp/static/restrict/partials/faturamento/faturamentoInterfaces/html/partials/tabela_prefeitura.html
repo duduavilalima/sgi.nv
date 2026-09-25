@@ -1,0 +1,128 @@
+<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding style="margin-top: -50px;">
+    <!-- CONTENT -->
+    <div class="content" flex>
+        <div layout="row" layout-wrap>
+            <div class="p-16" flex="100" layout="column">
+                <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+                    <header class="md-accent-bg">
+                        <div class="title" id="title_panel_lot_nfs" ng-if="screenMode !== 'NEW'">
+                            {{object.tipoLoteInterface}} - Relação de notas fiscais do lote LC/{{::object.codigo}}
+                        </div>
+                        <div class="title" id="title_panel_lot_nfs_new" ng-if="screenMode === 'NEW'">
+                            {{object.tipoLoteInterface}} - Relação de notas fiscais do lote
+                        </div>
+                    </header>
+                    <div class="text-center"><img ng-show="action" src="../img/carregando.gif" style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px" />
+                            </div>
+                        <div ng-show="!action">
+                            <table class="simple row-border hover text-center font-size-12" id="table-list2" ms-responsive-table width="100%">
+                                <thead class="cabecalho-borda-cinza" ng-show="listaNotasFiscais != null && listaNotasFiscais.length > 0">
+                                    <tr>
+                                        <th class="titulo_colunas_rb" width="10%">
+                                            <div class="table-header text-center"><span class="column-title">Nota fiscal</span></div>
+                                        </th>
+                                        <th class="titulo_colunas_rb" width="45%">
+                                            <div class="table-header text-center"><span class="column-title">Centro de lucro</span>
+                                            </div>
+                                        </th>
+                                        <th class="titulo_colunas_rb" width="20%">
+                                            <div class="table-header text-center"><span class="column-title">CNPJ/CPF</span>
+                                            </div>
+                                        </th>
+                                        <th class="titulo_colunas_rb" width="15%">
+                                            <div class="table-header text-center"><span class="column-title">Valor</span></div>
+                                        </th>
+                                        <th class="titulo_colunas_rb" style="padding-right: 0px;" width="10%" ng-show="object.tipoLoteInterface !== 'NF/Material'">
+                                            <div class="table-header text-center"><span class="column-title">RPS</span>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center" ng-show="listaNotasFiscais != null && listaNotasFiscais.length == 0" style="background-color: white">
+                                        <td colspan="11">
+                                            <b ng-if="object.situacao !== 'Arquivo gerado' && screenMode === 'VIEW'">Este
+												lote encontra-se em processamento. A relação de notas fiscais ainda não
+												encontra-se disponível.</b>
+                                            <b ng-if="screenMode !== 'NEW' && screenMode !== 'VIEW'">Não há notas
+												fiscais relacionadas.</b>
+                                            <b ng-if="screenMode === 'NEW'">Não existem notas fiscais a serem associadas
+												a um novo lote do tipo "{{object.tipoLoteInterface}}".</b>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-center" ng-show="listaNotasFiscais == null" style="background-color: white">
+                                        <td colspan="11">
+                                            <div layout="row" layout-align="space-around" layout-sm="column">
+                                                <img src="../img/carregando.gif" style="height: 30px;width: 30px;" />
+                                                </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="linha-borda-cinza" ng-class="{'grey-300-bg': hover}" ng-mouseleave="hover = false" ng-mouseover="hover = true" ng-repeat="item in listaNotasFiscais" style="{{item.linhaVermelha ? 'background-color:red; color: white' : 'background-color:white'}}">
+                                        <td class="text-center" style="{{item.textoVermelha ? 'color: red' : ''}}">
+                                            {{item.numero}}
+                                        </td>
+                                        <td class="{{item.codigo === null ? 'text-center' : 'text-left'}}">{{item.codigo === null ? '—' : item.centroFinanceiro.identificadorFinal + ' - ' + item.centroFinanceiro.nome}}</td>
+                                        <td class="text-center">
+                                            {{item.codigo === null ? '—' : item.cliente.documento}}
+                                            <md-tooltip id="tool_input_cliente" md-direction="bottom">
+                                                <span class="h4">{{item.cliente.nome}}</span>
+                                            </md-tooltip>
+                                        </td>
+                                        <td class="{{item.codigo === null ? 'text-center' : 'text-right'}}">
+                                            {{item.codigo === null ? '—' : (item.valor | currency:'':2) }}
+                                        </td>
+                                        <td class="text-center" ng-show="object.tipoLoteInterface !== 'NF/Material'">{{item.codigo === null ? '—' : item.numero}}</td>
+                                    </tr>
+                                    <tr class="cabecalho-borda-cinza linha-borda-cinza" ng-show="listaNotasFiscais != null && listaNotasFiscais.length > 0">
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                        <td class="text-right"><b>Valor total ({{listaNotasFiscais.length}} NF de {{object.tipoLoteInterface === 'NF/Material' ? 'material' : 'serviço' }})</b></td>
+                                        <td class="text-right"><b>{{totalNotas | currency:'':2 }}</b></td>
+                                        <td class="text-center" ng-show="object.tipoLoteInterface !== 'NF/Material'"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div ng-show="listaNotasFiscais != null && listaNotasFiscais.length > 15">
+                                <md-divider></md-divider>
+                                <div class="navigation padding-8" flex layout="row">
+                                    <md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvarLote()" ng-disabled="form.$invalid || action" ng-hide="screenMode === 'VIEW'">
+                                        Salvar
+                                        <md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+                                            <span class="h4">Salvar as alterações realizadas neste lote</span>
+                                        </md-tooltip>
+                                    </md-button>
+                                    <md-button class="md-raised md-accent" id="btn_cancelar" ng-click="listar()" ng-disabled="action" ng-hide="screenMode === 'VIEW'">
+                                        Cancelar
+                                        <md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+                                            <span class="h4">Sair deste lote contábil, sem gravar as modificações realizadas</span>
+                                        </md-tooltip>
+                                    </md-button>
+                                    <md-button class="md-raised md-accent" ng-click="download()" ng-disabled="object.situacao !== 'Arquivo gerado'"
+                                        ng-show="screenMode === 'VIEW' && object.situacao !== 'Aguardando geração do arquivo' && object.tipoLoteInterface === 'Nota carioca'">
+                                        Download
+                                        <md-tooltip md-direction="bottom">
+                                            <span class="h4">Realizar o download do arquivo deste lote</span>
+                                        </md-tooltip>
+                                    </md-button>
+                                    <md-button class="md-raised md-accent" ng-click="reprocessarLote()" ng-show="screenMode === 'VIEW' && (object.situacao === 'Arquivo gerado' || object.situacao === 'Processado com erros')">
+                                        Reprocessar
+                                        <md-tooltip md-direction="bottom">
+                                            <span class="h4">Reprocessar este lote</span>
+                                        </md-tooltip>
+                                    </md-button>
+                                    <md-button class="md-raised md-accent" id="btn_retornar" ng-click="listar()" ng-disabled="action" ng-show="screenMode === 'VIEW'">
+                                        Retornar
+                                        <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+                                            <span class="h4">Sair desta tela e retornar para a tela anterior</span>
+                                        </md-tooltip>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

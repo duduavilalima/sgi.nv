@@ -1,0 +1,60 @@
+package br.com.fasolti.sgi.job.controlefiscal.reinf;
+
+import br.com.araujoabreu.sgi.lang.AdministracaoException;
+import br.com.fasolti.queue.commons.api.model.annotations.ImplementsJob;
+import br.com.fasolti.queue.commons.api.model.annotations.WithJobModel;
+import br.com.fasolti.queue.commons.api.model.entities.JobExecutionInfo;
+import br.com.fasolti.queue.commons.api.model.enumerations.JobInstantiationMode;
+import br.com.fasolti.sgi.job.impl.util.SgiJobImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+@Service
+@ImplementsJob
+@WithJobModel(
+	autostart = true,
+	crontab = "#{'0 0/6 5-23 ? * 1-7'}",
+	instantiationMode = JobInstantiationMode.ORDERED)
+public class ReinfImportarArquivosJob extends SgiJobImpl {
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	private static final String MSG = "Importação dos arquivos do Reinf após envio à Receita Federal";
+
+	@Autowired
+	private ApplicationContext applicationContext;
+
+	@Override
+	protected void doProcess(JobExecutionInfo execution) throws Exception {
+		Calendar dia = Calendar.getInstance();
+		dia.add(Calendar.DAY_OF_MONTH, -1);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		logger.info("Iniciando - {} {}: {}", MSG, sdf.format(dia.getTime()), execution.toString());
+
+		try {
+			criarTarefa().executar();
+
+		} catch (AdministracaoException e) {
+			logger.error("{} {} finalizado com erros!", MSG, sdf.format(dia.getTime()), e);
+			throw e;
+
+		} catch (Exception e) {
+			logger.error("{} {} finalizado com erro desconhecido!", MSG, sdf.format(dia.getTime()), e);
+			throw e;
+		}
+
+		logger.info("Finalizado - {} {}: {}", MSG, sdf.format(dia.getTime()), execution.toString());
+	}
+
+	private ReinfImportarArquivosJobTask criarTarefa() {
+		return applicationContext.getBean(ReinfImportarArquivosJobTask.class);
+	}
+
+}

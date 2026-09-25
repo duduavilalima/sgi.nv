@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xmlns="http://dozer.sourceforge.net"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping>
+		<class-a>
+			br.com.araujoabreu.sgi.service.motivoRetorno.transfer.MotivoRetornoDocumentoNotaSaidaParcelaPesquisaTO
+		</class-a>
+		<class-b>
+			br.com.araujoabreu.sgi.administracao.domain.MotivoRetornoDocumentoNotaSaidaParcela
+		</class-b>
+
+		<field-exclude>
+			<a>notaSaidaParcela</a>
+			<b>notaSaidaParcela</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>motivoRetornoDocumento</a>
+			<b>motivoRetornoDocumento</b>
+		</field-exclude>
+
+		<field>
+			<a>notaSaidaParcela.codigo</a>
+			<b>notaSaidaParcela.codigo</b>
+		</field>
+
+		<field>
+			<a>motivoRetornoDocumento.codigo</a>
+			<b>motivoRetornoDocumento.codigo</b>
+		</field>
+	</mapping>
+</mappings>

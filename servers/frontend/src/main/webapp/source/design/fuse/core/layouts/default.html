@@ -1,0 +1,13 @@
+<md-sidenav class="md-primary-bg" id="navigation" md-component-id="navigation"
+			md-is-locked-open="$mdMedia('gt-md')" ms-nav-is-folded="false" ms-scroll ui-view="navigation"></md-sidenav>
+
+<div flex id="content-container" layout="column">
+	<md-toolbar class="md-menu-toolbar md-whiteframe-1dp md-background-bg" id="toolbar" ui-view="toolbar"></md-toolbar>
+
+	<div flex id="content">
+		<md-content class="md-background md-hue-1 animate slide-up" flex ms-scroll ui-view="content"></md-content>
+	</div>
+</div>
+
+<!--<md-sidenav id="quick-panel" class="md-sidenav-right md-whiteframe-4dp" md-component-id="quick-panel"-->
+<!--ms-scroll ui-view="quickPanel"></md-sidenav>-->

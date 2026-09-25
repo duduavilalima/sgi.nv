@@ -1,0 +1,510 @@
+<md-dialog aria-label="Etapa - Novo/Edição" id="dialog_titulo_popup_faturamento_etapa" style="width: 1100px;">
+	<form name="form_etapa" ng-controller="FaturamentoEtapaCtrl" ng-show="object != null">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_faturamento_etapa" md-autofocus>Etapa <span ng-show="screenMode === 'VIEW'">- Exibição</span><span
+					ng-show="screenMode === 'NEW'">- Novo</span><span ng-show="screenMode === 'EDIT'">- Edição</span>
+				</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+
+		<md-dialog-content class="white-bg" role="document">
+			<div class="md-dialog-content" md-theme="sgi" style="padding-bottom: 0px;">
+
+				<div layout layout-sm="column">
+					<md-input-container flex="25">
+						<label id="lbl_numero_dialog_etapa">Etapa</label>
+						<input id="input_numero_dialog_etapa" name="numero" ng-disabled="true" ng-model="object.numero"
+							   type="text" value="{{ object.numero }}">
+					</md-input-container>
+
+					<md-input-container flex="25">
+						<label id="lbl_situacao_dialog_etapa">Situação</label>
+						<input id="input_situacao_dialog_etapa" name="situacao" ng-disabled="true"
+							   ng-model="object.situacao" type="text" value="{{ object.situacao }}">
+					</md-input-container>
+
+					<div flex="50" layout="row" ng-if="screenMode != 'VIEW'">
+						<md-input-container flex="50">
+							<label id="lbl_inicio_dialog_etapa">Início</label>
+							<input id="input_inicio_dialog_etapa" max-date="object.termino" name="inicio"
+								   ng-model="object.inicio" ng-required="true" required title=" " tt-date-picker
+								   type="text" value="{{ object.inicio | date:'dd/MM/yyyy' }}">
+
+							<div ng-messages="form_etapa.inicio.$error" ng-show="form_etapa.inicio.$touched">
+								<div class="msg_datapicker" id="msg_req_inicio" ng-message="required">Obrigatório.</div>
+							</div>
+						</md-input-container>
+
+						<md-input-container flex="50">
+							<label id="lbl_termino_dialog_etapa">Término</label>
+							<input id="input_termino_dialog_etapa" min-date="object.inicio" name="termino"
+								   ng-disabled="vencimento2" ng-model="object.termino" ng-required="true" required
+								   title=" " tt-date-picker type="text"
+								   value="{{ object.termino | date:'dd/MM/yyyy' }}">
+
+							<div ng-messages="form_etapa.termino.$error" ng-show="form_etapa.termino.$touched">
+								<div class="msg_datapicker" id="msg_req_termino" ng-message="required">Obrigatório.
+								</div>
+							</div>
+						</md-input-container>
+					</div>
+
+					<div flex="50" layout="row" ng-if="screenMode === 'VIEW'">
+						<md-input-container flex="50">
+							<label id="lbl_inicio_dialog_etapa_exibicao">Início</label>
+							<input id="input_inicio_dialog_etapa_exibicao" name="input_inicio_dialog_etapa_exibicao"
+								   ng-disabled="screenMode === 'VIEW'" type="text"
+								   value="{{ object.inicio | date:'dd/MM/yyyy' }}">
+						</md-input-container>
+
+						<md-input-container flex="50">
+							<label id="lbl_termino_dialog_etapa_exibicao">Término</label>
+							<input id="input_termino_dialog_etapa_exibicao" name="input_termino_dialog_etapa_exibicao"
+								   ng-disabled="screenMode === 'VIEW'" type="text"
+								   value="{{ object.termino | date:'dd/MM/yyyy' }}">
+						</md-input-container>
+					</div>
+				</div>
+
+				<div layout layout-sm="column">
+					<md-input-container flex ng-if="screenMode != 'VIEW'">
+						<label id="lbl_descricao_item_dialog_etapa">Descrição do item</label>
+						<input id="input_descricao_item_dialog_etapa" maxlength="200" md-maxlength="200"
+							   name="descricao_item" ng-disabled="screenMode === 'VIEW'"
+							   ng-maxlength="200" ng-model="object.descricao" ng-required="screenMode != 'VIEW'" type="text"
+							   value="{{ object.descricao }}">
+						<div ng-messages="form_etapa.descricao_item.$error" role="alert">
+							<div id="msg_req_descricao" ng-message="required">Obrigatório.</div>
+							<div id="msg_max_desc_" ng-message="max">A descrição informada é muito longa.</div>
+						</div>
+					</md-input-container>
+					<md-input-container flex ng-if="screenMode === 'VIEW'">
+						<label id="lbl_descricao_item_dialog_etapa_exibicao">Descrição do item</label>
+						<input id="input_descricao_item_dialog_etapa_exibicao" name="descricao_item" ng-disabled="true"
+							   ng-model="object.descricao" type="text" value="{{ object.descricao }}">
+					</md-input-container>
+				</div>
+
+				<div layout layout-sm="column">
+
+					<md-input-container flex>
+						<label id="lbl_valor_bruto_dialog_etapa">Valor bruto</label>
+						<input id="input_valor_bruto_dialog_etapa" max="9999999999" maxlength="13"
+							   min="0.01" name="valor_bruto_dialog_etapa" ng-disabled="screenMode === 'VIEW'"
+							   ng-model="object.valor" ng-required="screenMode !== 'VIEW'" type="text" ui-number-mask="2"
+							   value="{{ object.valor }}">
+						<div ng-messages="form_etapa.valor_bruto_dialog_etapa.$error" role="alert">
+							<div id="msg_req_serv" ng-message="required">Obrigatório.</div>
+							<div id="msg_min_serv" ng-message="min">O valor bruto deve ser maior do que zero.</div>
+							<div id="msg_max_serv" ng-message="max">Valor não pode ser maior de 999.999.999.999,99.
+							</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_valor_tributos_dialog_etapa">Tributos (-)</label>
+						<input id="input_valor_tributos_dialog_etapa" name="valor_tributos_dialog_etapa" ng-disabled="true"
+							   ng-model="object.valorTributos" type="text" ui-number-mask="2"
+							   value="{{ object.valorTributos }}">
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_retencao_percentual_contratual_dialog_etapa">Retenção contratual (%)</label>
+						<input id="input_retencao_percentual_contratual_dialog_etapa"
+							   name="input_retencao_percentual_contratual_dialog_etapa" ng-disabled="true"
+							   ng-model="object.percentualRetencaoContratual" type="text" ui-number-mask="2"
+							   ui-percentage-value value="{{ object.percentualRetencaoContratual }}">
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_retencao_valor_contratual_dialog_etapa">Retenção contratual (-)</label>
+						<input id="input_retencao_valor_contratual_dialog_etapa"
+							   name="input_retencao_valor_contratual_dialog_etapa" ng-disabled="true"
+							   ng-model="object.valorRetencaoContratual" type="text" ui-number-mask="2"
+							   value="{{ object.valorRetencaoContratual }}">
+					</md-input-container>
+
+				</div>
+
+				<div layout layout-sm="column">
+
+					<md-input-container flex>
+						<label id="lbl_retencao_percentual_acessoria_dialog_etapa">Retenção acessória (%)</label>
+						<input id="input_retencao_percentual_acessoria_dialog_etapa"
+							   name="input_retencao_percentual_acessoria_dialog_etapa" ng-disabled="true"
+							   ng-model="object.percentualRetencaoAcessoria" type="text" ui-number-mask="2"
+							   ui-percentage-value>
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_retencao_valor_acessoria_dialog_etapa">Retenção acessória (-)</label>
+						<input id="input_retencao_valor_acessoria_dialog_etapa"
+							   name="input_retencao_valor_acessoria_dialog_etapa" ng-disabled="true"
+							   ng-model="object.valorRetencaoAcessoria" type="text" ui-number-mask="2">
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_permuta_valor_dialog_etapa">Permuta (-)</label>
+						<input id="input_permuta_valor_dialog_etapa" max="9999999999" maxlength="11"
+							   name="permuta_valor_dialog_etapa" ng-disabled="true"
+							   ng-model="object.valorPermuta" type="text" ui-number-mask="2">
+					</md-input-container>
+
+					<md-input-container flex>
+						<label id="lbl_valor_liquido_dialog_etapa">Valor líquido (=)</label>
+						<input class="text-left font-weight-900" id="input_valor_liquido_dialog_etapa" min="0.00001"
+							   name="valor_liquido_dialog_etapa" ng-disabled="true" ng-model="object.valorLiquido"
+							   style="{{'color:'+colorValorLiquido}}" type="text" ui-negative-number ui-number-mask="2">
+						<div ng-messages="form_etapa.valor_liquido_dialog_etapa.$error" role="alert">
+							<div id="msg_min_val_liq" ng-message="min">O valor liquido deve ser maior do que zero.</div>
+						</div>
+					</md-input-container>
+
+				</div>
+
+				<div layout layout-sm="column">
+
+					<md-input-container flex="25">
+						<label id="combo_exib_acesso">Exibe retenção contratual</label>
+						<md-select id="combo_exib_acesso" name="combo_exib_acesso"
+								   ng-change="changeExibirRetencaoContratual()" ng-disabled="screenMode === 'VIEW' || object.valorRetencaoContratual == 0"
+								   ng-if="screenMode !== 'VIEW'" ng-model="object.exibeRetencaoContratual">
+							<md-option ng-repeat="item in listaExibirSimNao" ng-value="item">{{item ? 'Sim' : 'Não'}}
+							</md-option>
+						</md-select>
+
+						<input id="combo_exib_acesso_view" name="combo_exib_acesso_view" ng-disabled="true"
+							   ng-if="screenMode == 'VIEW'" type="text"
+							   value="{{object.exibeRetencaoContratual  ? 'Sim' : 'Não'}}">
+					</md-input-container>
+
+					<md-input-container flex="25">
+						<label id="combo_exib_ret">Exibe retenção acessória</label>
+						<md-select id="combo_exib_ret" name="combo_exib_ret" ng-change="changeExibirRetencaoAcessorio()"
+								   ng-disabled="screenMode === 'VIEW' || object.valorRetencaoAcessoria == 0" ng-if="screenMode !== 'VIEW'"
+								   ng-model="object.exibeRetencaoAcessoria">
+							<md-option ng-repeat="item in listaExibirSimNao" ng-value="item">{{item ? 'Sim' : 'Não'}}
+							</md-option>
+						</md-select>
+
+						<input id="combo_exib_ret_view" name="combo_exib_ret_view" ng-disabled="true"
+							   ng-if="screenMode == 'VIEW'" type="text"
+							   value="{{object.exibeRetencaoAcessoria ? 'Sim' : 'Não'}}">
+					</md-input-container>
+
+					<md-input-container flex="25">
+						<label id="combo_exib_permuta">Exibe permuta</label>
+						<md-select id="combo_exib_permuta" name="combo_exib_permuta" ng-change="changeExibirPermuta()"
+								   ng-disabled="screenMode === 'VIEW' || object.valorPermuta == 0" ng-if="screenMode !== 'VIEW'"
+								   ng-model="object.exibePermuta">
+							<md-option ng-repeat="item in listaExibirSimNao" ng-value="item">{{item ? 'Sim' : 'Não'}}
+							</md-option>
+						</md-select>
+
+						<input id="combo_exib_permuta_view" name="combo_exib_permuta_view" ng-disabled="true"
+							   ng-if="screenMode == 'VIEW'" type="text" value="{{object.exibePermuta ? 'Sim' : 'Não'}}">
+					</md-input-container>
+
+				</div>
+
+
+				<div class="sample" layout="column" layout-column style="margin-top: -10px;">
+					<md-content>
+						<md-tabs id="abas_etapas" md-border-bottom md-dynamic-height>
+							<md-tab id="aba_parte_inicial_dialog_etapa"
+									label="Parte Inicial{{screenMode != 'VIEW' ? ' *' : ''}}">
+								<div layout layout-sm="column" style="height: 200px;">
+									<md-input-container flex ng-if="screenMode != 'VIEW'">
+										<label id="lbl_parte_inicial_dialog_etapa">Discriminação</label>
+										<textarea columns="1" id="input_parte_inicial_dialog_etapa" maxlength="2000"
+												  md-maxlength="2000" name="parte_inicial_dialog_etapa"
+												  ng-disabled="screenMode === 'VIEW'" ng-maxlength="2000"
+												  ng-model="object.discriminacaoInicial"
+												  ng-required="screenMode != 'VIEW'"
+												  style="height: 150px;max-height: 150px;min-height: 150px;overflow-y: scroll;resize: none; font-family: Courier;"></textarea>
+										<div ng-messages="form_etapa.parte_inicial_dialog_etapa.$error">
+											<div id="msg_req_disc_inicial" ng-message="required">Obrigatório.</div>
+											<div id="msg_max_disc_inicial" ng-message="maxlength">Texto Parte inicial é
+												muito longo.
+											</div>
+										</div>
+									</md-input-container>
+									<md-input-container flex ng-if="screenMode === 'VIEW'">
+										<label id="lbl_parte_inicial_dialog_etapa_exibicao">Discriminação</label>
+										<textarea columns="1" id="input_parte_inicial_dialog_etapa_exibicao"
+												  name="parte_inicial_dialog_etapa" ng-disabled="true"
+												  ng-model="object.discriminacaoInicial"
+												  style="height: 150px;max-height: 150px;min-height: 150px;overflow-y: scroll;resize: none; font-family: Courier;"></textarea>
+									</md-input-container>
+								</div>
+								<md-icon md-font-icon="icon-question-mark-circle" md-menu-align-target
+										 style="margin-top: -50px;color: #8e112e !important;cursor: pointer;font-size: 20px;">
+									<md-tooltip class="h3" id="tool_tip_btn_exibir" md-direction="bottom">
+										Textos especiais para substituição de conteúdo: "PERIODO", "PEDIDO", "ITEM",
+										"CODT6", "BASELEGAL" e "GESTOR"
+									</md-tooltip>
+								</md-icon>
+							</md-tab>
+
+
+							<md-tab id="aba_parte_central_dialog_etapa" label="Parte Central">
+								<div layout layout-sm="column" style="height: 200px;">
+									<md-input-container flex ng-if="screenMode != 'VIEW'">
+										<label id="lbl_parte_central_dialog_etapa">Discriminação</label>
+										<textarea columns="1" id="input_parte_central_dialog_etapa" maxlength="2000"
+												  md-maxlength="2000" name="parte_central_dialog_etapa"
+												  ng-disabled="screenMode === 'VIEW'" ng-maxlength="2000"
+												  ng-model="object.discriminacaoCentral"
+												  style="height: 150px;max-height: 150px;min-height: 150px;overflow-y: scroll;resize: none; font-family: Courier;"></textarea>
+										<div ng-messages="form_etapa.parte_central_dialog_etapa.$error">
+											<div id="msg_max_disc_central" ng-message="maxlength">Texto Parte central é
+												muito longo.
+											</div>
+										</div>
+									</md-input-container>
+									<md-input-container flex ng-if="screenMode === 'VIEW'">
+										<label id="lbl_parte_central_dialog_etapa_exibicao">Discriminação</label>
+										<textarea columns="1" id="input_parte_central_dialog_etapa_exibicao"
+												  name="parte_central_dialog_etapa" ng-disabled="true"
+												  ng-model="object.discriminacaoCentral"
+												  style="height: 150px;max-height: 150px;min-height: 150px;overflow-y: scroll;resize: none; font-family: Courier;"></textarea>
+									</md-input-container>
+								</div>
+							</md-tab>
+
+
+							<md-tab id="aba_parte_final_dialog_etapa"
+									label="Parte Final{{screenMode != 'VIEW' ? ' *' : ''}}">
+								<div layout layout-sm="column" style="height: 200px;">
+									<md-input-container flex ng-if="screenMode !== 'VIEW'">
+										<label id="lbl_parte_final_dialog_etapa">Discriminação</label>
+										<textarea columns="1" id="input_parte_final_dialog_etapa" maxlength="2000"
+												  md-maxlength="2000" name="parte_final_dialog_etapa"
+												  ng-maxlength="2000" ng-model="object.discriminacaoFinal"
+												  ng-required="screenMode != 'VIEW'"
+												  style="height: 150px;max-height: 150px;min-height: 150px;overflow-y: scroll;resize: none; font-family: Courier;"></textarea>
+										<div ng-messages="form_etapa.parte_final_dialog_etapa.$error">
+											<div id="msg_req_disc_final" ng-message="required">Obrigatório.</div>
+											<div id="msg_max_final_" ng-message="maxlength">Texto Parte final é muito
+												longo.
+											</div>
+										</div>
+									</md-input-container>
+									<md-input-container flex ng-if="screenMode === 'VIEW'">
+										<label id="lbl_parte_final_dialog_etapa_exibicao">Discriminação</label>
+										<textarea columns="1" id="input_parte_final_dialog_etapa_exibicao"
+												  name="parte_final_dialog_etapa" ng-disabled="true"
+												  ng-model="object.discriminacaoFinal"
+												  style="height: 150px;max-height: 150px;min-height: 150px;overflow-y: scroll;resize: none; font-family: Courier;"></textarea>
+									</md-input-container>
+								</div>
+							</md-tab>
+
+							<md-tab id="aba_cancelamento_dialog_etapa" label="Cancelamento"
+									ng-if="screenMode === 'VIEW' && object.situacao === 'Cancelada'">
+								<div class="padding-16">
+									<div class="content" flex ng-repeat="item in listMotivos">
+										<div layout="row" layout-wrap>
+											<div class="about" flex="100" layout="column">
+												<div class="profile-box info-box general md-whiteframe-1dp"
+													 layout="column">
+													<header class="md-accent-bg">
+														<div class="title padding-10" id="title_panel">
+															{{item.motivoRetornoDocumento.pessoa.nome}} -
+															{{item.motivoRetornoDocumento.dataCriacao | date :
+															'dd/MM/yyyy hh:mm:ss'}}
+														</div>
+													</header>
+													<div class="padding-16">
+														<div class="simple-table-container md-whiteframe-1dp">
+															<table
+																class="tabela_exibicao row-border hover md-caption tabela_exibicao"
+																id="table_motivos_{{$index}}" ms-responsive-table>
+																<thead>
+																<tr class="md-grey-200-bg">
+																	<th width="40%">Motivo</th>
+																	<th>Solução</th>
+																</tr>
+																</thead>
+
+																<tbody>
+																<tr ng-if="item.motivoRetornoDocumento.listaMotivoRetorno != null && item.motivoRetornoDocumento.listaMotivoRetorno.length > 0"
+																	ng-repeat="itemMotivo in item.motivoRetornoDocumento.listaMotivoRetorno">
+																	<td id="td_motivo_{{$index}}">{{
+																		itemMotivo.motivoRetorno.motivo }}
+																	</td>
+																	<td id="td_solucao_{{$index}}">{{
+																		itemMotivo.motivoRetorno.solucao }}
+																	</td>
+																</tr>
+																</tbody>
+
+																<tbody>
+																<tr ng-if="item.motivoRetornoDocumento.listaMotivoRetorno == null || item.motivoRetornoDocumento.listaMotivoRetorno.length == 0">
+																	<td class="text-center msg-empty-list" colspan="3">
+																		Não existem <strong>Motivos de Retorno</strong>
+																		informados.
+																	</td>
+																</tr>
+																</tbody>
+															</table>
+														</div>
+														<div layout layout-sm="column" style="margin-top: 15px">
+															<md-input-container flex>
+																<label id="lbl_observacao_{{$index}}">Observação</label>
+																<textarea columns="10" id="input_observacao_{{$index}}"
+																		  name="input_observacao" ng-disabled="true"
+																		  ng-model="item.motivoRetornoDocumento.observacao"
+																		  value="{{ item.motivoRetornoDocumento.observacao }}">
+																</textarea>
+															</md-input-container>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</md-tab>
+
+							<md-tab id="aba_controles_dialog_etapa" label="Controles" ng-if="screenMode === 'VIEW'">
+								<div layout-gt-xs="row" style="margin-top: 10px">
+									<md-input-container class="md-block" flex flex-gt-sm="70">
+										<label id="lbl_cadastramento_dialog_etapa">Cadastramento</label>
+										<input class="text-left" id="input_cadastramento_dialog_etapa"
+											   name="cadastramento_dialog_etapa" ng-disabled="true"
+											   ng-model="object.nomeCriador" type="text"
+											   value="{{ object.nomeCriador }}">
+									</md-input-container>
+									<md-input-container class="md-block" flex flex-gt-sm="30">
+										<label id="lbl_data_hora_cadastramento_dialog_etapa">Data/hora</label>
+										<input class="text-left" id="input_data_hora_cadastramento_dialog_etapa"
+											   name="data_hora_cadastramento_dialog_etapa" ng-disabled="true"
+											   type="text"
+											   value="{{ object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+									</md-input-container>
+								</div>
+
+								<div layout-gt-xs="row">
+									<md-input-container class="md-block" flex flex-gt-sm="70">
+										<label id="lbl_ultima_alteracao_dialog_etapa">Última alteração</label>
+										<input class="text-left" id="input_ultima_alteracao_dialog_etapa"
+											   name="ultima_alteracao_dialog_etapa" ng-disabled="true"
+											   ng-model="object.nomeAtualizador" type="text"
+											   value="{{ object.nomeAtualizador }}">
+									</md-input-container>
+									<md-input-container class="md-block" flex flex-gt-sm="30">
+										<label id="lbl_data_hora_ultima_alteracao_dialog_etapa">Data/hora</label>
+										<input class="text-left" id="input_data_hora_ultima_alteracao_dialog_etapa"
+											   name="data_hora_ultima_alteracao_dialog_etapa" ng-disabled="true"
+											   type="text"
+											   value="{{ object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+									</md-input-container>
+								</div>
+
+								<div layout-gt-xs="row">
+									<md-input-container class="md-block" flex flex-gt-sm="70">
+										<label id="lbl_faturamento_dialog_etapa">Faturamento</label>
+										<input class="text-left" id="input_faturamento_dialog_etapa"
+											   name="faturamento_dialog_etapa" ng-disabled="true"
+											   ng-model="object.nomeCriadorFaturamento" type="text"
+											   value="{{ object.nomeCriadorFaturamento }}">
+									</md-input-container>
+									<md-input-container class="md-block" flex flex-gt-sm="30">
+										<label id="lbl_data_hora_faturamento_dialog_etapa">Data/hora</label>
+										<input class="text-left" id="input_data_hora_faturamento_dialog_etapa"
+											   name="data_hora_faturamento_dialog_etapa" ng-disabled="true" type="text"
+											   value="{{ object.faturamento.dataCriacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+									</md-input-container>
+								</div>
+
+								<div layout-gt-xs="row">
+									<md-input-container class="md-block" flex flex-gt-sm="70">
+										<label id="lbl_cancelamento_dialog_etapa">Cancelamento</label>
+										<input class="text-left" id="input_cancelamento_dialog_etapa"
+											   name="cancelamento_dialog_etapa" ng-disabled="true"
+											   ng-model="object.cancelador.nome" type="text"
+											   value="{{ object.cancelador.nome }}">
+									</md-input-container>
+									<md-input-container class="md-block" flex flex-gt-sm="30">
+										<label id="lbl_data_hora_cancelamento_dialog_etapa">Data/hora</label>
+										<input class="text-left" id="input_data_hora_cancelamento_dialog_etapa"
+											   name="data_hora_cancelamento_dialog_etapa" ng-disabled="true" type="text"
+											   value="{{ object.dataCancelamento | date:'dd/MM/yyyy HH:mm:ss ' }}">
+									</md-input-container>
+								</div>
+							</md-tab>
+
+						</md-tabs>
+					</md-content>
+				</div>
+
+
+			</div>
+
+			<md-divider></md-divider>
+
+		</md-dialog-content>
+
+		<md-dialog-actions class="navigation padding-8" layout="row" style="padding-right: 16px;">
+
+			<div flex="100" flex-sm="100" layout="row" layout-align="start center">
+
+				<md-button class="md-raised md-accent" id="btn_confirmar_dialog_etapa" ng-click="salvarEtapa()"
+						   ng-disabled="form_etapa.$invalid || action" ng-hide="screenMode === 'VIEW'">
+					CONFIRMAR
+					<img ng-show="action" src="../img/gray_carregando.gif"
+						 style="height: 20px;width: 20px;margin-top: 8px;"/>
+					<md-tooltip class="h4" md-direction="bottom">
+						Confirmar as alterações realizadas nesta etapa
+					</md-tooltip>
+
+				</md-button>
+
+				<md-button class="md-raised md-accent" id="btn_fechar_dialog_etapa" ng-click="cancel()"
+						   ng-disabled="action">
+                        <span ng-hide="screenMode === 'VIEW'">
+                            CANCELAR
+                            <md-tooltip class="h4" md-direction="bottom">
+                                Sair desta etapa, sem gravar as modificações realizadas
+                            </md-tooltip>
+                        </span>
+					<span ng-show="screenMode === 'VIEW'">
+                            FECHAR
+                            <md-tooltip class="h4" md-direction="bottom">
+                                Sair desta etapa
+                            </md-tooltip>
+                        </span>
+				</md-button>
+			</div>
+
+			<div flex="100" flex-sm="100" layout="row" layout-align="end center"
+				 ng-if="objetoFaturamento.situacao !== 'Cancelado'">
+
+				<md-button class="md-raised md-accent" id="btn_cancelar_dialog_etapa" ng-click="cancelarEtapa()"
+						   ng-disabled="action" ng-show="screenMode === 'VIEW' && object.situacao === 'A faturar'">
+					CANCELAR ETAPA
+					<md-tooltip class="h4" md-direction="bottom">
+						Cancelar esta etapa (esta operação não poderá ser desfeita)
+					</md-tooltip>
+				</md-button>
+
+				<md-button class="md-raised md-accent" id="btn_remover_dialog_etapa" ng-click="removerEtapaDialog()"
+						   ng-disabled="action"
+						   ng-show="screenMode === 'VIEW' && object.situacao === 'A faturar' && ultimaEtapa()">
+					REMOVER
+					<md-tooltip class="h4" md-direction="bottom">
+						Remover esta etapa (esta operação não poderá ser desfeita)
+					</md-tooltip>
+				</md-button>
+			</div>
+
+		</md-dialog-actions>
+	</form>
+</md-dialog>

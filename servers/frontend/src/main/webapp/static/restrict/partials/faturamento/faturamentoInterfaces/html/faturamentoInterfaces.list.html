@@ -1,0 +1,199 @@
+<div class="page-layout simple fullwidth" id="page_list" ng-controller="FaturamentoInterfacesListarCtrl"
+	 ng-init="initDatepicker();">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{titulo == 'Lote' ? 'Interfaces' : titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="subtitulo">{{::subtitulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+			<div class="content" flex>
+
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">{{::titulo}} - Filtros de pesquisa</div>
+							</header>
+
+							<div class="content">
+								<form name="form" ui-keypress="{13:'buscar()'}">
+									<div layout layout-sm="column" layout-wrap>
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_numero">Lote</label>
+											<input id="input_numero" maxlength="9" name="numero_lote"
+												   ng-model="object.codigo" type="text"
+												   ui-hide-group-sep ui-number-mask="0" value="{{ object.codigo }}">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_situacao">Situação</label>
+											<md-select id="combo_situacao" name="situacao"
+													   ng-change="$emit('changeSituacao')" ng-model="object.situacao"
+													   value="{{ object.situacao }}">
+												<md-option ng-repeat="situacao in enumStatus" ng-value="situacao.value">
+													{{ situacao.label }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_tipo">Tipo</label>
+											<md-select id="combo_tipo" name="tipo"
+													   ng-change="$emit('changeTipoLoteInterface')"
+													   ng-model="object.tipoLoteInterface"
+													   value="{{ object.tipoLoteInterface }}">
+												<md-option disabled="{{tipo.separador}}" ng-disabled="tipo.desabilitado"
+														   ng-repeat="tipo in enumTipo track by $index"
+														   ng-value="tipo.tipo">
+													{{ tipo.tipo }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_empresa">Matriz / Filial</label>
+											<md-select id="combo_empresa" name="empresa"
+													   ng-change="$emit('changeEmpresa')"
+													   ng-model="object.unidade"
+													   value="{{ object.unidade }}">
+												<md-option ng-repeat="unidade in empresaListComFiltro" ng-value="unidade">
+													{{ unidade.codnome }}
+												</md-option>
+											</md-select>
+											</md-select>
+										</md-input-container>
+									</div>
+
+									<div layout="row">
+
+										<md-input-container flex flex-gt-md="25"
+															ng-show="!renderizarLblDataCancelamento()">
+											<label id="lbl_emissao_de">Emissão de</label>
+											<input id="emissao_de" max-date="object.dataEmissaoAte"
+												   ng-model="object.dataEmissaoDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25"
+															ng-show="!renderizarLblDataCancelamento()">
+											<label id="lbl_emissao_ate">Emissão até</label>
+											<input id="emissao_ate" min-date="object.dataEmissaoDe"
+												   ng-model="object.dataEmissaoAte" tt-date-picker type="text">
+										</md-input-container>
+
+
+										<md-input-container flex flex-gt-md="25"
+															ng-show="renderizarLblDataCancelamento()">
+											<label id="lbl_cancelamento_de">Cancelamento de</label>
+											<input id="cancelamento_de" max-date="object.dataCancelamentoAte"
+												   ng-model="object.dataCancelamentoDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25"
+															ng-show="renderizarLblDataCancelamento()">
+											<label id="lbl_cancelamento_ate">Cancelamento até</label>
+											<input id="cancelamento_ate" min-date="object.dataCancelamentoDe"
+												   ng-model="object.dataCancelamentoAte" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_execucao_de">Execução de</label>
+											<input id="execucao_de" max-date="object.dataExecucaoAte" ng-model="object.dataExecucaoDe"
+												   tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_execucao_ate">Execução até</label>
+											<input id="execucao_ate" min-date="object.dataExecucaoDe"
+												   ng-model="object.dataExecucaoAte" tt-date-picker type="text">
+										</md-input-container>
+
+									</div>
+
+
+									<section layout="row" layout-sm="row" layout-wrap style="margin-top: 28px;">
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_pesquisar"
+													   name="btn_pesquisar" ng-click="buscar()" ng-disabled="isAction">
+												Pesquisar
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+										<div flex="auto" layout-wrap show-gt-sm>
+										</div>
+
+										<div flex="30" flex-sm="10" layout="row" layout-align="end center">
+											<md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction"
+													   ui-sref="interfaces.novo">
+												Nova interface
+											</md-button>
+										</div>
+									</section>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- / CAMPOS DE PESQUISA -->
+
+				<!-- DATATABLE - RESULTADO DA PESQUISA -->
+
+				<div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result"
+					 ng-if="result && result != null">
+					<header class="md-accent-bg">
+						<div class="title" id="titulo_resultado">{{ ::titulo}} - Resultado da pesquisa</div>
+					</header>
+
+					<div class="sgiUiGridPesquisa" id="idGridLotes" ng-if="exibirGrid(gridPesquisa)"
+						 ng-style="ajustarAlturaTabela(gridPesquisa)" ui-grid="gridPesquisa" ui-grid-auto-resize
+						 ui-grid-pinning></div>
+
+					<div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+						<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+							<span class="h4 p-32">{{mensagemPesquisa()}}</span>
+						</md-whiteframe>
+					</div>
+
+					<section class="p-8" layout="row" layout-align="space-between center" layout-sm="row" layout-wrap>
+						<div></div>
+
+						<div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+
+						<div layout="row" layout-align="end center" layout-sm="row" layout-wrap>
+							<md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction"
+									   ui-sref="interfaces.novo"> Nova interface
+							</md-button>
+						</div>
+					</section>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+	<!-- / CONTENT -->
+
+</div>

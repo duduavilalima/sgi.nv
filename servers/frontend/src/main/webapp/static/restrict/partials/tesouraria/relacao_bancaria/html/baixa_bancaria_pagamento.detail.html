@@ -1,0 +1,341 @@
+<div class="page-layout simple fullwidth">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">{{::modulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo">{{ ::titulo}}</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo_subtitulo">Conciliação Bancária</span>
+            </div>
+            <!--<div class="title">Datatable</div>-->
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+        <!-- CONTENT -->
+        <div class="content" flex>
+            <div layout="row" layout-wrap>
+                <div class="about" flex="100" layout="column">
+                    <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+                        <header class="md-accent-bg">
+                            <div class="title" id="title_panel">{{ ::titulo }} - Dados Gerais</div>
+                        </header>
+
+                        <div class="text-center"><img ng-show="object == null" src="../img/carregando.gif"
+													  style="height: 30px;width: 30px;margin-top: 10px;margin-bottom: 10px"/>
+						</div>
+
+                            <div ng-show="object != null">
+                                <div class="white-500-bg">
+                                    <form name="RelacaoForm" novalidate>
+                                        <!-- MODO EDIÇAO -->
+
+                                        <div flex layout="column">
+                                            <!--{{object}}-->
+
+                                            <!-- MODO EXIBIÇÃO-->
+
+                                            <div class="p-16" flex layout="column">
+                                                <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                        <label id="lbl_numero_exibir">Número</label>
+                                                        <input id="input_numero_exibir" name="input_numero" ng-disabled="true" ng-disabled="true" type="text" value="{{ ::object.numero }}">
+                                                    </md-input-container>
+
+                                                    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                        <label id="lbl_situacao_exibir">Situação</label>
+                                                        <input id="input_situacao_exibir" name="input_situacao" ng-disabled="true" type="text" value="{{ object.status }}">
+                                                    </md-input-container>
+
+                                                    <md-input-container flex="50" flex-sm="100" flex-xs="100">
+                                                        <label id="lbl_criador_exibir">Criador</label>
+                                                        <input id="input_criador_exibir" name="input_criador" ng-disabled="true" type="text" value="{{ ::object.criador }}">
+                                                    </md-input-container>
+                                                </div>
+
+                                                <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+                                                    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                        <label id="lbl__exibir">Empresa</label>
+                                                        <input id="input_empresa_exibir" name="input_empresa" ng-disabled="true" type="text" value="{{ ::object.unidade.codnome }}">
+                                                    </md-input-container>
+
+                                                    <md-input-container flex flex-gt-md="25">
+                                                        <label id="lbl_banco_exibir">Banco</label>
+                                                        <input id="input_banco_exibir" name="input_banco" ng-disabled="true" type="text" value="{{ ::object.contaCorrente.banco.nome }}">
+                                                    </md-input-container>
+
+                                                    <md-input-container flex flex-gt-md="25">
+                                                        <label id="lbl_agencia_exibir">Agência/conta</label>
+                                                        <input id="input_agencia_exibir" name="input_agencia" ng-disabled="true" type="text" value="{{::object.contaCorrente.agencia }} / {{::object.contaCorrente.conta }}-{{::object.contaCorrente.digito }} ">
+                                                    </md-input-container>
+
+                                                    <md-input-container flex flex-gt-md="25">
+                                                        <label id="lbl_meio_pagamento_exibir">Meio de pagamento</label>
+                                                        <input id="input_meio_pagamento_exibir" name="input_meio_pagamento" ng-disabled="true" type="text" value="{{ ::object.meioPagamento }}">
+                                                    </md-input-container>
+
+
+                                                </div>
+
+                                                <div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+
+                                                    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                        <label id="lbl_cheque_exibir">Cheque anterior</label>
+                                                        <input id="cheque_exibir" name="cheque" ng-disabled="object.meioPagamento.tipo != 'Cheque'" type="text" value="{{ ::object.chequeAnterior }}">
+                                                    </md-input-container>
+
+                                                    <md-input-container flex="25" flex-sm="100" flex-xs="100" ng-hide="object.meioPagamento.tipo == 'Cheque'">
+                                                        <label id="lbl_pgt_individual_exibir">Pagamento individual</label>
+                                                        <input id="pgt_individual_exibir" name="pgt_individual" ng-disabled="true" type="text" value="{{ object.pagamentoIndividual? 'Sim' : 'Não' }}">
+                                                    </md-input-container>
+
+                                                    <md-input-container flex flex-gt-md="25">
+                                                        <label id="lbl_pag_exibir">Pagamento</label>
+                                                        <input id="lbl_paga_exibir" name="pagamento" ng-disabled="true" type="text" value="{{ ::object.dataPagamento | date : 'dd/MM/yyyy' }}">
+                                                    </md-input-container>
+
+                                                    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                        <label id="lbl_total_exibir">Total</label>
+                                                        <input id="pgt_total_exibir" name="total" ng-disabled="true" style="font-weight: bold;" type="text" value="{{ object.total | currency:'':2 }}">
+                                                    </md-input-container>
+
+                                                </div>
+
+                                                <div class="mt-25" layout="row" layout-sm="column" layout-wrap layout-xs="column" ng-if="object.meioPagamento.tipo == 'Cheque'">
+
+                                                    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                        <label id="lbl_impressao_exibir">Impres. cheque</label>
+                                                        <input id="impressao_exibir" name="impressao" ng-disabled="true" type="text" value="{{ object.cheque }}">
+                                                        <md-tooltip class="h4">Indica se a impressão de cheques foi
+                                                            realizada
+                                                        </md-tooltip>
+                                                    </md-input-container>
+
+                                                    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                        <label id="lbl_endosso_exibir">Impres. endosso</label>
+                                                        <input I id="pgt_endosso_exibir" name="endosso" ng-disabled="true" type="text" value="{{ object.endosso }}">
+                                                        <md-tooltip class="h4">Indica se a impressão do endosso de cheques
+                                                            foi realizada
+                                                        </md-tooltip>
+                                                    </md-input-container>
+
+                                                    <md-input-container flex flex-gt-md="25">
+                                                        <label id="lbl_segunda_exibir">Impres. 2ª via</label>
+                                                        <input id="segunda_exibir" name="segunda" ng-disabled="true" type="text" value="{{ object.segunda }}">
+                                                    </md-input-container>
+
+                                                    <md-input-container flex="25" flex-sm="100" flex-xs="100">
+                                                        <label id="lbl_num_pagamentos_exibir">Nº pagamento</label>
+                                                        <input id="num_pagamentos_exibir" name="num_pagamentos" ng-disabled="true" type="text" value="{{ object.numPagamentos }}">
+                                                    </md-input-container>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div ms-responsive-table style="padding: 1px">
+                                                <table class="simple row-border hover text-center font-size-12" id="table-list2" width="100%">
+                                                    <thead class="cabecalho-borda-cinza">
+                                                        <tr ng-show="object.relacaoBancariaPagamentosVO.length == 0">
+                                                            <th class="secondary-text" colspan="10"></th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="titulo_colunas_rb" width="8%">
+                                                                <div class="table-header text-center"><span
+															class="column-title">Número</span></div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb">
+                                                                <div class="table-header text-center"><span
+															class="column-title">Credor (Nome de fantasia) / Favorecido</span>
+                                                                </div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" width="12%">
+                                                                <div class="table-header text-center"><span
+															class="column-title">Banco</span></div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" width="20%">
+                                                                <div class="table-header text-center"><span
+															class="column-title">Documento para pagamento</span>
+                                                                </div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" width="5%">
+                                                                <div class="table-header text-center"><span
+															class="column-title">Pagamento</span></div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" width="5%">
+                                                                <div class="table-header text-center"><span
+															class="column-title">N° pgto</span>
+                                                                    <md-tooltip class="h3" md-direction="bottom">Número de pagamentos</md-tooltip>
+                                                                </div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" width="5%">
+                                                                <div class="table-header text-center"><span
+															class="column-title">A pagar</span></div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" width="5%">
+                                                                <div class="table-header text-center"><span
+															class="column-title">Cheque</span></div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" width="10%">
+                                                                <div class="table-header text-center" style="margin-bottom: -32px;margin-top: -25px;" ng-if="object.status !== 'Finalizada'">
+                                                                    <md-select aria-label="status pagamento" id="statusPagamentoCombo" name="statusPagamentoCombo" ng-change="$emit('changeStatusPagamento')" ng-model="statusPagamentoCombo">
+                                                                        <md-option ng-repeat="item in listSituacaoes" ng-value="item">{{ item }}
+                                                                        </md-option>
+                                                                    </md-select>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        <tr ng-show="object.relacaoBancariaPagamentosVO == null || object.relacaoBancariaPagamentosVO.length == 0">
+                                                            <td class="text-center" colspan="10"><b>Não há pagamentos.</b></td>
+                                                        </tr>
+                                                        <tr class="linha-borda-cinza" ng-class="{'grey-300-bg': hover}" ng-mouseleave="hover = false" ng-mouseover="hover = true" ng-repeat="(key, item) in object.relacaoBancariaPagamentosVO">
+                                                            <td class="text-center table-truncate" id="item_{{key}}" ng-if="item.qtdadePagamentos == 1">
+                                                                {{ ::item.numero}}
+                                                                <md-tooltip class="h3" md-direction="bottom">{{::item.numero}}</md-tooltip>
+                                                            </td>
+                                                            <td class="text-center" id="item_{{key}}" ng-if="item.qtdadePagamentos > 1">
+                                                                {{ ::item.numero}}
+                                                            </td>
+                                                            <td class="text-left table-truncate" id="item_{{key}}" ng-if="item.credor">
+                                                                {{::item.credor.nome}}
+                                                                <md-tooltip class="h3" md-direction="bottom">{{::item.credor.nome}}</md-tooltip>
+                                                            </td>
+                                                            <td class="text-left" id="item_{{key}}" ng-if="item.tributo">{{::item.tributo}}
+                                                            </td>
+                                                            <td class="text-left table-truncate" id="item_{{key}}">
+                                                                {{ ::item.bancoSelecionado.nome}}
+                                                                <md-tooltip class="h3" md-direction="bottom">{{ ::item.bancoSelecionado.nome}}</md-tooltip>
+                                                            </td>
+                                                            <td class="text-left table-truncate" id="item_{{key}}">
+                                                                {{ ::item.tipoDocumentoPagamento}}
+                                                                <md-icon class="red-400-fg" md-font-icon="icon-checkbox-marked-outline" ng-if="item.bancoSelecionado.homologado" style="margin-top: -5px;font-size: 24px !important;color: green !important;float: right;">
+                                                                    <md-tooltip class="h3" md-direction="bottom">
+                                                                        Dados bancários homologados
+                                                                    </md-tooltip>
+                                                                </md-icon>
+                                                            </td>
+                                                            <td class="text-center" id="item_{{key}}">{{ ::item.dataPagamento | date:'dd/MM/yyyy' }}
+                                                            </td>
+                                                            <td class="text-right" id="item_{{key}}">{{::item.qtdadePagamentos}}
+                                                            </td>
+                                                            <td class="text-right" id="item_{{key}}">{{ ::item.valorAPagar | currency:'':2 }}
+                                                            </td>
+                                                            <td class="text-center" id="item_{{key}}">{{ ::item.cheque}}</td>
+                                                            <td class="text-center" flex id="item_{{key}}" layout="row" ng-if="object.status !== 'Finalizada'">
+                                                                <div class="table-header text-center" style="margin-bottom: -25px;margin-top: -25px;">
+                                                                    <md-select aria-label="status pagamento" id="statusPagamento" name="statusPagamento" ng-change="changePagamento(item)" ng-model="item.statusConciliacaoBancaria">
+                                                                        <md-option ng-repeat="item in listSituacaoes" ng-value="item">{{ item }}
+                                                                        </md-option>
+                                                                    </md-select>
+                                                                </div>
+                                                                <div style="margin-left: 10px">
+                                                                    <md-button aria-label="Adicionar movito estorno" class="md-icon-button" id="btn_editar_estorno" ng-click="adicionarMotivoEstorno($event, item)" ng-show="item.statusConciliacaoBancaria === 'Estornado'"
+                                                                        style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                                                                        <md-icon md-font-icon="icon-pencil"></md-icon>
+                                                                        <md-tooltip class="h3" md-direction="bottom">Editar motivo de estorno
+                                                                        </md-tooltip>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <thead class="cabecalho-borda-cinza">
+                                                        <tr>
+                                                            <th class="titulo_colunas_rb" colspan="6">
+                                                                <div class="table-header text-right"><span class="column-title">Total</span>
+                                                                </div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb">
+                                                                <div class="table-header text-right"><span class="column-title">{{total | currency: '' : 2}}</span>
+                                                                </div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" colspan="3">
+                                                                <div class="table-header text-center"><span
+															class="column-title"> </span></div>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="titulo_colunas_rb" colspan="6">
+                                                                <div class="table-header text-right"><span class="column-title">Pago</span>
+                                                                </div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb">
+                                                                <div class="table-header text-right"><span class="column-title">{{total_pago | currency: '' : 2}}</span>
+                                                                </div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" colspan="3">
+                                                                <div class="table-header text-center"><span
+															class="column-title"> </span></div>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="titulo_colunas_rb" colspan="6">
+                                                                <div class="table-header text-right"><span class="column-title">Estornado</span>
+                                                                </div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb">
+                                                                <div class="table-header text-right"><span class="column-title">{{total_estornado | currency: '' : 2}}</span>
+                                                                </div>
+                                                            </th>
+                                                            <th class="titulo_colunas_rb" colspan="3">
+                                                                <div class="table-header text-center"><span
+															class="column-title"> </span></div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+
+                                            <md-divider></md-divider>
+
+                                            <div class="p-8" flex layout="row" layout-align="end start">
+                                                <md-button aria-label="motivo estorno" class="md-raised md-accent" id="btn_motivo_estorno" ng-click="adicionarMotivoEstornoTodos($event)" ng-disabled="!todo_motivo_estorno" style="float: right; text-transform: none;">
+                                                    Motivo estorno
+                                                </md-button>
+                                            </div>
+
+
+                                        </div>
+
+                                        <md-divider></md-divider>
+                                        <div class="p-8" flex layout="row" layout-align="start start">
+                                            <md-button class="md-raised md-accent" id="btn_salvar" ng-click="realizarBaixaBancaria()" ng-disabled="action || !baixaBancariaHabilitado || object.status === 'Finalizada'">
+                                                Realizar baixa bancária
+                                                <img ng-show="action" src="../img/gray_carregando.gif"
+												 style="height: 20px;width: 20px;margin-top: 8px;"/>
+                                                <md-tooltip class="h4">Confirmar a baixa bancária dos pagamentos
+                                                    selecionados
+                                                </md-tooltip>
+                                            </md-button>
+
+                                            <md-button class="md-raised md-accent" id="btn_cancelar" ng-click="cancelar()" ng-disabled="action">
+                                                Cancelar
+                                                <md-tooltip class="h4">Sair desta conciliação bancária, sem gravar as
+                                                    modificações realizadas
+                                                </md-tooltip>
+                                            </md-button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+    </div>

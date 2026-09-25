@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="
+       		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="br.com.fasolti.queue.appconfig"/>
+	<context:component-scan base-package="br.com.fasolti.sgi.job"/>
+	<context:component-scan base-package="br.com.fasolti.sgi.service"/>
+
+	<!-- Devido ao uso conjunto de configuração XML + DispatchServlet no SGI.NV (não-Spring Boot), e classes
+	     autoconfiguradas + classes Properties no Fasolti Queue (Spring Boot), por algum motivo, a mesma instância de
+	     OptionalValidatorFactoryBean é identificada duas vezes.
+	     A solução paliativa, aplicada aqui, é criar um novo bean com @Primary. A esperança é que um dia o SGI.NV possa
+	     ser inteiramente convertido para Spring Boot.
+	-->
+	<!--	<bean name="mvcValidator" class="org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean" primary="true" />-->
+</beans>

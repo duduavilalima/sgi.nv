@@ -1,0 +1,98 @@
+<md-dialog aria-label="Baixa da retenção - Novo" id="dialog_titulo_popup_baixa_retencao" style="width: 900px;">
+    <form name="Dialogbaixa_retencaoForm">
+        <md-toolbar class="md-accent-bg">
+            <div class="md-toolbar-tools">
+                <h2 id="titulo_popup_baixa_retencao" md-autofocus>Baixa da retenção - Novo</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+                    <md-icon aria-label="Close dialog" md-font-icon="icon-close" style="color: rgba(255,255,255,0.87) !important"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content role="document">
+            <div class="md-dialog-content md-dialog-content-body ng-scope">
+
+                <div layout layout-sm="column" layout-wrap>
+
+                    <md-input-container flex="25" flex-sm="100">
+                        <label id="lbl_dataPagamento">Pagamento</label>
+                        <input id="input_dataPagamento" min-date="notaSaidaParcela.dataPagamento" name="input_dataPagamento" ng-model="object.dataPagamento" ng-required="true" tt-date-picker type="text">
+                        <div ng-messages="Dialogbaixa_retencaoForm.input_dataPagamento.$error" role="alert">
+                            <div id="msg_req_dataPagamento" ng-message="required">
+                                Obrigatório.
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container flex="25" flex-sm="100">
+                        <label id="lbl_dataContabilizacao">Contabilização</label>
+                        <input id="input_dataContabilizacao" min-date="notaSaidaParcela.dataContabilizacao" name="input_dataContabilizacao" ng-model="object.dataContabilizacao" ng-required="true" tt-date-picker type="text">
+                        <div ng-messages="Dialogbaixa_retencaoForm.input_dataContabilizacao.$error" role="alert">
+                            <div id="msg_req_dataContabilizacao" ng-message="required">
+                                Obrigatório.
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container flex="25" flex-sm="100">
+                        <label id="lbl_valor">Valor</label>
+                        <input id="input_valor" maxlength="18" ng-required="true" name="input_valor" ng-model="object.valorBaixa" type="text" ui-number-mask="2" min="0" max="{{notaSaidaParcela.saldoRetencao}}">
+                        <div ng-messages="Dialogbaixa_retencaoForm.input_valor.$error" role="alert">
+                            <div id="msg_req_valor" ng-message="required">Obrigatório.</div>
+                            <div id="msg_max_valor" ng-message="max">Valor máximo: {{notaSaidaParcela.saldoRetencao | currency:'':2}}</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container flex="25" flex-sm="100">
+                        <label id="lbl_valor_juros">Juros</label>
+                        <input id="input_valor_juros" maxlength="18" name="input_valor_juros" ng-model="object.valorJuros" type="text" ui-number-mask="2">
+                    </md-input-container>
+
+                    <md-input-container flex="25" flex-sm="100">
+                        <label id="lbl_recebido">Recebido</label>
+                        <input id="input_recebido" maxlength="18" max="{{notaSaidaParcela.saldoRetencao}}" name="input_recebido" disabled="true" value="{{ (object.valorBaixa + object.valorJuros) | currency:'':2 }}" type="text">
+<!--                        <div ng-if="(object.valorBaixa + object.valorJuros) > notaSaidaParcela.saldoRetencao" role="alert">-->
+<!--                            <div id="msg_max_valor" style="color: RED">Valor máximo: {{notaSaidaParcela.saldoRetencao | currency:'':2}}</div>-->
+<!--                        </div>-->
+                    </md-input-container>
+
+                    <md-input-container flex="25" flex-sm="100">
+                        <label id="lbl_banco">Banco</label>
+                        <md-select id="combo_banco" name="combo_banco" ng-change="$emit('changeBanco')" ng-disabled="bancoList.length == 0" ng-model="object.bancoSelecionado.codigo" ng-required="true" required>
+                            <md-option ng-repeat="cc in bancoList | orderBy: 'banco.nome' | unique:'banco.nome'" ng-value="cc.banco.codigo">{{cc.banco.nome}}</md-option>
+                        </md-select>
+                        <div ng-messages="Dialogbaixa_retencaoForm.combo_banco.$error" role="alert">
+                            <div id="msg_req_banco" ng-message="required">Obrigatório.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container flex="50" flex-sm="100">
+                        <label id="lbl_agencia_conta">Agência/Conta</span></label>
+                        <md-select id="combo_agencia_conta" name="agencia_conta" ng-disabled="agenciaContaList == null || agenciaContaList.length == 0" ng-model="object.contaCorrente.codigo" ng-required="true" required>
+                            <md-option ng-repeat="agenciaConta in agenciaContaList" ng-value="agenciaConta.codigo">
+                                {{ montarLabelAgenciaConta(agenciaConta) }}
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="Dialogbaixa_retencaoForm.agencia_conta.$error" role="alert">
+                            <div id="msg_req_agencia" ng-message="required">Obrigatório.</div>
+                        </div>
+                    </md-input-container>
+
+                </div>
+
+            </div>
+            <md-divider></md-divider>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button class="md-raised md-default" id="btn_confirmar_baixa_retencao" ng-click="confirm()" ng-disabled="Dialogbaixa_retencaoForm.$invalid || action">
+                <img ng-show="action" src="../img/gray_carregando.gif" style="height: 20px;width: 20px;margin-top: 8px;"/>
+				CONFIRMAR
+			</md-button>
+                <md-button class="md-raised md-default" id="btn_cancelar_baixa_retencao" ng-click="cancel()" ng-disabled="action">
+                    CANCELAR
+                </md-button>
+                <span flex></span>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

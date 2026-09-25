@@ -1,0 +1,55 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>br.com.fasolti.sgi</groupId>
+		<artifactId>parent</artifactId>
+		<version>5.13.6</version>
+	</parent>
+	<artifactId>jobs</artifactId>
+	<name>SGI :: Nova Versão :: Jobs</name>
+
+	<dependencies>
+		<!-- FASOLTI QUEUE -->
+		<dependency>
+			<groupId>br.com.fasolti.queue</groupId>
+			<artifactId>commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>br.com.fasolti.queue</groupId>
+			<artifactId>email-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!-- SGI -->
+		<dependency>
+			<groupId>br.com.fasolti.sgi</groupId>
+			<artifactId>domain</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>br.com.fasolti.sgi</groupId>
+			<artifactId>services.client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/templates</directory>
+				<filtering>false</filtering>
+				<targetPath>${project.build.outputDirectory}/templates
+				</targetPath>
+			</resource>
+		</resources>
+	</build>
+
+</project>

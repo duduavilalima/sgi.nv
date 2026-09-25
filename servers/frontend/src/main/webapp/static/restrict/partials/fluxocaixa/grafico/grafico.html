@@ -1,0 +1,679 @@
+<div class="page-layout simple fullwidth" ng-controller="GraficoCtrl">
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{::titulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<div class="page-layout simple" id="profile" layout="row" layout-padding>
+			<div class="content" flex>
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">{{ ::titulo}}</div>
+							</header>
+							<div class="content">
+								<form name="form" novalidate>
+
+									<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_periodo_de">Período de</label>
+											<input id="periodo_de_input" name="periodo_de" ng-model="object.periodoDe"
+												   tt-date-picker type="text"/>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_periodo_ate">Período até</label>
+											<input id="periodo_ate_input" name="periodo_ate"
+												   ng-model="object.periodoAte" tt-date-picker type="text"/>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_saldo_inicial">Saldo inicial</label>
+											<input id="saldo_inicial" maxlength="18" name="saldo_inicial"
+												   ng-model="object.saldoInicial" ng-required="true" type="text"
+												   ui-number-mask="2"/>
+											<div ng-messages="form.saldo_inicial.$error"
+												 ng-show="form.saldo_inicial.$touched">
+												<div ng-message="required">
+													<span>Obrigatório.</span>
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_tipo_periodo">Tipo período</label>
+											<md-select id="tipo_periodo" name="tipo_periodo"
+													   ng-model="object.tipoPeriodo">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listTipoPeriodo" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div flex layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_nivel_receitas">Nível de precisão das receitas</label>
+											<md-select id="nivel_receitas" name="nivel_receitas"
+													   ng-model="object.nivelReceitas">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listNiveisReceitas" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_nivel_fornecedores">Nível de precisão de fornecedores</label>
+											<md-select id="nivel_fornecedores" name="nivel_fornecedores"
+													   ng-model="object.nivelFornecedores">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listNiveisFornecedores" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_prest_contas">Nível de precisão da prestação de
+												contas</label>
+											<md-select id="prest_contas" name="prest_contas"
+													   ng-model="object.nivelPrestContas">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listNiveisPrestContas" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_prest_tributos">Nível de precisão de tributos</label>
+											<md-select id="prest_tributos" name="prest_tributos"
+													   ng-model="object.nivelTributos">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listNiveisTributos" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+									</div>
+
+									<div flex layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_grafico">Tipo gráfico</label>
+											<md-select id="grafico" name="grafico" ng-model="object.grafico"
+													   ng-required="true">
+												<md-option ng-repeat="item in listTipoGrafico" ng-value="item"
+														   value="{{item}}">{{ item }}
+												</md-option>
+											</md-select>
+											<div ng-messages="form.grafico.$error" ng-show="form.grafico.$touched">
+												<div ng-message="required">
+													<span>Obrigatório.</span>
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_empresa">Empresa</label>
+											<md-select id="combo_empresa" name="empresa" ng-model="object.unidade">
+												<md-option ng-repeat="item in listEmpresas" ng-value="item"
+														   value="{{item}}">{{ item.codnome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_diretoria">Diretoria</label>
+											<md-select id="combo_diretoria" name="diretoria"
+													   ng-model="object.diretoria">
+												<md-option ng-repeat="item in listDiretorias" ng-value="item"
+														   value="{{item}}">{{ item.diretoria }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_regional">Regional</label>
+											<md-select id="combo_regional" name="regional" ng-model="object.regional">
+												<md-option ng-repeat="item in listRegionais" ng-value="item"
+														   value="{{item}}">{{ item.regional }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+									</div>
+
+									<div flex layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_gerencia">Gerência</label>
+											<md-select id="combo_gerencia" name="gerencia" ng-model="object.gerencia">
+												<md-option ng-repeat="item in listGerencias" ng-value="item"
+														   value="{{item}}">{{ item.gerencia }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_cl">CL</label>
+											<md-select id="combo_cl" name="cl" ng-model="object.cl">
+												<md-option ng-repeat="item in listCls" ng-value="item" value="{{item}}">
+													{{ item.cl }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+									</div>
+									<section layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" flex-xs="100" layout="row"
+											 layout-align="start center" layout-xs="column">
+											<md-button class="md-raised md-accent" id="btn_gerar" name="btn_gerar"
+													   ng-click="gerarGrafico()" ng-disabled="form.$invalid">
+												Gerar gráfico
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+									</section>
+								</form>
+							</div>
+
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-hide="graficoLinha" ng-if="mostraGrafico">
+
+							<div class="content">
+								<div flex layout="row" ng-if="graficoGeral != false">
+									<md-input-container flex flex-gt-md="30" flex-xs="100"
+														ng-if="object.tipoPeriodo.tipo === 'Diário'">
+										<label id="lbl_semana">Semanas</label>
+										<md-select id="combo_semana" name="semana" ng-model="object.semana">
+											<md-option ng-repeat="item in listSemanas" ng-value="item" value="{{item}}">
+												{{ item.semana }}
+											</md-option>
+										</md-select>
+									</md-input-container>
+								</div>
+								<div flex layout="column" layout-align="center center">
+									<md-progress-circular class="md-accent" id="toolbar-progress" md-diameter="42"
+														  md-mode="indeterminate" ng-if="graficoGeral == false">
+									</md-progress-circular>
+								</div>
+
+								<!--Inicio grafico 1-->
+								<div ngif="graficoGeral != false">
+									<c3chart bindto-id="chartRegionSample" ng-if="graficoBarra">
+										<chart-column column-id="x"
+													  column-values="1ª semana,2ª semana,3ª semana,4ª semana,5ª semana"/>
+										<chart-column column-color="rgb(31, 119, 180)"
+													  column-id="x1"
+													  column-name="Receitas"
+													  column-type="bar"
+													  column-values="70,40,50,66,80"/>
+
+										<chart-column column-color="#e9322d"
+													  column-id="x3"
+													  column-name="Despesas operacionais"
+													  column-type="bar"
+													  column-values="40,50,30,40,25"/>
+
+										<chart-column column-color="rgb(44, 160, 44)"
+													  column-id="x4"
+													  column-name="Outras despesas"
+													  column-type="bar"
+													  column-values="15,20,10,25,15"/>
+										<chart-group group-values="x3,x4"/>
+
+										<chart-column column-color="black"
+													  column-id="x2"
+													  column-name="Saldo real / previsto"
+													  column-type="line"
+													  column-values="0,30,50,60,75"/>
+										<chart-points point-expand-enabled="true"
+													  point-expand-radius="10"
+													  point-radius="5"
+													  show-point="true"/>
+										<chart-region region-ends="4"
+													  region-id="x2"
+													  region-starts="2"
+													  region-style="dashed"></chart-region>
+										<chart-axes values-x="x" y="x1,x2,x3,x4"/>
+
+										<chart-axis>
+											<chart-axis-x axis-position="outer-center"
+														  axis-type="category">
+												<chart-axis-x-tick/>
+											</chart-axis-x>
+										</chart-axis>
+										<chart-events on-click-data="gerarGraficoDonut(data)"/>
+									</c3chart>
+								</div>
+								<!--Fim grafico 1-->
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-hide="graficoLinha" ng-if="mostraDiv">
+							<div class="content" flex layout="column" layout-xs="column">
+								<h2 class="text-center md-accent-fg">{{tipoDoGrafico}}</h2>
+								<!--Inicio graficos 2-->
+								<div flex layout="row">
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="grafico1 == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-show="grafico1 != false">
+												<div><h3 class="text-center">Receitas</h3></div>
+												<c3chart bindto-id="donut-plot1-chart">
+													<chart-column column-id="Fauramento"
+																  column-type="donut"
+																  column-values="70"/>
+													<chart-column column-id="Previsto"
+																  column-type="donut"
+																  column-values="30"/>
+													<chart-donut width="60"/>
+													<chart-events on-click-data="mostraReceitas($event)"/>
+												</c3chart>
+											</div>
+										</div>
+									</div>
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="grafico2 == false">
+												</md-progress-circular>
+											</div>
+											<div flex layout="column" ng-show="grafico2 != false">
+												<div><h3 class="text-center">Despesas Operacionais</h3></div>
+												<c3chart bindto-id="donut-plot2-chart">
+													<chart-column column-color="#6A5ACD"
+																  column-id="Fornecedores"
+																  column-type="donut"
+																  column-values="10"/>
+													<chart-column column-color="#4169E1"
+																  column-id="OC"
+																  column-type="donut"
+																  column-values="5"/>
+													<chart-column column-color="#9932CC"
+																  column-id="Refeições"
+																  column-type="donut"
+																  column-values="5"/>
+													<chart-column column-color="#FF7F50"
+																  column-id="FP/13o.Sal."
+																  column-type="donut"
+																  column-values="5"/>
+													<chart-column column-color="#FFD700"
+																  column-id="M.O. Temporária"
+																  column-type="donut"
+																  column-values="5"/>
+													<chart-column column-color="#00FA9A"
+																  column-id="Subempreiteiros"
+																  column-type="donut"
+																  column-values="5"/>
+													<chart-column column-color="#D2691E"
+																  column-id="Inss/Fgts/Irrf"
+																  column-type="donut"
+																  column-values="5"/>
+													<chart-column column-color="#20B2AA"
+																  column-id="Inss"
+																  column-type="donut"
+																  column-values="5"/>
+													<chart-column column-color="#808000"
+																  column-id="Encargos RH/Ferias"
+																  column-type="donut"
+																  column-values="5"/>
+													<chart-column column-color="#FF0000"
+																  column-id="Cofins/Pis/Irpj/Cssl"
+																  column-type="donut"
+																  column-values="15"/>
+													<chart-column column-color="#DC143C"
+																  column-color="#696969"
+																  column-id="Recisões"
+																  column-type="donut"
+																  column-values="10"/>
+													<chart-column column-color="#DB7093"
+																  column-id="Acordos"
+																  column-type="donut"
+																  column-values="10"/>
+													<chart-column column-color="#000000"
+																  column-id="Reembolso/Outros"
+																  column-type="donut"
+																  column-values="10"/>
+													<chart-donut width="50"/>
+													<chart-events on-click-data="mostraDespesas($event)"/>
+												</c3chart>
+											</div>
+										</div>
+									</div>
+
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="grafico3 == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-show="grafico3 != false">
+												<div><h3 class="text-center">Outras Despesas</h3></div>
+												<c3chart bindto-id="donut-plot3-chart">
+													<chart-column column-id="Dividendos"
+																  column-type="donut"
+																  column-values="40"/>
+													<chart-column column-id="Aplicações"
+																  column-type="donut"
+																  column-values="30"/>
+													<chart-column column-id="Baixa"
+																  column-type="donut"
+																  column-values="30"/>
+													<chart-donut width="60"/>
+												</c3chart>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--Fim graficos 2-->
+
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-if="graficoLinha">
+							<div class="content">
+								<div flex layout="column">
+									<h2>Saldo Real / previsto</h2>
+									<c3chart bindto-id="line-area-chart">
+										<chart-column column-id="x"
+													  column-values="1º dia,2º dia,3º dia,4º dia,5º dia,6º dia,7º dia,8º dia,9º dia,
+													  10º dia,11º dia,12º dia,13º dia,14º dia,15º dia,16º dia,17º dia,18º dia,19º dia,
+													   20º dia,21º dia,22º dia,23º dia,24º dia,25º dia"/>
+										<chart-column column-color="black"
+													  column-id="x2"
+													  column-name="Saldo real / previsto"
+													  column-type="area"
+													  column-values="25,30,-20,37, 39,-30, 42, 43, -44, 46, 47, -15, 51, 53, 55,
+															57, 59, 60, 61, 63, 65, 70, 73, 75, 80, 85"/>
+										<chart-points point-expand-enabled="true"
+													  point-expand-radius="10"
+													  point-radius="5"
+													  show-point="true"/>
+										<chart-region region-ends="26"
+													  region-id="x2"
+													  region-starts="14"
+													  region-style="dashed"></chart-region>
+										<chart-axes values-x="x" y="x2"/>
+
+										<chart-axis>
+											<chart-axis-x axis-position="outer-center"
+														  axis-type="category">
+												<chart-axis-x-tick/>
+											</chart-axis-x>
+										</chart-axis>
+										</chart-grid>
+									</c3chart>
+								</div>
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-if="graficoLinha">
+							<div class="content">
+								<div flex layout="column">
+									<h2>Receitas</h2>
+									<c3chart bindto-id="stacked-bar-plot1-chart">
+										<chart-column column-id="x"
+													  column-values="1º dia,2º dia,3º dia,4º dia,5º dia,6º dia,7º dia,8º dia,9º dia,
+													  10º dia,11º dia,12º dia,13º dia,14º dia,15º dia,16º dia,17º dia,18º dia,19º dia,
+													   20º dia,21º dia,22º dia,23º dia,24º dia,25º dia"/>
+										<chart-column column-color="rgb(31, 119, 180)"
+													  column-id="data 1"
+													  column-name="Faturamento"
+													  column-type="bar"
+													  column-values="60,55,70,37, 40,40, 80, 75, 60, 46, 90, 49, 51, 53, 55,
+															57, 59, 60, 61, 63, 65, 70, 73, 75, 80, 85"/>
+										<chart-column column-color="rgb(255, 127, 14)"
+													  column-id="data 2"
+													  column-name="Previsto"
+													  column-type="bar"
+													  column-values="40,45,30,63, 60,60, 20, 25, 40, 54, 10, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-group group-values="data 1,data 2"/>
+										<chart-axes values-x="x" y="data 1,data 2"/>
+
+										<chart-axis>
+											<chart-axis-x axis-position="outer-center"
+														  axis-type="category">
+												<chart-axis-x-tick/>
+											</chart-axis-x>
+										</chart-axis>
+									</c3chart>
+								</div>
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-if="graficoLinha">
+							<div class="content">
+								<div flex layout="column">
+									<h2>Despesas</h2>
+									<c3chart bindto-id="stacked-bar-plot2-chart">
+										<chart-column column-id="x"
+													  column-values="1º dia,2º dia,3º dia,4º dia,5º dia,6º dia,7º dia,8º dia,9º dia,
+													  10º dia,11º dia,12º dia,13º dia,14º dia,15º dia,16º dia,17º dia,18º dia,19º dia,
+													   20º dia,21º dia,22º dia,23º dia,24º dia,25º dia"/>
+										<chart-column column-color="grey"
+													  column-id="data 1"
+													  column-name="Fornecedores"
+													  column-type="bar"
+													  column-values="25,30,35,37, 39,40, 42, 43, 44, 46, 47, 49, 51, 53, 55,
+															57, 59, 60, 61, 63, 65, 70, 73, 75, 80, 85"/>
+										<chart-column column-color="rgb(31, 119, 180)"
+													  column-id="data 2"
+													  column-name="Folha de pagamento"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-column column-color="rgb(44, 160, 44)"
+													  column-id="data 3"
+													  column-name="Tributos"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-column column-color="rgb(213,0,0)"
+													  column-id="data 4"
+													  column-name="Prestação de contas"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-group group-values="data 1,data 2,data 3,data 4"/>
+										<chart-axes values-x="x" y="data 1,data 2,data 3,data,4"/>
+
+										<chart-axis>
+											<chart-axis-x axis-position="outer-center"
+														  axis-type="category">
+												<chart-axis-x-tick/>
+											</chart-axis-x>
+										</chart-axis>
+									</c3chart>
+								</div>
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-if="graficoLinha">
+							<div class="content">
+								<div flex layout="column">
+									<h2>Fornecedores</h2>
+									<c3chart bindto-id="stacked-bar-plot10-chart">
+										<chart-column column-id="x"
+													  column-values="1º dia,2º dia,3º dia,4º dia,5º dia,6º dia,7º dia,8º dia,9º dia,
+													  10º dia,11º dia,12º dia,13º dia,14º dia,15º dia,16º dia,17º dia,18º dia,19º dia,
+													   20º dia,21º dia,22º dia,23º dia,24º dia,25º dia"/>
+										<chart-column column-color="grey"
+													  column-id="data 1"
+													  column-name="Fornecedores"
+													  column-type="bar"
+													  column-values="60,55,70,37, 40,40, 80, 75, 60, 46, 90, 49, 51, 53, 55,
+															57, 59, 60, 61, 63, 65, 70, 73, 75, 80, 85"/>
+										<chart-column column-color="rgb(255, 127, 14)"
+													  column-id="data 2"
+													  column-name="Ordem de compra"
+													  column-type="bar"
+													  column-values="40,45,30,63, 60,60, 20, 25, 40, 54, 10, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-group group-values="data 1,data 2"/>
+										<chart-axes values-x="x" y="data 1,data 2"/>
+
+										<chart-axis>
+											<chart-axis-x axis-position="outer-center"
+														  axis-type="category">
+												<chart-axis-x-tick/>
+											</chart-axis-x>
+										</chart-axis>
+									</c3chart>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-if="graficoLinha">
+							<div class="content">
+								<div flex layout="column">
+									<h2>Tributos</h2>
+									<c3chart bindto-id="stacked-bar-plot4-chart">
+										<chart-column column-id="x"
+													  column-values="1º dia,2º dia,3º dia,4º dia,5º dia,6º dia,7º dia,8º dia,9º dia,
+													  10º dia,11º dia,12º dia,13º dia,14º dia,15º dia,16º dia,17º dia,18º dia,19º dia,
+													   20º dia,21º dia,22º dia,23º dia,24º dia,25º dia"/>
+										<chart-column column-color="rgb(31, 119, 180)"
+													  column-id="data 1"
+													  column-name="INSS/FGTS/IRRF"
+													  column-type="bar"
+													  column-values="25,30,35,37, 39,40, 42, 43, 44, 46, 47, 49, 51, 53, 55,
+															57, 59, 60, 61, 63, 65, 70, 73, 75, 80, 85"/>
+										<chart-column column-color="rgb(255, 127, 14)"
+													  column-id="data 2"
+													  column-name="ISS"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-column column-color="rgb(207,216,220)"
+													  column-id="data 3"
+													  column-name="Cofins/Pis/IRPJ/CSSL"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-group group-values="data 1,data 2,data 3"/>
+										<chart-axes values-x="x" y="data 1,data 2,data 3"/>
+
+										<chart-axis>
+											<chart-axis-x axis-position="outer-center"
+														  axis-type="category">
+												<chart-axis-x-tick/>
+											</chart-axis-x>
+										</chart-axis>
+									</c3chart>
+								</div>
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-if="graficoLinha">
+							<div class="content">
+								<div flex layout="column">
+									<h2>Folha de pagamento</h2>
+									<c3chart bindto-id="stacked-bar-plot5-chart">
+										<chart-column column-color="#D4D5C7"
+													  column-id="data 1"
+													  column-name="Folha"
+													  column-type="bar"
+													  column-values="25,30,35,37, 39,40, 42, 43, 44, 46, 47, 49, 51, 53, 55,
+															57, 59, 60, 61, 63, 65, 70, 73, 75, 80, 85"/>
+										<chart-column column-color="rgb(46,98,177)"
+													  column-id="data 2"
+													  column-name="Encargos RH/Férias"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-column column-color="rgb(117,117,117)"
+													  column-id="data 3"
+													  column-name="Precisões"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-column column-color="#4CAF50"
+													  column-id="data 4"
+													  column-name="Acordos"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-group group-values="data 1,data 2,data 3,data 4"/>
+									</c3chart>
+								</div>
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-if="graficoLinha">
+							<div class="content">
+								<div flex layout="column">
+									<h2>Prestação de contas</h2>
+									<c3chart bindto-id="stacked-bar-plot11-chart">
+										<chart-column column-color="brown"
+													  column-id="data 1"
+													  column-name="Fundo fixo"
+													  column-type="bar"
+													  column-values="25,30,35,37, 39,40, 42, 43, 44, 46, 47, 49, 51, 53, 55,
+															57, 59, 60, 61, 63, 65, 70, 73, 75, 80, 85"/>
+										<chart-column column-color="black"
+													  column-id="data 2"
+													  column-name="Reembolso"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-column column-color="rgb(207,216,220)"
+													  column-id="data 3"
+													  column-name="Adiantamento"
+													  column-type="bar"
+													  column-values="15,20,25,32, 36,37, 39, 24, 30, 38, 36, 21, 24, 28, 33,
+															50, 41, 63, 55, 80, 77, 76, 12, 15, 22, 35"/>
+										<chart-group group-values="data 1,data 2,data 3"/>
+									</c3chart>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+</div>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+</head>
+<body>
+
+	<p>Prezado,</p>
+
+	<p th:if="${emailBean.total == 0}">
+		<strong>
+			<span>Nenhuma NP foi criada nesta data.</span>
+		</strong>
+	</p>
+
+	<p th:if="${emailBean.total > 0}">
+
+		<p>Segue a lista das <strong th:text="${emailBean.total}">NNN</strong> NPs criadas nesta data.</p>
+
+		<table th:if="${emailBean.total > 0}" cellspacing="5">
+			<thead>
+			<tr>
+				<th> Número </th>
+				<th> Favorecido/Fornecedor </th>
+				<th> Valor bruto </th>
+				<th> Rateio </th>
+				<th> Responsável </th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="np : ${emailBean.nps}">
+				<td><span th:text="${np.numero}"> Número </span></td>
+				<td><span th:text="${np.nomeCredor}"> Favorecido/Fornecedor </span></td>
+				<td style="text-align:right;"><span th:text="${np.strValor}"> Valor bruto </span></td>
+				<td style="text-align:center;"><span th:text="${np.cl}"> Rateio </span></td>
+				<td><span th:text="${np.criador}"> Responsável </span></td>
+			</tr>
+			</tbody>
+		</table>
+	</p>
+
+	<p th:if="${emailBean.totalNfs > 0}">
+
+	<p>Segue a lista das <strong th:text="${emailBean.totalNfs}">NNN</strong> NFs criadas nesta data.</p>
+
+		<table th:if="${emailBean.totalNfs > 0}" cellspacing="5">
+			<thead>
+			<tr>
+				<th> Número </th>
+				<th> Favorecido/Fornecedor </th>
+				<th> Valor bruto </th>
+				<th> Rateio </th>
+				<th> Responsável </th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="nf : ${emailBean.nfs}">
+				<td><span th:text="${nf.numero}"> Número </span></td>
+				<td><span th:text="${nf.nomeCredor}"> Favorecido/Fornecedor </span></td>
+				<td style="text-align:right;"><span th:text="${nf.strValor}"> Valor bruto </span></td>
+				<td style="text-align:center;"><span th:text="${nf.cl}"> Rateio </span></td>
+				<td><span th:text="${nf.criador}"> Responsável </span></td>
+			</tr>
+			</tbody>
+		</table>
+
+	</p>
+
+	<p>Equipe Araujo Abreu</p>
+	<p><i>Esta mensagem foi gerada automaticamente pelo Sistema de Gestão Integrada da Araujo Abreu.</i></p>
+
+</body>
+
+</html>

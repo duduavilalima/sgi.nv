@@ -1,0 +1,51 @@
+<div class="content" flex ng-repeat="item in listMotivos">
+	<div layout="row" layout-wrap>
+		<div class="about" flex="100" layout="column">
+			<div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+				<header class="md-accent-bg">
+					<div class="title" id="title_panel">{{item.motivoRetornoDocumento.pessoa.nome}} -
+						{{item.motivoRetornoDocumento.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss'}}
+					</div>
+				</header>
+				<div class="padding-16">
+					<div class="simple-table-container md-whiteframe-1dp">
+						<table class="tabela_exibicao row-border hover md-caption tabela_exibicao"
+							   id="table_motivos_{{$index}}" ms-responsive-table>
+							<thead>
+							<tr class="md-grey-200-bg">
+								<th width="40%">Motivo</th>
+								<th>Solução</th>
+							</tr>
+							</thead>
+
+							<tbody>
+							<tr ng-if="item.motivoRetornoDocumento.listaMotivoRetorno != null && item.motivoRetornoDocumento.listaMotivoRetorno.length > 0"
+								ng-repeat="itemMotivo in item.motivoRetornoDocumento.listaMotivoRetorno">
+								<td id="td_motivo_{{$index}}">{{ itemMotivo.motivoRetorno.motivo }}</td>
+								<td id="td_solucao_{{$index}}">{{ itemMotivo.motivoRetorno.solucao }}</td>
+							</tr>
+							</tbody>
+
+							<tbody>
+							<tr ng-if="item.motivoRetornoDocumento.listaMotivoRetorno == null || item.motivoRetornoDocumento.listaMotivoRetorno.length == 0">
+								<td class="text-center msg-empty-list" colspan="3">Não existem <strong>Motivos de
+									Retorno</strong> informados.
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<div layout layout-sm="column" style="margin-top: 15px">
+						<md-input-container flex>
+							<label id="lbl_observacao_{{$index}}">Observação</label>
+							<textarea columns="10" id="input_observacao_{{$index}}" name="input_observacao"
+									  ng-disabled="true" ng-model="item.motivoRetornoDocumento.observacao"
+									  value="{{ item.motivoRetornoDocumento.observacao }}">
+                            </textarea>
+						</md-input-container>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,220 @@
+<div class="page-layout simple fullwidth">
+
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">Comercial</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">Contratos</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="subtitulo">Pesquisar</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+			<div class="content" flex>
+
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">Contratos - Filtros de pesquisa</div>
+							</header>
+
+							<div class="content">
+								<form name="form" ui-keypress="{13:'$ctrl.buscar(1)'}">
+
+									<div layout layout-sm="column" layout-wrap>
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_numero">Número</label>
+											<input id="input_numero" maxlength="9" name="numero"
+												   ng-model="object.codigo"
+												   type="text" ui-hide-group-sep ui-number-mask="0">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_proposta">Proposta</label>
+											<input id="input_proposta" name="proposta" ng-model="object.proposta"
+												   type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_situacao">Situação</label>
+											<md-select id="combo_situacao" name="situacao" ng-model="object.situacao">
+												<md-option ng-repeat="status in $ctrl.listSituacoes" ng-value="status">
+													{{ status }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_tipo">Estágio comercial</label>
+											<md-select id="combo_estcomercial" name="estagioComercial" ng-model="object.estagioComercial"
+												ng-change="$ctrl.changeEstComercial()">
+												<md-option ng-repeat="estagioComercial in $ctrl.listComercial" ng-value="estagioComercial.value">
+													{{ estagioComercial.value }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+									</div>
+
+									<div layout layout-sm="column" layout-wrap>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_empresa">Matriz/Filial</label>
+											<md-select id="combo_empresa" name="empresa" ng-model="object.empresa" ng-change="$ctrl.changeEmpresa()">
+												<md-option ng-repeat="item in $ctrl.listEmpresas" ng-value="item">
+													{{ item.codnome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_diretoria">Diretoria</label>
+											<md-select id="combo_diretoria" name="diretoria" ng-disabled="$ctrl.listDiretoria.length == 1"
+												ng-change="$ctrl.carregarGerencia()" ng-model="object.diretoria">
+												<md-option ng-repeat="diretoria in $ctrl.listDiretoria" ng-value="diretoria">
+													{{ diretoria.descricao }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_gerencia">Gerência</label>
+											<md-select id="combo_gerencia" name="gerencia" ng-model="object.gerencia">
+												<md-option ng-repeat="item in $ctrl.listGerencias | orderBy: 'nome'"
+														   ng-value="item">{{ item.nome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div layout layout-sm="column" layout-wrap>
+
+										<md-input-container flex flex-gt-md="50">
+											<label id="lbl_cliente">Cliente</label>
+											<input id="input_cliente" name="cliente" ng-model="object.cliente.nome"
+												   type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_valor_de">Valor total de</label>
+											<input id="input_valor_de" maxlength="18" name="valorTotalDe"
+												   ng-model="object.valorTotalDe" type="text" ui-number-mask="2">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_valor_ate">Valor total até</label>
+											<input id="input_valor_ate" maxlength="18" name="valorTotalAte"
+												   ng-model="object.valorTotalAte" type="text" ui-number-mask="2">
+										</md-input-container>
+									</div>
+
+									<div layout layout-sm="column" layout-wrap>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_assinaturaDe">Assinatura de</label>
+											<input id="input_assinaturaDe" max-date="object.assinaturaAte"
+												   ng-model="object.assinaturaDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_assinaturaAte">Assinatura até</label>
+											<input id="input_assinaturaAte" min-date="object.assinaturaDe"
+												   ng-model="object.assinaturaAte" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_vigenciaDe">Vigência de</label>
+											<input id="input_vigenciaDe" max-date="object.vigenciaAte"
+												   ng-model="object.vigenciaDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_vigenciaAte">Vigência até</label>
+											<input id="input_vigenciaAte" min-date="object.vigenciaDe"
+												   ng-model="object.vigenciaAte" tt-date-picker type="text">
+										</md-input-container>
+									</div>
+
+									<section layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_pesquisar"
+													   name="btn_pesquisar" ng-click="$ctrl.buscar(1)" ng-disabled="isAction">
+												Pesquisar
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="$ctrl.reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+										<div flex="auto" layout-wrap show-gt-sm>
+										</div>
+										<div flex="30" flex-sm="10" layout="row" layout-align="end center">
+											<md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction"
+													   ui-sref="contratos.novo">
+												Novo contrato
+											</md-button>
+										</div>
+									</section>
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- / CAMPOS DE PESQUISA -->
+
+				<!-- DATATABLE - RESULTADO DA PESQUISA -->
+				<div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result"
+					 ng-if="result && result != undefined">
+					<header class="md-accent-bg">
+						<div class="title" id="titulo_resultado">Contratos - Resultado da pesquisa</div>
+					</header>
+
+					<div class="sgiUiGridPesquisa" id="idGridContratos" ng-if="exibirGrid(gridPesquisa)"
+						 ng-style="ajustarAlturaTabela(gridPesquisa)" ui-grid="gridPesquisa" ui-grid-auto-resize
+						 ui-grid-pinning></div>
+
+					<div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+						<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+							<span class="h4 p-32">{{mensagemPesquisa()}}</span>
+						</md-whiteframe>
+					</div>
+
+					<section class="p-8" layout="row" layout-align="space-between center" layout-sm="row" layout-wrap>
+						<div></div>
+
+						<div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+
+						<div layout="row" layout-align="end center" layout-sm="row" layout-wrap>
+							<md-button class="md-raised md-default" id="btn_novo" ng-disabled="isAction"
+									   ui-sref="contratos.novo"> Novo Contrato
+							</md-button>
+						</div>
+					</section>
+
+				</div>
+				<!-- / DATATABLE - RESULTADO DA PESQUISA -->
+
+			</div>
+
+		</div>
+
+	</div>
+	<!-- / CONTENT -->
+
+</div>

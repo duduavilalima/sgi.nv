@@ -1,0 +1,105 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_adicionar_aditivo" style="width: 1200px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_adicionar_aditivo" md-autofocus> {{ ::title }} </h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content class="white-bg" role="document">
+		<div class="md-dialog-content" md-theme="sgi" style="padding: 0px;">
+			
+			<form name="DialogAdicionarAditivoForm" novalidate>
+
+				<div class="pl-16 pr-16 pt-16" layout layout-sm="column" layout-wrap>
+
+					<md-input-container flex flex-gt-md="25">
+						<label id="lbl_numero">Número</label>
+						<input id="input_numero" name="input_numero" ng-disabled="true" ng-model="object.numero" type="text">
+					</md-input-container>
+
+					<md-input-container flex flex-gt-md="25">
+						<label id="lbl_assinatura">Assinatura</label>
+						<input id="input_assinatura" name="assinatura" ng-model="object.dataAssinatura"
+								ng-required="true" required tt-date-picker type="text">
+						<div ng-messages="DialogAdicionarAditivoForm.assinatura.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex flex-gt-md="25">
+						<label id="lbl_inicio_vigencia">Início da vigência</label>
+						<input id="input_inicio_vigencia" max-date="object.dataFimVigencia"
+								ng-change="calcularPrazo(object)" ng-model="object.dataInicioVigencia"
+								tt-date-picker type="text">
+					</md-input-container>
+
+					<md-input-container flex flex-gt-md="25">
+						<label id="lbl_fim_vigencia">Fim da vigência</label>
+						<input id="input_fim_vigencia" min-date="object.dataInicioVigencia"
+								ng-change="calcularPrazo(object)" ng-model="object.dataFimVigencia"
+								tt-date-picker type="text">
+					</md-input-container>
+
+				</div>
+
+				<div class="pl-16 pr-16" layout layout-sm="column" layout-wrap>
+
+					<md-input-container flex flex-gt-md="25">
+						<label id="lbl_reajuste">Reajuste</label>
+						<md-select id="combo_reajuste" name="combo_reajuste" ng-model="object.periodoReajuste">
+							<md-option ng-repeat="item in listReajuste" ng-value="item" value="{{ item }}">{{
+								item }}
+							</md-option>
+						</md-select>
+					</md-input-container>
+
+					<md-input-container flex flex-gt-md="50">
+						<label id="lbl_indice_reajuste">Índice de reajuste</label>
+						<input id="input_indice_reajuste" name="input_indice_reajuste"
+								ng-model="object.indiceReajuste" type="text">
+					</md-input-container>
+
+					<md-input-container flex flex-gt-md="25">
+						<label id="lbl_prazo">Prazo (meses)</label>
+						<input disabled="true" id="input_prazo" name="input_prazo" ng-model="object.prazoAtual"
+								type="text">
+					</md-input-container>
+
+				</div>
+
+				<div class="pl-16 pr-16" layout layout-sm="column" layout-wrap>
+					<md-input-container flex flex-gt-md="100">
+						<label id="lbl_resumo">Resumo</label>
+						<textarea id="input_resumo" maxlength="2000" name="input_resumo"
+									ng-model="object.resumo" required="true" rows="2"
+									type="text">
+						</textarea>
+						<div ng-messages="DialogAdicionarAditivoForm.input_resumo.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+				</div>
+				<div class="p-16" layout layout-sm="column" layout-wrap>
+					<span class="red-fg">*&nbsp;</span> Campos obrigatórios
+				</div>
+
+			</form>
+		</div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar" ng-click="confirm()"
+				   ng-disabled="DialogAdicionarAditivoForm.$invalid">
+			Salvar
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar" ng-click="cancel()">
+			Fechar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

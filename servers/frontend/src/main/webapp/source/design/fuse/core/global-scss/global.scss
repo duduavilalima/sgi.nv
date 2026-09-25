@@ -1,0 +1,26 @@
+@import '../../../../node_modules/@bower_components/angular-material/angular-material.scss';
+
+@import 'partials/reset.scss';
+@import 'partials/fixes.scss';
+@import 'partials/variables.scss';
+@import 'partials/mixins.scss';
+@import 'partials/layouts.scss';
+@import 'partials/angular-material-extend.scss';
+@import 'partials/animations.scss';
+@import 'partials/colors.scss';
+@import 'partials/icons.scss';
+@import 'partials/material.scss';
+@import 'partials/typography.scss';
+@import 'partials/widgets.scss';
+
+@import 'partials/plugins/angular-google-map.scss';
+@import 'partials/plugins/c3.scss';
+@import 'partials/plugins/chartist.scss';
+@import 'partials/plugins/chartjs.scss';
+@import 'partials/plugins/datatable.scss';
+@import 'partials/plugins/highlight.scss';
+@import 'partials/plugins/nvd3.scss';
+@import 'partials/plugins/perfect-scrollbar.scss';
+@import 'partials/plugins/text-angular.scss';
+
+@import 'partials/helpers.scss';

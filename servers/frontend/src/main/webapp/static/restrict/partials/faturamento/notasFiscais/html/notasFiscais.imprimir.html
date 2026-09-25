@@ -1,0 +1,460 @@
+<div id="inicio_pagina" ng-controller="NotaFiscalImpressaoCtrl">
+
+	<div layout="row">
+		<div id="papel" class="page_layout_print" layout-align="center center">
+
+			<div flex id="nota_fiscal" layout="column" class="m-25">
+
+				<div flex id="cabecalho" layout="row" layout-align="start"
+					class="nota-cabecalho">
+
+					<div layout-align="center center" class="nota-cabecalho-titulo" ng-show="tipoimpressao == 'nf'">
+						<p class="text-center {{ !exibindoStatusNF ? 'h4' : 'h5' }}">PREFEITURA DA CIDADE</p>
+						<p class="text-center {{ !exibindoStatusNF ? 'h3' : 'h4' }} -m-15">
+							{{prefeituraCidadeUF}}</p>
+						<p class="text-center {{ !exibindoStatusNF ? 'h4' : 'h5' }} -m-15">NOTA FISCAL DE SERVIÇOS ELETRÔNICA - NFS-e</p>
+						<p class="text-center h5 -m-15 bold" ng-if="exibindoStatusNF">({{ exibindoStatusNF }})</p>
+					</div>
+
+					<div layout-align="center center" class="nota-cabecalho-titulo" ng-show="tipoimpressao == 'rps'">
+						<p class="text-center {{ !exibindoStatusNF ? 'h4' : 'h5' }}">PREFEITURA DA CIDADE</p>
+						<p class="text-center {{ !exibindoStatusNF ? 'h3' : 'h4' }} -m-15">
+							{{prefeituraCidadeUF}}</p>
+						<p class="text-center {{ !exibindoStatusNF ? 'h4' : 'h5' }} -m-15">RECIBO PROVISÓRIO DE SERVIÇOS - RPS</p>
+						<p class="text-center h5 -m-15 bold" ng-if="exibindoStatusNF">({{ exibindoStatusNF }})</p>
+					</div>
+
+					<div class="nota-cabecalho-titulo-right">
+						<div class="w-100perc h-25px borderbottom-1px-black">
+							<p class="text-left f-9-mt-5px" ng-show="tipoimpressao == 'nf'">Número da Nota</p>
+							<p class="text-left f-9-mt-5px" ng-show="tipoimpressao == 'rps'">Número do RPS</p>
+							<p class="text-center f-11-f-b"
+								style="margin: -12px -20px 0px 0px;">
+								{{object.numero}}</p>
+						</div>
+						<div
+							style="width: 100%; height: 25px; border: 1px #000 solid; border-top: 0px; border-left: 0px; border-right: 0px; margin: 0px;">
+							<p class="text-left" style="font-size: 9px; margin: 5px 0px 0px 0px;">Data de Emissão</p>
+							<p class="text-center"
+								style="font-size: 11px; font-weight: bold; margin: -13px -21px 0px 0px">
+								{{object.dataEmissao | date : 'dd/MM/yyyy'}}</p>
+						</div>
+						<div
+							style="width: 100%; height: 25px; border: 0px; border-left: 0px; border-right: 0px; margin: 0px;">
+							<p class="text-left" style="font-size: 9px; margin: 5px 0px 0px 0px;">Código de
+								Verificação</p>
+							<p class="text-center"
+								style="font-size: 11px; font-weight: bold;margin: -13px -50px 0px 0px">------------</p>
+						</div>
+					</div>
+
+				</div>
+
+				<div flex id="prestador" layout="column" layout-align="start" style="width: 100%; height: 100%; margin: 0px;" ng-show="tipoimpressao == 'rps'">
+					<div layout="row" layout-align="start center" style="margin: 7px 0px;">
+						<p class="text-left" style="font-size: 11px; font-weight: bold;">Prestador de Serviços</p>
+					</div>
+					<div layout="row" style="margin-top: -15px;">
+						<table id="table_parcelas_tomador_dados" width="100%">
+							<tbody>
+							<tr class="md-grey-200-bg">
+								<th class="text-left" style="border: 1px #000 solid; background-color: white; vertical-align: top;" width="35%">
+									<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+										Nome/Razão social
+									</div>
+									<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+										{{object.empresa.nome}}
+									</div>
+								</th>
+								<th class="text-left"
+									style="border: 1px #000 solid; background-color: white; vertical-align: top;"
+									width="20%">
+									<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+										CNPJ
+									</div>
+									<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+										{{object.empresa.documento}}
+									</div>
+								</th>
+								<th class="text-left"
+									style="border: 1px #000 solid; background-color: white; vertical-align: top;"
+									width="20%">
+									<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+										Inscrição estadual
+									</div>
+									<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+										{{object.empresa.inscricaoEstadual}}
+									</div>
+								</th>
+								<th class="text-left"
+									style="border: 1px #000 solid; background-color: white; vertical-align: top;"
+									width="25%">
+									<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+										Inscrição municipal
+									</div>
+									<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+										{{object.empresa.inscricaoMunicipal}}
+									</div>
+								</th>
+							</tr>
+							<tr class="md-grey-200-bg">
+								<th class="text-left"
+									style="border: 1px #000 solid; background-color: white; vertical-align: top;">
+									<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+										Endereço
+									</div>
+									<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+										{{object.empresa.endereco.logradouro}}
+									</div>
+								</th>
+								<th class="text-left"
+									style="border: 1px #000 solid; background-color: white; vertical-align: top;">
+									<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+										Bairro
+									</div>
+									<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+										{{object.empresa.endereco.bairro}}
+									</div>
+								</th>
+								<th class="text-left"
+									style="border: 1px #000 solid; background-color: white; vertical-align: top;">
+									<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+										Cidade/UF
+									</div>
+									<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+										{{object.empresa.endereco.cidadeUF}}
+									</div>
+								</th>
+								<th class="text-left"
+									style="border: 1px #000 solid; background-color: white; vertical-align: top;">
+									<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+										CEP
+									</div>
+									<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+										{{object.empresa.endereco.cep}}
+									</div>
+								</th>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div flex id="tomador" layout="column" layout-align="start" style="width: 100%; height: 100%; margin: 0px;">
+					<div layout="row" layout-align="start center" style="margin: 7px 0px;">
+						<p class="text-left" style="font-size: 11px; font-weight: bold;">Tomador de Serviços</p>
+					</div>
+					<div layout="row" style="margin-top: -15px;">
+						<table id="table_parcelas_tomador_dados" width="100%">
+							<tbody>
+								<tr class="md-grey-200-bg">
+									<th class="text-left" style="border: 1px #000 solid; background-color: white; vertical-align: top;" width="35%">
+										<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+											Nome/Razão social
+										</div>
+										<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+											{{object.faturamentoEtapaTO.faturamento.cliente.nome}}
+										</div>
+									</th>
+									<th class="text-left"
+										style="border: 1px #000 solid; background-color: white; vertical-align: top;"
+										width="20%">
+										<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+											CPF/CNPJ
+										</div>
+										<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+											{{object.faturamentoEtapaTO.faturamento.cliente.documento}}
+										</div>
+									</th>
+									<th class="text-left"
+										style="border: 1px #000 solid; background-color: white; vertical-align: top;"
+										width="20%">
+										<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+											Inscrição estadual
+										</div>
+										<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+											{{object.faturamentoEtapaTO.faturamento.cliente.inscricaoEstadual}}
+										</div>
+									</th>
+									<th class="text-left"
+										style="border: 1px #000 solid; background-color: white; vertical-align: top;"
+										width="25%">
+										<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+											Inscrição municipal
+										</div>
+										<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+											{{object.faturamentoEtapaTO.faturamento.cliente.inscricaoMunicipal}}
+										</div>
+									</th>
+								</tr>
+								<tr class="md-grey-200-bg">
+									<th class="text-left"
+										style="border: 1px #000 solid; background-color: white; vertical-align: top;">
+										<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+											Endereço
+										</div>
+										<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+											{{object.faturamentoEtapaTO.faturamento.cliente.endereco.logradouro}}
+										</div>
+									</th>
+									<th class="text-left"
+										style="border: 1px #000 solid; background-color: white; vertical-align: top;">
+										<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+											Bairro
+										</div>
+										<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+											{{object.faturamentoEtapaTO.faturamento.cliente.endereco.bairro}}
+										</div>
+									</th>
+									<th class="text-left"
+										style="border: 1px #000 solid; background-color: white; vertical-align: top;">
+										<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+											Cidade/UF
+										</div>
+										<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+											{{object.faturamentoEtapaTO.faturamento.cliente.endereco.cidadeUF}}
+										</div>
+									</th>
+									<th class="text-left"
+										style="border: 1px #000 solid; background-color: white; vertical-align: top;">
+										<div style="margin: 5px 0px 0px 5px; font-size: 9px; font-weight: bold;">
+											CEP
+										</div>
+										<div style="margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal;">
+											{{object.faturamentoEtapaTO.faturamento.cliente.endereco.cep}}
+										</div>
+									</th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div flex id="discriminacao_servicos" layout="column" layout-align="start"
+					style="width: 100%; height: 100%; margin: 0px;">
+					<div layout="row" layout-align="start center" style="margin: 7px 0px;">
+						<p class="text-left" style="font-size: 11px; font-weight: bold;">Discriminação dos Serviços</p>
+					</div>
+					<div layout="column" style="width: 100%; height: 100%; border: 1px #000 solid; margin-top: -15px;">
+						<div layout="column"
+							style="width: 100%; height: 100%; margin: 5px 0px 5px 5px; font-size: 11px; font-weight: normal; white-space: pre">
+							<label>{{object.infoComplementarContribuinte}}</label>
+						</div>
+					</div>
+				</div>
+
+				<div flex id="tributos" layout="column" layout-align="start"
+					style="width: 100%; height: 100%; margin: 0px;">
+					<div layout="row" layout-align="start center" style="margin: 7px 0px;">
+						<p class="text-left" style="font-size: 11px; font-weight: bold;">Valores das Retenções</p>
+					</div>
+					<div layout="row" style="margin-top: -15px;">
+						<table id="table_tributos" width="100%">
+							<tbody>
+								<tr class="f-9-f-b">
+									<th class="b-1-w-10">COFINS</th>
+									<th class="b-1-w-10">CSLL</th>
+									<th class="b-1-w-10">PIS</th>
+									<th class="b-1-w-10">PCC</th>
+									<th class="b-1-w-10">INSS</th>
+									<th class="b-1-w-10">IRPJ</th>
+									<th class="b-1-w-10">ISS</th>
+									<th class="b-1-w-10">TOTAL</th>
+								</tr>
+								<tr class="f-11-f-n">
+									<th class="text-right b-1-w-10">{{object.cofins |
+									currency : '' : 2}} ({{object.cofinsPerc | currency : '' : 2}}%)
+									</th>
+									<th class="text-right b-1-w-10">{{object.csll |
+									currency : '' : 2}} ({{object.csllPerc | currency : '' : 2}}%)
+									</th>
+									<th class="text-right b-1-w-10">{{object.pis |
+									currency : '' : 2}} ({{object.pisPerc | currency : '' : 2}}%)
+									</th>
+									<th class="text-right b-1-w-10">{{object.pcc |
+									currency : '' : 2}} ({{object.pccPerc | currency : '' : 2}}%)
+									</th>
+									<th class="text-right b-1-w-10">{{object.inss |
+									currency : '' : 2}} ({{object.inssPerc | currency : '' : 2}}%)
+									</th>
+									<th class="text-right b-1-w-10">{{object.irpj |
+									currency : '' : 2}} ({{object.irpjPerc | currency : '' : 2}}%)
+									</th>
+									<th class="text-right b-1-w-10">{{object.iss |
+									currency : '' : 2}} ({{object.issPerc | currency : '' : 2}}%)
+									</th>
+									<th class="text-right b-1-w-10">{{object.totalRetencoes |
+									currency : '' : 2}}
+									</th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div id="valor_total" style="margin-top: 6px;">
+					<div style="width: 100%; height: 20px; border: 1px #000 solid; font-size: 11px; font-weight: bold; margin-top: 12px;">
+						<p class="text-center" style="margin-top: 2px;" ng-show="tipoimpressao == 'nf'">VALOR TOTAL DA NOTA = R$ {{object.faturamentoEtapaTO.valor | currency : '' : 2}}</p>
+						<p class="text-center" style="margin-top: 2px;" ng-show="tipoimpressao == 'rps'">VALOR TOTAL DO RPS = R$ {{object.faturamentoEtapaTO.valor | currency : '' : 2}}</p>
+					</div>
+
+					<div layout="column" style="margin-top: 18px;">
+						<label class="text-left" style="font-size: 11px; font-weight: bold; margin-bottom: 3px">Serviço Prestado</label>
+						<label class="text-left"
+							style="padding: 5px; font-size: 10px;border: 1px #000 solid;">{{object.servicoTipo.sigla}}
+							- {{object.servicoTipo.nome}}</label>
+					</div>
+				</div>
+
+				<div flex id="rateio" layout="column" layout-align="start"
+					style="width: 100%; height: 100%; margin: 0px;">
+					<div layout="row" layout-align="start center"
+						style="margin-top: 20px; font-size: 11px; font-weight: bold;">
+						<p class="text-center" style="margin-top: 1px; margin-bottom: 0px;">Outras informações</p>
+					</div>
+					<div layout="row">
+						<table id="table_rateio" style="width: 100%">
+							<tbody>
+								<tr style="font-size: 9px; font-weight: bold;">
+									<th style="border: 1px #000 solid;" width="64%">Centro financeiro</th>
+									<th style="border: 1px #000 solid;" width="10%">Tipo</th>
+									<th style="border: 1px #000 solid; " width="11%">Faturamento</th>
+									<th style="border: 1px #000 solid; " width="11%">Valor líquido</th>
+								</tr>
+								<tr style="font-size: 11px; font-weight: normal;">
+									<th class="text-left" style="border: 1px #000 solid;" width="64%">
+										<div style="width: 100%; height: 1.2em; overflow: hidden;">
+											{{object.faturamentoEtapaTO.faturamento.centroFinanceiro.identificadorFinal}}
+											-
+											{{object.faturamentoEtapaTO.faturamento.centroFinanceiro.nome}}
+										</div>
+									</th>
+									<th class="text-center b-1-w-10">
+										{{object.faturamentoEtapaTO.faturamento.tipo.startsWith("Extra") ? "Extra" : object.faturamentoEtapaTO.faturamento.tipo}}
+									</th>
+									<th class="text-center" style="border: 1px #000 solid;" width="11%">
+										{{object.faturamentoEtapaTO.faturamento.numero}}
+									</th>
+									<th class="text-right" style="border: 1px #000 solid;" width="11%">{{valorLiquidoNF | currency : '' : 2}}
+									</th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div flex id="parcelas" layout="column" layout-align="start"
+					style="width: 100%; height: 100%; margin: 0px;">
+					<div layout="row" style="margin: 7px 0px; font-size: 11px; font-weight: bold;">
+						<p class="text-center" style="font-size: 11px; font-weight: bold;">Parcelas</p>
+					</div>
+					<div layout="row" style="margin-top:-17px;">
+						<table id="table_parcelas" width="100%">
+							<thead>
+								<tr style="font-size: 9px; font-weight: bold;">
+									<th style="border: 1px #000 solid; " width="4%">Nº</th>
+									<th style="border: 1px #000 solid;" width="10%">Vencimento</th>
+									<th style="border: 1px #000 solid;" width="11%">Valor líquido</th>
+									<th style="border: 1px #000 solid;">Situação</th>
+									<th style="border: 1px #000 solid;" width="16%" >Recebimento</th>
+									<th style="border: 1px #000 solid; " width="10%">Pagamento</th>
+									<th style="border: 1px #000 solid; " width="10%">Contabilização</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="parcela in object.notaSaidaParcelas"
+									style="font-size: 11px; font-weight: normal;">
+									<td class="text-center" style="border: 1px #000 solid; ">{{parcela.ordem}}</td>
+									<td class="text-center" style="border: 1px #000 solid;">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}
+									</td>
+									<td class="text-right pr-5" style="border: 1px #000 solid;">{{parcela.valorLiquido | currency : '' : 2}}
+									</td>
+									<td class="text-left pl-5" style="border: 1px #000 solid;">{{parcela.situacao}}</td>
+									<td class="text-center" style="border: 1px #000 solid;">
+										{{parcela.responsavelRecebimento.nome}} {{parcela.dataResponsavelRecebimento | date : 'dd/MM/yyyy HH:mm:ss'}}
+									</td>
+									<td class="text-center" style="border: 1px #000 solid; ">{{parcela.dataPagamento | date : 'dd/MM/yyyy'}}
+									</td>
+									<td class="text-center" style="border: 1px #000 solid; ">{{parcela.dataContabilizacao | date : 'dd/MM/yyyy'}}
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="no-print" flex id="controles" layout="column" layout-align="start" style="width: 100%; height: 100%; margin: 0px;" ng-show="tipoimpressao == 'nf'">
+					<div layout="row" style="margin: 7px 0px; font-size: 11px; font-weight: bold;">
+						<p class="text-center">Controles (SGI)</p>
+					</div>
+					<div layout="row" style="margin-top:-17px;">
+						<table id="table_controles" width="100%">
+							<tbody>
+								<tr style="font-size: 9px; font-weight: bold;">
+									<th class="text-center" style="border: 1px #000 solid;" width="25%">Operação</th>
+									<th class="text-center" style="border: 1px #000 solid;">Nome</th>
+									<th class="text-center" style="border: 1px #000 solid;" width="25%">Data/Hora</th>
+								</tr>
+								<tr style="font-size: 11px; font-weight: normal;">
+									<th class="text-left" style="border: 1px #000 solid; ">Cadastramento</th>
+									<th class="text-left" style="border: 1px #000 solid;">{{object.criador}}</th>
+									<th style="border: 1px #000 solid;">{{object.dataCriacao | date : 'dd/MM/yyyy HH:mm:ss'}}
+									</th>
+								</tr>
+								<tr style="font-size: 11px; font-weight: normal;">
+									<th class="text-left" style="border: 1px #000 solid; ">Última alteração</th>
+									<th class="text-left" style="border: 1px #000 solid;">{{object.atualizador}}</th>
+									<th style="border: 1px #000 solid;">{{object.dataAtualizacao | date : 'dd/MM/yyyy HH:mm:ss'}}
+									</th>
+								</tr>
+								<tr style="font-size: 11px; font-weight: normal;">
+									<th class="text-left" style="border: 1px #000 solid; ">Numeração</th>
+									<th class="text-left" style="border: 1px #000 solid;">
+										{{object.responsavelNumeracao.nome}}
+									</th>
+									<th style="border: 1px #000 solid;">{{object.dataNumeracao | date : 'dd/MM/yyyy HH:mm:ss'}}
+									</th>
+								</tr>
+								<tr style="font-size: 11px; font-weight: normal;">
+									<th class="text-left" style="border: 1px #000 solid;">Cancelamento da numeração</th>
+									<th class="text-left" style="border: 1px #000 solid;">
+										{{object.responsavelCancelarNumeracao.nome}}
+									</th>
+									<th style="border: 1px #000 solid; ">{{object.dataCancelamentoNumeracao | date :
+									'dd/MM/yyyy HH:mm:ss'}}
+									</th>
+								</tr>
+
+								<tr style="font-size: 11px; font-weight: normal;">
+									<th class="text-left" style="border: 1px #000 solid;">Cancelamento</th>
+									<th class="text-left" style="border: 1px #000 solid;">
+										{{object.responsavelCancelamento.nome}}
+									</th>
+									<th style="border: 1px #000 solid; ">{{object.dataCancelamento | date : 'dd/MM/yyyy HH:mm:ss'}}
+									</th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+
+			</div>
+
+
+		</div>
+
+		<div style="bottom: 23px; margin-bottom: 0; padding-top: 15px; position: fixed; right: 23px; z-index: 998;">
+
+			<md-button aria-label="imprimir" class="md-fab md-mini md-primary no-print" ng-click="imprimir()">
+				<md-icon md-font-icon="icon-printer" md-menu-align-target></md-icon>
+				<md-tooltip id="tool_tip_btn_imprimir" md-direction="bottom">
+					<span class="h4">Imprimir esta nota fiscal</span>
+				</md-tooltip>
+			</md-button>
+
+		</div>
+
+	</div>
+</div>

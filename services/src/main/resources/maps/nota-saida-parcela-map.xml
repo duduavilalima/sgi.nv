@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xmlns="http://dozer.sourceforge.net"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping>
+		<class-a>
+			br.com.araujoabreu.sgi.service.nota.transfer.NotaSaidaParcelaTO
+		</class-a>
+		<class-b>br.com.araujoabreu.sgi.compras.domain.NotaSaidaParcela
+		</class-b>
+
+
+		<field-exclude>
+			<a>notaSaida</a>
+			<b>notaSaida</b>
+		</field-exclude>
+
+		<field>
+			<a>notaSaida.codigo</a>
+			<b>notaSaida.codigo</b>
+		</field>
+
+		<field-exclude>
+			<a>parcelaRetencoes</a>
+			<b>parcelaRetencoes</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>responsavelRecebimento</a>
+			<b>responsavelRecebimento</b>
+		</field-exclude>
+
+		<field-exclude>
+			<a>responsavelCancelamento</a>
+			<b>responsavelCancelamento</b>
+		</field-exclude>
+
+		<!--        <field-exclude>
+                    <a>contaCorrentePrevista</a>
+                    <b>contaCorrentePrevista</b>
+                </field-exclude>
+
+                <field-exclude>
+                    <a>contaCorrenteRecebimento</a>
+                    <b>contaCorrenteRecebimento</b>
+                </field-exclude>
+
+                <field>
+                    <a>contaCorrentePrevista.codigo</a>
+                    <b>contaCorrentePrevista.codigo</b>
+                </field>
+
+                <field>
+                    <a>contaCorrenteRecebimento.codigo</a>
+                    <b>contaCorrenteRecebimento.codigo</b>
+                </field>-->
+
+
+	</mapping>
+
+</mappings>

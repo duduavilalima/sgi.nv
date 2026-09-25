@@ -1,0 +1,28 @@
+<md-dialog aria-label="Remover perfil: Confirmação">
+	<md-toolbar class="md-accent-bg _md md-sgi-theme _md-toolbar-transitions">
+		<div class="md-toolbar-tools">
+			<h2 class="ng-binding md-autofocus" md-autofocus="">Remover perfil: Confirmação</h2>
+			<span class="flex" flex=""></span>
+			<md-button class="md-icon-button md-button md-ink-ripple md-sgi-theme" ng-click="cancelarRemover()"
+					   style="padding: 0px 0px 0px 0px; " type="button">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close" role="img"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content>
+		<div class="p-16">
+			<p>Deseja realmente remover este perfil (esta operação não poderá ser desfeita)?</p>
+		</div>
+		<md-divider></md-divider>
+	</md-dialog-content>
+	<md-dialog-actions layout="row" layout-align="left center">
+		<md-button aria-label="Remover" class="md-raised md-accent md-sgi-theme" class="md-primary"
+				   ng-click="remover()">Remover
+		</md-button>
+		<md-button aria-label="Cancelar" class="md-accent md-default md-ink-ripple md-sgi-theme" class="md-primary"
+				   ng-click="cancelarRemover()">Cancelar
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>

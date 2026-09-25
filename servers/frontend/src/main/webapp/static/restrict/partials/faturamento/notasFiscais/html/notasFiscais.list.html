@@ -1,0 +1,247 @@
+<div class="page-layout simple fullwidth" id="page_list" ng-controller="NotaFiscalFaturamentoListarCtrl">
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{::titulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="subtitulo">{{::subtitulo}}</span>
+			</div>
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+
+		<div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+
+			<div class="content" flex>
+
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">{{::titulo}} - Filtros de pesquisa</div>
+							</header>
+
+							<div class="content">
+								<form name="form" ui-keypress="{13:'buscar()'}">
+									<div layout layout-sm="column" layout-wrap>
+										<md-input-container flex="25" flex-sm="100">
+											<label id="lbl_numero">Número</label>
+											<input id="input_numero" maxlength="20" name="numero"
+												   ng-model="object.notaSaida.numero" type="text"
+												   ui-hide-group-sep ui-number-mask="0"
+												   value="{{ object.notaSaida.numero }}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100">
+											<label id="lbl_situacao">Situação</label>
+											<md-select id="combo_situacao" name="situacao"
+													   ng-change="$emit('changeSituacao')"
+													   ng-model="object.notaSaida.status"
+													   value="{{ object.notaSaida.status }}">
+												<md-option ng-repeat="status in listaSituacao"
+														   ng-value="status.ordemStatus">{{ status.nomeStatus }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100">
+											<label id="lbl_tipo">Empresa</label>
+											<md-select id="combo_empresa" name="empresa"
+													   ng-change="$emit('changeEmpresa')"
+													   ng-model="object.notaSaida.empresa.codigo"
+													   value="{{ object.notaSaida.empresa.codigo  }}">
+												<md-option ng-repeat="unidade in empresaList" ng-value="unidade.codigo">
+													{{ unidade.codnome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100">
+											<label id="lbl_lote">Lote (interface com a Prefeitura)</label>
+											<input id="input_lote" maxlength="200" name="lote" ng-maxlength="200"
+												   ng-model="object.codigoLote" type="text"
+												   value="{{ object.codigoLote }}">
+										</md-input-container>
+									</div>
+
+									<div layout layout-sm="column" layout-wrap>
+										<md-input-container flex="50" flex-sm="100">
+											<label id="lbl_cliente_sub">Cliente/Subcliente</label>
+											<input id="input_cliente_sub" maxlength="200" name="ident"
+												   ng-maxlength="200" ng-model="object.nomeFantasiaDocumento"
+												   type="text" value="{{ object.nomeFantasiaDocumento }}">
+											<md-tooltip md-direction="bottom" style="margin-top: -30px">
+												<span class="h4">Informe o CNPJ, razão social ou o nome fantasia do cliente ou do subcliente</span>
+											</md-tooltip>
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100">
+											<label id="lbl_cc_cl">Centro de lucro</label>
+											<input class="text-left" id="input_cc_cl" maxlength="4" name="cc_cl"
+												   ng-model="object.notaSaida.centroFinanceiro.identificadorFinal"
+												   type="text" ui-hide-group-sep ui-number-mask="0"
+												   value="{{ object.notaSaida.centroFinanceiro.identificadorFinal }}">
+										</md-input-container>
+
+										<md-input-container flex="25" flex-sm="100">
+											<label id="lbl_contrato">Contrato</label>
+											<input class="text-left" id="input_contrato" maxlength="9" name="contrato"
+												   ng-model="object.notaSaida.centroFinanceiro.contratoTO.codigo"
+												   type="text" ui-hide-group-sep ui-number-mask="0"
+												   value="{{ object.notaSaida.centroFinanceiro.contratoTO.codigo }}">
+										</md-input-container>
+									</div>
+
+									<div layout layout-sm="column" layout-wrap>
+										<md-input-container flex="50" flex-sm="100">
+											<label id="lbl_descricao_item">Descrição do item</label>
+											<input id="input_descricao_item" maxlength="200" md-maxlength="200"
+												   name="desc_item" ng-maxlength="200" ng-model="object.etapa.descricao"
+												   type="text" value="{{ object.etapa.descricao }}">
+										</md-input-container>
+
+										<div flex="25" flex-sm="100">
+											<md-autocomplete flex="100" id="autocomplete_servico_aba_dados"
+															 md-delay="250"
+															 md-floating-label="Código do serviço"
+															 md-input-id="input_serivco_aba_dados"
+															 md-input-name="autocompleteServico"
+															 md-item-text="item.sigla + ' - ' + item.nome"
+															 md-items="item in querySearchServico(searchTextServico)"
+															 md-menu-class="autocomplete-custom-template"
+															 md-min-length="3"
+															 md-no-cache="false"
+															 md-search-text="searchTextServico"
+															 md-selected-item="selectedItemServico"
+															 md-selected-item-change="selectedItemChangeService(item, 'servico')"
+															 name="autocompleteServico"
+															 value="{{ object.servicoTipo.nome }}">
+												<md-item-template>
+                                                    <span class="item-title">
+                                                        <h3><strong> <span md-highlight-flags="i"
+																		   md-highlight-text="searchTextServico"> {{item.sigla}} </span>
+                                                        </strong></h3>
+                                                    </span>
+													<span class="item-title">
+                                                        <h5><strong>DESCRIÇÃO: </strong> <span md-highlight-flags="i"
+																							   md-highlight-text="searchTextServico">{{item.nome}} </span>
+                                                        </h5>
+                                                    </span>
+												</md-item-template>
+											</md-autocomplete>
+											<md-tooltip style="margin-top: -72px">
+												<span
+													class="h4">Código do serviço, conforme definido pela Prefeitura</span>
+											</md-tooltip>
+										</div>
+
+
+											<md-input-container flex="25" flex-sm="100">
+												<label id="lbl_tipo_item">Tipo de itens</label>
+												<md-select id="combo_tipo_item" name="tipo_item"
+														   ng-change="$emit('changeItem')"
+														   ng-model="object.notaSaida.tipoFornecimento"
+														   value="{{ object.notaSaida.tipoFornecimento }}">
+													<md-option ng-repeat="tipo in listaItem" ng-value="tipo">
+														{{ tipo }}
+													</md-option>
+												</md-select>
+											</md-input-container>
+
+									</div>
+
+									<div layout layout-sm="column" layout-wrap>
+
+										<md-input-container flex="25" flex-sm="100">
+											<label id="lbl_cidade">Cidade do ISS</label>
+											<input id="input_cidade" maxlength="200" md-maxlength="200" name="cidade"
+												   ng-maxlength="200" ng-model="object.cidade.nome" type="text"
+												   value="{{ object.cidade.nome }}">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_combo_data_1">Data</label>
+											<md-select id="combo_data_1" name="combo_data_1" ng-change="$emit('changeData1')" ng-model="object.data1">
+												<md-option ng-repeat="tipoEnum in tipoDataEnum" ng-value="tipoEnum">{{ tipoEnum.tipo }}</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl_1_data_de">{{ lblDataDe }}</label>
+											<input id="_1_data_de" max-date="object._1DataAte" name="_1_data_de" ng-change="$emit('changeData1')"
+												   ng-disabled="!object.data1 || object.data1 === 1" ng-model="object.dataDe" tt-date-picker type="text">
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25">
+											<label id="lbl__1_data_ate">{{ lblDataAte }}</label>
+											<input id="_1_data_ate" min-date="object._1DataDe" name="_1_data_ate" ng-change="$emit('changeData1')"
+												   ng-disabled="!object.data1 || object.data1 === 1" ng-model="object.dataAte" tt-date-picker type="text">
+										</md-input-container>
+
+									</div>
+
+									<section layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_pesquisar"
+													   name="btn_pesquisar" ng-click="buscar()" ng-disabled="isAction">
+												Pesquisar
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+										<div flex="auto" layout-wrap show-gt-sm>
+										</div>
+									</section>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- / CAMPOS DE PESQUISA -->
+
+				<!-- DATATABLE - RESULTADO DA PESQUISA -->
+				<div class="simple-table-container profile-box md-whiteframe-2dp" id="div_result" ng-if="result && result != null">
+					<header class="md-accent-bg">
+						<div class="title" id="titulo_resultado">{{ ::titulo}} - Resultado da pesquisa</div>
+					</header>
+
+					<div class="sgiUiGridPesquisa" id="idGridNotaFiscal" ng-if="exibirGrid(gridPesquisa)"
+						 ng-style="ajustarAlturaTabela(gridPesquisa)" ui-grid="gridPesquisa" ui-grid-auto-resize ui-grid-pinning>
+					</div>
+
+					<div id="idMensagemPesquisa" ng-if="!exibirGrid(gridPesquisa)">
+						<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+							<!--<span class="h4 p-32">{{mensagemPesquisa(titulo)}}</span>-->
+							<span class="h4 p-32">Nenhum resultado encontrado.</span>
+						</md-whiteframe>
+					</div>
+
+					<section class="p-8" layout="row" layout-align="space-between center" layout-sm="row" layout-wrap>
+						<div></div>
+
+						<div ng-if="exibirGrid(gridPesquisa)" ng-include="'js/util/templates/paginacao.html'"></div>
+
+						<div></div>
+					</section>
+				</div>
+
+				<!-- / DATATABLE - RESULTADO DA PESQUISA -->
+
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+
+</div>

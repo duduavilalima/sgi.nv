@@ -1,0 +1,238 @@
+<div class="simple-table-container md-whiteframe-1dp">
+
+	<table class="row-border md-caption tabela_exibicao" id="table_parcelas" ms-responsive-table>
+		<thead>
+		<tr class="md-grey-200-bg">
+			<th style="text-align: center" width="5%">Parcela</th>
+			<th style="text-align: center" width="9%">Situação</th>
+			<th style="text-align: center" width="8%">Bruto</th>
+			<th style="text-align: center" width="8%">Tributos (-)</th>
+			<th style="text-align: center" width="8%">Retenções (-)</th>
+			<th style="text-align: center" width="8%">Permuta (-)</th>
+			<th style="text-align: center" width="8%">Desconto (-)</th>
+			<th style="text-align: center" width="8%">Devolução (+)</th>
+			<th style="text-align: center" width="8%">Juros (+)</th>
+			<th style="text-align: center" width="8%">Líquido (=)</th>
+			<th style="text-align: center" width="5%">Vencimento</th>
+			<th style="text-align: center" width="5%">Pagamento</th>
+			<th class="text-center" ng-show="screenMode != 'VIEW'" width="10%">Opções</th>
+		</tr>
+		</thead>
+		<tfoot>
+		<tr class="md-grey-300-bg">
+			<td class="text-right" colspan="2" ng-style="{color: myColor}"><strong>Total {{ totalValorGeralParcelas()
+				}}</strong></td>
+			<td style="text-align: right;padding: 10px 5px 5px 10px;"><strong>{{ totalParcelas | currency:'':2
+				}}</strong></td>
+			<td style="text-align: right;padding: 10px 5px 5px 10px;"><strong>{{ parcelasValorTributos | currency:'':2
+				}}</strong></td>
+			<td style="text-align: right;padding: 10px 5px 5px 10px;"><strong>{{ valorRetencoes | currency:'':2
+				}}</strong></td>
+			<td style="text-align: right;padding: 10px 5px 5px 10px;"><strong>{{ permuta | currency:'':2 }}</strong>
+			</td>
+			<td style="text-align: right;padding: 10px 5px 5px 10px;"><strong>{{ valorDesconto | currency:'':2
+				}}</strong></td>
+			<td style="text-align: right;padding: 10px 5px 5px 10px;"><strong>{{ valorDevolucao | currency:'':2
+				}}</strong></td>
+			<td style="text-align: right;padding: 10px 5px 5px 10px;"><strong>{{ juros | currency:'':2 }}</strong></td>
+			<td style="text-align: right;padding: 10px 5px 5px 10px;"><strong>{{ valorLiquido | currency:'':2
+				}}</strong></td>
+			<td class="text-left"></td>
+			<td class="text-left"></td>
+
+
+			<td ng-show="screenMode != 'VIEW'"></td>
+		</tr>
+		</tfoot>
+
+		<tbody>
+		<tr ng-include="getTemplate(parcela)"
+			ng-repeat="(key, parcela) in object.notaSaidaParcelas track by parcela.ordem">
+		</tr>
+		</tbody>
+	</table>
+
+	<script id="display" type="text/ng-template">
+		<td id="parcela_{{key}}">{{parcela.ordem}}</td>
+		<td id="parcela_{{key}}">{{parcela.situacao == 'Aberta (NF não processada)' ? 'Aberta' : parcela.situacao ==
+			'Finalizada (recebida)' ? 'Recebida' : parcela.situacao}}
+		</td>
+		<td id="parcela_{{key}}" style="text-align: right">{{parcela.valorBruto | currency : '' : 2}}</td>
+		<td id="parcela_{{key}}" style="text-align: right">{{parcela.valorTributo ? parcela.valorTributo : 0 | currency
+			: '' : 2}}
+		</td>
+		<td id="parcela_{{key}}" style="text-align: right">{{parcela.valorRetencaoContratual ?
+			parcela.valorRetencaoContratual : 0 | currency : '' : 2}}
+		</td>
+		<td id="parcela_{{key}}" style="text-align: right">{{parcela.valorPermuta | currency : '' : 2}}</td>
+		<td id="parcela_{{key}}" style="text-align: right">{{parcela.valorDesconto | currency : '' : 2}}</td>
+		<td id="parcela_{{key}}" style="text-align: right">{{parcela.valorDevolucao ? parcela.valorDevolucao : 0 |
+			currency : '' : 2}}
+		</td>
+		<td id="parcela_{{key}}" style="text-align: right">{{parcela.valorJuros | currency : '' : 2}}</td>
+		<td id="parcela_{{key}}" style="text-align: right">{{parcela.valorLiquido | currency : '' : 2}}</td>
+		<td id="parcela_{{key}}" style="text-align: center">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}</td>
+		<td id="parcela_{{key}}" style="text-align: center">{{parcela.dataPagamento | date : 'dd/MM/yyyy'}}</td>
+
+		<td id="parcela_{{key}}" style="padding-top: 0px; padding-bottom: 0px; padding-right: 0px;"
+			ng-show="screenMode != 'VIEW'">
+			<md-button id="btn_editar_parcela" class="md-icon-button"
+					   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;" ng-click="editarParcela(parcela)"
+					   ng-show="screenMode != 'VIEW' && parcela.situacao !== 'Finalizada (recebida)' && exibirBotoes">
+				<md-icon md-font-icon="icon-pencil"></md-icon>
+				<md-tooltip md-direction="bottom" class="h3">
+					Editar esta parcela
+				</md-tooltip>
+			</md-button>
+			<md-button id="btn_remover_parcela" class="md-icon-button"
+					   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;"
+					   ng-click="removerParcela($event,$index)"
+					   ng-show="$last && screenMode != 'VIEW' && parcela.situacao !== 'Finalizada (recebida)' && exibirBotoes">
+				<md-icon md-font-icon="icon-close" class="red-400-fg"></md-icon>
+				<md-tooltip md-direction="bottom" class="h3">
+					Remover esta parcela desta nota fiscal (será efetivamente removida ao salvar a nota fiscal)
+				</md-tooltip>
+			</md-button>
+			<md-button id="btn_adicionar_parcela" name="btn_add_novo_tributo_iss" class="md-icon-button"
+					   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;"
+					   ng-click="adicionarParcela(parcela)" ng-show="$last && !desabilitarBotaoAdicionar(parcela) && exibirBotoes">
+				<md-icon md-font-icon="icon-plus" class="green-400-fg"></md-icon>
+				<md-tooltip md-direction="bottom" class="h3">
+					Adicionar nova parcela
+				</md-tooltip>
+			</md-button>
+		</td>
+	</script>
+
+	<script id="edit" type="text/ng-template">
+		<td>{{parcelaSelecionada.ordem}}</td>
+		<td>{{parcelaSelecionada.situacao == 'Aberta (NF não processada)' ? 'Aberta' : parcelaSelecionada.situacao ==
+			'Finalizada (recebida)' ? 'Recebida' : parcelaSelecionada.situacao}}
+		</td>
+		<td style="margin: 0; padding: 0; vertical-align: top;">
+			<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+				<input id="input_valor_parcela" name="input_valor_parcela" aria-label="valor_parcela" type="text"
+					   ng-model="parcelaSelecionada.valorBruto" ui-number-mask="2" maxlength="18" min="0.01"
+					   max="999999999999"
+					   style="margin-top: 15px; margin-left: 15px; width: 80%;text-align: right;">
+			</md-input-container>
+		</td>
+		<td style="text-align: right">
+			{{parcelaSelecionada.valorTributo ? parcelaSelecionada.valorTributo : 0 | currency : '' : 2}}
+		</td>
+		<td style="text-align: right">
+			{{parcelaSelecionada.valorRetencaoContratual ? parcelaSelecionada.valorRetencaoContratual : 0 | currency :
+			'' : 2}}
+		</td>
+		<td style="margin: 0; padding: 0; vertical-align: top;">
+			<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+				<input id="input_valor_permuta" name="input_valor_permuta" aria-label="valor_permuta" type="text"
+					   ng-model="parcelaSelecionada.valorPermuta" ui-number-mask="2" maxlength="18" min="0.01"
+					   max="999999999999"
+					   style="margin-top: 15px; margin-left: 15px; width: 80%;text-align: right;">
+			</md-input-container>
+		</td>
+		<td style="text-align: right">
+			{{parcela.valorDesconto ? parcela.valorDesconto : parcela.valorDesconto | currency : '' : 2}}
+		</td>
+		<td style="text-align: right">
+			{{parcela.valorDevolucao ? parcela.valorDevolucao : 0 | currency : '' : 2}}
+		</td>
+		<td style="margin: 0; padding: 0; vertical-align: top;">
+			<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+				<input id="input_valor_juros" name="input_valor_juros" aria-label="valor_juros" type="text"
+					   ng-model="parcelaSelecionada.valorJuros" ui-number-mask="2" maxlength="18" min="0.01"
+					   max="999999999999"
+					   style="margin-top: 15px; margin-left: 15px; width: 80%;text-align: right;">
+			</md-input-container>
+		</td>
+		<td style="text-align: right">
+			{{parcelaSelecionada.valorLiquido | currency : '' : 2}}
+		</td>
+		<td style="margin: 0; padding: 0;">
+			<md-input-container>
+				<input id="input_vencimento" name="input_vencimento" aria-label="data_vencimento" tt-date-picker
+					   min-date="parcelaSelecionada.minDate" type="text" ng-model="parcelaSelecionada.dataVencimento"
+					   style="margin-top: -5px; margin-bottom: 0px;">
+			</md-input-container>
+		</td>
+		<td style="margin: 0; padding: 0;">
+			<md-input-container>
+				<input id="input_pagamento" name="input_pagamento" aria-label="data_pagamento" tt-date-picker
+					   min-date="parcelaSelecionada.minDate" type="text" ng-model="parcelaSelecionada.dataPagamento"
+					   style="margin-top: -5px; margin-bottom: 0px;" ng-disabled="true">
+			</md-input-container>
+		</td>
+		<td style="padding-top: 0px; padding-bottom: 0px; padding-right: 0px;">
+
+			<md-button id="btn_salvar_parcela" name="btn_add_novo_tributo_iss" class="md-icon-button"
+					   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;" ng-click="salvarParcela($index)">
+				<md-icon md-font-icon="icon-check" class="green-400-fg"></md-icon>
+
+				<md-tooltip md-direction="bottom" class="h3">
+					Salvar modificação
+				</md-tooltip>
+			</md-button>
+
+			<md-button id="btn_cancelar_parcela" class="md-icon-button"
+					   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;"
+					   ng-click="cancelarRemoverParcela($index)">
+				<md-icon md-font-icon="icon-minus-circle-outline" class="red-400-fg"></md-icon>
+				<md-tooltip md-direction="bottom" class="h3">
+					Cancelar modificação
+				</md-tooltip>
+			</md-button>
+		</td>
+	</script>
+</div>
+
+<div class="navigation padding-10" flex layout="row"
+	 ng-hide="screenMode === 'NEW'"
+	 ng-if="object.status != 'Finalizada' && object.status != 'Cancelada' && object.status != 'Recebida' && exibirBotoes" style="margin-top: 0px;margin-left: -15px;">
+	<md-button class="md-raised md-accent" id="btn_editar_parcelas" ng-click="editarParcelas()"
+			   ng-disabled="action" ng-hide="modeParcelas == true || modeFormaPagamentoParcelada == true"
+			   ng-show="screenMode === 'VIEW'">
+		<span class="h4">Editar</span>
+		<img ng-if="action" src="../img/gray_carregando.gif" style="height: 20px;width: 20px;margin-top: 8px;"/>
+		<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+			<span class="h4">Editar parcela</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_salvar_editar_parcelas" ng-click="salvarParcelas(wizardStep5)"
+			   ng-disabled="wizardStep5.$invalid || action || editarParcelaAction"
+			   ng-show="modeParcelas == true && screenMode === 'EDIT'">
+		Salvar
+		<md-tooltip id="tool_tip_btn_salvar_editar_parcelas" md-direction="bottom">
+			<span class="h4">Salvar as alterações realizadas nesta tela da nota fiscal</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_cancelar_parcelas" ng-click="cancelarParcelas(wizardStep5)"
+			   ng-disabled="action || editarParcelaAction" ng-show="modeParcelas == true && screenMode === 'EDIT'">
+		Cancelar
+		<md-tooltip id="tool_tip_btn_cancelar_discriminacao" md-direction="bottom">
+			<span class="h4">Sair desta nota fiscal, sem gravar as modificações realizadas</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_salvar_editar_dados_principais2"
+			   ng-click="salvarDadosPrincipais(wizardStep1)"
+			   ng-disabled="wizardStep1.$invalid || action"
+			   ng-show="modeDadosPrincipais == true || modeFormaPagamentoParcelada == true">
+		Salvar
+		<md-tooltip id="tool_tip_btn_salvar_editar2" md-direction="bottom">
+			<span class="h4">Salvar as alterações realizadas nesta tela do faturamento</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_cancelar_dados_principais2" ng-click="cancelarDadosPrincipais(wizardStep1)"
+			   ng-disabled="action"
+			   ng-show="modeDadosPrincipais == true || modeFormaPagamentoParcelada == true">
+		Cancelar
+		<md-tooltip id="tool_tip_btn_cancelar_dados_principais2" md-direction="bottom">
+			<span class="h4">Sair desta nota fiscal, sem gravar as modificações realizadas</span>
+		</md-tooltip>
+	</md-button>
+
+</div>

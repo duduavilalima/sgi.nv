@@ -1,0 +1,119 @@
+<div class="page-layout simple fullwidth" ng-controller="RelacionamentoContatoDetailCtrl as $ctrl">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb white-text" layout="row" layout-align="start center">
+                <md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="modulo">Comercial</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo">Relacionamentos de Contato</span>
+                <md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+                <span class="parent" id="titulo_subtitulo">Exibição</span>
+            </div>
+        </div>
+        <span class="h2"></span>
+    </div>
+    <!-- / HEADER -->
+
+    <div class="page-layout simple single-scroll" id="profile" layout="row" layout-padding>
+        <!-- CONTENT -->
+        <div class="content" flex>
+            <div layout="row" layout-wrap>
+                <div class="about" flex="100" layout="column">
+                    <div class="profile-box info-box general md-whiteframe-1dp" layout="column">
+                        <header class="md-accent-bg">
+                            <div class="title" id="title_panel">Relacionamentos de Contato - Dados gerais</div>
+                        </header>
+
+                        <form name="ViewDialogForm" novalidate>
+
+                            <!-- DADOS -->
+                            <div class="md-padding" layout="row" layout-sm="column" layout-wrap layout-xs="column">
+                                <md-input-container flex flex-gt-md="50">
+                                    <label id="lbl_nomeV">Nome</label>
+                                    <input id="nomeV" name="nome" disabled="true" ng-value="$ctrl.object.nome" type="text-left">
+                                </md-input-container>
+
+                                <md-input-container flex="50" flex-sm="100" flex-xs="100">
+                                    <label id="lbl_perfilV">Perfil</label>
+                                    <md-select id="combo_perfilV" disabled="true" ng-model="$ctrl.object.perfil.codigo">
+                                        <md-option ng-repeat="item in $ctrl.listPerfis" ng-value="item.codigo" value="{{ item.codigo }}">{{ item.descricao }}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+
+                            <!-- ABA CONTROLES -->
+                            <md-tabs>
+                                <md-tab label="Controles">
+                                        <md-divider></md-divider>
+                                    <md-content class="md-padding">
+                                        <div layout-gt-xs="row">
+                                            <md-input-container class="md-block" flex flex-gt-sm="70">
+                                                <label id="lbl_cadastramento">Cadastramento</label>
+                                                <input class="text-left" id="input_cadastramento" 
+                                                name="cadastramento" disabled="true" type="text" value="{{ ::$ctrl.object.criador }}">
+                                            </md-input-container>
+
+                                            <span class="width-20"></span>
+
+                                            <md-input-container class="md-block" flex flex-gt-sm="30">
+                                                <label id="lbl_data_hora_cadastramento">Data/hora</label>
+                                                <input class="text-left" id="input_data_hora_cadastramento" 
+                                                name="data_hora_cadastramento" disabled="true" type="text" value="{{ $ctrl.object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                                            </md-input-container>
+                                        </div>
+                                        <span class="width-20"></span>
+                                        <div layout-gt-xs="row">
+                                            <md-input-container class="md-block" flex flex-gt-sm="70">
+                                                <label id="lbl_ultima_alteracao">Última alteração</label>
+                                                <input class="text-left" id="input_ultima_alteracao" 
+                                                name="ultima_alteracao" disabled="true" type="text" value="{{ $ctrl.object.atualizador }}">
+                                            </md-input-container>
+
+                                            <span class="width-20"></span>
+
+                                            <md-input-container class="md-block" flex flex-gt-sm="30">
+                                                <label id="lbl_data_hora_ultima_alteracao">Data/hora</label>
+                                                <input class="text-left" id="input_data_hora_ultima_alteracao" 
+                                                name="data_hora_ultima_alteracao" disabled="true" type="text" value="{{ $ctrl.object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+                                            </md-input-container>
+                                        </div>
+                                    </md-content>
+                                </md-tab>
+                            </md-tabs>
+                            <md-divider></md-divider>
+
+                            <div class="navigation padding-8" flex layout="row">
+                                <md-button class="md-raised md-accent estilo_botoes" id="btn_editar_nregistro" ng-click="$ctrl.editar()">
+                                    Editar
+                                    <md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+                                        <span class="h4">Editar este relacionamento de contato</span>
+                                    </md-tooltip>
+                                </md-button>
+                                <md-button class="md-raised md-primary estilo_botoes" id="btn_retornar_nregistro" ng-click="$ctrl.retornar()">
+                                    Retornar
+                                    <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+                                        <span class="h4">Sair desta tela e retornar para a tela anterior</span>
+                                    </md-tooltip>
+                                </md-button>
+                                <div style="text-align: right; width: 100%">
+                                    <md-button class="md-raised md-primary estilo_botoes" id="btn_remover_nregistro" ng-click="$ctrl.remover($event)">
+                                        Remover
+                                        <md-tooltip id="tool_tip_btn_remover" md-direction="bottom">
+                                            <span class="h4">Remover este relacionamento de contato (esta operação não poderá ser desfeita)</span>
+                                        </md-tooltip>
+                                    </md-button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+    </div>
+</div>

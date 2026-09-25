@@ -1,0 +1,89 @@
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_cadastramento_contas_receber">Cadastramento</label>
+		<input class="text-left" id="input_cadastramento_contas_receber" name="cadastramento_contas_receber"
+			   ng-disabled="true" ng-model="object.criador" type="text">
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_cadastramento_dialog_etapa">Data/hora</label>
+		<input class="text-left" id="input_data_hora_cadastramento_dialog_etapa"
+			   name="data_hora_cadastramento_dialog_etapa" ng-disabled="true" type="text"
+			   value="{{ object.dataCriacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+
+<span class="width-20"></span>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_ultima_alteracao_contas_receber">Última alteração</label>
+		<input class="text-left" id="input_ultima_alteracao_contas_receber" name="ultima_alteracao_contas_receber"
+			   ng-disabled="true" ng-model="object.atualizador" type="text">
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_ultima_alteracao_contas_receber">Data/hora</label>
+		<input class="text-left" id="input_data_hora_ultima_alteracao_contas_receber"
+			   name="data_hora_ultima_alteracao_contas_receber" ng-disabled="true" type="text"
+			   value="{{ object.dataAtualizacao | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_recebimento_contas_receber">Recebimento</label>
+		<input class="text-left" id="input_recebimento_contas_receber" name="recebimento_contas_receber"
+			   ng-disabled="true" ng-model="object.responsavelRecebimento.nome" type="text">
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_recebimento_contas_receber">Data/hora</label>
+		<input class="text-left" id="input_data_hora_recebimento_contas_receber"
+			   name="data_hora_recebimento_contas_receber" ng-disabled="true" type="text"
+			   value="{{ object.dataResponsavelRecebimento | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_cancelamento_receb_parcela">Cancelamento do recebimento da parcela</label>
+		<input class="text-left" id="input_cancelamento_receb_parcela" name="cancelamento_contas_receber"
+			   ng-disabled="true" ng-model="object.responsavelCancelarRecebimento.nome" type="text"
+			   value="{{ object.responsavelCancRecebimento.nome }}">
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_cancelamento_receb_parcela">Data/hora</label>
+		<input class="text-left" id="input_data_hora_cancelamento_receb_parcela"
+			   name="data_hora_cancelamento_receb_parcela" ng-disabled="true" type="text"
+			   value="{{ object.dataResponsavelCancelarRecebimento | date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>
+
+<div layout-gt-xs="row">
+	<md-input-container class="md-block" flex flex-gt-sm="70">
+		<label id="lbl_cancelamento_contas_receber">Cancelamento</label>
+		<input class="text-left" id="input_cancelamento_contas_receber" name="cancelamento_contas_receber"
+			   ng-disabled="true" ng-model="object.responsavelCancelamento.nome" type="text"
+			   value="{{ object.responsavelCancelamento.nome }}">
+	</md-input-container>
+
+	<span class="width-20"></span>
+
+	<md-input-container class="md-block" flex flex-gt-sm="30">
+		<label id="lbl_data_hora_cancelamento_contas_receber">Data/hora</label>
+		<input class="text-left" id="input_data_hora_cancelamento_contas_receber"
+			   name="data_hora_cancelamento_contas_receber" ng-disabled="true" type="text"
+			   value="{{ object.dataResponsavelCancelamento| date:'dd/MM/yyyy HH:mm:ss ' }}">
+	</md-input-container>
+</div>

@@ -1,0 +1,84 @@
+<md-dialog aria-label="Detalhe contas">
+	<md-dialog-content>
+		<div id="profile" layout="column">
+			<div class="about" layout="column">
+				<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+					<md-toolbar>
+						<div class="md-toolbar-tools">
+							<h3>Dados bancários</h3>
+							<span flex></span>
+							<md-button class="md-icon-button" ng-click="fechar()">
+								<md-icon aria-label="Fechar detalhe" class="s24 white-fg" md-font-icon="icon-close"
+										 style="color: white !important;"></md-icon>
+							</md-button>
+						</div>
+					</md-toolbar>
+
+					<div class="content">
+						<form name="detalheContas">
+							<table cellpadding="1px" id="tabela">
+								<thead>
+								<tr>
+									<th class="titulo_colunas" ng-if="!exibeSimples">Principal</th>
+									<th class="titulo_colunas">Banco</th>
+									<th class="titulo_colunas">Agência</th>
+									<th class="titulo_colunas">Digito</th>
+									<th class="titulo_colunas">Conta</th>
+									<th class="titulo_colunas">Digito</th>
+									<th class="titulo_colunas">Tipo</th>
+									<th class="titulo_colunas" ng-if="!exibeSimples">Homologação</th>
+									<th class="titulo_colunas" ng-if="!exibeSimples">Seleção</th>
+								</tr>
+								</thead>
+
+								<tbody ng-if="exibeSimples">
+								<tr ng-class="{'grey-300-bg': hover}" ng-if="item.codigo == contaSelecionada"
+									ng-mouseleave="hover = false" ng-mouseover="hover = true"
+									ng-repeat="item in listaDadosBancarios">
+									<td class="text-left">{{::item.banco.nome}}</td>
+									<td class="text-center">{{::item.agencia}}</td>
+									<td class="text-center">{{::item.digitoAgencia}}</td>
+									<td>{{::item.conta}}</td>
+									<td class="text-center">{{::item.digito}}</td>
+									<td>{{::item.tipoConta}}</td>
+								</tr>
+								</tbody>
+
+								<tbody ng-if="!exibeSimples">
+								<tr ng-class="{'grey-300-bg': hover}" ng-mouseleave="hover = false"
+									ng-mouseover="hover = true" ng-repeat="item in listaDadosBancarios">
+									<td class="text-center">{{::item.principal ? 'Sim' : ''}}</td>
+									<td class="text-left">{{::item.banco.nome}}</td>
+									<td class="text-center">{{::item.agencia}}</td>
+									<td class="text-center">{{::item.digitoAgencia}}</td>
+									<td>{{::item.conta}}</td>
+									<td class="text-center">{{::item.digito}}</td>
+									<td>{{::item.tipoConta}}</td>
+									<td class="text-center">{{::item.dataHomologacao | date:'dd/MM/yyyy HH:mm'}}</td>
+									<td class="text-center">
+										<span
+											ng-if="item.codigo == contaSelecionada && item.situacao == 'Ativo'">x</span>
+										<div ng-if="item.situacao == 'Inativo'">
+											{{:: item.situacao}}
+											<md-tooltip class="h3" md-direction="bottom">
+												{{:: item.responsavelInativacao.nome}} | {{:: item.dataInativacao |
+												date:'dd/MM/yyyy HH:mm'}}
+											</md-tooltip>
+										</div>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row" layout-align="center center" style="margin-top: -15px;">
+		<md-button class="md-raised md-accent" ng-click="fechar()">
+			Fechar
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>

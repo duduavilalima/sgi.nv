@@ -1,0 +1,33 @@
+<table class="simple row-border hover text-center font-size-12"
+	   id="table-Subclientes" ms-responsive-table width="100%">
+	<thead class="cabecalho-borda-cinza">
+	<tr>
+		<th class="titulo_colunas_rb" width="5%">
+			<div class="table-header text-center"><span
+				class="column-title">Nº</span></div>
+		</th>
+		<th class="titulo_colunas_rb" width="51%">
+			<div class="table-header text-center"><span
+				class="column-title">Razão Social</span></div>
+		</th>
+		<th class="titulo_colunas_rb" width="25%">
+			<div class="table-header text-center"><span
+				class="column-title">Nome fantasia</span></div>
+		</th>
+		<th class="titulo_colunas_rb" width="14%">
+			<div class="table-header text-center"><span
+				class="column-title">CNPJ</span></div>
+		</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<tr class="linha-borda-cinza" ng-repeat="item in $ctrl.listaSubclientes">
+		<td class="text-center"> {{ $index + 1 }}</td>
+		<td class="text-left"> {{item.nome}}</td>
+		<td class="text-left"> {{item.nomeFantasia}}</td>
+		<td class="text-center"> {{item.documento}}</td>
+	</tr>
+	</tbody>
+</table>
+<md-divider></md-divider>

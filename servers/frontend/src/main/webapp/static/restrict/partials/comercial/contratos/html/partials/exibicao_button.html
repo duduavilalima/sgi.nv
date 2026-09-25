@@ -1,0 +1,71 @@
+<div flex="100" layout="row" layout-align="start center">
+    <md-button aria-label="Editar" class="md-raised md-accent" id="btn_editar" ng-click="$ctrl.editar()"
+        ng-disabled="!$ctrl.habilitarAdminContrato || !($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' ||  $ctrl.object.situacao === 'Em revisão')">
+        Editar
+        <md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+            <span class="h4">Editar os dados deste contrato</span>
+        </md-tooltip>
+    </md-button>
+
+    <md-button aria-label="RECALCULAR" class="md-raised md-accent" id="btn_recalcular" ng-click="$ctrl.recalcular()"
+        ng-disabled="!$ctrl.habilitarAdminContrato || !($ctrl.object.situacao === 'Ativo' || $ctrl.object.situacao === 'Em elaboração' ||  $ctrl.object.situacao === 'Em revisão')">
+        RECALCULAR
+        <md-tooltip id="tool_tip_btn_recalcular" md-direction="bottom">
+            <span class="h4">Recalcular os valores mensal e total deste contato</span>
+        </md-tooltip>
+    </md-button>
+
+    <md-button aria-label="Retornar" class="md-raised md-accent" id="btn_retornar" ng-click="$ctrl.retornar()">
+        Retornar
+        <md-tooltip id="tool_tip_btn_retornar" md-direction="bottom">
+            <span class="h4">Sair desta tela e retornar para a tela anterior</span>
+        </md-tooltip>
+    </md-button>
+</div>
+
+<div flex="100" layout="row" layout-align="center center">
+
+</div>
+
+<div flex="100" layout="row" layout-align="end end">
+    <md-button aria-label="Paralisar" class="md-raised md-accent" id="btn_paralisar"
+        ng-click="$ctrl.paralizarContrato($event)"
+        ng-if="$ctrl.habilitarAdminContrato && $ctrl.object.situacao === 'Ativo' && $ctrl.habilitarParalisacaoDeContrato">
+        Paralisar
+        <md-tooltip id="tool_tip_btn_paralisar" md-direction="bottom">
+            <span class="h4">Paralisar este contrato</span>
+        </md-tooltip>
+    </md-button>
+
+    <md-button aria-label="Encerrar" class="md-raised md-accent" id="btn_encerrar" ng-click="$ctrl.encerrarContrato($event)"
+        ng-if="$ctrl.habilitarAdminContrato && ($ctrl.object.situacao !== 'Ativo' || $ctrl.object.situacao !== 'Paralisado') && $ctrl.habilitarEncerrarContrato && $ctrl.object.situacao !== 'Encerrado' && $ctrl.object.situacao !== 'Cancelado'">
+        Encerrar
+        <md-tooltip id="tool_tip_btn_encerrar" md-direction="bottom">
+            <span class="h4">Encerrar este contrato (esta ação não poderá ser desfeita)</span>
+        </md-tooltip>
+    </md-button>
+
+    <md-button aria-label="Cancelar" class="md-raised md-accent" id="btn_cancelar_rb" ng-click="$ctrl.cancelarContrato()"
+        ng-if="$ctrl.habilitarAdminContrato && ($ctrl.object.situacao !== 'Cancelado' && $ctrl.object.situacao !== 'Encerrado') ">
+        Cancelar
+        <md-tooltip id="tool_tip_btn_cancelar" md-direction="bottom">
+            <span class="h4">Cancelar este contrato</span>
+        </md-tooltip>
+    </md-button>
+
+    <md-button aria-label="Reativar" class="md-raised md-accent" id="btn_reativar" ng-click="$ctrl.reativar($event)"
+        ng-if="$ctrl.habilitarAdminContrato && $ctrl.object.situacao === 'Paralisado'">
+        Reativar
+        <md-tooltip id="tool_tip_btn_reativar" md-direction="bottom">
+            <span class="h4">Reativar este contrato</span>
+        </md-tooltip>
+    </md-button>
+
+    <md-button aria-label="Remover" class="md-raised md-accent" id="btn_remover" ng-click="$ctrl.remover($event)"
+        ng-disabled="$ctrl.listCentroLucro.length > 0">
+        Remover
+        <md-tooltip id="tool_tip_btn_remover" md-direction="bottom">
+            <span class="h4">Remover este contrato (esta operação não poderá ser desfeita)</span>
+        </md-tooltip>
+    </md-button>
+</div>

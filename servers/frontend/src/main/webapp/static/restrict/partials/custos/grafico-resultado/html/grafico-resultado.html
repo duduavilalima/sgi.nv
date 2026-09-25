@@ -1,0 +1,702 @@
+<div class="page-layout simple fullwidth" ng-controller="GraficoResultadoCtrl">
+	<!-- HEADER -->
+	<div class="header md-accent-bg">
+		<div layout="column" layout-align="center start">
+			<div class="breadcrumb white-text" layout="row" layout-align="start center">
+				<md-icon class="white-text s16" md-font-icon="icon-home"></md-icon>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="modulo">{{::modulo}}</span>
+				<md-icon class="white-text s16 separator" md-font-icon="icon-chevron-right"></md-icon>
+				<span class="parent" id="titulo">{{::titulo}}</span>
+			</div>
+			<!--<div class="title">Datatable</div>-->
+		</div>
+		<span class="h2"></span>
+	</div>
+	<!-- / HEADER -->
+	<!-- CONTENT -->
+	<div class="content" md-background-bg>
+		<div class="page-layout simple" id="profile" layout="row" layout-padding>
+			<div class="content" flex>
+				<!-- CAMPOS DE PESQUISA -->
+				<div layout="row" layout-wrap>
+					<div class="about" flex="100" layout="column">
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column">
+							<header class="md-accent-bg">
+								<div class="title" id="titulo_filtro">{{ ::titulo}}</div>
+							</header>
+							<div class="content">
+								<form name="form" novalidate>
+
+									<div class="mt-25" layout="row" layout-sm="column" layout-wrap layout-xs="column"
+										 style="margin-top: 0px">
+
+										<md-input-container flex flex-gt-md="25" flex-xs="100">
+											<label id="lbl_periodo">Ano</label>
+											<md-select id="periodo" name="periodo" ng-model="object.ano"
+													   ng-required="true">
+												<md-option ng-repeat="item in listAnos" ng-value="item"
+														   value="{{item}}">{{ item.ano }}
+												</md-option>
+											</md-select>
+											<div ng-messages="form.periodo.$error" ng-show="form.periodo.$touched">
+												<div ng-message="required">
+													<span>Obrigatório.</span>
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md="25" flex-xs="100">
+											<label id="lbl_inclui">Inlui mês corrente na projeção</label>
+											<md-select id="inclui" name="inclui" ng-model="object.inclui">
+												<md-option ng-repeat="item in listInclui" ng-value="item"
+														   value="{{item}}">{{ item.tipo }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+									</div>
+
+									<div flex layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_grafico">Tipo de gráfico</label>
+											<md-select id="grafico" name="grafico" ng-model="object.grafico"
+													   ng-required="true">
+												<md-option ng-repeat="item in listTipoGrafico" ng-value="item"
+														   value="{{item}}">{{ item.tipo }}
+												</md-option>
+											</md-select>
+											<div ng-messages="form.grafico.$error" ng-show="form.grafico.$touched">
+												<div ng-message="required">
+													<span>Obrigatório.</span>
+												</div>
+											</div>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_empresa">Empresa</label>
+											<md-select id="combo_empresa" name="empresa" ng-model="object.unidade">
+												<md-option ng-repeat="item in listEmpresas" ng-value="item"
+														   value="{{item}}">{{ item.codnome }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_diretoria">Diretoria</label>
+											<md-select id="combo_diretoria" name="diretoria"
+													   ng-model="object.diretoria">
+												<md-option ng-repeat="item in listDiretorias" ng-value="item"
+														   value="{{item}}">{{ item.diretoria }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_regional">Regional</label>
+											<md-select id="combo_regional" name="regional" ng-model="object.regional">
+												<md-option ng-repeat="item in listRegionais" ng-value="item"
+														   value="{{item}}">{{ item.regional }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+									</div>
+
+									<div flex layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_gerencia">Gerência</label>
+											<md-select id="combo_gerencia" name="gerencia" ng-model="object.gerencia">
+												<md-option ng-repeat="item in listGerencias" ng-value="item"
+														   value="{{item}}">{{ item.gerencia }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_cl">CL</label>
+											<md-select id="combo_cl" name="cl" ng-model="object.cl">
+												<md-option ng-repeat="item in listCls" ng-value="item" value="{{item}}">
+													{{ item.cl }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+									</div>
+
+									<div flex layout="row" layout-sm="column" layout-wrap layout-xs="column">
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_nivel_receitas">Nível de precisão das receitas</label>
+											<md-select id="nivel_receitas" name="nivel_receitas"
+													   ng-model="object.nivelReceitas">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listNiveisReceitas" ng-value="item"
+														   value="{{item}}">{{ item.nivel }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_nivel_fornecedores">Nível de precisão dos
+												fornecedores</label>
+											<md-select id="nivel_fornecedores" name="nivel_fornecedores"
+													   ng-model="object.nivelFornecedores">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listNiveisFornecedores" ng-value="item"
+														   value="{{item}}">{{ item.nivel }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_prest_contas">Nível de precisão da prestação de
+												contas</label>
+											<md-select id="prest_contas" name="prest_contas"
+													   ng-model="object.nivelPrestContas">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listNiveisPrestContas" ng-value="item"
+														   value="{{item}}">{{ item.nivel }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+
+										<md-input-container flex flex-gt-md flex-xs="100">
+											<label id="lbl_prest_tributos">Nível da precisão de tributos</label>
+											<md-select id="prest_tributos" name="prest_tributos"
+													   ng-model="object.nivelTributos">
+												<md-option ng-value=""></md-option>
+												<md-option ng-repeat="item in listNiveisTributos" ng-value="item"
+														   value="{{item}}">{{ item.nivel }}
+												</md-option>
+											</md-select>
+										</md-input-container>
+									</div>
+									<section layout="row" layout-sm="row" layout-wrap>
+										<div flex="30" flex-sm="10" layout="row" layout-align="start center">
+											<md-button class="md-raised md-accent" id="btn_gerar" name="btn_gerar"
+													   ng-click="gerarGrafico()" ng-disabled="form.$invalid">
+												Gerar gráfico
+											</md-button>
+											<md-button class="md-raised md-default" id="btn_limpar" name="btn_limpar"
+													   ng-click="reset()" ng-disabled="isAction">
+												Limpar
+											</md-button>
+										</div>
+									</section>
+								</form>
+							</div>
+
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-hide="graficoLinha" ng-if="mostraGrafico">
+
+							<header class="border-bottom white-bg">
+								<div class="title" id="titulo_demostracao">Demonstração de resultados mês a mês -
+									{{object.ano.ano}}
+								</div>
+							</header>
+							<div class="content">
+								<div flex layout="column" layout-align="center center">
+									<md-progress-circular class="md-accent" id="toolbar-progress" md-diameter="42"
+														  md-mode="indeterminate" ng-if="graficoGeral == false">
+									</md-progress-circular>
+								</div>
+
+								<!--Inicio grafico 1-->
+								<div ngif="graficoGeral != false">
+									<c3chart bindto-id="chartRegionSample" style="cursor: pointer;">
+										<chart-column column-id="x"
+													  column-values="Janeiro,Fevereiro,Março,Abril,Maio,Junho,Julho,Agosto,Setembro,Outubro,Novembro,Dezembro"/>
+										<chart-column column-color="#1a6499"
+													  column-id="x1"
+													  column-name="Receitas liquidas - orçado"
+													  column-type="bar"
+													  column-values="599212.65,599212.65,599212.65,599212.65,599212.65,599212.65,599212.65,599212.65,599212.65,599212.65,599212.65,599212.65"/>
+
+										<chart-column column-color="#7cbce9"
+													  column-id="x3"
+													  column-name="Receitas liquidas - real"
+													  column-type="bar"
+													  column-values="2064935.34,1332.38,191093.55"/>
+
+
+										<chart-column column-color="#367c39"
+													  column-id="x6"
+													  column-name="Custos dos serviços - orçado"
+													  column-type="bar"
+													  column-values="554000.00,554000.00,554000.00,554000.00,554000.00,554000.00,554000.00,554000.00,554000.00,554000.00,554000.00,554000.00"/>
+
+
+										<chart-column column-color="#4CAF50"
+													  column-id="x4"
+													  column-name="Custos dos serviços - real"
+													  column-type="bar"
+													  column-values="608437.90,793449.75,537405.55"/>
+
+
+										<chart-column column-color="rgb(143,17,46)"
+													  column-id="x7"
+													  column-name="Margem de contribuição - orçado"
+													  column-type="line"
+													  column-values="45212.65,45212.65,45212.65,18962.25,17087.65,17087.65,17087.65,17087.65,17087.65,17087.65,17087.65,17087.65"/>
+
+
+										<chart-column column-color="rgba(143, 17, 46, 0.61)"
+													  column-id="x2"
+													  column-name="Margem de contribuição - real"
+													  column-type="line"
+													  column-values="1456497.44,-792117.37,-346312.00"/>
+
+										<chart-axes values-x="x" y="x1,x2,x3,x4,x5,x6,x7"/>
+
+										<chart-axis>
+											<chart-axis-x axis-position="outer-center"
+														  axis-type="category">
+											</chart-axis-x>
+											<chart-axis-y axis-id="y"
+														  axis-position="outer-right"
+														  padding-bottom="5"
+														  padding-top="-5"
+														  range-min="0">
+											</chart-axis-y>
+										</chart-axis>
+										<chart-size chart-height="600"/>
+										<chart-events on-click-data="gerarGraficoDonut(data)"/>
+									</c3chart>
+								</div>
+								<!--Fim grafico 1-->
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column"
+							 ng-hide="graficoLinha" ng-if="mostraDiv">
+							<header class="border-bottom white-bg">
+								<div class="title" id="titulo_mes">Demonstração de resultados do mês
+									({{mes}}/{{object.ano.ano}})
+								</div>
+							</header>
+							<div class="content" flex layout="column" layout-xs="column">
+								<!--Inicio graficos 2-->
+								<div flex layout="row">
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="grafico1 == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-show="grafico1 != false">
+												<div><h3 class="text-center">Receitas líquidas - orçado</h3></div>
+												<c3chart bindto-id="donut-plot1-chart"
+														 ng-class="{'text-center': mes != 'Janeiro' || mes != 'Fevereiro' || mes != 'Março'}">
+													<chart-column column-id="Contratual"
+																  column-type="donut"
+																  column-values="483437.00 "/>
+													<chart-column column-id="Extra"
+																  column-type="donut"
+																  column-values="72515.55"/>
+													<chart-column column-id="Reembolsável"
+																  column-type="donut"
+																  column-values="100000.00"/>
+													<chart-column column-id="Ano anterior"
+																  column-type="donut"
+																  column-values="0"/>
+													<chart-column column-id="ISS"
+																  column-type="donut"
+																  column-values="32797.63"/>
+													<chart-column column-id="PIS/COFINS/Outros"
+																  column-type="donut"
+																  column-values="23942.27"/>
+													<chart-donut width="60"/>
+												</c3chart>
+											</div>
+										</div>
+									</div>
+									<div flex-gt-xs flex-xs layout="column"
+										 ng-if="mes == 'Janeiro' || mes == 'Fevereiro' || mes == 'Março'">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="grafico2 == false">
+												</md-progress-circular>
+											</div>
+											<div flex layout="column" ng-show="grafico2 != false">
+												<div><h3 class="text-center">Receitas líquidas - real</h3></div>
+												<c3chart bindto-id="donut-plot2-chart">
+													<chart-column column-id="Contratual"
+																  column-type="donut"
+																  column-values="158781.38"/>
+													<chart-column column-id="Extra"
+																  column-type="donut"
+																  column-values="889093.47"/>
+													<chart-column column-id="Reembolsável"
+																  column-type="donut"
+																  column-values="0"/>
+													<chart-column column-id="Ano anterior"
+																  column-type="donut"
+																  column-values="0"/>
+													<chart-column column-id="ISS"
+																  column-type="donut"
+																  column-values="38358.57"/>
+													<chart-column column-id="PIS/COFINS/Outros"
+																  column-type="donut"
+																  column-values="0"/>
+													<chart-donut width="60"/>
+												</c3chart>
+											</div>
+										</div>
+									</div>
+
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="grafico3 == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-show="grafico3 != false">
+												<div><h3 class="text-center">Custo dos serviços - orçado</h3></div>
+												<c3chart bindto-id="donut-plot3-chart"
+														 ng-class="{'text-center': mes != 'Janeiro' || mes != 'Fevereiro' || mes != 'Março'}">
+													<chart-column column-id="Material"
+																  column-type="donut"
+																  column-values="5000.00"/>
+													<chart-column column-id="Material Reembolsável"
+																  column-type="donut"
+																  column-values="42000.00"/>
+													<chart-column column-id="MO direta"
+																  column-type="donut"
+																  column-values="375000.00"/>
+													<chart-column column-id="Fiscalização/apoio"
+																  column-type="donut"
+																  column-values="0"/>
+													<chart-column column-id="Serviços de terceiros"
+																  column-type="donut"
+																  column-values="22000.00"/>
+													<chart-column column-id="Serviços reembolsáveis"
+																  column-type="donut"
+																  column-values="40000.00"/>
+													<chart-column column-id="Gastos gerais (transporte)"
+																  column-type="donut"
+																  column-values="22000.00"/>
+													<chart-column column-id="Gastos gerais (financeiras)"
+																  column-type="donut"
+																  column-values="48000.00"/>
+													<chart-donut width="60"/>
+												</c3chart>
+											</div>
+										</div>
+									</div>
+
+									<div flex-gt-xs flex-xs layout="column"
+										 ng-if="mes == 'Janeiro' || mes == 'Fevereiro' || mes == 'Março'">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="grafico3 == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-show="grafico3 != false">
+												<div><h3 class="text-center">Custo dos serviços - real</h3></div>
+												<c3chart bindto-id="donut-plot4-chart">
+													<chart-column column-id="Material"
+																  column-type="donut"
+																  column-values="57552.48"/>
+													<chart-column column-id="Material Reembolsável"
+																  column-type="donut"
+																  column-values="0"/>
+													<chart-column column-id="MO direta"
+																  column-type="donut"
+																  column-values="363416.19"/>
+													<chart-column column-id="Fiscalização/apoio"
+																  column-type="donut"
+																  column-values="7248.53"/>
+													<chart-column column-id="Serviços de terceiros"
+																  column-type="donut"
+																  column-values="101617.15"/>
+													<chart-column column-id="Serviços reembolsáveis"
+																  column-type="donut"
+																  column-values="0"/>
+													<chart-column column-id="Gastos gerais (transporte)"
+																  column-type="donut"
+																  column-values="31791.00"/>
+													<chart-column column-id="Gastos gerais (financeiras)"
+																  column-type="donut"
+																  column-values="46812.55"/>
+													<chart-donut width="60"/>
+												</c3chart>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--Fim graficos 2-->
+
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column" layout-xs="column"
+							 ng-if="graficoLinha">
+							<header class="border-bottom white-bg">
+								<div class="title" id="titulo_anual">Orçado x Real - até
+									{{mesAnterior}}/{{object.ano.ano}}
+								</div>
+							</header>
+							<div class="content" layout="row">
+								<div flex layout="row">
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="graficos == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-if="graficos">
+												<c3chart bindto-id="stacked-bar-plot1-chart">
+													<chart-column column-id="x"
+																  column-values="Receitas líquidas"/>
+													<chart-column column-color="#1a6499"
+																  column-id="data 1"
+																  column-name="Receita liquida - orçado"
+																  column-type="bar"
+																  column-values="1797637.95"/>
+													<chart-column column-color="#7cbce9"
+																  column-id="data 2"
+																  column-name="Receita liquida - real"
+																  column-type="bar"
+																  column-values="2257361.27"/>
+													<chart-axes values-x="x" y="data1,data2"/>
+													<chart-axis>
+														<chart-axis-x axis-position="outer-center"
+																	  axis-type="category">
+														</chart-axis-x>
+														<chart-axis-y axis-max="2400000">
+														</chart-axis-y>
+													</chart-axis>
+
+												</c3chart>
+											</div>
+										</div>
+									</div>
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="graficos == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-if="graficos">
+												<c3chart bindto-id="stacked-bar-plot2-chart">
+													<chart-column column-id="x"
+																  column-values="Custo dos serviços"/>
+													<chart-column column-color="#367c39"
+																  column-id="data 1"
+																  column-name="Custo dos serviços - orçado"
+																  column-type="bar"
+																  column-values="1662000"/>
+													<chart-column column-color="#4CAF50"
+																  column-id="data 2"
+																  column-name="Custo dos serviços - real"
+																  column-type="bar"
+																  column-values="1939293.2"/>
+													<chart-axes values-x="x" y="data1,data2"/>
+													<chart-axis>
+														<chart-axis-x axis-position="outer-center"
+																	  axis-type="category">
+														</chart-axis-x>
+														<chart-axis-y axis-max="2400000">
+														</chart-axis-y>
+													</chart-axis>
+
+												</c3chart>
+											</div>
+										</div>
+									</div>
+
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="graficos == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-if="graficos">
+												<c3chart bindto-id="stacked-bar-plot3-chart">
+													<chart-column column-id="x"
+																  column-values="Margem de contribuição"/>
+													<chart-column column-color="rgb(143,17,46)"
+																  column-id="data 1"
+																  column-name="Margem de contribuição - orçado"
+																  column-type="bar"
+																  column-values="135637.95"/>
+													<chart-column column-color="rgba(143, 17, 46, 0.61)"
+																  column-id="data 2"
+																  column-name="Margem de contribuição - real"
+																  column-type="bar"
+																  column-values="318068.07"/>
+													<chart-axes values-x="x" y="data1,data2"/>
+													<chart-axis>
+														<chart-axis-x axis-position="outer-center"
+																	  axis-type="category">
+														</chart-axis-x>
+														<chart-axis-y axis-max="2400000">
+														</chart-axis-y>
+													</chart-axis>
+
+												</c3chart>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="profile-box info-box general md-whiteframe-2dp" layout="column" layout-xs="column"
+							 ng-if="graficoLinha">
+							<header class="border-bottom white-bg">
+								<div class="title" id="titulo_real">Orçado x Real/Projetado - {{object.ano.ano}}</div>
+							</header>
+							<div class="content" layout="row">
+								<div flex layout="row">
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="graficos == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-if="graficos">
+												<c3chart bindto-id="stacked-bar-plot5-chart">
+													<chart-column column-id="x"
+																  column-values="Receitas líquidas"/>
+													<chart-column column-color="#1a6499"
+																  column-id="data 1"
+																  column-name="Receita liquida - orçado"
+																  column-type="bar"
+																  column-values="7190551.85"/>
+													<chart-column column-color="#7cbce9"
+																  column-id="data 2"
+																  column-name="Receita liquida - real"
+																  column-type="bar"
+																  column-values="2257361.27"/>
+													<chart-column column-color="#d3e9f8"
+																  column-id="data 3"
+																  column-name="Receita liquida - projetado"
+																  column-type="bar"
+																  column-values="5392913.85"/>
+													<chart-group group-values="data 2,data 3"/>
+													<chart-axes values-x="x" y="data1,data2,data3"/>
+													<chart-axis>
+														<chart-axis-x axis-position="outer-center"
+																	  axis-type="category">
+														</chart-axis-x>
+														<chart-axis-y axis-max="8000000">
+														</chart-axis-y>
+													</chart-axis>
+
+												</c3chart>
+											</div>
+										</div>
+									</div>
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="graficos == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-if="graficos">
+												<c3chart bindto-id="stacked-bar-plot6-chart">
+													<chart-column column-id="x"
+																  column-values="Custo dos serviços"/>
+													<chart-column column-color="#367c39"
+																  column-id="data 1"
+																  column-name="Custo dos serviços - orçado"
+																  column-type="bar"
+																  column-values="6899250.00"/>
+													<chart-column column-color="#4CAF50"
+																  column-id="data 2"
+																  column-name="Custo dos serviços - real"
+																  column-type="bar"
+																  column-values="1939293.20"/>
+													<chart-column column-color="#a6d8a8"
+																  column-id="data 3"
+																  column-name="Custo dos serviços - projetado"
+																  column-type="bar"
+																  column-values="5237250"/>
+													<chart-group group-values="data 2,data 3"/>
+													<chart-axes values-x="x" y="data1,data2,data3"/>
+													<chart-axis>
+														<chart-axis-x axis-position="outer-center"
+																	  axis-type="category">
+														</chart-axis-x>
+														<chart-axis-y axis-max="8000000">
+														</chart-axis-y>
+													</chart-axis>
+
+												</c3chart>
+											</div>
+										</div>
+									</div>
+
+									<div flex-gt-xs flex-xs layout="column">
+										<div class="white-bg">
+											<div flex layout="column" layout-align="center center">
+												<md-progress-circular class="md-accent" id="toolbar-progress"
+																	  md-diameter="42" md-mode="indeterminate"
+																	  ng-if="graficos == false">
+												</md-progress-circular>
+											</div>
+											<div flex ng-if="graficos">
+												<c3chart bindto-id="stacked-bar-plot7-chart" sort-data="asc">
+													<chart-column column-id="x"
+																  column-values="Margem de contribuição"/>
+													<chart-column column-color="rgb(143,17,46)"
+																  column-id="data 1"
+																  column-name="Margem de contribuição - orçado"
+																  column-type="bar"
+																  column-values="291301.85"/>
+													<chart-column column-color="rgba(143, 17, 46, 0.61)"
+																  column-id="data 2"
+																  column-name="Margem de contribuição - real"
+																  column-type="bar"
+																  column-values="318068.07"/>
+													<chart-column column-color="#f4a4b7"
+																  column-id="data 3"
+																  column-name="Margem de contribuição - projetado"
+																  column-type="bar"
+																  column-values="155663.85"/>
+													<chart-group group-values="data 2,data 3"/>
+													<chart-axes values-x="x" y="data1,data2,data3"/>
+													<chart-axis>
+														<chart-axis-x axis-position="outer-center"
+																	  axis-type="category">
+														</chart-axis-x>
+														<chart-axis-y axis-max="8000000">
+														</chart-axis-y>
+													</chart-axis>
+
+												</c3chart>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- / CONTENT -->
+</div>

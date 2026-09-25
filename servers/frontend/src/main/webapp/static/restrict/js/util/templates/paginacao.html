@@ -1,0 +1,26 @@
+<section layout="row" layout-align="center center" layout-sm="row">
+    <span hide-xs>
+        <md-button aria-label="Primeira anterior" class="md-accent" id="first" ng-click="getPage(1)"
+				   ng-disabled="!exibirAnterior()"
+				   style="border: 1px solid #d4d4d4;font-size: 11px;">Primeiro</md-button>
+    </span>
+	<md-button aria-label="Página anterior" class="md-accent" id="previous"
+			   ng-click="getPage(paginationOptions.pageNumber - 1)" ng-disabled="!exibirAnterior()"
+			   style="border: 1px solid #d4d4d4;font-size: 11px;">
+		<md-icon class="s16 separator" md-font-icon="icon-chevron-double-left"></md-icon>
+	</md-button>
+	<span>
+        <md-button aria-label="Página atual" class="md-accent" id="paginate_button" ng-disabled="true"
+				   style="border: 1px solid #d4d4d4;font-size: 11px;">{{paginationOptions.pageNumber}} / {{paginationOptions.totalPages == 0 ? 1 : paginationOptions.totalPages}}</md-button>
+    </span>
+	<md-button aria-label="Próxima página" class="md-accent" id="next"
+			   ng-click="getPage(paginationOptions.pageNumber + 1)" ng-disabled="!exibirProximo()"
+			   style="border: 1px solid #d4d4d4;font-size: 11px;">
+		<md-icon class="s16 separator" md-font-icon="icon-chevron-double-right"></md-icon>
+	</md-button>
+	<span hide-xs>
+        <md-button aria-label="Última página" class="md-accent" id="last"
+				   ng-click="getPage(paginationOptions.totalPages)" ng-disabled="!exibirProximo()"
+				   style="border: 1px solid #d4d4d4;font-size: 11px;">Último</md-button>
+    </span>
+</section>

@@ -1,0 +1,18 @@
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+	<New id="ds" class="org.eclipse.jetty.plus.jndi.Resource">
+		<Arg></Arg>
+		<Arg>jdbc/SGIDB</Arg>
+		<Arg>
+			<New class="org.apache.commons.dbcp2.BasicDataSource">
+				<Set name="driverClassName">org.postgresql.Driver</Set>
+				<Set name="url">
+					jdbc:postgresql://@db.host@:@db.port@/@db.name@
+				</Set>
+				<Set name="username">@db.username@</Set>
+				<Set name="password">@db.password@</Set>
+				<Set name="initialSize">3</Set>
+				<Set name="maxTotal">10</Set>
+			</New>
+		</Arg>
+	</New>
+</Configure>

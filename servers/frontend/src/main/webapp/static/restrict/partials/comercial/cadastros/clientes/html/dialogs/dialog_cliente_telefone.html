@@ -1,0 +1,106 @@
+<md-dialog aria-label="{{title}}" id="dialog_titulo_popup_cliente_telefone" style="width: 700px;">
+	<md-toolbar class="md-accent-bg">
+		<div class="md-toolbar-tools">
+			<h2 id="titulo_popup_cliente_telefone" md-autofocus>Telefone - {{title}}</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+				<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+						 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content role="document">
+		<div class="md-dialog-content md-dialog-content-body ng-scope">
+			<form name="DialogClienteTelefoneForm">
+
+				<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+					<md-input-container flex="50" flex-sm="100" flex-xs="100">
+						<label id="lbl_tipo">Tipo</label>
+						<md-select id="combo_tipo" name="tipo" ng-model="object.tipo" required="true">
+							<md-option ng-repeat="item in listTipoTelefone" ng-value="item" value="{{ item }}">{{ item
+								}}
+							</md-option>
+						</md-select>
+						<div ng-messages="DialogClienteTelefoneForm.tipo.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo != 'Celular'">
+						<label id="lbl_DDD">DDD</label>
+						<input id="input_DDD" mask="99" name="DDD" ng-model="object.ddd" required="true"
+							   restrict="reject" type="text">
+						<div ng-messages="DialogClienteTelefoneForm.DDD.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo === 'Celular'">
+						<label id="lbl_Operadora">Operadora</label>
+						<md-select id="combo_operadora" name="operadora" ng-model="object.operadora"
+								   ng-model-options="{trackBy: '$value.codigo'}" required="true">
+							<md-option ng-repeat="item in listOperadoras" ng-value="item" value="{{ item }}">{{
+								item.nome }}
+							</md-option>
+						</md-select>
+						<div ng-messages="DialogClienteTelefoneForm.operadora.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+				</div>
+
+				<div layout="row" layout-sm="column" layout-wrap layout-xs="column">
+					<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo === 'Celular'">
+						<label id="lbl_DDDCel">DDD</label>
+						<input id="input_DDCelD" mask="99" name="DDD" ng-model="object.ddd" required="true"
+							   restrict="reject" type="text">
+						<div ng-messages="DialogClienteTelefoneForm.DDD.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo != 'Celular'">
+						<label id="lbl_telefone">Telefone</label>
+						<input id="input_telefone" mask="9999-9999" name="telefone" ng-model="object.numero"
+							   required="true" restrict="reject" type="text">
+						<div ng-messages="DialogClienteTelefoneForm.telefone.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo === 'Celular'">
+						<label id="lbl_telefonecel">Telefone</label>
+						<input id="input_telefonecel" mask="99999-9999" name="telefone" ng-model="object.numero"
+							   required="true" restrict="reject" type="text">
+						<div ng-messages="DialogClienteTelefoneForm.telefone.$error" role="alert">
+							<div ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+
+					<md-input-container flex="50" flex-sm="100" flex-xs="100" ng-if="object.tipo != 'Celular'">
+						<label id="lbl_ramal">Ramal</label>
+						<input id="input_ramal" mask="9999" name="ramal" ng-model="object.ramal" restrict="reject"
+							   type="text">
+					</md-input-container>
+				</div>
+				<div layout layout-sm="column" ng-if="screenMode != 'VIEW'" style="margin-top: -0px">
+					<span>*</span>&nbsp;Campos obrigatórios
+				</div>
+
+			</form>
+		</div>
+
+		<md-divider></md-divider>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+		<md-button class="md-raised md-accent" id="btn_salvar_confirmar" ng-click="confirm()" ng-disabled="!DialogClienteTelefoneForm.$valid || action">
+			CONFIRMAR
+		</md-button>
+		<md-button class="md-raised md-default" id="btn_cancelar_remover" ng-click="cancel()" ng-disabled="action">
+			Fechar
+		</md-button>
+		<span flex></span>
+	</md-dialog-actions>
+</md-dialog>

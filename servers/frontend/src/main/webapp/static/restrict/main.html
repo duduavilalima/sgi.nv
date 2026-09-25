@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html class="no-js" lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+	<meta content="IE=edge" http-equiv="X-UA-Compatible">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+
+	<title>SGI - Sistema de Gestão Integrada</title>
+
+	<link href="/favicon.ico" rel="icon" type="image/x-icon">
+	<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+	<style>
+        [ng\:cloak],
+        [ng-cloak],
+        [data-ng-cloak],
+        [x-ng-cloak],
+        .ng-cloak,
+        .x-ng-cloak,
+        .ng-hide:not(.ng-hide-animate) {
+        display: none !important;
+        }
+
+        ng\:form {
+        display: block;
+        }
+
+        #splash-screen {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #FFF;
+        z-index: 99999;
+        }
+
+        [ng-cloak]#splash-screen {
+        display: block !important;
+        }
+
+        #splash-screen .center {
+        display: block;
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        }
+
+        #splash-screen .logo {
+        width: 69px;
+        height: 62px;
+        line-height: 96px;
+        margin: 0 auto 48px auto;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 56px;
+        text-align: center;
+        border-radius: 2px;
+        /*background-color: #039BE5;*/
+        color: #FFFFFF;
+        /*box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.22);*/
+        }
+
+        #splash-screen .spinner-wrapper {
+        position: relative;
+        margin: 0 auto;
+        text-align: center;
+        -webkit-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        }
+
+        #splash-screen .spinner-wrapper .outer-spinner {
+        display: inline-block;
+        width: 48px;
+        height: 48px;
+        -webkit-animation: rotate 2.25s linear infinite;
+        animation: rotate 2.25s linear infinite;
+        }
+
+        #splash-screen .spinner-wrapper .outer-spinner .spinner {
+        display: inline-block;
+        position: relative;
+        width: 48px;
+        height: 48px;
+        -webkit-animation: sporadic-rotate 5s ease infinite;
+        animation: sporadic-rotate 5s ease infinite;
+        }
+
+        #splash-screen .spinner-wrapper .outer-spinner .spinner .left {
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        width: 24px;
+        height: 48px;
+        }
+
+        #splash-screen .spinner-wrapper .outer-spinner .spinner .left .circle {
+        width: 48px;
+        height: 48px;
+        border: 4px solid #4285F4;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        -webkit-animation: animate-left-circle 1.25s ease infinite, left-circle-colors 5s linear infinite;
+        animation: animate-left-circle 1.25s ease infinite, left-circle-colors 5s linear infinite;
+        }
+
+        #splash-screen .spinner-wrapper .outer-spinner .spinner .right {
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 50%;
+        width: 24px;
+        height: 48px;
+        }
+
+        #splash-screen .spinner-wrapper .outer-spinner .spinner .right .circle {
+        position: relative;
+        right: 100%;
+        width: 48px;
+        height: 48px;
+        border: 4px solid #4285F4;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        -webkit-animation: animate-right-circle 1.25s ease infinite, right-circle-colors 5s linear infinite;
+        animation: animate-right-circle 1.25s ease infinite, right-circle-colors 5s linear infinite;
+        }
+
+        @-webkit-keyframes rotate {
+        0% {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+        }
+        100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+        }
+        }
+
+        @keyframes rotate {
+        0% {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+        }
+        100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+        }
+        }
+
+        @keyframes sporadic-rotate {
+        12.5% {
+        -webkit-transform: rotate(135deg);
+        -ms-transform: rotate(135deg);
+        transform: rotate(135deg);
+        }
+        25% {
+        -webkit-transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+        transform: rotate(270deg);
+        }
+        37.5% {
+        -webkit-transform: rotate(405deg);
+        -ms-transform: rotate(405deg);
+        transform: rotate(405deg);
+        }
+        50% {
+        -webkit-transform: rotate(540deg);
+        -ms-transform: rotate(540deg);
+        transform: rotate(540deg);
+        }
+        62.5% {
+        -webkit-transform: rotate(675deg);
+        -ms-transform: rotate(675deg);
+        transform: rotate(675deg);
+        }
+        75% {
+        -webkit-transform: rotate(810deg);
+        -ms-transform: rotate(810deg);
+        transform: rotate(810deg);
+        }
+        87.5% {
+        -webkit-transform: rotate(945deg);
+        -ms-transform: rotate(945deg);
+        transform: rotate(945deg);
+        }
+        100% {
+        -webkit-transform: rotate(1080deg);
+        -ms-transform: rotate(1080deg);
+        transform: rotate(1080deg);
+        }
+        }
+
+        @-webkit-keyframes animate-left-circle {
+        0%,
+        100% {
+        -webkit-transform: rotate(130deg);
+        -ms-transform: rotate(130deg);
+        transform: rotate(130deg);
+        }
+        50% {
+        -webkit-transform: rotate(-5deg);
+        -ms-transform: rotate(-5deg);
+        transform: rotate(-5deg);
+        }
+        }
+
+        @keyframes animate-left-circle {
+        0%,
+        100% {
+        -webkit-transform: rotate(130deg);
+        -ms-transform: rotate(130deg);
+        transform: rotate(130deg);
+        }
+        50% {
+        -webkit-transform: rotate(-5deg);
+        -ms-transform: rotate(-5deg);
+        transform: rotate(-5deg);
+        }
+        }
+
+        @-webkit-keyframes animate-right-circle {
+        0%,
+        100% {
+        -webkit-transform: rotate(-130deg);
+        -ms-transform: rotate(-130deg);
+        transform: rotate(-130deg);
+        }
+        50% {
+        -webkit-transform: rotate(5deg);
+        -ms-transform: rotate(5deg);
+        transform: rotate(5deg);
+        }
+        }
+
+        @keyframes animate-right-circle {
+        0%,
+        100% {
+        -webkit-transform: rotate(-130deg);
+        -ms-transform: rotate(-130deg);
+        transform: rotate(-130deg);
+        }
+        50% {
+        -webkit-transform: rotate(5deg);
+        -ms-transform: rotate(5deg);
+        transform: rotate(5deg);
+        }
+        }
+
+        @-webkit-keyframes left-circle-colors {
+        0%,
+        100% {
+        border-color: #4285F4;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        }
+        25% {
+        border-color: #DE3E35;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        }
+        50% {
+        border-color: #F7C223;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        }
+        75% {
+        border-color: #1B9A59;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        }
+        }
+
+        @keyframes left-circle-colors {
+        0%,
+        100% {
+        border-color: #4285F4;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        }
+        25% {
+        border-color: #DE3E35;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        }
+        50% {
+        border-color: #F7C223;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        }
+        75% {
+        border-color: #1B9A59;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        }
+        }
+
+        @-webkit-keyframes right-circle-colors {
+        0%,
+        100% {
+        border-color: #4285F4;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        }
+        25% {
+        border-color: #DE3E35;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        }
+        50% {
+        border-color: #F7C223;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        }
+        75% {
+        border-color: #1B9A59;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        }
+        }
+
+        @keyframes right-circle-colors {
+        0%,
+        100% {
+        border-color: #4285F4;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        }
+        25% {
+        border-color: #DE3E35;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        }
+        50% {
+        border-color: #F7C223;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        }
+        75% {
+        border-color: #1B9A59;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        }
+        }
+
+
+
+	</style>
+	<style type="text/css">
+        div.image {
+        background-repeat: no-repeat;
+        background-image: url('data:image/png;base64,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');
+        }
+
+
+	</style>
+
+	<link href="../lib/angular-ui-grid/ui-grid.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/angular-toastr/dist/angular-toastr.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/angular-datatables/dist/css/angular-datatables.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/perfect-scrollbar/css/perfect-scrollbar.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/textAngular/dist/textAngular.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/angular-material-data-table/dist/md-data-table.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/c3/c3.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/datetimepicker/jquery.datetimepicker.css" rel="stylesheet">
+	<link href="../lib/fuse/assets/icons/style.css" rel="stylesheet">
+	<link href="../lib/picklist/picklist.css" rel="stylesheet">
+	<link href="../lib/angular-material/angular-material.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../lib/style/main.css" rel="stylesheet">
+
+	<!-- Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!-- [if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif] -->
+</head>
+
+<body md-theme="{{ :: vm.themes.active.name }}" ng-app="SGIApp" ng-controller="AppController as vm">
+
+<div id="splash-screen">
+	<div class="center">
+		<div class="logo image"></div>
+		<!-- Material Design Spinner -->
+		<div class="spinner-wrapper">
+			<div class="outer-spinner">
+				<div class="spinner">
+					<div class="left">
+						<div class="circle"></div>
+					</div>
+					<div class="right">
+						<div class="circle"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- / Material Design Spinner -->
+	</div>
+</div>
+
+<div class="animate slide-up" flex id="main" layout="row">
+
+	<md-sidenav class="md-primary-bg no-print" id="navigation" md-component-id="navigation"
+				md-is-locked-open="$mdMedia('gt-md')" ms-nav-is-folded="false" ms-scroll ui-view="navigation">
+
+		<div ng-controller="NavigationController as vm" ng-include="'partials/menu/menu-restrict.html'"></div>
+
+	</md-sidenav>
+
+	<div flex id="content-container" layout="column">
+		<md-toolbar class="md-menu-toolbar md-whiteframe-1dp md-background-bg no-print" id="toolbar">
+			<div ng-include="'partials/header/header.html'"></div>
+		</md-toolbar>
+
+		<div flex id="content">
+			<md-content class="md-background-bg md-hue-2 animate slide-up" flex ms-scroll ui-view></md-content>
+		</div>
+	</div>
+
+</div>
+
+<!-- bower:js-->
+<!-- TEMPLATES PARA AS TELAS DE PESQUISA -->
+<div ng-include="'js/util/templates/headerCellTemplate.html'"></div>
+<script src="../lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
+<script src="../lib/angular-cookies/angular-cookies.min.js" type="text/javascript"></script>
+<script src="../lib/angular-file-upload/dist/angular-file-upload.min.js" type="text/javascript"></script>
+<script src="../lib/angular-ui-utils/ui-utils.min.js" type="text/javascript"></script>
+<script src="../lib/angular-resource/angular-resource.min.js" type="text/javascript"></script>
+<script src="../lib/angular-ui-router/release/angular-ui-router.min.js" type="text/javascript"></script>
+<script src="../lib/angular-ui-grid/ui-grid.min.js" type="text/javascript"></script>
+<script src="../lib/angular-animate/angular-animate.min.js" type="text/javascript"></script>
+<script src="../lib/angular-aria/angular-aria.min.js" type="text/javascript"></script>
+<script src="../lib/angular-messages/angular-messages.min.js" type="text/javascript"></script>
+<script src="../lib/angular-material/angular-material.min.js" type="text/javascript"></script>
+<script src="../lib/angular-toastr/dist/angular-toastr.min.js" type="text/javascript"></script>
+<script src="../lib/angular-toastr/dist/angular-toastr.tpls.min.js" type="text/javascript"></script>
+<script src="../lib/angular-mask/dist/ngMask.min.js" type="text/javascript"></script>
+<script src="../lib/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="../lib/angular-datatables/dist/angular-datatables.min.js" type="text/javascript"></script>
+<script src="../lib/angular-sanitize/angular-sanitize.min.js" type="text/javascript"></script>
+<script src="../lib/momentjs/moment.js" type="text/javascript"></script>
+<script src="../lib/humanize-duration/humanize-duration.js" type="text/javascript"></script>
+<script src="../lib/angular-timer/dist/angular-timer.min.js" type="text/javascript"></script>
+<script src="../lib/moment/min/moment.min.js" type="text/javascript"></script>
+<script src="../lib/angular-ui-calendar/src/calendar.js" type="text/javascript"></script>
+<script src="../lib/mobile-detect/mobile-detect.min.js" type="text/javascript"></script>
+<script src="../lib/perfect-scrollbar/js/perfect-scrollbar.min.js" type="text/javascript"></script>
+<script src="../lib/rangy/rangy-core.min.js" type="text/javascript"></script>
+<script src="../lib/rangy/rangy-classapplier.min.js" type="text/javascript"></script>
+<script src="../lib/rangy/rangy-highlighter.min.js" type="text/javascript"></script>
+<script src="../lib/rangy/rangy-selectionsaverestore.min.js" type="text/javascript"></script>
+<script src="../lib/rangy/rangy-serializer.min.js" type="text/javascript"></script>
+<script src="../lib/rangy/rangy-textrange.min.js" type="text/javascript"></script>
+<script src="../lib/textAngular/dist/textAngular.min.js" type="text/javascript"></script>
+<script src="../lib/textAngular/dist/textAngular-rangy.min.js" type="text/javascript"></script>
+<script src="../lib/textAngular/dist/textAngular-sanitize.min.js" type="text/javascript"></script>
+<script src="../lib/Sortable/Sortable.min.js" type="text/javascript"></script>
+<script src="../lib/Sortable/ng-sortable.js" type="text/javascript"></script>
+<script src="../lib/angular-route/angular-route.min.js" type="text/javascript"></script>
+<script src="../lib/br-validations/releases/br-validations.min.js" type="text/javascript"></script>
+<script src="../lib/string-mask/src/string-mask.js" type="text/javascript"></script>
+<script src="../lib/angular-input-masks/angular-input-masks-standalone.min.js" type="text/javascript"></script>
+<script src="../lib/angular-material-data-table/dist/md-data-table.js" type="text/javascript"></script>
+<script src="../lib/d3/d3.min.js" type="text/javascript"></script>
+<script src="../lib/c3/c3.js" type="text/javascript"></script>
+<script src="../lib/c3-angular/c3-angular.min.js" type="text/javascript"></script>
+<script src="../lib/angular-fullscreen/src/angular-fullscreen.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/core.module.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/core.run.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/core.config.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/config/fuse-config.provider.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/highlight.directive.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/filters/basic.filter.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/filters/tag.filter.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/theming/fuse-generator.factory.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/theming/fuse-palettes.constant.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/theming/fuse-themes.constant.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/theming/fuse-theming.config.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/theming/fuse-theming.provider.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/ms-card/ms-card.directive.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/ms-form-wizard/ms-form-wizard.directive.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/ms-navigation/ms-navigation.directive.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/ms-random-class/ms-random-class.directive.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/ms-responsive-table/ms-responsive-table.directive.js"
+		type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/ms-scroll/ms-scroll.directive.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/ms-sidenav-helper/ms-sidenav-helper.directive.js"
+		type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/ms-timeline/ms-timeline.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/directives/ms-widget/ms-widget.directive.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/services/api/api.service.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/services/fuse-helper/fuse-helper.service.js" type="text/javascript"></script>
+<script src="../lib/fuse/core/theming/theme-options/theme-options.js" type="text/javascript"></script>
+<script src="../lib/datetimepicker/jquery.datetimepicker.js" type="text/javascript"></script>
+<script src="../lib/datetimepicker/datetimepicker.js" type="text/javascript"></script>
+<script src="../lib/picklist/example.js" type="text/javascript"></script>
+<script src="../lib/picklist/picklist.js" type="text/javascript"></script>
+<script src="js/app.js"></script>
+<script src="js/angular-crud-helper.js"></script>
+<script src="js/autocomplete.js"></script>
+<script src="js/enumservice.js"></script>
+<script src="js/resources.js"></script>
+<script src="js/services.js"></script>
+<script src="js/states.js"></script>
+<script src="js/servicos/usuariologado.js"></script>
+<script src="js/util/grid.js"></script>
+<script src="../js/directives.js" type="text/javascript"></script>
+<script src="../js/utils.js" type="text/javascript"></script>
+<script src="../js/controllers/navigation.controller.js" type="text/javascript"></script>
+<script src="partials/contasareceber/parcelas/services/contasareceber.module.js"></script>
+<script src="partials/contasareceber/parcelas/services/contasareceber.services.js"></script>
+
+<script src="partials/contasareceber/notasdebito/services/notasDebitoCR.module.js"></script>
+
+<script src="partials/custos/grafico-resultado/services/grafico-resultado.module.js"></script>
+<script src="partials/custos/cadastros/orcamento-empresarial/services/orcamento-empresarial.module.js"></script>
+<script src="partials/custos/cadastros/rubricas/services/rubricas.module.js"></script>
+<script src="partials/custos/comparativos/services/comparativos.module.js"></script>
+<script src="partials/custos/relatorios/services/relatorios.module.js"></script>
+
+<script src="partials/administracao/colaborador/colaborador.module.js"></script>
+<script src="partials/administracao/funcionalidades/services/funcionalidades.module.js"></script>
+<script src="partials/administracao/gerencia/gerencia.module.js"></script>
+<script src="partials/administracao/regional/regional.module.js"></script>
+<script src="partials/administracao/usuario/usuario.module.js"></script>
+<script src="partials/administracao/perfil/perfil.module.js"></script>
+<script src="partials/comercial/contratos/services/contratos.module.js"></script>
+<script src="partials/contasareceber/relatorios/relatorios.module.js"></script>
+<script src="partials/faturamento/etapasNaoFaturadas/etapasNaoFaturadas.module.js"></script>
+<script src="partials/faturamento/faturamento/faturamento.module.js"></script>
+<script src="partials/faturamento/notasFiscais/services/notasFiscais.module.js"></script>
+<script src="partials/faturamento/notasFiscais/services/notasFiscais.service.js"></script>
+<script src="partials/faturamento/notasDebitos/services/notasDebitos.module.js"></script>
+<script src="partials/faturamento/notasDebitos/services/notasDebitos.service.js"></script>
+<script src="partials/faturamento/faturamentoInterfaces/services/faturamentoInterfaces.module.js"></script>
+<script src="partials/faturamento/previsaoFaturamento/previsaoFaturamento.module.js"></script>
+<script src="partials/faturamento/relatorios/relatorios.module.js"></script>
+<script src="partials/faturamento/tiposServico/tiposServico.module.js"></script>
+<script src="partials/fluxocaixa/grafico/grafico.module.js"></script>
+<script src="partials/fluxocaixa/previsao/previsao.module.js"></script>
+<script src="partials/fluxocaixa/relatorios/relatorios.module.js"></script>
+<script src="partials/tesouraria/importar-conciliacao/importar-conciliacao.module.js"></script>
+<script src="partials/tesouraria/lancamentos/services/lancamentos.module.js"></script>
+<script src="partials/tesouraria/movimento_autorizado/services/movimento_autorizado.module.js"></script>
+<script src="partials/tesouraria/movimento_autorizado_boletos/services/movimento_autorizado_boletos.module.js"></script>
+<script src="partials/tesouraria/relacao_bancaria/services/relacao_bancaria.module.js"></script>
+<script src="partials/tesouraria/relatorios/relatorios.module.js"></script>
+<script src="partials/comercial/cadastros/categoriacontrato/services/categoriacontrato.module.js"></script>
+<script src="partials/comercial/cadastros/centrosfinanceiros/services/centrosfinanceiros.module.js"></script>
+<script src="partials/comercial/cadastros/clientes/services/clientes.module.js"></script>
+<script src="partials/comercial/cadastros/formacontratacao/services/formacontratacao.module.js"></script>
+<script src="partials/comercial/cadastros/obras/services/obras.module.js"></script>
+<script src="partials/comercial/cadastros/relacionamentocontato/services/relacionamentocontato.module.js"></script>
+<script src="partials/comercial/relatorios/services/relatorios.module.js"></script>
+<script src="partials/fluxocaixa/cadastros/despesas/despesas.module.js"></script>
+<script src="partials/tesouraria/cadastros/conta_corrente/services/conta_corrente.module.js"></script>
+<script src="partials/tesouraria/cadastros/banco/banco.module.js"></script>
+
+<script src="partials/tesouraria/cadastros/historico_conciliacao_bancaria/historico_conciliacao_bancaria.module.js"></script>
+<script src="partials/tesouraria/cadastros/historico_conciliacao_bancaria/historico_conciliacao_bancaria.detail.controller.js"></script>
+<script src="partials/tesouraria/cadastros/historico_conciliacao_bancaria/historico_conciliacao_bancaria.list.controller.js"></script>
+
+<script src="partials/contasareceber/parcelas/controllers/contasareceber.detail.controller.js"></script>
+<script src="partials/contasareceber/parcelas/controllers/contasareceber.list.controller.js"></script>
+
+<script src="partials/contasareceber/notasdebito/controllers/notasDebitoCR.list.controller.js"></script>
+<script src="partials/contasareceber/notasdebito/controllers/notasDebitoCR.detail.controller.js"></script>
+
+<script src="partials/faturamento/notasDebitos/controllers/notasDebitos.impressao.controller.js"></script>
+<script src="partials/faturamento/notasDebitos/controllers/notasDebitos.imprimir.controller.js"></script>
+
+<script src="partials/contasareceber/parcelas/controllers/contasareceber.print.controller.js"></script>
+
+<script src="partials/custos/grafico-resultado/controllers/grafico-resultado.controller.js"></script>
+<script src="partials/custos/comparativos/controllers/comparativos.controller.js"></script>
+
+
+<script src="partials/custos/cadastros/rubricas/controllers/rubricas.detail.controller.js"></script>
+<script src="partials/custos/cadastros/rubricas/controllers/rubricas.list.controller.js"></script>
+
+<script src="partials/custos/cadastros/orcamento-empresarial/controllers/orcamento-empresarial.detail.controller.js"></script>
+<script src="partials/custos/cadastros/orcamento-empresarial/controllers/orcamento-empresarial.list.controller.js"></script>
+<script src="partials/custos/cadastros/orcamento-empresarial/controllers/orcamento-empresarial.importacao.controller.js"></script>
+
+<script src="partials/custos/relatorios/controllers/relatorios.controller.js"></script>
+
+<script src="partials/header/header.controller.js"></script>
+<script src="partials/menu/menu-restrict.controller.js"></script>
+<script src="partials/administracao/funcionalidades/controller/funcionalidades.controller.list.js"></script>
+<script src="partials/administracao/funcionalidades/controller/funcionalidades.controller.detail.js"></script>
+<script src="partials/administracao/usuario/usuario.controller.js"></script>
+<script src="partials/administracao/perfil/perfil.controller.js"></script>
+<script src="partials/comercial/contratos/controllers/contratos.detail.controller.js"></script>
+<script src="partials/comercial/contratos/controllers/contratos.list.controller.js"></script>
+<script src="partials/contasareceber/relatorios/relatorios.controller.js"></script>
+<script src="partials/faturamento/etapasNaoFaturadas/etapasNaoFaturadas.list.controller.js"></script>
+<script src="partials/faturamento/faturamento/faturamento.detail.controller.js"></script>
+<script src="partials/faturamento/faturamento/faturamento.list.controller.js"></script>
+<script src="partials/faturamento/faturamento/faturamento.etapa.controller.js"></script>
+<script src="partials/faturamento/faturamentoInterfaces/controllers/faturamentoInterfaces.detail.controller.js"></script>
+<script src="partials/faturamento/faturamentoInterfaces/controllers/faturamentoInterfaces.list.controller.js"></script>
+
+<script src="partials/faturamento/notasFiscais/controllers/notasFiscais.detail.controller.js"></script>
+<script src="partials/faturamento/notasFiscais/controllers/notasFiscais.list.controller.js"></script>
+<script src="partials/faturamento/notasFiscais/controllers/notasFiscais.imprimir.controller.js"></script>
+<script src="partials/faturamento/notasFiscais/controllers/notasFiscais.impressao.controller.js"></script>
+
+<script src="partials/faturamento/notasDebitos/controllers/notasDebitos.detail.controller.js"></script>
+<script src="partials/faturamento/notasDebitos/controllers/notasDebitos.list.controller.js"></script>
+<!--<script src="partials/faturamento/notasDebitos/controllers/notasDebitos.imprimir.controller.js"></script>
+<script src="partials/faturamento/notasDebitos/controllers/notasDebitos.impressao.controller.js"></script>
+-->
+
+<script src="partials/faturamento/previsaoFaturamento/previsaoFaturamento.controller.js"></script>
+<script src="partials/faturamento/relatorios/relatorios.controller.js"></script>
+<script src="partials/faturamento/tiposServico/tiposServico.controller.js"></script>
+<script src="partials/fluxocaixa/grafico/grafico.controller.js"></script>
+<script src="partials/fluxocaixa/previsao/previsao.controller.js"></script>
+<script src="partials/fluxocaixa/relatorios/relatorios.controller.js"></script>
+<script src="partials/tesouraria/importar-conciliacao/importar-conciliacao.controller.js"></script>
+
+<script src="partials/tesouraria/lancamentos/controllers/lancamentos.detail.controller.js"></script>
+<script src="partials/tesouraria/lancamentos/controllers/lancamentos.list.controller.js"></script>
+
+<script src="partials/tesouraria/movimento_autorizado/controllers/movimento_autorizado.detail.controller.js"></script>
+<script src="partials/tesouraria/movimento_autorizado/controllers/movimento_autorizado.list.controller.js"></script>
+
+<script src="partials/tesouraria/movimento_autorizado_boletos/controllers/movimento_autorizado_boletos.detail.controller.js"></script>
+<script src="partials/tesouraria/movimento_autorizado_boletos/controllers/movimento_autorizado_boletos.list.controller.js"></script>
+
+<script src="partials/tesouraria/relacao_bancaria/controllers/relacao_bancaria.conciliacao.manual.controller.js"></script>
+<script src="partials/tesouraria/relacao_bancaria/controllers/relacao_bancaria.detail.controller.js"></script>
+<script src="partials/tesouraria/relacao_bancaria/controllers/relacao_bancaria.imprimir.cheques.controller.js"></script>
+<script src="partials/tesouraria/relacao_bancaria/controllers/relacao_bancaria.list.controller.js"></script>
+<script src="partials/tesouraria/relacao_bancaria/controllers/relacao_bancaria_conciliacao_bancaria.controller.js"></script>
+
+<script src="partials/comercial/cadastros/categoriacontrato/controllers/categoriacontrato.list.controller.js"></script>
+<script src="partials/comercial/cadastros/categoriacontrato/controllers/categoriacontrato.detail.controller.js"></script>
+
+<script src="partials/tesouraria/relatorios/relatorios.controller.js"></script>
+<script src="partials/comercial/cadastros/centrosfinanceiros/controllers/centrosfinanceiros.detail.controller.js"></script>
+<script src="partials/comercial/cadastros/centrosfinanceiros/controllers/centrosfinanceiros.list.controller.js"></script>
+<script src="partials/comercial/cadastros/centrosfinanceiros/controllers/fecho.controller.js"></script>
+
+<script src="partials/comercial/cadastros/clientes/controllers/clientes.list.controller.js"></script>
+<script src="partials/comercial/cadastros/clientes/controllers/clientes.detail.controller.js"></script>
+<script src="partials/comercial/cadastros/formacontratacao/controllers/formacontratacao.controller.detail.js"></script>
+<script src="partials/comercial/cadastros/formacontratacao/controllers/formacontratacao.controller.list.js"></script>
+<script src="partials/comercial/cadastros/obras/controllers/obras.controller.list.js"></script>
+<script src="partials/comercial/cadastros/obras/controllers/obras.controller.detail.js"></script>
+<script src="partials/comercial/cadastros/relacionamentocontato/controllers/relacionamentocontato.controller.detail.js"></script>
+<script src="partials/comercial/cadastros/relacionamentocontato/controllers/relacionamentocontato.controller.list.js"></script>
+<script src="partials/comercial/relatorios/controllers/relatorios.datail.controller.js"></script>
+<script src="partials/fluxocaixa/cadastros/despesas/despesas.controller.js"></script>
+<script src="partials/tesouraria/cadastros/conta_corrente/controllers/conta_corrente.detail.controller.js"></script>
+<script src="partials/tesouraria/cadastros/conta_corrente/controllers/conta_corrente.list.controller.js"></script>
+<script src="partials/tesouraria/cadastros/banco/banco.detail.controller.js"></script>
+<script src="partials/tesouraria/cadastros/banco/banco.list.controller.js"></script>
+<script src="../lib/angular-locale-pt-br/angular-locale_pt-br.js" type="text/javascript"></script>
+
+</body>
+</html>

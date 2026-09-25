@@ -1,0 +1,136 @@
+<div layout layout-sm="column">
+	<div flex layout="column">
+		<label id="lbl_numero" style="margin-top: -4px;">Número</label>
+		<span class="link-contrato" ng-click="openNewTargetContrato()"><b>{{ object.centroFinanceiro.contratoTO.numero }}</b></span>
+	</div>
+	<span style="width: 2.5px;"></span>
+	<md-input-container flex>
+		<label id="lbl_situacao">Situação</label>
+		<input id="lbl_situacao_contrato" name="situacao_contrato" ng-disabled="true"
+			   type="text" value="{{ object.centroFinanceiro.contratoTO.situacao }}">
+	</md-input-container>
+	<md-input-container flex>
+		<label id="lbl_inicio_vigencia">Início vigência</label>
+		<input id="lbl_inicio_vigencia_contrato" name="incio_vigencia" ng-disabled="true"
+			   type="text"
+			   value="{{ object.centroFinanceiro.contratoTO.dataInicioVigencia | date : 'dd/MM/yyyy' }}">
+	</md-input-container>
+	<md-input-container flex>
+		<label id="lbl_fim_vigencia">Fim vigência</label>
+		<input id="lbl_fim_vigencia_contrato" name="fim_vigencia" ng-disabled="true"
+			   type="text"
+			   value="{{ object.centroFinanceiro.contratoTO.dataFimVigencia | date : 'dd/MM/yyyy' }}">
+	</md-input-container>
+</div>
+<div layout layout-sm="column">
+	<md-input-container flex="25">
+		<label id="lbl_prazo">Prazo (meses)</label>
+		<input class="text-left" id="lbl_prazo_contrato" name="prazo" ng-disabled="true"
+			   type="text" value="{{ object.centroFinanceiro.contratoTO.prazoAtual }}">
+	</md-input-container>
+	<md-input-container flex>
+		<label id="lbl_mes_inicial">Mês inicial</label>
+		<input class="text-left" id="lbl_mes_inicial_contrato" name="mes_inicial" ng-disabled="true"
+			   type="text" value="{{ object.centroFinanceiro.contratoTO.dataInicioVigencia | date : 'dd/MM/yyyy' }}">
+	</md-input-container>
+	<md-input-container flex>
+		<label id="lbl_valor_mensal">Valor mensal (R$)</label>
+		<input class="text-left" id="lbl_valor_mensal_contrato" name="valor_mes" ng-disabled="true"
+			   type="text" value="{{ object.centroFinanceiro.contratoTO.valorMensal | currency:'':2 }}">
+	</md-input-container>
+	<md-input-container flex>
+		<label id="lbl_valor_total">Valor total (R$)</label>
+		<input class="text-left" id="lbl_valor_total_contrato" name="valor_total" ng-disabled="true"
+			   type="text" value="{{ object.centroFinanceiro.contratoTO.valorTotal | currency:'':2 }}">
+	</md-input-container>
+</div>
+<div layout layout-sm="column" style="margin-top: 28px;">
+	<md-input-container flex ng-if="screenMode !== 'VIEW'">
+		<label id="lbl_obj_faturamento_contrato">Objeto (Faturamento)</label>
+		<textarea id="text_objeto_faturamento" maxlength="2000" md-maxlength="2000"
+				  name="objeto_faturamento" ng-disabled="false" ng-maxlength="2000" ng-model="object.resumo"
+				  ng-required="true"
+				  ng-trim="true" required
+				  style="height: 80px;max-height: 80px;min-height: 80px;overflow-y: scroll;resize: none;"
+				  value="{{ object.resumo }}"></textarea>
+		<div ng-messages="wizardStep2.objeto_faturamento.$error" role="alert">
+			<div id="msg_req_obj_faturamento" ng-message="required">Obrigatório.</div>
+			<div id="msg_max_obj_faturamento" ng-message="maxlength">Objeto (Faturamento) é muito longo.</div>
+		</div>
+	</md-input-container>
+	<md-input-container flex ng-if="screenMode === 'VIEW'">
+		<label id="lbl_obj_faturamento_contrato_exibicao">Objeto (Faturamento)</label>
+		<textarea id="text_objeto_faturamento_exibicao" maxlength="2000" name="objeto_faturamento_exibicao"
+				  ng-disabled="true" ng-maxlength="2000"
+				  ng-model="object.resumo" ng-trim="true"
+				  style="height: 80px;max-height: 80px;min-height: 80px;overflow-y: scroll;resize: none;"
+				  value="{{ object.resumo }}"></textarea>
+	</md-input-container>
+</div>
+<div layout layout-sm="column" style="margin-top: 70px">
+	<md-input-container flex="25" ng-if="screenMode != 'VIEW'">
+		<label id="lbl_centro_cidade_aba_contrato">Local de prestação dos serviços</label>
+		<md-select id="combo_cidade_aba_contrato" name="cidade_faturamento" ng-change="$emit('changeCidade')"
+				   ng-disabled="screenMode === 'VIEW'"
+				   ng-model="object.cidadePrestacaoServico" ng-model-options="{trackBy: '$value.codigo'}"
+				   ng-required="true">
+			<md-option ng-repeat="cidadeFaturamento in cidades | orderBy: ['cidade.uf', 'cidade.nome']"
+					   ng-value="cidadeFaturamento.cidade"
+					   value="{{ cidadeFaturamento.cidade.nome }} / {{ cidadeFaturamento.cidade.uf }}">{{
+				cidadeFaturamento.cidade.uf }}/{{ cidadeFaturamento.cidade.nome }}
+			</md-option>
+		</md-select>
+		<div ng-messages="wizardStep2.cidade_faturamento.$error" role="alert">
+			<div id="msg_req_cidade_fat" ng-message="required">Obrigatório.</div>
+		</div>
+	</md-input-container>
+	<md-button aria-label="Adicionar cidade" class="md-icon-button" id="btn_adicionar_cidade"
+			   ng-click="adicionarCidade()" ng-if="screenMode != 'VIEW'" style="margin-top: 15px;">
+		<md-icon class="green-400-fg" md-font-icon="icon-plus-circle" style="line-height: 17px;"></md-icon>
+		<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+			<span class="h4">Adicionar cidade para faturamento</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-input-container flex="25" ng-if="screenMode === 'VIEW'">
+		<label id="lbl_cidade_exibicao">Local de prestação dos serviços</label>
+		<input id="input_cidade_exibicao" name="cl" ng-disabled="true" ng-show="screenMode === 'VIEW'" type="text"
+			   value="{{ object.cidadePrestacaoServico.nome }}/{{ object.cidadePrestacaoServico.uf }}">
+	</md-input-container>
+</div>
+
+
+<div layout layout-sm="column" ng-if="screenMode != 'VIEW'" style="margin-top: 10px">
+	<span>*</span>&nbsp;Campos obrigatórios
+</div>
+
+<div class="navigation padding-8" flex layout="row" ng-hide="screenMode === 'NEW'"
+	 ng-if="habilitarBotoesFaturamento && object.situacao !== 'Cancelado'"
+	 style="margin-top: -5px;margin-left: -15px;">
+	<md-button class="md-raised md-accent" id="btn_editar_contrato" ng-click="editarContrato()" ng-disabled="action"
+			   ng-hide="modeContrato == true"
+			   ng-show="screenMode === 'VIEW'">
+		<span class="h4">Editar</span>
+		<img ng-show="action" src="../img/gray_carregando.gif" style="height: 20px;width: 20px;margin-top: 8px;"/>
+		<md-tooltip id="tool_tip_btn_editar" md-direction="bottom">
+			<span class="h4">Editar Contrato (Objeto faturamento e Local de prestação dos serviços)</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_salvar_editar_contrato" ng-click="salvarContrato(wizardStep2)"
+			   ng-disabled="wizardStep2.$invalid || desabilitarBotaoSalvarFat() || action"
+			   ng-show="modeContrato == true">
+		Salvar
+		<md-tooltip id="tool_tip_btn_salvar_editar" md-direction="bottom">
+			<span class="h4">Salvar as alterações realizadas nesta tela do faturamento</span>
+		</md-tooltip>
+	</md-button>
+
+	<md-button class="md-raised md-accent" id="btn_cancelar_contrato" ng-click="cancelarContrato(wizardStep2)"
+			   ng-disabled="action" ng-show="modeContrato == true">
+		Cancelar
+		<md-tooltip id="tool_tip_btn_cancelar_contrato" md-direction="bottom">
+			<span class="h4">Sair deste faturamento, sem gravar as modificações realizadas</span>
+		</md-tooltip>
+	</md-button>
+</div>

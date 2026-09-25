@@ -1,0 +1,1402 @@
+@import 'settings/settings.common';
+@import '../design/fuse/core/global-scss/global.scss';
+
+@import '../design/fuse/sidenav/navigation/navigation.scss';
+@import '../design/fuse/main/pages/profile/profile.scss';
+@import '../design/fuse/main/pages/500/error-500.scss';
+// @import '../design/fuse/core/theming/theme-options/theme-options.scss';
+
+@import '../design/fuse/core/directives/ms-card/ms-card.scss';
+@import '../design/fuse/core/directives/ms-responsive-table/ms-responsive-table.scss';
+@import '../design/fuse/core/directives/ms-scroll/ms-scroll.scss';
+//@import '../design/fuse/core/directives/ms-widget/ms-widget.scss';
+@import '../design/fuse/main/forms/forms.scss';
+@import '../design/fuse/core/directives/ms-form-wizard/ms-form-wizard.scss';
+
+@import '../../static/restrict/partials/header/header.scss';
+
+@import '../design/ui-grid/style-grid.scss';
+
+/* TÍTULOS DOS DIÁLOGOS */
+md-toolbar.md-sgi-theme:not(.md-menu-toolbar) {
+    background-color: rgb(143, 17, 46);
+    color: rgba(255, 255, 255, 1);
+}
+
+md-progress-linear.md-sgi-theme .md-container {
+    background-color: rgb(143, 17, 46);
+}
+
+/* Classe para os botões da tabela de tributos - faturamento (Deve ser colocado fora do md-button, em um div) */
+.bt_table_tributo {
+    margin: -20px 0px 0px -10px;
+    height: 36px;
+    /*width: 36px;*/
+}
+
+/* Toolbar Progress */
+.corrigir_posicao {
+    margin-top: -28px;
+}
+
+/* CSS para as tabelas de pesquisa */
+.tabela_pesquisa {
+    margin-top: -30px !important;
+}
+
+/* CSS para as tabelas de exibição */
+.tabela_exibicao {
+    border-collapse: collapse !important;
+}
+
+table.tabela_exibicao {
+    width: 100%;
+    border: none;
+    border-spacing: 0;
+    text-align: left
+}
+
+table.tabela_exibicao thead tr th {
+    padding: 16px 8px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, .54);
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 16px 8px;
+    white-space: nowrap;
+}
+
+table.tabela_exibicao thead tr th {
+    background-color: #EEE !important;
+    color: rgba(0, 0, 0, 0.88);
+    padding: 10px 10px 10px 10px;
+}
+
+table.tabela_exibicao tbody tr td {
+    padding: 5px 5px 5px 5px;
+    border-bottom: none;
+    color: rgba(0, 0, 0, .90);
+}
+
+table.tabela_exibicao tfoot td {
+    padding: 10px 10px 5px 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.10);
+    color: rgba(0, 0, 0, 0.88);
+    border-bottom: none;
+    background-color: rgba(158, 158, 158, 0.98) !important;
+}
+
+table.tabela_exibicao.row-border tbody th,
+table.tabela_exibicao.row-border tbody td,
+table.tabela_exibicao.display tbody th,
+table.tabela_exibicao.display tbody td {
+    border-top: 1px solid #ddd;
+}
+
+table.tabela_exibicao.clickable tbody tr {
+    cursor: pointer
+}
+
+
+.msg-empty-list {
+    font-weight: 600;
+    color: rgba(0, 0, 0, .70);
+    vertical-align: middle;
+}
+
+.autocompletedemoCustomTemplate .autocomplete-custom-template li {
+    border-bottom: 1px solid #ccc !important;
+    height: auto !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    white-space: normal !important;
+}
+
+.autocompletedemoCustomTemplate .autocomplete-custom-template li:last-child {
+    border-bottom-width: 0 !important;
+}
+
+.autocompletedemoCustomTemplate .autocomplete-custom-template .item-title,
+.autocompletedemoCustomTemplate .autocomplete-custom-template .item-metadata {
+    display: block !important;
+    line-height: 2 !important;
+}
+
+.autocompletedemoCustomTemplate .autocomplete-custom-template .item-title md-icon {
+    height: 10px !important;
+    width: 18px !important;
+}
+
+/* Ajustando campos data */
+.md-default-theme .md-datepicker-input,
+.md-datepicker-input {
+    background: rgb(255, 255, 255) !important;
+}
+
+.label_datapicker {
+    color: gray;
+    margin-bottom: -9px;
+    transform: translate3d(-19px, 11px, 0) scale(0.85);
+}
+
+.msg_datapicker {
+    color: rgb(213, 0, 0);
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+    opacity: 1;
+    margin-top: 0;
+    padding-top: 5px;
+}
+
+/* ÍCONE DE OPÇÕES TABELA PESQUISA */
+.opcao_table_list {
+    margin: -18px 0 -20px 0px;
+}
+
+/* TORNAR O TÍTULO DO DIALOG MENOR NA ALTURA */
+md-toolbar {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+    font-size: 18px;
+    min-height: 50px;
+    width: 100%;
+}
+
+.md-toolbar-tools {
+    font-size: 18px;
+    letter-spacing: 0.005em;
+    box-sizing: border-box;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    height: 50px !important;
+    max-height: 50px !important;
+    padding: 0 16px;
+    margin: 0;
+}
+
+.over-flow-hidden {
+    height: 15px;
+    width: 98%;
+    overflow: hidden;
+}
+
+/* BOTÃO HEAD */
+.bt-head {
+    width: 64px;
+    height: 64px;
+    margin: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 0;
+}
+
+.datepicker-label {
+    z-index: 100;
+    position: absolute;
+    margin-top: 2px;
+    margin-left: -8px;
+    font-size: 14px;
+    font-weight: 500;
+    transform: translate3d(0, 8px, 0) scale(0.76);
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.new-datepicker {
+    position: relative;
+    left: -16px;
+    top: 9px;
+}
+
+/* material-datetimepicker */
+.dtp div.dtp-date,
+.dtp div.dtp-time {
+    background: #8F112E;
+    text-align: center;
+    color: #fff;
+    padding: 10px;
+}
+
+.dtp>.dtp-content>.dtp-date-view>header.dtp-header {
+    display: none;
+    background: #8F112E;
+    color: #fff;
+    text-align: center;
+    padding: 3px;
+}
+
+.dtp table.dtp-picker-days tr>td>a.selected {
+    background: #8F112E;
+    color: #fff;
+}
+
+
+/* Customização do autocomplete */
+.autocomplete-custom-template li {
+    border-bottom: 1px solid #ccc;
+    height: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    white-space: normal;
+}
+
+.autocomplete-custom-template li:last-child {
+    border-bottom-width: 0;
+}
+
+.autocomplete-custom-template .item-title,
+.autocomplete-custom-template .item-metadata {
+    display: block;
+    line-height: 2;
+}
+
+.autocomplete-custom-template .item-title md-icon {
+    height: 10px;
+    width: 18px;
+}
+
+.item-title {
+    margin-top: -20px;
+    margin-bottom: -20px;
+}
+
+/* Animação ng-repeat */
+
+.animate-enter,
+.animate-leave {
+    -webkit-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    position: relative;
+    display: block;
+}
+
+.animate-enter.animate-enter-active,
+.animate-leave {
+    opacity: 1;
+    top: 0;
+    height: 30px;
+}
+
+.animate-leave.animate-leave-active,
+.animate-enter {
+    opacity: 0;
+    top: -50px;
+    height: 0px;
+}
+
+
+/* Customização do datepicker */
+.md-datepicker-custom .md-datepicker-button {
+    width: 0px;
+    height: 0px;
+    line-height: 70px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.md-datepicker-custom .md-datepicker-input-container {
+    width: 95%;
+}
+
+/* Customização do ui-grid */
+
+.sgiUiGridPesquisa {
+    width: 100%;
+    height: 0px;
+}
+
+
+@media print {
+    .no-print {
+        display: none !important;
+        margin: 0px;
+    }
+}
+
+
+md-select.md-sgi-theme:not([disabled]):focus {
+
+    label {
+        color: rgba(143, 17, 46, 1) !important;
+    }
+
+}
+
+md-select.md-sgi-theme.md-select-value {
+    border-bottom-color: rgba(143, 17, 46, 1);
+}
+
+md-select.md-sgi-theme:not([disabled]):focus .md-select-value {
+    border-bottom-color: rgba(143, 17, 46, 1) !important;
+}
+
+/*
+ *  FOCUS DOS COMPONETES DE TELAS (FIELDS)
+ */
+md-input-container.md-sgi-theme:not(.md-input-invalid).md-input-focused .md-input,
+md-input-container.md-sgi-theme:not(.md-input-invalid).md-input-resized .md-input {
+    border-color: rgb(143, 17, 46) !important;
+}
+
+
+md-select:not([disabled]):hover {
+    color: black !important;
+}
+
+
+
+/*----------------------------------------------*/
+/*  placeholder                                  */
+/*----------------------------------------------*/
+
+md-select.md-default-theme .md-select-value.md-select-placeholder,
+md-select .md-select-value.md-select-placeholder {
+    color: rgba(0, 0, 0, 0.40);
+}
+
+div#pop-up {
+    display: none;
+    position: fixed;
+    padding: 10px;
+    width: 800px;
+    background: white;
+    color: #000000;
+    border: 3px solid orange;
+    font-size: 90%;
+    z-index: 1000;
+}
+
+/* FOCUS DOS BOTÕES */
+a.md-button.md-sgi-theme.md-accent.md-raised:not([disabled]).md-focused,
+a.md-button.md-sgi-theme.md-accent.md-fab:not([disabled]).md-focused,
+.md-button.md-sgi-theme.md-accent.md-raised:not([disabled]).md-focused,
+.md-button.md-sgi-theme.md-accent.md-fab:not([disabled]).md-focused {
+    background-color: rgb(173, 24, 58);
+}
+
+/* FIXME: PROVISÓRIO, ATÉ CORRIGIR THEME DO FUSE, USAR ABA SELECIONADA NA COR ACCENT */
+md-tabs.md-sgi-theme .md-tab.md-active,
+md-tabs.md-sgi-theme .md-tab.md-active md-icon,
+md-tabs.md-sgi-theme .md-tab.md-focused,
+md-tabs.md-sgi-theme .md-tab.md-focused md-icon {
+    color: rgb(143, 17, 46);
+}
+
+/* FIXME: PARA OS BOTÃO DE DIALOG. MESMO CASO ACIMA. */
+a.md-button.md-default-theme.md-accent.md-raised,
+a.md-button.md-accent.md-raised,
+a.md-button.md-default-theme.md-accent.md-fab,
+a.md-button.md-accent.md-fab,
+.md-button.md-default-theme.md-accent.md-raised,
+.md-button.md-accent.md-raised,
+.md-button.md-default-theme.md-accent.md-fab,
+.md-button.md-accent.md-fab {
+    color: rgb(255, 255, 255);
+    background-color: rgb(143, 17, 46);
+}
+
+/* FIXME: HOVER */
+a.md-button.md-default-theme.md-accent.md-raised:not([disabled]):hover,
+a.md-button.md-accent.md-raised:not([disabled]):hover,
+a.md-button.md-default-theme.md-accent.md-fab:not([disabled]):hover,
+a.md-button.md-accent.md-fab:not([disabled]):hover,
+.md-button.md-default-theme.md-accent.md-raised:not([disabled]):hover,
+.md-button.md-accent.md-raised:not([disabled]):hover,
+.md-button.md-default-theme.md-accent.md-fab:not([disabled]):hover,
+.md-button.md-accent.md-fab:not([disabled]):hover {
+    background-color: rgb(183, 9, 49);
+}
+
+.md-button.md-default-theme.md-raised:not([disabled]):hover,
+.md-button.md-raised:not([disabled]):hover {
+    background-color: rgb(226, 226, 226);
+}
+
+/* FIXME: DISABLED */
+a.md-button.md-default-theme.md-raised[disabled],
+a.md-button.md-raised[disabled],
+a.md-button.md-default-theme.md-fab[disabled],
+a.md-button.md-fab[disabled],
+.md-button.md-default-theme.md-raised[disabled],
+.md-button.md-raised[disabled],
+.md-button.md-default-theme.md-fab[disabled],
+.md-button.md-fab[disabled] {
+    background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.md-button.md-default-theme.md-accent.md-fab:not([disabled]).md-focused,
+.md-button.md-accent.md-fab:not([disabled]).md-focused,
+.md-button.md-default-theme.md-accent.md-fab:not([disabled]):hover,
+.md-button.md-accent.md-fab:not([disabled]):hover,
+.md-button.md-default-theme.md-accent.md-raised:not([disabled]).md-focused,
+.md-button.md-accent.md-raised:not([disabled]).md-focused,
+.md-button.md-default-theme.md-accent.md-raised:not([disabled]):hover,
+.md-button.md-accent.md-raised:not([disabled]):hover {
+    background-color: rgb(216, 30, 73);
+}
+
+md-input-container label:not(.md-container-ignore).md-required:after {
+    content: ' *' !important;
+    font-size: 20px !important;
+    vertical-align: top !important;
+}
+
+md-input-container:not(.md-input-has-value) md-select[required]:not(.md-no-asterisk) .md-select-value span:first-child:after,
+md-input-container:not(.md-input-has-value) md-select.ng-required:not(.md-no-asterisk) .md-select-value span:first-child:after {
+    content: ' *' !important;
+    font-size: 20px !important;
+    vertical-align: top !important;
+}
+
+/*----------------------------------------------*/
+/*  COMPONENTES DESABILITADOS */
+/*----------------------------------------------*/
+
+[disabled] md-input-container.md-sgi-theme .md-input,
+md-input-container.md-sgi-theme .md-input[disabled] {
+    border-bottom-color: transparent !important;
+    color: rgba(0, 0, 0, 1) !important;
+    //background-image: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.55) 33%, transparent 0%) !important;
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.98) 0, rgba(0, 0, 0, 0.98) 38%, transparent 0) !important;
+    background-image: -ms-linear-gradient(left, transparent 0%, rgba(0, 0, 0, 0.26) 100%) !important;
+}
+
+
+/*  LABEL */
+md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label,
+md-input-container:not(.md-input-invalid).md-input-has-value label {
+    color: rgba(143, 17, 46, 1);
+}
+
+
+md-input-container.md-sgi-theme:not(.md-input-invalid).md-input-focused {
+
+    label {
+        color: rgba(143, 17, 46, 1) !important;
+        border-bottom-color: rgba(0, 0, 0, 0.55) !important;
+    }
+
+    .md-input {
+        border-color: rgba(143, 17, 46, 1) !important;
+    }
+}
+
+
+
+
+
+/*
+ * LABEL DOS SELECTS
+ */
+md-input-container.md-sgi-theme:not(.md-input-invalid).md-input-focused label,
+md-input-container.md-sgi-theme:not(.md-input-invalid).md-input-focused md-icon {
+    color: rgba(143, 17, 46, 1) !important;
+    font-size: 20px !important;
+}
+
+md-select.md-sgi-theme:not([disabled]):focus {
+
+    label {
+        color: rgba(143, 17, 46, 1) !important;
+    }
+
+}
+
+md-select.md-sgi-theme.md-select-value {
+    border-bottom-color: rgba(143, 17, 46, 1);
+}
+
+.md-select:focus {
+    color: rgba(143, 17, 46, 1) !important;
+}
+
+/*
+ *  FOCUS DOS COMPONETES DE TELAS (FIELDS)
+ */
+md-input-container.md-sgi-theme:not(.md-input-invalid).md-input-focused .md-input,
+md-input-container.md-sgi-theme:not(.md-input-invalid).md-input-resized .md-input {
+    border-color: rgb(143, 17, 46) !important;
+}
+
+
+/* INPUT FONT BOLD */
+input-bold {
+    font-weight: bold;
+}
+
+table#tabela {
+    width: 100%;
+    margin-bottom: .5em;
+    display: table;
+    border-collapse: collapse;
+    border-spacing: 0px;
+    border-color: grey;
+
+    td,
+    th {
+        padding: .7em;
+        margin: 0;
+        border: 1px solid #ccc;
+    }
+
+    .titulo_colunas {
+        font-weight: bold !important;
+        background-color: rgb(189, 189, 189) !important;
+        color: black !important;
+    }
+
+}
+
+/* GRID */
+.ui-grid-invisible {
+    visibility: hidden;
+    display: none;
+}
+
+.ui-grid-cell-header-contents {
+    padding: 14px 0px 14px 0px !important;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 100%;
+}
+
+.ui-grid-cell-contents {
+    padding: 14px 10px 14px 13px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 100%;
+}
+
+/* ALTURAS TABELAS */
+table.simple tbody tr td {
+    padding: 9px 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* BOTÃO/ICONE DESABILITADO */
+.md-button.md-sgi-theme[disabled] md-icon,
+.md-button.md-sgi-theme.md-raised[disabled] md-icon,
+.md-button.md-sgi-theme.md-fab[disabled] md-icon,
+.md-button.md-sgi-theme.md-accent[disabled] md-icon,
+.md-button.md-sgi-theme.md-warn[disabled] md-icon {
+    color: rgba(0, 0, 0, 0.38) !important;
+}
+
+/* BORDAS CINZAS PARA LINHAS DA TABELA */
+.linha-borda-cinza td {
+    border: 1px solid #DDD;
+}
+
+/* BORDAS CINZAS PARA CABECALHO DA TABELA */
+.cabecalho-borda-cinza th {
+    border: 1px solid #DDD;
+}
+
+/* CELULA DE UMA TABELA COM BORDA DIREITA CINZA ESCURA */
+.celula-borda-direita {
+    border-right: 1px solid #818181;
+}
+
+.celula-direita-gray {
+    border-right: 1px solid rgb(129, 129, 129);
+  }
+
+/* ALINHAR CONTEÚDO DA LINHA VERTICALMENTE NO MEIO */
+.linha-alinhado-meio td {
+    vertical-align: middle;
+}
+
+/* TABELAS */
+table.md-table:not(.md-row-select) td.md-cell:nth-child(n+2):nth-last-child(n+2),
+table.md-table:not(.md-row-select) th.md-column:nth-child(n+2):nth-last-child(n+2) {
+    padding: 0 0 0 0;
+}
+
+table.simple tbody tr td:first-child {
+    padding: 10px;
+}
+
+table.simple thead tr th:first-child {
+    padding-left: 0;
+}
+
+.titulo_colunas_rb {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 12px;
+    font-weight: bold !important;
+    white-space: nowrap;
+    background-color: #EEE !important;
+}
+
+.padding-10 {
+    padding: 10px;
+}
+
+/* ALINHAR CONTEÚDO DO CABEÇALHO VERTICALMENTE NO MEIO */
+.cabecalho-alinhado-meio th {
+    vertical-align: middle;
+}
+
+
+.borda_celula {
+    border: 1px solid #c4c4c4;
+    padding: 8px !important;
+}
+
+.titulo {
+    border-right: 1px solid #c4c4c4;
+    background-color: #9E9E9E !important;
+    font-weight: bold !important;
+    color: black !important;
+    padding: 8px !important;
+}
+
+.celula {
+    border: 1px solid #c4c4c4;
+}
+
+table.simple thead tr th {
+    text-align: left;
+    padding: 9px 8px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.54);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    white-space: nowrap;
+    min-width: 30px;
+}
+
+
+/* inputs
+md-input-container {
+    display: inline-block;
+    position: relative;
+    padding: 2px 4px 1px 5px;
+    margin: 10px 0px 0px 0px;
+    vertical-align: middle;
+}
+*/
+
+.margin_form {
+    margin-top: -25px;
+}
+
+.dataDialog {
+    border: 1px solid !important;
+    padding: 3px !important;
+}
+
+/* CSS para conteudo grande de célula  */
+.mdCell_hidden {
+    padding: 10px;
+    position: relative;
+}
+
+.div_cell_hidden {
+    white-space: nowrap;
+    position: absolute;
+    overflow: hidden;
+    width: 88%;
+    margin-top: -9px;
+}
+
+/* CSS para fixar o head da table */
+table.fixed thead tr:last-child {
+    transition: height 0.2s ease-in-out;
+}
+
+table.fixed thead tr:last-child th {
+    vertical-align: bottom;
+    border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
+}
+
+table.fixed+table thead tr th>span {
+    display: inline-block;
+}
+
+table.fixed+table tbody tr:first-child td {
+    border-top: none;
+}
+
+/* CHECKBOX */
+md-checkbox.md-default-theme.md-checked .md-ink-ripple,
+md-checkbox.md-checked .md-ink-ripple {
+    color: rgb(143, 17, 46) !important;
+}
+
+md-checkbox.md-default-theme.md-checked .md-icon,
+md-checkbox.md-checked .md-icon {
+    background-color: rgb(143, 17, 46) !important;
+}
+
+
+.text-right {
+    text-align: right !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.padding-left-0-important {
+    padding-left: 0px !important;
+}
+
+.padding-right-0-important {
+    padding-right: 0px !important;
+}
+
+.c3 .c3-axis text {
+    fill: rgb(0, 0, 0);
+}
+
+/* CSS para o texto da grid não ultrapassar */
+.text-over {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+.md-button.md-icon-button {
+    height: 30px;
+    line-height: 30px;
+    width: 30px;
+}
+
+.input_cliente {
+    height: 51px;
+    border-bottom: 2px dotted rgba(0, 0, 0, 0.19);
+}
+
+
+/**********************/
+md-select.md-sgi-theme .md-select-value.md-select-placeholder {
+    color: black;
+}
+
+md-select.md-sgi-theme .md-select-value {
+    border-bottom-color: rgba(0, 0, 0, 0.38);
+}
+
+md-input-container.md-sgi-theme .md-placeholder,
+md-input-container.md-sgi-theme label {
+    color: black;
+}
+
+md-select.md-sgi-theme[disabled] .md-select-icon,
+md-select.md-sgi-theme[disabled] .md-select-value,
+md-select.md-sgi-theme[disabled] .md-select-value.md-select-placeholder {
+    color: black;
+}
+
+
+
+
+md-select.md-default-theme[disabled] .md-select-value,
+md-select[disabled] .md-select-value {
+    border-bottom-color: transparent !important;
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 1.98) 0, rgba(0, 0, 0, 1.98) 38.2%, transparent 0) !important;
+    background-image: -ms-linear-gradient(left, transparent 0, rgba(0, 0, 0, 0.38) 100%) !important;
+}
+
+md-input-container.md-sgi-theme:not(.md-input-invalid).md-input-has-value label {
+    color: black;
+}
+
+md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label,
+md-input-container:not(.md-input-invalid).md-input-has-value label {
+    color: #8f112e;
+}
+
+
+
+md-input-container.md-sgi-theme:not(.md-input-invalid).md-input-has-value label {
+    color: black;
+    font-size: 20px !important;
+}
+
+/*  ALTURA ENTRE OS CAMPOs */
+md-input-container {
+    display: inline-block;
+    position: relative;
+    padding: 2px;
+    margin: 18px 0;
+    vertical-align: middle;
+    height: 2em !important;
+}
+
+/* ESPAÇO ENTRE OS PAINEIS */
+.page-layout.simple.fullwidth>.content {
+    padding: 0px !important;
+}
+
+
+.link-contrato {
+    cursor: pointer;
+    margin-top: 9px;
+    padding-bottom: 2px;
+    border-bottom: dotted;
+    display: inline-block;
+    border-bottom-color: transparent;
+    color: rgb(143, 17, 46) !important;
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.98) 0, rgba(0, 0, 0, 0.98) 38%, transparent 0);
+    background-image: -ms-linear-gradient(left, transparent 0, rgba(0, 0, 0, 0.38) 100%);
+    background-position: bottom -1px left 0;
+    background-size: 4px 1px;
+    background-repeat: repeat-x;
+}
+
+.link-contrato-sample {
+    cursor: pointer;
+    margin-top: 9px;
+    padding-bottom: 2px;
+    border-bottom: dotted;
+    display: inline-block;
+    border-bottom-color: transparent;
+    color: rgb(143, 17, 46) !important;
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.98) 0, rgba(0, 0, 0, 0.98) 38%, transparent 0);
+    background-image: -ms-linear-gradient(left, transparent 0, rgba(0, 0, 0, 0.38) 100%);
+    background-position: bottom -1px left 0;
+    background-size: 4px 1px;
+    background-repeat: repeat-x;
+}
+
+#toast-container>div {
+    box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.6);
+}
+
+.botao-opcoes {
+    position: fixed;
+    bottom: 200px;
+    right: -2px;
+    padding: 0;
+    z-index: 99;
+}
+
+.tamanho-icones {
+    width: 70% !important;
+    height: 50% !important;
+}
+
+.breadcrumb .white-fg md-icon,
+.white-text md-icon {
+    color: #FFFFFF !important;
+}
+
+#toast-container>div {
+    box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.6);
+}
+
+.botao-opcoes {
+    position: fixed;
+    bottom: 200px;
+    right: -2px;
+    padding: 0;
+    z-index: 99;
+}
+
+.tamanho-icones {
+    width: 70% !important;
+    height: 50% !important;
+}
+
+
+md-input-container {
+    display: inline-block;
+    position: relative;
+    padding: 2px 5px 0px 5px;
+    margin: 18px 0;
+    vertical-align: middle;
+    height: 2em !important;
+}
+
+#toast-container>div {
+    box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.6);
+}
+
+.botao-opcoes {
+    position: fixed;
+    bottom: 200px;
+    right: -2px;
+    padding: 0;
+    z-index: 99;
+}
+
+.tamanho-icones {
+    width: 70% !important;
+    height: 50% !important;
+}
+
+.btn-descer {
+    width: 40px !important;
+    height: 40px !important;
+    position: fixed;
+    bottom: 0px;
+    right: -2px;
+}
+
+md-input-container {
+    display: inline-block;
+    position: relative;
+    padding: 2px 5px 0px 5px;
+    margin: 18px 0;
+    vertical-align: middle;
+    height: 2em !important;
+}
+
+.botao-opcoes .white-fg {
+    color: white !important;
+}
+
+.picklist-main .white-500-fg {
+    color: white !important;
+}
+
+/**
+ * Classe utilizada para "cortar" o texto de uma div (ou tag qualquer) quando este exceder o tamanho disponível em tela
+ * para exibição. Vide tiposServico.controller.js, coluna nome da tabela de resultados de pesquisa, para um exemplo
+ * de uso.
+ */
+.text-overflow-cut {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.md-resize-handle {
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    height: 10px;
+    background: transparent;
+    width: 100%;
+    cursor: auto;
+}
+
+
+#toast-container .toast {
+    position: relative;
+    overflow: hidden;
+    margin: 0 0 6px;
+    padding: 15px 15px 15px 50px;
+    width: 300px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 3px 3px;
+    background-position: 15px center;
+    background-repeat: no-repeat;
+    -moz-box-shadow: 0 0 12px #999999;
+    -webkit-box-shadow: 0 0 12px #999999;
+    box-shadow: 0 0 12px #999999;
+    color: #FFFFFF;
+    opacity: 1;
+}
+
+.table-truncate {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 1px;
+}
+
+/* ÁRVORES CUSTOS */
+treecontrol.tree-classic li.tree-collapsed i.tree-branch-head {
+    background: none;
+}
+
+treecontrol.tree-classic li.tree-expanded i.tree-branch-head {
+    padding: 0px 10px;
+    background: none;
+}
+
+treecontrol li .tree-label {
+    cursor: default;
+    display: inline;
+}
+
+treecontrol.tree-classic li .tree-selected {}
+
+treecontrol.tree-light li .tree-selected {}
+
+treecontrol.tree-dark li .tree-selected {}
+
+treecontrol.tree-classic li .tree-selected {
+    background-color: transparent !important;
+    font-weight: initial;
+}
+
+treecontrol li .tree-label {
+    margin-left: -10px;
+    font-size: 1.2em;
+}
+
+
+treecontrol.tree-classic li.tree-expanded i.tree-branch-head::before {
+    content: "\2193";
+    font-size: 30px;
+}
+
+treecontrol.tree-classic li.tree-collapsed i.tree-branch-head::before {
+    content: "\2192";
+    font-size: 30px;
+}
+
+treecontrol.tree-classic li.tree-leaf i.tree-leaf-head {
+    font-size: 18px;
+    background: url("") no-repeat;
+    margin-right: 10px;
+}
+
+
+#div-graficos:-webkit-full-screen {
+    height: 100vh;
+    width: 100vw;
+}
+
+#div-graficos:-moz-full-screen {
+    height: 100vh;
+    width: 100vw;
+}
+
+
+#div-graficos:-ms-full-screen {
+    height: 100vh;
+    width: 100vw;
+}
+
+
+#div-graficos:-o-full-screen {
+    height: 100vh;
+    width: 100vw;
+}
+
+
+:full-screen .fullscreen {
+    height: 100vh;
+    width: 100vw;
+}
+
+.br-5 {
+    border-radius: 5px;
+}
+
+.header-graficos {
+    position: relative;
+
+    .btn-full {
+        position: absolute;
+        height: 30px;
+        line-height: 50px;
+        width: 50px;
+        right: 4px;
+        top: 8px;
+    }
+
+    .icone-full {
+        color: #fff !important;
+        font-size: 30px;
+    }
+}
+
+#navigation ms-nav ms-nav-item .ms-nav-button .ms-nav-label {
+    white-space: pre;
+    overflow: initial;
+    text-overflow: initial;
+}
+
+.chart-custos .c3-line {
+    stroke-width: 4px;
+}
+
+.select-chart {
+    .select {
+        position: relative;
+        margin-top: 18px;
+    }
+
+    .select-text {
+        position: relative;
+        font-family: inherit;
+        background-color: transparent;
+        width: 100%;
+        padding: 10px 25px 4px 0;
+        font-size: 15px;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid rgb(158, 158, 158);
+    }
+
+    /* Remove focus */
+    .select-text:focus {
+        outline: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0);
+    }
+
+    /* Use custom arrow */
+    .select .select-text {
+        appearance: none;
+        -webkit-appearance: none
+    }
+
+    .select:after {
+        position: absolute;
+        top: 16px;
+        right: 10px;
+        width: 0;
+        height: 0;
+        padding: 0;
+        content: '';
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid #757575;
+        pointer-events: none;
+    }
+
+
+    /* LABEL ======================================= */
+    .select-label {
+        color: black;
+        font-size: 15px;
+        font-weight: normal;
+        position: absolute;
+        pointer-events: none;
+        left: 0;
+        top: 8px;
+        transition: 0.2s ease all;
+    }
+
+    /* active state */
+    .select-text:focus~.select-label,
+    .select-text:valid~.select-label {
+        color: rgb(143, 17, 46);
+        top: -10px;
+        transition: 0.2s ease all;
+        font-size: 14px;
+    }
+
+    /* BOTTOM BARS ================================= */
+    .select-bar {
+        position: relative;
+        display: block;
+        width: 350px;
+    }
+
+    .select-bar:before,
+    .select-bar:after {
+        content: '';
+        height: 2px;
+        width: 0;
+        bottom: 1px;
+        position: absolute;
+        background: rgb(143, 17, 46);
+        transition: 0.2s ease all;
+    }
+
+    .select-bar:before {
+        left: 50%;
+    }
+
+    .select-bar:after {
+        right: 50%;
+    }
+
+    /* active state */
+    .select-text:focus~.select-bar:before,
+    .select-text:focus~.select-bar:after {
+        width: 50%;
+    }
+
+    /* HIGHLIGHTER ================================== */
+    .select-highlight {
+        position: absolute;
+        height: 60%;
+        width: 100px;
+        top: 25%;
+        left: 0;
+        pointer-events: none;
+        opacity: 0.5;
+    }
+}
+
+.texto_cor_vermelho {
+    color: rgb(143, 17, 46) !important;
+}
+
+.text-red {
+    margin-top: 9px;
+    padding-bottom: 2px;
+    border-bottom: dotted;
+    display: inline-block;
+    border-bottom-color: transparent;
+    color: #8f112e !important;
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.98) 0, rgba(0, 0, 0, 0.98) 38%, transparent 0);
+    background-image: -ms-linear-gradient(left, transparent 0, rgba(0, 0, 0, 0.38) 100%);
+    background-position: bottom -1px left 0;
+    background-size: 4px 1px;
+    background-repeat: repeat-x;
+}
+
+.md-success-fg {
+    color: green !important;
+}
+
+md-input-container.md-sgi-theme .md-input {
+    color: rgba(0, 0, 0, 0.87);
+    border-color: rgba(0, 0, 0, 0.38);
+}
+
+.auxiliary_table_title {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    padding-right: 2px !important;
+    padding-left: 2px !important;
+    border-bottom: 1px solid #a5a5a5 !important;
+}
+
+.space_helper_cell_tr {
+    border: 1px solid;
+    border-right-color: white;
+    border-left-color: white;
+    color: white !important;
+}
+
+.space_helper_cell_td {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 2px;
+    padding-left: 2px;
+    border-right-color: white;
+    color: white !important;
+}
+
+.table_print_end_tables {
+    padding-left: 0px;
+    vertical-align: top;
+}
+
+.table_border_print {
+    border: 1px solid #a5a5a5;
+}
+
+.page_layout_print_text {
+    font-size: 10px !important;
+}
+
+.page_layout_print {
+    width: 20cm;
+    max-width: 20cm;
+    min-width: 20cm;
+    min-height: 28cm;
+    padding: 0px;
+    margin: 1cm auto;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.page_layout_print_view {
+    width: 20cm;
+    max-width: 20cm;
+    min-height: 28cm;
+    padding: 0px;
+    margin: 1cm auto;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); }
+
+.cell_print {
+    vertical-align: top !important;
+    padding: 2px 5px 2px 5px !important;
+}
+
+.label_cell_print {
+    font-size: 10px !important;
+}
+
+.padding-3,
+.p-3 {
+    padding: 3px;
+}
+
+.padding-2,
+.p-2 {
+    padding: 2px;
+}
+
+.nota-cabecalho {
+    width: 100%;
+    height: 90px;
+    border: 1px #000 solid;
+    margin: 0px; }
+  
+.nota-cabecalho-titulo {
+   width: 75%;
+   height: 100%; } 
+   .-m-15 {
+    margin-top: -15px;
+  }
+.nota-cabecalho-titulo-right {
+   width: 25%;
+   height: 100%;
+   border-left: 1px #000 solid; } 
+.bold{
+    font-weight: bold;
+  }
+.nf-table-f-normal {
+    margin: 5px 0px 5px 5px;
+    font-size: 11px;
+    font-weight: normal;
+  }
+.b-1-w-10{
+    border: 1px #000 solid;
+    width: 10%;
+  }
+
+.f-9-f-b {
+    font-size: 9px;
+    font-weight: bold; }
+.f-9-mt-5px {
+  font-size: 9px;
+  margin: 5px 0px 0px 0px; }    
+  
+.f-11-f-n {
+    font-size: 11px;
+    font-weight: normal; }
+
+.f-11-f-b {
+    font-size: 11px;
+    font-weight: bold; }    
+
+.w-100perc {
+    width: 100%;
+}
+      
+.h-25px {
+    height: 25px;  }
+  
+.borderbottom-1px-black{
+    border: 1px #000 solid;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    margin-left: 0px;
+}    

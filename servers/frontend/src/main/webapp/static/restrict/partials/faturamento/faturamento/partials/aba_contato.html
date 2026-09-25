@@ -1,0 +1,54 @@
+<md-content class="md-padding" ng-if="listContato.length > 0">
+	<table class="tabela_exibicao row-border hover md-caption" id="table_contatos_exibir">
+		<thead class="cabecalho-borda-cinza">
+		<tr>
+			<th class="text-center">Nome</th>
+			<th class="text-center" width="10%">1º Telefone</th>
+			<th class="text-center" width="10%">2º Telefone</th>
+			<th class="text-center" width="25%">E-mail</th>
+			<th class="text-center" width="15%">Relacionamento</th>
+			<th class="text-center" width="7%" ng-if="object.situacao !== 'Cancelado'">Opções</th>
+		</tr>
+		</thead>
+		<tbody id="table_tbody_contatos_exibir_list">
+		<tr class="linha-borda-cinza" ng-repeat="item in listContato">
+			<td class="text-left"> {{ item.contato.nome }}</td>
+			<td class="text-center"> {{ item.contato.telefone1.dddTelefoneRamal }}</td>
+			<td class="text-center"> {{ item.contato.telefone2.dddTelefoneRamal }}</td>
+			<td class="text-left"> {{ item.contato.email }}</td>
+			<td class="text-left"> {{ item.contato.relacionamentoContato.nome }}</td>
+			<td class="text-center" style="padding-top: 0px; padding-bottom: 0px;" ng-if="object.situacao !== 'Cancelado'">
+				<md-button class="md-icon-button" id="btn_edit_contato" ng-click="editarContato($event, item)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon md-font-icon="icon-pencil"></md-icon>
+					<md-tooltip class="h3" md-direction="bottom">
+						Editar
+					</md-tooltip>
+				</md-button>
+				<md-button class="md-icon-button" id="btn_excluir_endereco" name="btn_excluir_endereco"
+						   ng-click="excluirContato(item)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+					<md-tooltip class="h3" md-direction="bottom">
+						Remover
+					</md-tooltip>
+				</md-button>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<md-divider></md-divider>
+</md-content>
+
+<div id="idMensagemContato" ng-if="listContato == null || listContato.length == 0">
+	<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+		<span class="h4 p-32">Não existe(m) <b>contato(s)</b> associado(s) a este faturamento.</span>
+	</md-whiteframe>
+</div>
+
+<div class="p-8" layout="row" layout-sm="row" layout-wrap ng-if="habilitarBotoesFaturamento">
+	<md-button class="md-raised md-accent" id="btn_add_contato" name="btn_add_contato" ng-if="object.situacao !== 'Cancelado'"
+			   ng-click="editarContato($event, $index)">
+		Novo contato
+	</md-button>
+</div>

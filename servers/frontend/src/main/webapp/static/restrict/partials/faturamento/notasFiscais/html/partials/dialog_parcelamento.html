@@ -1,0 +1,54 @@
+<md-dialog aria-label="Nota Fiscal - parcelas: Confirmação" id="dialog_titulo_dialog_parcelas" style="width: 400px;">
+	<form name="DialogparcelasForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_dialog_parcelas">Nota Fiscal - Parcelamento</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content flex>
+			<div class="md-dialog-content" layout layout-sm="column" md-theme="sgi">
+
+				<md-input-container flex="50">
+					<label id="lbl_parcelas">Parcelas</label>
+					<input id="input_parcelas" name="input_parcelas" ng-model="qtdParcelas" ng-required="true"
+						   type="number">
+					<div ng-messages="DialogparcelasForm.input_parcelas.$error" role="alert">
+						<div ng-message="required">Obrigatório.</div>
+					</div>
+				</md-input-container>
+
+				<md-input-container flex="50">
+					<label id="lbl_vencimento">1º vencimento</label>
+					<input id="input_vencimento" min-date="object.dataEmissao" ng-model="dataPrimeiroVencimento"
+						   ng-required="true" tt-date-picker type="text">
+					<div ng-messages="DialogparcelasForm.input_vencimento.$error" role="alert">
+						<div ng-message="required">Obrigatório.</div>
+					</div>
+				</md-input-container>
+
+			</div>
+
+			<md-divider></md-divider>
+
+		</md-dialog-content>
+
+		<md-dialog-actions class="navigation padding-8" layout="row">
+
+			<md-button class="md-raised md-accent" id="btn_salvar_parcelas" ng-click="confirmar()"
+					   ng-disabled="DialogparcelasForm.$invalid || action">
+				CONFIRMAR
+			</md-button>
+
+			<md-button class="md-raised md-accent" id="btn_cancelar_parcelas" ng-click="cancel()" ng-disabled="action">
+				CANCELAR
+			</md-button>
+
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

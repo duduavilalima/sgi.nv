@@ -1,0 +1,89 @@
+<div class="simple-table-container md-whiteframe-1dp">
+    <div class="text-center p-16" ng-if="!baixasRetencaoList || baixasRetencaoList.length === 0">
+        Não existe <b>baixa</b> associada a retenção desta parcela.
+    </div>
+
+    <table class="tabela_exibicao row-border hover md-caption" id="table_baixas" ms-responsive-table ng-if="baixasRetencaoList && baixasRetencaoList.length > 0">
+        <thead id="table_thead_baixas" class="cabecalho-borda-cinza">
+            <tr class="md-grey-200-bg">
+                <th width="7%" class="text-center">Pagamento</th>
+                <th width="7%" class="text-center">Contabilização</th>
+                <th width="8%" class="text-center">Valor</th>
+                <th width="8%" class="text-center">Juros</th>
+                <th width="8%" class="text-center">Recebido</th>
+                <th width="15%" class="text-center">Banco</th>
+                <th width="14%" class="text-center">Agência / Conta</th>
+                <th class="text-center">Responsável</th>
+                <th width="8%" class="text-center">Data/hora</th>
+                <th width="5%" class="text-center" ng-if="temPerfilAnalista || temPerfilGestorFaturamento">Opções</th>
+            </tr>
+        </thead>
+
+        <tbody id="table_tbody_baixas_list">
+            <tr ng-repeat="item in baixasRetencaoList" class="linha-borda-cinza">
+                <td class="text-center table-truncate">{{::item.dataPagamento | date:'dd/MM/yyyy'}}</td>
+                <td class="text-center table-truncate">{{::item.dataContabilizacao | date:'dd/MM/yyyy'}}</td>
+                <td class="text-right table-truncate">{{::item.valorBaixa | currency : '' : 2 }}</td>
+                <td class="text-right table-truncate">{{::item.valorJuros | currency : '' : 2 }}</td>
+                <td class="text-right table-truncate">{{(item.valorBaixa + item.valorJuros) | currency : '' : 2}}</td>
+                <td class="table-truncate">
+                    <span>
+                        {{::item.contaCorrente.banco.nome}}
+                        <md-tooltip class="h3" md-direction="bottom">{{::item.contaCorrente.banco.nome}}</md-tooltip>
+                    </span>                    
+                </td>
+                <td class="table-truncate">
+                    <span>
+                        {{::item.contaCorrente.agencia}}{{item.contaCorrente.digitoAgencia && item.contaCorrente.digitoAgencia.trim() ? '-' + item.contaCorrente.digitoAgencia : ''}} / {{::item.contaCorrente.conta}}-{{::item.contaCorrente.digito}}
+                        <md-tooltip class="h3" md-direction="bottom">
+                            {{::item.contaCorrente.agencia}}{{item.contaCorrente.digitoAgencia && item.contaCorrente.digitoAgencia.trim() ? '-' + item.contaCorrente.digitoAgencia : ''}} / {{::item.contaCorrente.conta}}-{{::item.contaCorrente.digito}}
+                        </md-tooltip>
+                    </span>
+                </td>
+                <td class="table-truncate">
+                    <span>
+                        {{::item.criador}}
+                        <md-tooltip class="h3" md-direction="bottom">{{::item.criador}}</md-tooltip>
+                    </span>
+                </td>
+                <td class="text-center table-truncate">
+                    <span>
+                        {{::item.dataCriacao | date:'dd/MM/yyyy HH:mm'}}
+                        <md-tooltip class="h3" md-direction="bottom">{{::item.dataCriacao | date:'dd/MM/yyyy HH:mm:ss'}}</md-tooltip>
+                    </span>
+                </td>
+                <td class="text-center table-truncate" ng-if="temPerfilAnalista || temPerfilGestorFaturamento">
+                    <md-button class="md-icon-button" id="btn_baixa_retencao_{{$index}}" name="btn_excluir_baixa_retencao_{{$index}}" ng-click="excluirBaixaRetencao($event, item)" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+                        <md-icon class="red-400-fg" md-font-icon="icon-close"></md-icon>
+                        <md-tooltip class="h3" md-direction="bottom">Remover baixa retenção</md-tooltip>
+                    </md-button>
+                </td>
+            </tr>
+        </tbody>
+
+        <tfoot id="table_tfoot_tributos">
+            <tr class="md-grey-300-bg">
+                <td></td>
+                <td class="text-right table-truncate celula-direita-gray"><strong>Total</strong></td>
+                <td class="text-right table-truncate celula-direita-gray" style="padding: 10px 4px 5px 5px;"><strong>{{totalValorBaixa | currency : '' : 2 }}</strong></td>
+                <td class="text-right table-truncate celula-direita-gray" style="padding: 10px 4px 5px 5px;"><strong>{{totalJurosBaixa | currency : '' : 2 }}</strong></td>
+                <td class="text-right table-truncate celula-direita-gray" style="padding: 10px 4px 5px 5px;"><strong>{{totalRecebido | currency : '' : 2 }}</strong></td>
+                <td></td>
+                <td></td>
+                <td class="table-truncate"></td>
+                <td></td>
+                <td ng-if="temPerfilAnalista || temPerfilGestorFaturamento"></td>
+            </tr>
+        </tfoot>
+
+    </table>
+
+</div>
+
+<div class="pb-8" layout="row" layout-sm="row" layout-wrap layout-align="end center">
+    <md-button class="md-raised md-accent" id="btn_add_anexo" name="btn_add_anexo"
+               ng-if="temPerfilAnalista || temPerfilGestorFaturamento"
+               ng-disabled="action || (totalRecebido === object.valorRetencaoRetida)" ng-click="adicionarBaixaRetencao($event)">
+        NOVA BAIXA
+    </md-button>
+</div>

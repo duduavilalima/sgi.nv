@@ -1,0 +1,78 @@
+<md-dialog aria-label="Parcela - Reagendamento" class="white-bg" id="dialog_reagendamento" style="width: 600px; height:370px;">
+	<form name="DialogRegendamentoForm" >
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_tributo" md-autofocus>{{titulo}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content style="height:500px;">
+			<div class="md-dialog-content" md-theme="sgi">
+
+				<div layout layout-sm="column">
+
+					<md-input-container flex="50">
+						<label id="lbl_vencimento_dialog">Vencimento</label>
+						<input id="input_vencimento_dialog" ng-disabled="true" ng-model="object.dataVencimento"
+							   tt-date-picker type="text" value="{{ object.dataVencimento }}">
+					</md-input-container>
+
+					<md-input-container flex="50">
+						<label id="lbl_agendamento_dialog">Agendamento</label>
+						<input id="input_agendamento_dialog" ng-disabled="!edicao" ng-model="object.dataAgendamento" ng-required="{{titulo !== 'Agendamento - Dados gerais'}}" ng-disabled="false"
+							   tt-date-picker type="text">
+					</md-input-container>
+
+				</div>
+
+				<div layout layout-sm="column">
+					<md-input-container flex="100" ng-if="titulo !== 'Agendamento - Dados gerais'">
+						<label id="lbl_motivo_agendamento_dialog">Observações</label>
+						<textarea id="input_motivo_agendamento_dialog"
+								  style="resize:none; overflow:auto; max-height:130px;" ng-disabled="false" rows="5"
+								  md-maxlength="2000"
+								  name="input_motivo_agendamento_dialog" md-minlength="5"
+								  ng-model="object.motivoDataAgendamento" ng-required="{{titulo !== 'Agendamento - Dados gerais'}}" />
+						<div ng-messages="DialogRegendamentoForm.input_motivo_agendamento_dialog.$error" role="alert">
+							<div id="msg_req_vencimento" ng-message="minlength">
+								O campo Observações tem o tamanho minimo de 5 characteres.
+							</div>
+						</div>
+					</md-input-container>
+
+					<md-input-container flex="100" ng-if="titulo === 'Agendamento - Dados gerais'">
+						<label id="lbl_motivo_agendamento_dialog_leitura">Observações</label>
+						<textarea id="input_motivo_agendamento_dialog_leitura"
+								  style="resize:none; overflow:auto; max-height:130px;" ng-disabled="true" rows="5"
+								  maxlength="2000"
+								  name="input_motivo_agendamento_dialog_leitura" md-minlength="5"
+								  ng-model="object.motivoDataAgendamento" ng-required="{{titulo !== 'Agendamento - Dados gerais'}}" />
+					</md-input-container>
+				</div>
+
+			</div>
+
+			<!--<md-divider></md-divider>-->
+
+		</md-dialog-content>
+
+
+
+		<md-dialog-actions class="navigation padding-8" layout="row">
+			<md-button class="md-raised md-accent" id="btn_salvar" ng-click="salvar()"
+					   ng-disabled="DialogRegendamentoForm.$invalid" ng-if="edicao">
+				REAGENDAR
+			</md-button>
+
+			<md-button class="md-raised md-accent" id="btn_cancelar" ng-click="cancel()">
+				FECHAR
+			</md-button>
+
+			<span flex></span>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

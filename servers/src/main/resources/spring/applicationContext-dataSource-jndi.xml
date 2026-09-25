@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:jee="http://www.springframework.org/schema/jee"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="
+	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Configures the database connection. -->
+	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/SGIDB"/>
+
+	<!-- Para impedir que o bean "dataSource" seja exportado como um MBean via JNDI -->
+	<context:mbean-export server="mbeanServer" registration="ignoreExisting"/>
+
+	<!--<jee:jndi-lookup id="jndiDataSource" jndi-name="jdbc/SGIDB" />-->
+	<!--<bean id="dataSource" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">-->
+	<!--<property name="targetDataSource" ref="jndiDataSource" />-->
+	<!--</bean>-->
+
+</beans>

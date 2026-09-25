@@ -1,0 +1,162 @@
+<div class="simple-table-container md-whiteframe-1dp">
+
+	<table class="tabela_exibicao row-border hover md-caption text-center" id="table_notas_fiscais" ms-responsive-table
+		   style="table-layout:fixed;">
+		<thead ng-if="object.notasFiscais.length > 0" class="cabecalho-borda-cinza">
+		<tr class="md-grey-200-bg" class="text-center">
+			<th style="text-align: center;" width="12%">Nota fiscal</th>
+			<th style="text-align: center;" width="6%">
+				Nº Parc.
+				<md-tooltip md-direction="top">
+					<span class="h4">Número de parcelas da NF</span>
+				</md-tooltip>
+			</th>
+			<th style="text-align: center;" width="13%">Situação</th>
+			<th style="text-align: center;" width="10%">Valor bruto</th>
+			<th style="text-align: center;" width="10%">Valor a pagar</th>
+			<!--<th width="8%" style="text-align: center;">Tributos</th>-->
+			<!--<th width="9%" style="text-align: center;">Retenções</th>-->
+			<!--<th width="9%" style="text-align: center;">Permuta</th>-->
+			<!--<th width="8%" style="text-align: center;">Descontos</th>-->
+			<!--<th width="8%" style="text-align: center;">Multa/Juros</th>-->
+			<th style="text-align: center;" width="10%">Valor pago</th>
+			<th style="text-align: center;" width="10%">Emissão</th>
+			<th style="text-align: center;" width="6%">Etapa</th>
+			<th style="text-align: center;">Descrição do item</th>
+			<th style="text-align: center;" width="10%">Opções</th>
+		</tr>
+		</thead>
+
+		<thead ng-if="object.notasFiscais.length == 0">
+		<tr class="md-grey-200-bg" class="text-center">
+			<th colspan="14"></th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr ng-repeat="nf in object.notasFiscais" class="linha-borda-cinza">
+			<td class="text-left" style="text-align: left;" width="8%">{{nf.numero}}</td>
+			<td class="text-center" width="5%">{{nf.numParcelas}}</td>
+			<td class="text-left" width="5%">
+				<div class="over-flow-hidden">{{ nf.situacao.split("(")[0].trim() }}</div>
+				<md-tooltip md-direction="bottom">
+					<span class="h4">{{nf.situacao == 'Receb. parcial' ? 'Recebimento parcial' : nf.situacao }}</span>
+				</md-tooltip>
+			</td>
+			<td class="text-right" width="6%">
+				<div class="over-flow-hidden">{{nf.valorBruto | currency : '' : 2}}</div>
+			</td>
+			<td class="text-right" width="6%">
+				<a href ng-click="valoreNotaFiscal($event, nf)">
+					<md-icon class="s16" md-font-icon="icon-information-outline" style="float: left"></md-icon>
+				</a>
+				{{nf.valorPagar | currency : '' : 2}}
+			</td>
+			<!--<td width="8%" class="text-right">{{nf.tributos | currency : '' : 2}}</td>-->
+			<!--<td width="9%" class="text-right">-->
+			<!--<span>{{(nf.contratualValor + nf.acessoriaValor) | currency : '' : 2}}-->
+			<!--<md-tooltip ng-if="nf.contratualValor > 0 || nf.acessoriaValor > 0">-->
+			<!--<span class="h4"><span ng-if="nf.contratualValor > 0">Contratual: {{nf.contratualValor | currency:''}} ({{nf.contratualPerc | currency:''}}%) / </span><span ng-if="nf.acessoriaValor > 0">Acessória: {{nf.acessoriaValor | currency:''}} ({{nf.acessoriaPerc | currency:''}}%)</span></span>-->
+			<!--</md-tooltip>-->
+			<!--</span>-->
+			<!--</td>-->
+			<!--<td width="9%" class="text-right">{{nf.valorPermuta | currency : '' : 2}}</td>-->
+			<!--<td width="8%" class="text-right">{{nf.descontos | currency : '' : 2}}</td>-->
+			<!--<td width="8%" class="text-right">{{nf.multaJuros | currency : '' : 2}}</td>-->
+			<td class="text-right" width="6%">{{nf.valorPago | currency : '' : 2}}</td>
+			<td class="text-center" width="8%">{{ nf.dataEmissao | date : 'dd/MM/yyyy' }}</td>
+			<td class="text-center" width="4%">{{nf.etapa}}</td>
+			<td class="text-left" style="overflow: hidden;white-space: nowrap;" width="10%">
+				<div class="over-flow-hidden">
+					{{nf.descricaoItem}}
+				</div>
+				<md-tooltip md-direction="bottom" ng-if="!!nf.descricaoItem">
+					<span class="h4">{{nf.descricaoItem}}</span>
+				</md-tooltip>
+			</td>
+			<td class="text-center" style="padding-top: 0px; padding-bottom: 0px; padding-right: -20px;" width="7%">
+				<md-button class="md-icon-button" id="btn_exibir_nf_{{$index}}"
+						   ng-click="exibirNotaFiscal($event, nf)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon md-font-icon="icon-eye" md-menu-align-target>
+					</md-icon>
+					<md-tooltip id="tool_tip_btn_exibir" md-direction="bottom">
+						<span class="h4">Exibir os dados desta nota fiscal</span>
+					</md-tooltip>
+				</md-button>
+				<md-button class="md-icon-button" id="btn_imprimir_nf_{{$index}}"
+						   ng-click="imprimirNotaFiscal($event, nf)"
+						   style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;">
+					<md-icon md-font-icon="icon-printer" md-menu-align-target></md-icon>
+					<md-tooltip id="tool_tip_btn_imprimir" md-direction="bottom">
+						<span class="h4">Imprimir esta nota fiscal</span>
+					</md-tooltip>
+				</md-button>
+			</td>
+		</tr>
+		</tbody>
+
+		<tbody ng-show="exibirLoadNF == false && object.notasFiscais.length === 0">
+		<tr>
+			<td class="text-center msg-empty-list" colspan="14">Não existem <strong>notas fiscais</strong> associadas a
+				este faturamento.
+			</td>
+		</tr>
+		</tbody>
+
+		<tbody id="table_tbody_etapas_null" ng-show="exibirLoadNF == true || object.notasFiscais == null">
+		<tr>
+			<td colspan="14">
+				<div layout="row" layout-align="space-around" layout-sm="column">
+					<img src="../img/carregando.gif" style="height: 30px;width: 30px;"/>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+
+		<tfoot>
+		<tr class="md-grey-300-bg"  ng-if="object.notasFiscais.length > 0">
+			<td class="text-right celula-direita-gray" colspan="3" ng-if="object.notasFiscais.length > 0" width="10%"><strong>Total desta página</strong></td>
+			<td class="text-right celula-direita-gray" ng-if="object.notasFiscais.length > 0" width="10%"><strong
+				style="margin-right: 0px;">{{totalBrutoNF | currency : '' : 2}}</strong></td>
+			<td class="text-right celula-direita-gray" ng-if="object.notasFiscais.length > 0" style="padding-right: 4px;" width="8%"><strong
+				style="margin-right: 0px;">{{totalAPagarNF | currency : '' : 2}}</strong></td>
+			<td class="text-right celula-direita-gray" ng-if="object.notasFiscais.length > 0" style="padding-right: 4px;" width="8%"><strong
+				style="margin-right: 0px;">{{totalValorPagoNF | currency : '' : 2}}</strong></td>
+			<td colspan="4"></td>
+		</tr>
+		<tr class="md-grey-300-bg" ng-if="object.notasFiscais.length <= 0">
+			<td colspan="14"></td>
+		</tr>
+		</tfoot>
+
+	</table>
+	<section layout="row" layout-align="center center" layout-sm="row" ng-if="object.notasFiscais !== null">
+		<span hide-xs>
+			<md-button aria-label="Primeira anterior" class="md-accent" id="first" ng-click="getPageNf(0)"
+					   ng-disabled="!exibirAnteriorNf()"
+					   style="border: 1px solid #d4d4d4;font-size: 11px;">Primeiro</md-button>
+		</span>
+		<md-button aria-label="Página anterior" class="md-accent" id="previous"
+				   ng-click="getPageNf(paramsNfs.pageNumber - 1)" ng-disabled="!exibirAnteriorNf()"
+				   style="border: 1px solid #d4d4d4;font-size: 11px;">
+			<md-icon class="s16 separator" md-font-icon="icon-chevron-double-left"></md-icon>
+		</md-button>
+		<span>
+			<md-button aria-label="Página atual" class="md-accent" id="paginate_button" ng-disabled="true"
+					   style="border: 1px solid #d4d4d4;font-size: 11px;">{{paramsNfs.pageNumber + 1}} / {{paramsNfs.totalPages === 0 ? 1 : paramsNfs.totalPages}}</md-button>
+		</span>
+		<md-button aria-label="Próxima página" class="md-accent" id="next"
+				   ng-click="getPageNf(paramsNfs.pageNumber + 1)"
+				   ng-disabled="!exibirProximoNf() || (paramsNfs.totalPages === (paramsNfs.pageNumber +1))"
+				   style="border: 1px solid #d4d4d4;font-size: 11px;">
+			<md-icon class="s16 separator" md-font-icon="icon-chevron-double-right"></md-icon>
+		</md-button>
+		<span hide-xs>
+			<md-button aria-label="Última página" class="md-accent" id="last"
+					   ng-click="getPageNf(paramsNfs.totalPages - 1)"
+					   ng-disabled="!exibirProximoNf() || (paramsNfs.totalPages === (paramsNfs.pageNumber +1))"
+					   style="border: 1px solid #d4d4d4;font-size: 11px;">Último</md-button>
+		</span>
+	</section>
+</div>

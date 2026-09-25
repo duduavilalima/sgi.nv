@@ -1,0 +1,146 @@
+<md-dialog aria-label="Tributo - {{modo}}" id="dialog_titulo_popup_tributo" style="width: 1100px;">
+	<form name="DialogTributoForm">
+		<md-toolbar class="md-accent-bg">
+			<div class="md-toolbar-tools">
+				<h2 id="titulo_popup_tributo">Tributo (ISS) - {{modo}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()" style="padding: 0px 0px 0px 0px;">
+					<md-icon aria-label="Close dialog" md-font-icon="icon-close"
+							 style="color: rgba(255,255,255,0.87) !important"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+
+		<md-dialog-content>
+			<div class="md-dialog-content" md-theme="sgi" style="padding-bottom: 12px; height: 200px;">
+
+				<div layout layout-sm="column" layout-wrap>
+
+					<md-input-container flex="25" flex-sm="100">
+						<label id="lbl_uf">UF</label>
+						<input id="input_uf" name="input_uf" ng-disabled="true" ng-model="cidadeIss.uf" type="text"
+							   value="{{ cidadeIss.uf }}">
+					</md-input-container>
+
+					<span class="width-20"></span>
+
+					<md-input-container flex>
+						<label id="lbl_cidade_categoria_tributo">Cidade / Categoria do tributo</label>
+						<md-select id="combo_cidade_categoria_tributo"
+								   name="combo_cidade_categoria_tributo"
+								   ng-change="$emit('comboCategoriaTributo')"
+								   ng-disabled="false" ng-model="novoTributo.categoriaTributo"
+								   ng-model-options="{trackBy: '$value.codigo'}"
+								   ng-required="true">
+
+							<md-option
+								ng-repeat="categoriaTributo in listaCategoriaTributo | orderBy:getPercentualAliquota"
+								ng-value="categoriaTributo"
+								value="{{::categoriaTributo.cidade.nome}} - {{::getPercentualAliquota(categoriaTributo) | currency: '' : 2 }}% - {{categoriaTributo.descricao}}">
+								{{::categoriaTributo.cidade.nome}} - {{::getPercentualAliquota(categoriaTributo) |
+								currency
+								: '' : 2 }}% - {{::categoriaTributo.descricao}}
+							</md-option>
+
+						</md-select>
+						<div ng-messages="DialogTributoForm.combo_cidade_categoria_tributo.$error" role="alert">
+							<div id="tributo_cid_cat_req" ng-message="required">Obrigatório.</div>
+						</div>
+					</md-input-container>
+
+				</div>
+
+				<div layout layout-sm="column" layout-wrap>
+
+					<md-input-container flex="25">
+						<label id="lbl_base_de_calculo">Base de cálculo (R$)</label>
+						<input id="input_base_de_calculo" maxlength="18" min="0.01" name="input_base_de_calculo"
+							   ng-model="novoTributo.baseCalculo" ng-required="true"
+							   type="text" ui-number-mask="2" value="{{ novoTributo.baseCalculo }}">
+						<!-- max="{{ valorNotaFiscal }}">-->
+
+						<div ng-messages="DialogTributoForm.input_base_de_calculo.$error" role="alert">
+							<div id="tributo_base_req" ng-message="required">Obrigatório.</div>
+							<div id="tributo_base_not_zero" ng-message="min">
+								O valor da base de cálculo do tributo não pode ser zero.
+							</div>
+							<!-- <div ng-message="max" id="tributo_base_maior_valor_serv">
+								 O valor da base de cálculo do tributo não pode ser maior que o valor da nota fiscal.
+							 </div>-->
+						</div>
+
+					</md-input-container>
+
+					<span class="width-20"></span>
+
+					<md-input-container flex>
+						<label id="lbl_percentual">Percentual (%)</label>
+						<input id="input_percentual" name="input_percentual" ng-disabled="true" ng-maxlength="18"
+							   ng-model="novoTributo.percentual" ng-required="true" type="text"
+							   ui-number-mask="2" value="{{ novoTributo.aliquota.percentual }}">
+					</md-input-container>
+
+					<span class="width-20"></span>
+
+					<md-input-container flex>
+						<label id="lbl_valor">Valor (R$)</label>
+						<input id="input_valor_tributo" max="99999999999.99" min="0" name="input_valor_tributo"
+							   ng-maxlength="18" ng-model="novoTributo.valor"
+							   ng-required="true" ng-required="true" required type="text" ui-number-mask="2"
+							   value="{{ novoTributo.valor }}">
+
+						<div class="red-400-fg" ng-show="valorValidoMax" role="alert"
+							 style="font-size: 12px;line-height: 14px;transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);opacity: 1;margin-top: 0;padding-top: 5px;">
+							<div class="md-input-message-animation ng-scope" id="tributo_max" ng-show="valorValidoMax">
+								A variação entre o valor informado e o valor calculado do tributo excedeu o limite
+								máximo de R$
+								{{maxValor() | currency : '' : 2 }}.
+							</div>
+						</div>
+						<div class="red-400-fg" ng-show="valorValidoMin" role="alert"
+							 style="font-size: 12px;line-height: 14px;transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);opacity: 1;margin-top: 0;padding-top: 5px;">
+							<div class="md-input-message-animation ng-scope" id="tributo_min" ng-show="valorValidoMin">
+								A variação entre o valor informado e o valor calculado do tributo excedeu o limite
+								mínimo de R$
+								{{minValor() | currency : '' : 2 }}.
+							</div>
+						</div>
+						<div ng-messages="DialogTributoForm.input_valor_tributo.$error" role="alert">
+							<div id="tributo_fat_req" ng-message="required">Obrigatório.</div>
+							<div id="tributo_fat_min" ng-message="min">O valor deve ser maior do que zero.</div>
+							<div id="tributo_fat_max" ng-message="max">Valor não pode ser maior de 99.999.999.999,99.
+							</div>
+						</div>
+
+					</md-input-container>
+
+				</div>
+
+			</div>
+
+			<md-divider></md-divider>
+
+
+		</md-dialog-content>
+
+		<md-dialog-actions class="navigation padding-8" layout="row">
+
+			<md-button class="md-raised md-accent" id="btn_salvar_tributo" ng-click="salvar()"
+					   ng-disabled="isCampoVazio(novoTributo.categoriaTributo) ||
+                                    isCampoVazioNumerico(novoTributo.baseCalculo) || isCampoVazioNumerico(novoTributo.aliquota.percentual) ||
+                                    isCampoVazioNumerico(novoTributo.valor) || valorValidoMax || valorValidoMin">
+                                    <!--|| (novoTributo.baseCalculo > valorNotaFiscal)-->
+                CONFIRMAR
+
+			</md-button>
+
+			<md-button class="md-raised md-accent" id="btn_cancelar_tributo" ng-click="cancel()">
+				CANCELAR
+			</md-button>
+
+			<span flex></span>
+
+		</md-dialog-actions>
+
+	</form>
+</md-dialog>

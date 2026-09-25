@@ -1,0 +1,59 @@
+<div class="simple-table-container md-whiteframe-1dp">
+
+	<table class="tabela_exibicao row-border hover md-caption" style="width: 99.99%" id="table_tributos" ms-responsive-table>
+		<thead id="table_thead_tributos" class="cabecalho-borda-cinza">
+		<tr class="md-grey-200-bg">
+			<th class="text-center" width="90%">Motivo do desconto</th>
+			<th class="text-center" width="10%">Valor</th>
+		</tr>
+		</thead>
+
+		<tbody id="table_tbody_tributos_list">
+		<tr ng-repeat="item in object.listaNotaSaidaParcelaMotivoDescDev | filter : {tipo: 'DESCONTO' }" class="linha-borda-cinza">
+			<td>{{::item.motivoDescontoDevolucao.descricao}}</td>
+			<td style="text-align: right;">{{::item.valor | currency : '' : 2 }}</td>
+		</tr>
+		</tbody>
+
+		<tfoot id="table_tfoot_tributos">
+		<tr class="md-grey-300-bg">
+			<td class="celula-direita-gray" style="padding-left: 8px; text-align: right;"><strong>Total de desconto</strong></td>
+			<td style="padding-left: 8px; padding-right: 24px; text-align: right;"><strong>{{totalValorDesconto | currency : '' : 2 }}</strong></td>
+		</tr>
+		</tfoot>
+
+	</table>
+
+</div>
+
+<p></p>
+
+<div class="simple-table-container md-whiteframe-1dp">
+
+	<table class="tabela_exibicao row-border hover md-caption tabela_exibicao" style="width: 99.99%" id="table_tributosIss"
+		   ms-responsive-table>
+		<thead id="table_thead_iss" class="cabecalho-borda-cinza">
+		<tr class="md-grey-200-bg">
+			<th class="text-center" width="90%">Motivo da devolução</th>
+			<th class="text-center" width="10%">Valor</th>
+		</tr>
+		</thead>
+
+		<tbody id="table_tbody_iss_list">
+		<tr ng-repeat="item in object.listaNotaSaidaParcelaMotivoDescDev | filter : {tipo: 'DEVOLUCAO' }" class="linha-borda-cinza">
+			<td>{{::item.motivoDescontoDevolucao.descricao}}</td>
+			<td style="text-align: right;">{{::item.valor | currency : '' : 2 }}</td>
+		</tr>
+		</tbody>
+
+		<tfoot id="table_tfoot_iss">
+		<tr class="md-grey-300-bg">
+			<td class="celula-direita-gray" style="padding-left: 8px; text-align: right;"><strong>Total de devolução</strong></td>
+			<td style="padding-left: 8px; padding-right: 24px; text-align: right;"><strong>{{totalValorDevolucao | currency : '' : 2 }}</strong></td>
+		</tr>
+		</tfoot>
+
+	</table>
+
+</div>
+

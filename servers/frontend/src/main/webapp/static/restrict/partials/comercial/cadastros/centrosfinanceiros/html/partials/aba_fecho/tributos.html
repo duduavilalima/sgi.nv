@@ -1,0 +1,222 @@
+<md-content class="pt-16" layout="column">
+
+	<div ng-if="screenMode === 'VIEW'">
+
+		<div ng-if="!$ctrl.listaCentroFinanceiroAliquota || $ctrl.listaCentroFinanceiroAliquota.length <= 0">
+			<md-whiteframe class="md-whiteframe-1dp" flex="100" layout layout-align="center center">
+				<span class="h4 p-32">Não existem <b>tributos</b> associados a esse centro financeiro.</span>
+			</md-whiteframe>
+		</div>
+
+		<div ng-if="$ctrl.listaCentroFinanceiroAliquota && $ctrl.listaCentroFinanceiroAliquota.length > 0">
+			<md-table-container>
+				<table class="tabela_exibicao hover md-caption" ms-responsive-table width="100%" style="border: 1px;">
+					<thead>
+						<tr class="md-grey-200-bg">
+							<th class="text-center" style="border: 1px solid #c4c4c4;"
+								width="16%">Tributo
+							</th>
+							<th class="text-center" colspan="2" style="border: 1px solid #c4c4c4;" width="63%">Categoria
+							</th>
+							<th class="text-center" style="border: 1px solid #c4c4c4;" width="8%">%</th>
+							<th class="text-center" style="border: 1px solid #c4c4c4;" width="16%">Valor</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr class="linha-borda-cinza" style="border: 1px solid #c4c4c4;"
+							ng-repeat="item in $ctrl.listaCentroFinanceiroAliquota | filter : {aliquota : {categoriaTributo : {tributoTO : {nome: '!' + 'ISS' } } } }">
+							<td class="text-left">{{item.aliquota.categoriaTributo.tributoTO.nome}}</td>
+							<td class="text-left" colspan="2">{{item.aliquota.categoriaTributo.descricao}}</td>
+							<td class="text-right">{{ item.percentualTributo | currency: '':2 }}</td>
+							<td class="text-right">{{ item.totalTributos | currency: '':2 }}</td>
+						</tr>
+
+						<tr class="md-grey-500-bg" style="border: 1px solid #c4c4c4;">
+							<td colspan="3" class="text-right"><strong>Subtotal</strong></td>
+							<td class="text-right"><strong>{{ $ctrl.subTotalPercentualTributo | currency: '':2 }}</strong></td>
+							<td class="text-right"><strong>{{ $ctrl.subTotalValorTributo | currency: '':2 }}</strong></td>
+						</tr>
+					</tbody>
+				</table>
+			</md-table-container>
+
+			<p></p>
+
+			<md-table-container>
+				<table class="tabela_exibicao hover md-caption" ms-responsive-table width="100%" style="border: 1px;">
+					<thead>
+						<tr class="md-grey-200-bg">
+							<th class="text-center" style="border: 1px solid #c4c4c4;"
+								width="16%">Tributo
+							</th>
+							<th class="text-center" style="border: 1px solid #c4c4c4;" width="5%">UF</th>
+							<th class="text-center" style="border: 1px solid #c4c4c4;" width="58%">Cidade/Categoria</th>
+							<th class="text-center" style="border: 1px solid #c4c4c4;" width="8%">%</th>
+							<th class="text-center" style="border: 1px solid #c4c4c4;" width="16%">Valor</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr class="linha-borda-cinza"
+							ng-repeat="item in $ctrl.listaCentroFinanceiroAliquota | filter : {aliquota : {categoriaTributo : {tributoTO : {nome: 'ISS' } } } }">
+							<td class="text-left">{{item.aliquota.categoriaTributo.tributoTO.nome}}</td>
+							<td class="text-center">{{item.aliquota.categoriaTributo.cidade.uf}}</td>
+							<td class="text-left">{{item.aliquota.categoriaTributo.descricao}}</td>
+							<td class="text-right">{{ item.percentualTributo | currency: '':2 }}</td>
+							<td class="text-right">{{ item.totalTributos | currency: '':2 }}</td>
+						</tr>
+
+						<tr class="md-grey-500-bg" style="border: 1px solid #c4c4c4;">
+							<td colspan="3" class="text-right"><strong>Total</strong></td>
+							<td class="text-right"><strong>{{ $ctrl.totalPercentualTributo | currency: '':2 }}</strong></td>
+							<td class="text-right"><strong>{{ $ctrl.object.fecho.tributos | currency: '':2 }}</strong></td>
+						</tr>
+					</tbody>
+				</table>
+			</md-table-container>
+		</div>
+
+	</div>
+
+	<div ng-if="screenMode !== 'VIEW'">
+		<md-table-container>
+			<table class="tabela_exibicao hover md-caption" ms-responsive-table width="100%" style="border: 1px;">
+				<thead>
+					<tr class="md-grey-200-bg">
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="16%">Tributo</th>
+						<th class="text-center" colspan="2" style="border: 1px solid #c4c4c4;" width="45%">Categoria</th>
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="8%">%</th>
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="12%">Valor</th>
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="9%">Opções</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr class="linha-borda-cinza" style="border: 1px solid #c4c4c4;"
+						ng-repeat="centroFinanceiroAliquota in $ctrl.listaCentroFinanceiroAliquota | filter : {aliquota : {categoriaTributo : {tributoTO : {nome: '!' + 'ISS' } } } }">
+
+						<td class="text-left" width="16%">
+							<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+								<md-select ng-model="centroFinanceiroAliquota.aliquota.categoriaTributo.tributoTO"
+										   ng-required="false" ng-model-options="{trackBy: '$value.codigo'}"
+										   ng-change="$ctrl.changeTributo(centroFinanceiroAliquota)" aria-label="aliquota.categoriaTributo">
+									<md-option ng-repeat="tributo in centroFinanceiroAliquota.listaTempTributo" ng-value="tributo">
+										{{ tributo.nome }}
+									</md-option>
+								</md-select>
+							</md-input-container>
+						</td>
+						<td class="text-left" colspan="2" width="45%">
+							<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+								<md-select ng-model="centroFinanceiroAliquota.aliquota.categoriaTributo" ng-required="false"
+										   ng-model-options="{trackBy: '$value.codigo'}" aria-label="tributoSelecionado"
+										   ng-change="$ctrl.changeCategoriaTributo(centroFinanceiroAliquota)">
+									<md-option ng-repeat="categoriaTributo in centroFinanceiroAliquota.listaTempCategoriaTributo" ng-value="categoriaTributo">
+										{{ categoriaTributo.descricao }} - {{categoriaTributo.percentualTributo | currency : '' : 2 }}%
+									</md-option>
+								</md-select>
+							</md-input-container>
+						</td>
+						<td class="text-right" style="border: 1px solid #c4c4c4;" width="8%">
+							{{ centroFinanceiroAliquota.percentualTributo | currency: '':2 }}
+						</td>
+						<td class="text-right" style="border: 1px solid #c4c4c4;" width="12%">
+							{{ centroFinanceiroAliquota.totalTributos | currency: '':2 }}
+						</td>
+			
+						<td class="text-center" style="border: 1px solid #c4c4c4;" width="9%">
+							<md-button class="md-icon-button" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;"
+									ng-click="$ctrl.removerTributo(centroFinanceiroAliquota)">
+								<md-icon md-font-icon="icon-close" class="red-400-fg"></md-icon>
+								<md-tooltip md-direction="bottom" class="h3">
+									Remover
+								</md-tooltip>
+							</md-button>
+							<md-button class="md-icon-button" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;" ng-if="$last" ng-click="$ctrl.adicionarTributo(centroFinanceiroAliquota)">
+								<md-icon md-font-icon="icon-plus" class="green-400-fg"></md-icon>
+
+								<md-tooltip md-direction="bottom" class="h3">
+									Adicionar
+								</md-tooltip>
+							</md-button>
+						</td>
+
+
+					</tr>
+
+					<tr class="md-grey-500-bg" style="border: 1px solid #c4c4c4;">
+						<td colspan="3" class="text-right"><strong>Subtotal</strong></td>
+						<td class="text-right"><strong>{{ $ctrl.subTotalPercentualTributo | currency: '':2 }}</strong></td>
+						<td class="text-right"><strong>{{ $ctrl.subTotalValorTributo | currency: '':2 }}</strong></td>
+						<td class="text-right"><strong></strong></td>
+					</tr>
+				</tbody>
+			</table>
+		</md-table-container>
+
+		<p></p>
+
+		<md-table-container>
+			<table  class="tabela_exibicao hover md-caption" ms-responsive-table width="100%" style="border: 1px;">
+				<thead>
+					<tr class="md-grey-200-bg">
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="16%">Tributo</th>
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="5%">UF</th>
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="40%">Cidade/Categoria</th>
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="8%">%</th>
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="12%">Valor</th>
+						<th class="text-center" style="border: 1px solid #c4c4c4;" width="9%">Opções</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr class="linha-borda-cinza" style="border: 1px solid #c4c4c4;"
+						ng-repeat="centroFinanceiroAliquota in $ctrl.listaCentroFinanceiroAliquota | filter : {aliquota : {categoriaTributo : {tributoTO : {nome: 'ISS' } } } }">
+
+						<td class="text-left">{{ centroFinanceiroAliquota.aliquota.categoriaTributo.tributoTO.nome }}</td>
+						<td class="text-center">
+							<md-input-container flex style="margin: 0; padding: 0;">
+								<md-select ng-model="$ctrl.object.ufTributoIss" aria-label="ufTributoIss" ng-required="false" ng-change="$emit('comboUF')" style="width: 98%">
+									<md-option ng-repeat="uf in $ctrl.listaUF" ng-value="uf">{{ uf }}</md-option>
+								</md-select>
+							</md-input-container>
+						</td>
+						<td class="text-left">
+							<md-input-container class="md-block" flex style="margin: 0; padding: 0;">
+								<md-select ng-model="centroFinanceiroAliquota.aliquota.categoriaTributo" ng-required="false"
+										ng-model-options="{trackBy: '$value.codigo'}" aria-label="tributoSelecionadoIss"
+										ng-change="$ctrl.changeCategoriaIss(centroFinanceiroAliquota)">
+									<md-option ng-repeat="categoriaTributoIss in $ctrl.listaCategoriaTributoIss" ng-value="categoriaTributoIss">
+										{{categoriaTributoIss.cidade.nome}} - {{categoriaTributoIss.percentualTributo | currency : '' : 2}}% - {{ categoriaTributoIss.descricao }}
+									</md-option>
+								</md-select>
+							</md-input-container>
+						</td>
+						<td class="text-right">{{ centroFinanceiroAliquota.percentualTributo | currency: '':2 }}</td>
+						<td class="text-right">{{ centroFinanceiroAliquota.totalTributos | currency: '':2 }}</td>
+
+						<td class="text-center">
+							<md-button class="md-icon-button" style="padding: 0px 0px 0px 0px; margin: -5px -5px -5px -5px;" ng-click="$ctrl.removerTributoIss(centroFinanceiroAliquota)">
+								<md-icon md-font-icon="icon-close" class="red-400-fg"></md-icon>
+								<md-tooltip md-direction="bottom" class="h3">
+									Remover
+								</md-tooltip>
+							</md-button>
+						</td>
+
+					</tr>
+
+					<tr class="md-grey-500-bg" style="border: 1px solid #c4c4c4;">
+						<td colspan="3" class="text-right"><strong>Total</strong></td>
+						<td class="text-right"><strong>{{ $ctrl.totalPercentualTributo | currency: '':2 }}</strong></td>
+						<td class="text-right"><strong>{{ $ctrl.object.fecho.tributos | currency: '':2 }}</strong></td>
+						<td class="text-right"><strong></strong></td>
+					</tr>
+				</tbody>
+			</table>
+		</md-table-container>
+
+	</div>
+
+</md-content>

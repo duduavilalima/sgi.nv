@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>br.com.fasolti.sgi</groupId>
+		<artifactId>servers</artifactId>
+		<version>5.13.6</version>
+	</parent>
+
+	<artifactId>frontend</artifactId>
+	<packaging>war</packaging>
+
+	<name>SGI :: Nova Versão :: Frontend</name>
+
+	<properties>
+		<project.root>../..</project.root>
+
+        <module.deploy.skip>false</module.deploy.skip>
+		<project-rootdir>${project.basedir}/../..</project-rootdir>
+
+		<!-- Arquivos de configuração padrão -->
+		<spring.context-file>applicationContext-web.xml</spring.context-file>
+		<spring.security-conf>applicationContext-security.xml</spring.security-conf>
+		<cas-client.version>3.1.11</cas-client.version>
+
+		<!-- Versões -->
+		<frontend-plugin.version>1.8.0</frontend-plugin.version>
+		<node.version>v12.14.0</node.version>
+		<yarn.version>v1.21.1</yarn.version>
+	</properties>
+
+	<profiles>
+		<profile>
+			<!-- Roda o NPM e o GULP junto com a compilação do projeto -->
+			<id>compile.web</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>install and compile</id>
+								<goals>
+									<goal>install-node-and-yarn</goal>
+									<goal>yarn</goal>
+									<goal>gulp</goal>
+								</goals>
+								<phase>generate-resources</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- Executa o Jetty embutido na fase test -->
+			<id>debug.jetty</id>
+			<properties>
+				<server.context>/sgi</server.context>
+				<spring.context-file>applicationContext-full.xml
+				</spring.context-file>
+				<spring.security-conf>applicationContext-security-dev.xml
+				</spring.security-conf>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-maven-plugin</artifactId>
+						<configuration>
+							<!--
+							<scanIntervalSeconds>5</scanIntervalSeconds>
+							<reload>automatic</reload>
+							-->
+							<jvmArgs>
+								-Xms512m
+								-Xmx2048m
+								-XX:MaxPermSize=2024M
+								-XX:+HeapDumpOnOutOfMemoryError
+							</jvmArgs>
+							<dumpOnStart>false</dumpOnStart>
+							<webApp>
+								<contextPath>
+									${server.context}${application.context}
+								</contextPath>
+								<jettyEnvXml>target/classes/jetty-env.xml
+								</jettyEnvXml>
+							</webApp>
+							<stopKey></stopKey>
+							<stopPort></stopPort>
+						</configuration>
+						<executions>
+							<execution>
+								<id>jetty-run</id>
+								<phase>test</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>br.com.fasolti.commons</groupId>
+					<artifactId>commons-rest</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>br.com.fasolti.commons</groupId>
+					<artifactId>commons-security</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>br.com.fasolti.sgi</groupId>
+					<artifactId>services</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-dbcp2</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<!-- Cria uma app unificada incluindo as configurações de FRONTEND e BACKEND no mesmo servidor -->
+			<id>build.unified</id>
+			<properties>
+				<spring.context-file>applicationContext-full.xml
+				</spring.context-file>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<overlays>
+								<overlay>
+									<groupId>br.com.fasolti.sgi</groupId>
+									<artifactId>rest</artifactId>
+									<excludes>
+										<exclude>
+											WEB-INF/classes/applicationContext.xml
+										</exclude>
+									</excludes>
+								</overlay>
+							</overlays>
+							<warSourceExcludes>source/**</warSourceExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>br.com.fasolti.sgi</groupId>
+					<artifactId>rest</artifactId>
+					<type>war</type>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-cas</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<!-- TODO Remover a parte do contexto full daqui -->
+			<!-- Inclui as dependências do projeto services porque quando roda o projeto unificado no Jetty elas não são normalmente incluídas -->
+			<id>debug.full</id>
+			<properties>
+				<spring.context-file>applicationContext-full.xml
+				</spring.context-file>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>br.com.fasolti.sgi</groupId>
+					<artifactId>commons</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>br.com.fasolti.sgi</groupId>
+					<artifactId>domain</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>br.com.fasolti.sgi</groupId>
+					<artifactId>services.client</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-dbcp2</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warSourceExcludes>source/**</warSourceExcludes>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>${frontend-plugin.version}</version>
+				<configuration>
+					<workingDirectory>src/main/webapp/source</workingDirectory>
+					<nodeVersion>${node.version}</nodeVersion>
+					<yarnVersion>${yarn.version}</yarnVersion>
+					<installDirectory>node-bin</installDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<outputDirectory>${project.build.outputDirectory}
+							</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../src/main/resources</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<!-- Spring -->
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-cas</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- DEPENDÊNCIAS INTRA-PROJETOS -->
+
+		<dependency>
+			<groupId>br.com.fasolti.sgi</groupId>
+			<artifactId>services.client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>br.com.fasolti.commons</groupId>
+			<artifactId>commons-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<!-- CAS -->
+		<dependency>
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>${cas-client.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<!--WEBSERVICE-->
+
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-jaxrpc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
+		<!-- EXCEL -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+		</dependency>
+
+	</dependencies>
+</project>
