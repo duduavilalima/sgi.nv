@@ -113,7 +113,7 @@ public abstract class BaseCrudResource<T extends TransferObject, S extends Searc
 		@RequestParam(required = false) String sortField,
 		@RequestParam(defaultValue = "asc") String sortDir) {
 
-		Sort sort = null;
+		Sort sort = Sort.unsorted();
 		if (sortField != null) {
 			Sort.Direction dir = Sort.Direction.fromOptionalString(sortDir).orElse(null);
 			if (dir != null) {
@@ -123,15 +123,16 @@ public abstract class BaseCrudResource<T extends TransferObject, S extends Searc
 
 		Pageable pageRequest = new PageRequest(pageNumber, pageSize, sort);
 
-		List<S> list = Collections.emptyList(); //FIXME searchService.search(exampleObj, pageRequest);
+		Iterable<S> result = searchService.search(exampleObj, pageRequest);
 
-		Page<S> resultPage = new PageImpl<>(list, pageRequest, list.size());
+		if (result instanceof Page) {
+			Page<?> resultPage = (Page<?>) result;
+			logger.info("Retornando página {} de {} com {} itens de um total de {} itens",
+				resultPage.getNumber(), resultPage.getTotalPages(),
+				resultPage.getNumberOfElements(), resultPage.getTotalElements());
+		}
 
-		logger.info("Retornando página {} de {} com {} itens de um total de {} itens",
-			resultPage.getNumber(), resultPage.getTotalPages(),
-			resultPage.getNumberOfElements(), resultPage.getTotalElements());
-
-		return ResponseEntity.ok(doAfterSearch(resultPage));
+		return ResponseEntity.ok(doAfterSearch(result));
 	}
 
 	protected Enum valueOfStatus(String status) {

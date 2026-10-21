@@ -9,12 +9,18 @@ import br.com.fasolti.commons.lang.ServiceException;
 import br.com.fasolti.commons.util.BeanPathUtils;
 import br.com.fasolti.commons.util.DslHelper;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.dozer.Mapper;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.ManagedType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -111,8 +117,21 @@ public abstract class BaseSearchService<E extends DomainObject, T extends Transf
 		// Finaliza a query
 		query.where(predicate);
 
-		if (page != null) {
+		boolean paged = page != null && page.isPaged();
 
+		// O total é calculado antes de aplicar ordenação e janela
+		long total = paged ? query.fetchCount() : 0;
+
+		if (paged) {
+			applySort(query, page.getSort());
+			query.offset(page.getOffset()).limit(page.getPageSize());
+		}
+
+		if (!paged || page.getSort() == null || page.getSort().isUnsorted()) {
+			OrderSpecifier order = defineSearchOrder(exampleObj);
+			if (order != null) {
+				query.orderBy(order);
+			}
 		}
 
 		// Busca e retorna
@@ -122,7 +141,72 @@ public abstract class BaseSearchService<E extends DomainObject, T extends Transf
 
 		doAfterSearch(entities, result);
 
-		return result;
+		return paged ? new PageImpl<>(result, page, total) : result;
+	}
+
+	/**
+	 * Aplica a ordenação pedida pela página. Propriedades que não existem na entidade (ex. nomes
+	 * de colunas da tela) são ignoradas, em vez de falhar a pesquisa.
+	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private void applySort(JPAQuery<E> query, Sort sort) {
+		if (sort == null) {
+			return;
+		}
+
+		for (Sort.Order sortOrder : sort) {
+			String property = sortOrder.getProperty();
+			String prefix = pathBuilder.getMetadata().getName() + ".";
+
+			if (property.startsWith(prefix)) {
+				property = property.substring(prefix.length());
+			}
+
+			if (!isEntityProperty(entityType, property)) {
+				continue;
+			}
+
+			String[] segments = property.split("\\.");
+			PathBuilder<?> parent = pathBuilder;
+
+			for (int i = 0; i < segments.length - 1; i++) {
+				parent = parent.get(segments[i]);
+			}
+
+			String last = segments[segments.length - 1];
+			Order direction = sortOrder.isAscending() ? Order.ASC : Order.DESC;
+
+			if (sortOrder.isIgnoreCase() && getPropertyType(entityType, segments) == String.class) {
+				query.orderBy(new OrderSpecifier(direction, parent.getString(last).lower()));
+			} else {
+				query.orderBy(new OrderSpecifier(direction, parent.getComparable(last, Comparable.class)));
+			}
+		}
+	}
+
+	/**
+	 * Tipo da propriedade persistente (via metamodelo JPA) ou null se o caminho não for persistente.
+	 * Getters calculados (ex. Faturamento.getNumero) não contam: não existem no JPQL.
+	 */
+	private Class<?> getPropertyType(Class<?> type, String[] segments) {
+		Class<?> current = type;
+		for (String segment : segments) {
+			try {
+				ManagedType<?> managedType = getEntityManager().getMetamodel().managedType(current);
+				Attribute<?, ?> attribute = managedType.getAttribute(segment);
+				if (attribute.isCollection()) {
+					return null;
+				}
+				current = attribute.getJavaType();
+			} catch (IllegalArgumentException e) {
+				return null;
+			}
+		}
+		return current;
+	}
+
+	private boolean isEntityProperty(Class<?> type, String property) {
+		return getPropertyType(type, property.split("\\.")) != null;
 	}
 
 	protected final S mapSearch(E entity) {
