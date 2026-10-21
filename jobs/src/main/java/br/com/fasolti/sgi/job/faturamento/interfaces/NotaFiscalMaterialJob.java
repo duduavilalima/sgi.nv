@@ -2,10 +2,8 @@ package br.com.fasolti.sgi.job.faturamento.interfaces;
 
 
 import br.com.araujoabreu.sgi.lang.AdministracaoException;
-import br.com.fasolti.queue.commons.api.model.annotations.ImplementsJob;
-import br.com.fasolti.queue.commons.api.model.annotations.WithJobModel;
-import br.com.fasolti.queue.commons.api.model.entities.JobExecutionInfo;
-import br.com.fasolti.queue.commons.api.model.enumerations.JobInstantiationMode;
+import br.com.fasolti.sgi.job.util.JobSchedule;
+import br.com.fasolti.sgi.job.util.JobExecutionInfo;
 import br.com.fasolti.sgi.job.contasapagar.NotasEmailJobTask;
 import br.com.fasolti.sgi.job.impl.util.SgiJobImpl;
 import org.slf4j.Logger;
@@ -18,12 +16,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 @Service
-@ImplementsJob
-@WithJobModel(
+@JobSchedule(
 	autostart = true,
-	crontab = "#{configuracaoService.getAny('faturamento.interface.prefeituras.crontab').orElse('0 0/1 5-23 ? * 1-7')}",
-//	crontab = "#{configuracaoService.getAny('job.notas.cadastradas.crontab').orElse('0 0/1 * * * ?')}",
-	instantiationMode = JobInstantiationMode.ORDERED)
+	crontab = "#{configuracaoService.getAny('faturamento.interface.prefeituras.crontab').orElse('0 0/1 5-23 ? * 1-7')}")
+//	crontab = "#{configuracaoService.getAny('job.notas.cadastradas.crontab').orElse('0 0/1 * * * ?')}"
 public class NotaFiscalMaterialJob extends SgiJobImpl {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());

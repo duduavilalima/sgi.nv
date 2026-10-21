@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+	<context:component-scan base-package="br.com.fasolti.commons.security"/>
+
+	<security:global-method-security pre-post-annotations="enabled" />
+
+	<!-- Interface API para navegadores -->
+	<security:http pattern="/rest/**"
+	               entry-point-ref="unauthorizedEntryPoint">
+
+		<!-- Proteção CSRF -->
+		<security:csrf token-repository-ref="csrfTokenRepository"/>
+
+		<!-- LIBERADO -->
+		<security:intercept-url pattern="/rest/auth/**" access="permitAll" />
+
+		<!-- RESTRITO -->
+		<security:intercept-url pattern="/rest/**" access="isAuthenticated()" />
+	</security:http>
+
+	<security:http entry-point-ref="casEntryPoint">
+		<!-- Confs básicas -->
+		<security:form-login default-target-url='/app/main.html' always-use-default-target='false' />
+		<security:logout invalidate-session="true" logout-url="/logout" logout-success-url="/login.html"/>
+		<security:access-denied-handler error-page="/login.html" />
+
+		<!-- Validação pelo CAS -->
+		<security:custom-filter position="CAS_FILTER" ref="casFilter" />
+
+		<!-- Para o logout correto quando o cas-security é um servidor externo -->
+		<security:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER" />
+		<security:custom-filter ref="singleLogoutFilter" before="CAS_FILTER" />
+
+		<!-- Proteção CSRF -->
+		<security:custom-filter after="CSRF_FILTER" ref="csrfHeaderFilter" />
+		<security:csrf token-repository-ref="csrfTokenRepository"/>
+
+		<!-- RESTRITO -->
+		<security:intercept-url pattern="/app/**" access="isAuthenticated()" />
+	</security:http>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider ref="casAuthenticationProvider" />
+	</security:authentication-manager>
+
+
+	<!-- This filter handles a Single Logout Request from the CAS Server -->
+	<bean id="singleLogoutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"/>
+
+	<!-- This filter redirects to the CAS Server to signal Single Logout should be performed -->
+	<bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+    	<constructor-arg type="org.springframework.security.web.authentication.logout.LogoutSuccessHandler">
+			<bean class="br.com.fasolti.commons.security.logout.RedirectLogoutSuccessHandler">
+				<property name="casLogoutUrl" value="${cas.server.external}${cas.server.context}/logout" />
+				<property name="serviceUrl" value="${server.url}${server.context}${application.context}" />
+			</bean>
+		</constructor-arg>
+		<constructor-arg>
+			<bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+		</constructor-arg>
+		<property name="filterProcessesUrl" value="/logout"/>
+	</bean>
+
+	<!-- Conf beans -->
+
+	<bean id="unauthorizedEntryPoint" class="br.com.fasolti.commons.security.config.UnauthorizedEntryPoint" />
+
+	<!-- CSRF beans -->
+
+	<bean id="csrfHeaderFilter" class="br.com.fasolti.commons.security.config.CsrfHeaderFilter" />
+
+	<bean id="csrfTokenRepository" class="br.com.fasolti.commons.security.config.CsrfTokenRepository" />
+
+	<!-- CAS beans -->
+
+	<bean id="casEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
+		<property name="loginUrl" value="${cas.server.external}${cas.server.context}/login" />
+		<property name="serviceProperties" ref="serviceProperties"/>
+	</bean>
+
+	<bean id="userDetailsService" class="br.com.fasolti.commons.services.security.UserDetailsServiceImpl" />
+
+	<bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
+		<property name="service" value="${cas.client.check}" />
+		<property name="sendRenew" value="false" />
+	</bean>
+
+	<bean id="casFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+
+	<bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider">
+		<property name="userDetailsService" ref="userDetailsService" />
+		<property name="serviceProperties" ref="serviceProperties" />
+		<property name="ticketValidator">
+			<bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
+				<constructor-arg index="0" value="${cas.server.internal}${cas.server.context}" />
+			</bean>
+		</property>
+		<property name="key" value="24578236487236" />
+	</bean>
+
+</beans>

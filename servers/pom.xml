@@ -31,18 +31,9 @@
 		<db.password>P0o9i8u7</db.password>
 		<spring.config.dataSource>applicationContext-dataSource-jndi.xml</spring.config.dataSource>
 
-		<!-- RabbitMQ -->
-
-		<mq.host>localhost</mq.host>
-		<mq.port>5672</mq.port>
-		<mq.username>guest</mq.username>
-		<mq.password>guest</mq.password>
-		<mq.vhost>/</mq.vhost>
-		<mq.declaring>true</mq.declaring>
-
 		<!-- Jobs Service config -->
 
-		<fasolti.jobs.mainClass>br.com.fasolti.queue.service.Main</fasolti.jobs.mainClass>
+		<fasolti.jobs.mainClass>br.com.fasolti.sgi.jobs.JobsServiceApplication</fasolti.jobs.mainClass>
 		<fasolti.jobs.logging.level>DEBUG</fasolti.jobs.logging.level>
 		<fasolti.jobs.persistence.logging.level>INFO
 		</fasolti.jobs.persistence.logging.level>
@@ -92,7 +83,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>2.6</version>
+					<version>${maven-war-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.jetty</groupId>

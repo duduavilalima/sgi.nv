@@ -6,7 +6,7 @@
 	<configuration>
 		<custom-converters>
 			<converter
-				type="br.com.fasolti.commons.dozer.converters.EnumStringBiDirectionalDozerConverter">
+				type="br.com.fasolti.commons.util.EnumConverter">
 				<class-a>java.lang.Enum</class-a>
 				<class-b>java.lang.String</class-b>
 			</converter>

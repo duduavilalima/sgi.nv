@@ -2,9 +2,9 @@ package br.com.araujoabreu.sgi.service.impl.api;
 
 import br.com.araujoabreu.sgi.api.EmailAPIJavamail;
 import br.com.fasolti.corporativo.configuration.domain.Parametro;
-import br.com.fasolti.queue.email.JobsEmails;
-import br.com.fasolti.queue.email.domain.Email;
-import br.com.fasolti.queue.email.services.EmailService;
+import br.com.fasolti.commons.email.Emails;
+import br.com.fasolti.commons.email.Email;
+import br.com.fasolti.commons.email.EmailService;
 import br.com.fasolti.sgi.repository.parametro.ParametroRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class EmailAPIJavamailImpl implements EmailAPIJavamail {
 
 	public void sendEmail(String toAddress, String fromAddress, String subject, String msgBody) {
 		logger.info(String.format("Enviando email para: %s. Assunto: %s", toAddress, subject));
-		Email.Builder email = JobsEmails.emailTo(toAddress).addFrom(fromAddress).withSubject(subject).withHtmlBody(msgBody);
+		Email.Builder email = Emails.emailTo(toAddress).addFrom(fromAddress).withSubject(subject).withHtmlBody(msgBody);
 		emailService.send(email.build());
 	}
 
@@ -41,7 +41,7 @@ public class EmailAPIJavamailImpl implements EmailAPIJavamail {
 
 	public void sendEmail(String toAddress, String fromAddress, String subject, String msgBody, File... files) {
 		logger.info(String.format("Enviando email para: %s. Assunto: %s", toAddress, subject));
-		Email email = JobsEmails.emailTo(toAddress)
+		Email email = Emails.emailTo(toAddress)
 			.addFrom(fromAddress)
 			.withSubject(subject)
 			.addAttachmentFiles(files)

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+	<context:component-scan base-package="br.com.fasolti.commons.security"/>
+
+	<security:global-method-security pre-post-annotations="enabled" />
+
+	<!-- Interface API para ser usada fora de navegadores -->
+	<security:http pattern="/api/**"
+	               entry-point-ref="unauthorizedEntryPoint"
+	               create-session="stateless">
+
+		<!-- Processamento do Token -->
+		<security:custom-filter ref="authenticationTokenProcessingFilter" position="PRE_AUTH_FILTER" />
+
+		<!-- Não usa proteção CSRF -->
+		<security:csrf disabled="true"/>
+
+		<!-- LIBERADO -->
+		<security:intercept-url pattern="/api/auth/**" access="permitAll" />
+
+		<!-- RESTRITO -->
+		<security:intercept-url pattern="/api/**" access="isAuthenticated()" />
+	</security:http>
+
+	<!-- Interface API para navegadores -->
+	<security:http pattern="/rest/**"
+	               entry-point-ref="unauthorizedEntryPoint">
+
+		<!-- Proteção CSRF -->
+		<security:csrf token-repository-ref="csrfTokenRepository"/>
+
+		<!-- LIBERADO -->
+		<security:intercept-url pattern="/rest/auth/**" access="permitAll" />
+
+		<!-- RESTRITO -->
+		<security:intercept-url pattern="/rest/**" access="isAuthenticated()" />
+	</security:http>
+
+	<security:http>
+		<!-- Confs básicas -->
+		<security:form-login login-page="/index.html" default-target-url="/app/main.html" authentication-failure-url="/index.html" />
+		<security:remember-me remember-me-parameter="rememberme" remember-me-cookie="_spring_security_remember_me" />
+		<security:access-denied-handler error-page="/index.html" />
+		<security:logout logout-url="/logout" delete-cookies="true" invalidate-session="true" />
+
+		<!-- Proteção CSRF -->
+		<security:custom-filter after="CSRF_FILTER" ref="csrfHeaderFilter" />
+		<security:csrf token-repository-ref="csrfTokenRepository"/>
+
+		<!-- RESTRITO -->
+		<security:intercept-url pattern="/app/**" access="isAuthenticated()" />
+	</security:http>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider user-service-ref="userDetailsService">
+			<security:password-encoder ref="passwordEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<!-- CSRF beans -->
+	<bean id="csrfHeaderFilter" class="br.com.fasolti.commons.security.config.CsrfHeaderFilter" />
+	<bean id="csrfTokenRepository" class="br.com.fasolti.commons.security.config.CsrfTokenRepository" />
+	<!--
+	<bean id="csrfRequestMatcher" class="br.com.fasolti.commons.security.config.CsrfRequestMatcher">
+		<constructor-arg>
+			<list>
+				<value>/rest</value>
+				<value>/app</value>
+			</list>
+		</constructor-arg>
+	</bean>
+	-->
+
+	<!-- Custom UserDetailService -->
+	<bean id="userDetailsService" class="br.com.fasolti.commons.services.security.UserDetailsServiceImpl" />
+
+	<!-- Token filter -->
+	<bean id="authenticationTokenProcessingFilter" class="br.com.fasolti.commons.security.token.AuthenticationTokenProcessingFilter" />
+
+	<bean id="unauthorizedEntryPoint" class="br.com.fasolti.commons.security.config.UnauthorizedEntryPoint" />
+</beans>

@@ -1,0 +1,13 @@
+#!/bin/bash
+# Executa o jobs-service localmente com as variáveis do .env (banco, SMTP/MailHog e redirecionamento de e-mail).
+# Uso: ./jobs_service_local [opções -D extras da JVM, ex.: -Djobs.scheduler.enabled=false]
+set -e
+cd "$(dirname "$0")"
+JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-17-openjdk-amd64}"
+set -a; source .env; set +a
+RH_DIR="$PWD/.local/sgi/interface/rh"
+mkdir -p "$RH_DIR/history"
+exec "$JAVA_HOME/bin/java" \
+	-Dusuarios.interface.demitidos.diretorio="$RH_DIR/" \
+	-Dusuarios.interface.demitidos.diretorio.history="$RH_DIR/history/" \
+	"$@" -jar servers/jobs-service/target/jobs-service.jar

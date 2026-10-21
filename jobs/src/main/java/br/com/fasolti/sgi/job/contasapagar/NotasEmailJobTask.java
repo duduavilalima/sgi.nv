@@ -11,10 +11,10 @@ import br.com.araujoabreu.sgi.service.nota.NotaFiscalService;
 import br.com.fasolti.commons.util.DozerHelper;
 import br.com.fasolti.corporativo.pessoa.domain.QPessoa;
 import br.com.fasolti.corporativo.security.domain.QUsuario;
-import br.com.fasolti.queue.email.domain.Email;
-import br.com.fasolti.queue.email.helpers.InternetAddresses;
-import br.com.fasolti.queue.email.services.EmailService;
-import br.com.fasolti.queue.email.services.EmailTemplateProcessor;
+import br.com.fasolti.commons.email.Email;
+import br.com.fasolti.commons.email.InternetAddresses;
+import br.com.fasolti.commons.email.EmailService;
+import br.com.fasolti.commons.email.EmailTemplateProcessor;
 import br.com.fasolti.sgi.repository.administracao.ColaboradorRepository;
 import br.com.fasolti.sgi.service.util.ConfiguracaoService;
 import com.querydsl.core.Tuple;
@@ -34,7 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static br.com.fasolti.queue.email.JobsEmails.emailTo;
+import static br.com.fasolti.commons.email.Emails.emailTo;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

@@ -6,10 +6,10 @@ import br.com.araujoabreu.sgi.service.administracao.transfer.ColaboradorTO;
 import br.com.araujoabreu.sgi.service.lote.LoteInativacaoService;
 import br.com.araujoabreu.sgi.service.lote.transfer.LoteInativacaoTO;
 import br.com.araujoabreu.sgi.service.lote.util.ArquivoLoteInativacao;
-import br.com.fasolti.queue.email.domain.Email;
-import br.com.fasolti.queue.email.helpers.InternetAddresses;
-import br.com.fasolti.queue.email.services.EmailService;
-import br.com.fasolti.queue.email.services.EmailTemplateProcessor;
+import br.com.fasolti.commons.email.Email;
+import br.com.fasolti.commons.email.InternetAddresses;
+import br.com.fasolti.commons.email.EmailService;
+import br.com.fasolti.commons.email.EmailTemplateProcessor;
 import br.com.fasolti.sgi.service.util.ConfiguracaoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static br.com.fasolti.queue.email.JobsEmails.emailTo;
+import static br.com.fasolti.commons.email.Emails.emailTo;
 
 
 @Component
