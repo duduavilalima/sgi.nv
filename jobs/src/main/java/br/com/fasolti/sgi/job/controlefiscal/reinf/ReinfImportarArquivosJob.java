@@ -1,10 +1,8 @@
 package br.com.fasolti.sgi.job.controlefiscal.reinf;
 
 import br.com.araujoabreu.sgi.lang.AdministracaoException;
-import br.com.fasolti.queue.commons.api.model.annotations.ImplementsJob;
-import br.com.fasolti.queue.commons.api.model.annotations.WithJobModel;
-import br.com.fasolti.queue.commons.api.model.entities.JobExecutionInfo;
-import br.com.fasolti.queue.commons.api.model.enumerations.JobInstantiationMode;
+import br.com.fasolti.sgi.job.util.JobSchedule;
+import br.com.fasolti.sgi.job.util.JobExecutionInfo;
 import br.com.fasolti.sgi.job.impl.util.SgiJobImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 @Service
-@ImplementsJob
-@WithJobModel(
+@JobSchedule(
 	autostart = true,
-	crontab = "#{'0 0/6 5-23 ? * 1-7'}",
-	instantiationMode = JobInstantiationMode.ORDERED)
+	crontab = "#{'0 0/6 5-23 ? * 1-7'}")
 public class ReinfImportarArquivosJob extends SgiJobImpl {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());

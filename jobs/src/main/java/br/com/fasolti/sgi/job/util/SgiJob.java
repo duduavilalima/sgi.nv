@@ -1,7 +1,6 @@
 package br.com.fasolti.sgi.job.util;
 
-import br.com.fasolti.queue.commons.api.model.Job;
+public interface SgiJob {
 
-public interface SgiJob extends Job {
-
+	void process(JobExecutionInfo execution) throws Exception;
 }

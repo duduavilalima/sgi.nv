@@ -8,10 +8,10 @@ import br.com.araujoabreu.sgi.service.centroFinanceiro.transfer.CentroFinanceiro
 import br.com.araujoabreu.sgi.service.gerencia.GerenciaService;
 import br.com.araujoabreu.sgi.service.gerencia.transfer.GerenciaTO;
 import br.com.fasolti.commons.util.DozerHelper;
-import br.com.fasolti.queue.email.domain.Email;
-import br.com.fasolti.queue.email.helpers.InternetAddresses;
-import br.com.fasolti.queue.email.services.EmailService;
-import br.com.fasolti.queue.email.services.EmailTemplateProcessor;
+import br.com.fasolti.commons.email.Email;
+import br.com.fasolti.commons.email.InternetAddresses;
+import br.com.fasolti.commons.email.EmailService;
+import br.com.fasolti.commons.email.EmailTemplateProcessor;
 import br.com.fasolti.sgi.repository.administracao.ColaboradorRepository;
 import br.com.fasolti.sgi.service.util.ConfiguracaoService;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static br.com.fasolti.queue.email.JobsEmails.emailTo;
+import static br.com.fasolti.commons.email.Emails.emailTo;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -38,6 +38,7 @@ public class DespesasCLEmailJobTask {
 	public static final String JOB_DESPESAS_CL_LIMITE = "job.despesas.cl.limite";
 	public static final String JOB_DESPESAS_CL_FUTURO = "job.despesas.cl.futuro";
 	public static final String DATE_FORMAT_EMAIL = "MMMM/yyyy";
+	private static final Locale LOCALE_PT_BR = new Locale("pt", "BR");
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static final String ARQUIVO_TEMPLATE_EMAIL = "mail.despesasCL.html";
@@ -124,7 +125,7 @@ public class DespesasCLEmailJobTask {
 
 	private void enviarEmails(List<ColaboradorTO> destinatariosEmail, List<CentroFinanceiroTO> cls, LocalDateTime hoje) {
 		DespesasCLEmailBean emailBean = new DespesasCLEmailBean();
-		emailBean.setDataDespesas(hoje.format(DateTimeFormatter.ofPattern(DATE_FORMAT_EMAIL)));
+		emailBean.setDataDespesas(hoje.format(DateTimeFormatter.ofPattern(DATE_FORMAT_EMAIL, LOCALE_PT_BR)));
 		emailBean.setDespesasLimite(configuracaoService.getAny(JOB_DESPESAS_CL_LIMITE).get());
 
 		emailBean.setcFList(cls);

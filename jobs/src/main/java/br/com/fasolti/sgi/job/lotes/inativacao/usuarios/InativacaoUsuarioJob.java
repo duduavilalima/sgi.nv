@@ -1,10 +1,8 @@
 package br.com.fasolti.sgi.job.lotes.inativacao.usuarios;
 
 import br.com.araujoabreu.sgi.lang.AdministracaoException;
-import br.com.fasolti.queue.commons.api.model.annotations.ImplementsJob;
-import br.com.fasolti.queue.commons.api.model.annotations.WithJobModel;
-import br.com.fasolti.queue.commons.api.model.entities.JobExecutionInfo;
-import br.com.fasolti.queue.commons.api.model.enumerations.JobInstantiationMode;
+import br.com.fasolti.sgi.job.util.JobSchedule;
+import br.com.fasolti.sgi.job.util.JobExecutionInfo;
 import br.com.fasolti.sgi.job.impl.util.SgiJobImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +11,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
-@ImplementsJob
-@WithJobModel(
+@JobSchedule(
 	autostart = true,
-	crontab = "#{configuracaoService.getAny('usuarios.interface.demitidos.crontab').orElse('0 0,10,20,30,40,50 7-22 ? * 1-5')}",
-	instantiationMode = JobInstantiationMode.ORDERED)
+	crontab = "#{configuracaoService.getAny('usuarios.interface.demitidos.crontab').orElse('0 0,10,20,30,40,50 7-22 ? * 1-5')}")
 public class InativacaoUsuarioJob extends SgiJobImpl {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());

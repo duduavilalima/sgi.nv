@@ -9,6 +9,9 @@
 				  value="jdbc:postgresql://${db.host}:${db.port}/${db.name}"/>
 		<property name="username" value="${db.username}"/>
 		<property name="password" value="${db.password}"/>
+		<!-- Jobs usam parallelStream: o padrão do DBCP2 (8 conexões, espera infinita) esgota o pool. -->
+		<property name="maxTotal" value="${DB_POOL_MAX:60}"/>
+		<property name="maxWaitMillis" value="60000"/>
 	</bean>
 
 </beans>
