@@ -482,6 +482,12 @@ public class FaturamentoServiceImpl extends BaseSearchService<Faturamento, Fatur
 	}
 
 	@Override
+	protected String translateSortProperty(String property) {
+		// "numero" é calculado a partir do código ("FT/" + código com zeros à esquerda)
+		return "numero".equals(property) ? "codigo" : property;
+	}
+
+	@Override
 	protected void buildSearchPredicate(BooleanBuilder builder, FaturamentoPesquisaTO exampleObj) {
 		Faturamento f = getMapper().map(exampleObj, Faturamento.class);
 
