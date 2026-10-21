@@ -178,6 +178,11 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- EhCacheCacheManager (movido para spring-context-support no Spring 5) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
 		<!-- ehcache -->
 
 		<dependency>
