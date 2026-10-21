@@ -10,7 +10,7 @@
 	<context:component-scan base-package="br.com.araujoabreu.sgi"/>
 	<context:component-scan base-package="br.com.fasolti.sgi"/>
 	<context:component-scan base-package="br.com.fasolti.commons"/>
-	<context:component-scan base-package="br.com.fasolti.queue.appconfig"/>
+	<context:component-scan base-package="br.com.fasolti.commons.email"/>
 
 	<context:property-placeholder
 		location="classpath:spring/conf/*.properties"/>

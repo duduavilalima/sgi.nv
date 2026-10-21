@@ -6,7 +6,7 @@
 <body>
 <p>Prezado,</p>
 <p>
-	Segue a lista de CLs com gastos acima do limite da OS Inicial (<span th:text="${#emailBean.despesasLimite}"></span>%).
+	Segue a lista de CLs com gastos acima do limite da OS Inicial (<span th:text="${emailBean.despesasLimite}"></span>%).
 </p>
 
 
@@ -20,7 +20,7 @@ Legenda:
 </p>
 
 
-<table style="width:900px; border-collapse: collapse;" th:if="${#emailBean.total > 0}" cellspacing="0" border="1">
+<table style="width:900px; border-collapse: collapse;" th:if="${emailBean.total > 0}" cellspacing="0" border="1">
 	<thead>
 	<tr>
 		<th:block th:each="h : ${emailBean.cFList[0].emailJobCabecalho}">
