@@ -25,3 +25,5 @@ build/target
 build/**/build
 build/cache
 /.metadata/
+.env
+.local/

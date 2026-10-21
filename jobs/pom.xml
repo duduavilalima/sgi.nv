@@ -11,14 +11,10 @@
 	<name>SGI :: Nova Versão :: Jobs</name>
 
 	<dependencies>
-		<!-- FASOLTI QUEUE -->
+		<!-- FASOLTI COMMONS -->
 		<dependency>
-			<groupId>br.com.fasolti.queue</groupId>
-			<artifactId>commons</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>br.com.fasolti.queue</groupId>
-			<artifactId>email-client</artifactId>
+			<groupId>br.com.fasolti.commons</groupId>
+			<artifactId>commons-email</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.mail</groupId>

@@ -27,8 +27,9 @@
 			<artifactId>services</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>br.com.fasolti.queue</groupId>
-			<artifactId>service-runtime</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<version>${spring-boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -75,13 +76,6 @@
 					<mainClass>${fasolti.jobs.mainClass}</mainClass>
 					<layout>ZIP</layout>
 					<excludeDevtools>true</excludeDevtools>
-					<!-- Magic happens here! -->
-					<requiresUnpack>
-						<requiresUnpack>
-							<groupId>br.com.fasolti.queue</groupId>
-							<artifactId>service-runtime</artifactId>
-						</requiresUnpack>
-					</requiresUnpack>
 				</configuration>
 				<executions>
 					<execution>
@@ -97,11 +91,7 @@
 	</build>
 
 	<profiles>
-		<!-- Solução temporária. Talvez no futuro considerar a criação de um plugin próprio para o Maven, para
-		     compilar, empacotar e executar os projetos do Fasolti Jobs.
-		     Lembrar de executar um container com a imagem "docker.fasolti.com.br/rabbitmq" antes de executar
-		     este profile!
-		  -->
+		<!-- Executa o serviço de jobs localmente. -->
 		<profile>
 			<id>debug.jobs</id>
 			<properties>
@@ -127,17 +117,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-		<profile>
-			<id>build.docker</id>
-			<properties>
-				<mq.host>localhost</mq.host>
-				<mq.port>5672</mq.port>
-				<mq.username>sgi</mq.username>
-				<mq.password>Q!W@E#R$T%</mq.password>
-				<mq.vhost>/</mq.vhost>
-				<mq.declaring>true</mq.declaring>
-			</properties>
 		</profile>
 	</profiles>
 </project>

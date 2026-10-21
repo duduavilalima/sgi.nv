@@ -42,18 +42,8 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>br.com.fasolti.queue</groupId>
-			<artifactId>email-client</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-context</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-core</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>br.com.fasolti.commons</groupId>
+			<artifactId>commons-email</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>axis</groupId>

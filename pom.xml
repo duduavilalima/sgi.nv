@@ -8,6 +8,7 @@
   <packaging>pom</packaging>
   <name>SGI :: Nova Versão</name>
   <modules>
+    <module>commons</module>
     <module>servers</module>
     <module>domain</module>
     <module>services.client</module>
@@ -40,7 +41,6 @@
     <cas.server.context>${server.context}/security</cas.server.context>
     <test.db.name>sgi.producao</test.db.name>
     <axis>1.4</axis>
-    <fasolti-queue.version>0.4.0</fasolti-queue.version>
     <test.db.username>sgi</test.db.username>
     <junit.version>4.12</junit.version>
     <commons-email.version>1.1</commons-email.version>
@@ -58,7 +58,6 @@
     <jackson.core.version>2.9.8</jackson.core.version>
     <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
     <ehcache-core.version>2.6.11</ehcache-core.version>
-    <fasolti-commons.version>2.2.1-20190716.182219-1</fasolti-commons.version>
     <querydsl.version>4.2.1</querydsl.version>
     <test.suites>**/JunitTestSuite</test.suites>
     <jetty.version>9.4.18.v20190429</jetty.version>
@@ -78,7 +77,7 @@
     <server.url>http://localhost:8080</server.url>
     <commons-io.version>2.6</commons-io.version>
     <hibernate.version>5.2.12.FINAL</hibernate.version>
-    <caelum-stella.version>1.3.3</caelum-stella.version>
+    <caelum-stella.version>1.2</caelum-stella.version>
     <querydsl.maven-plugin.version>4.0.4</querydsl.maven-plugin.version>
     <java.version>1.8</java.version>
     <maven.test.skip>true</maven.test.skip>
@@ -122,18 +121,81 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>br.com.fasolti.commons</groupId>
-        <artifactId>parent</artifactId>
-        <version>${fasolti-commons.version}</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>br.com.fasolti.queue</groupId>
-        <artifactId>dependencies</artifactId>
-        <version>${fasolti-queue.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
+        <groupId>br.com.fasolti.commons</groupId>
+        <artifactId>commons-utils</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>br.com.fasolti.commons</groupId>
+        <artifactId>commons-email</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>br.com.fasolti.commons</groupId>
+        <artifactId>commons-client</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>br.com.fasolti.commons</groupId>
+        <artifactId>commons-services</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>br.com.fasolti.commons</groupId>
+        <artifactId>commons-rest</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>br.com.fasolti.commons</groupId>
+        <artifactId>commons-security</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>27.1-jre</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.9</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-text</artifactId>
+        <version>1.6</version>
+      </dependency>
+      <dependency>
+        <groupId>com.esotericsoftware</groupId>
+        <artifactId>kryo</artifactId>
+        <version>4.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.dozer</groupId>
+        <artifactId>dozer-spring</artifactId>
+        <version>${dozer.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.dozer</groupId>
+        <artifactId>dozer</artifactId>
+        <version>${dozer.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>1.9.3</version>
       </dependency>
       <dependency>
         <groupId>br.com.fasolti.sgi</groupId>
@@ -320,6 +382,15 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <!-- Removidos do JDK a partir do Java 11 -->
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
