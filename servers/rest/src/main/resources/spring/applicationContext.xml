@@ -20,5 +20,4 @@
 
 	<import resource="applicationContext-rest.xml"/>
 	<import resource="applicationContext-persistence.xml"/>
-	<import resource="applicationContext-email.xml"/>
 </beans>

@@ -12,6 +12,7 @@
 	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/SGIDB"/>
 
 	<!-- Para impedir que o bean "dataSource" seja exportado como um MBean via JNDI -->
+	<context:mbean-server id="mbeanServer"/>
 	<context:mbean-export server="mbeanServer" registration="ignoreExisting"/>
 
 	<!--<jee:jndi-lookup id="jndiDataSource" jndi-name="jdbc/SGIDB" />-->
