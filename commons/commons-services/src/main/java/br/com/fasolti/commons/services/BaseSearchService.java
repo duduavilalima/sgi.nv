@@ -80,6 +80,14 @@ public abstract class BaseSearchService<E extends DomainObject, T extends Transf
 //		builder.and(predicate);
 	}
 
+	/**
+	 * Permite mapear uma propriedade de ordenação pedida pela tela (ex. um getter calculado) para
+	 * uma propriedade persistente da entidade.
+	 */
+	protected String translateSortProperty(String property) {
+		return property;
+	}
+
 	protected OrderSpecifier defineSearchOrder(S exampleObj) {
 		return null;
 	}
@@ -161,6 +169,8 @@ public abstract class BaseSearchService<E extends DomainObject, T extends Transf
 			if (property.startsWith(prefix)) {
 				property = property.substring(prefix.length());
 			}
+
+			property = translateSortProperty(property);
 
 			if (!isEntityProperty(entityType, property)) {
 				continue;
