@@ -1,7 +1,7 @@
-- [Servidor de JOBs e RabbitMQ](#servidor-de-jobs-e-rabbitmq)
-	- [Executando o Docker para o rabbitMq:](#executando-o-docker-para-o-rabbitmq)
-  - [Executando o Docker de envio de e-mail:](#executando-o-docker-de-envio-de-e-mail)
-  - [Configurando o RUN para executar o servidor de JOBS](#configurando-o-run-para-executar-o-servidor-de-jobs)
+- [Executando com Docker (Tomcat)](#executando-com-docker-tomcat)
+- [Servidor de JOBs](#servidor-de-jobs)
+	- [Configurando o RUN para executar o servidor de JOBS](#configurando-o-run-para-executar-o-servidor-de-jobs)
+	- [Executando localmente pelo script](#executando-localmente-pelo-script)
 - [Executando aplicação](#executando-aplica%C3%A7%C3%A3o)
 	- [Select run (Maven):](#select-run-maven)
 - [Teste](#teste)
@@ -14,45 +14,30 @@
 		- [Referências:](#refer%C3%AAncias)
 - [Gerando o CHANGELOG do projeto](#gerando-o-changelog-do-projeto)
 
-# Servidor de JOBs e RabbitMQ
+# Executando com Docker (Tomcat)
 
-## Executando o Docker para o rabbitMq:
+Executa os WARs `frontend` e `rest` em containers Tomcat. O Postgres e o servidor de e-mail (ex.: MailHog) **não** sobem no compose: devem estar rodando no host.
 
-`docker run --name rabbitmq -d -it --rm -p 5672:5672 -p 15672:15672 docker.fasolti.com.br/rabbitmq`
+Pré-requisitos:
 
-Também é possível subir o servidor usando o arquivo sh `./rabbitmq_run.sh`.
+- Postgres e SMTP acessíveis no host.
+- Arquivo `.env` na raiz (não versionado) com as variáveis `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_STARTTLS`, `MAIL_SSL` e, em testes, `MAIL_REDIRECT_TO`.
 
-Para parar o servidor, execute o arquivo sh `./rabbitmq_stop.sh`.
-
-Endereço para o RabbitMQ: http://localhost:15672/#/
-
-## Executando o Docker de envio de e-mail:
-
-Ver: http://git.fasolti.com.br/snippets/55
-
-Baixar o plugin do Docker para o IntelliJ, e criar o comando:
-
-- **Criar configuração**: Docker-compose
-- **Name**: RabbitMQ AND MQMail5.12.3-SNAPSHOT
-- **Compose file(s)**: ./docker-compose.mqmail.yml; 
-- **Service(s)**:  mq, mqmail,
-
-
-
-## ~~Plugin para Docker~~
-
-Usar a configuração de __Executando o Docker de envio de e-mail__.
-
-## Configuração em produção
-
-```xml
-<mq.host>localhost</mq.host>
-<mq.port>5672</mq.port>
-<mq.username>sgi</mq.username>
-<mq.password>Q!W@E#R$T%</mq.password>
-<mq.vhost>/</mq.vhost>
-<mq.declaring>true</mq.declaring>
+```bash
+mvn package -DskipTests                           # gera servers/*/target/*.war
+docker compose -f docker-compose.web.yml up --build
 ```
+
+| Serviço    | Porta | Contexto Tomcat |
+|------------|-------|-----------------|
+| `frontend` | 8080  | `/sgi/nv`       |
+| `rest`     | 8081  | `/sgi/rest`     |
+
+Os containers acessam o Postgres e o SMTP do host via `host.docker.internal`. Para parar: `docker compose -f docker-compose.web.yml down`.
+
+# Servidor de JOBs
+
+Os jobs rodam no `jobs-service` (Spring Boot, `JobScheduler`). Não há mais RabbitMQ nem fila de e-mail.
 
 ## Configurando o RUN para executar o servidor de JOBS
 
@@ -62,6 +47,10 @@ No IntelliJ IDE configurar:
 - Working_directory: `Raiz do projeto sgi.nv`
 - Command line: `test -pl servers/jobs-service -am`
 - Profiles: `debug.jobs`
+
+## Executando localmente pelo script
+
+Após `mvn package -DskipTests`, execute `./jobs_service_local`. O script carrega o `.env` e inicia `servers/jobs-service/target/jobs-service.jar`. Opções `-D` extras da JVM podem ser passadas como argumento, ex.: `./jobs_service_local -Djobs.scheduler.enabled=false`.
 
 # Executando aplicação
 
