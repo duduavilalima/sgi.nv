@@ -71,6 +71,11 @@
     <codehaus.build-helper-plugin.version>3.0.0</codehaus.build-helper-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <cas.server.internal>${server.url}</cas.server.internal>
+    <!-- URLs do CAS no perfil build.docker. Padroes: http://auth:8080 e ${server.url}
+         (no build.docker, ${env.SERVER_URL}); sobrescritas pelas variaveis
+         CAS_INTERNAL_URL e CAS_EXTERNAL_URL (perfis cas.internal.env e cas.external.env). -->
+    <cas.internal.url>http://auth:8080</cas.internal.url>
+    <cas.external.url>${server.url}</cas.external.url>
     <hibernate.show_sql>false</hibernate.show_sql>
     <skipTests>true</skipTests>
     <project.root>..</project.root>
@@ -613,12 +618,36 @@
     </plugins>
   </reporting>
   <profiles>
+    <!-- Ativados sozinhos quando CAS_INTERNAL_URL / CAS_EXTERNAL_URL existem no ambiente.
+         So mudam cas.internal.url / cas.external.url, que apenas o perfil build.docker usa. -->
+    <profile>
+      <id>cas.internal.env</id>
+      <activation>
+        <property>
+          <name>env.CAS_INTERNAL_URL</name>
+        </property>
+      </activation>
+      <properties>
+        <cas.internal.url>${env.CAS_INTERNAL_URL}</cas.internal.url>
+      </properties>
+    </profile>
+    <profile>
+      <id>cas.external.env</id>
+      <activation>
+        <property>
+          <name>env.CAS_EXTERNAL_URL</name>
+        </property>
+      </activation>
+      <properties>
+        <cas.external.url>${env.CAS_EXTERNAL_URL}</cas.external.url>
+      </properties>
+    </profile>
     <profile>
 		<id>build.docker</id>
 		<properties>
-			<cas.server.external>${server.url}</cas.server.external>
+			<cas.server.external>${cas.external.url}</cas.server.external>
 			<cas.client.check>${server.url}${server.context}${application.context}/login/cas</cas.client.check>
-			<cas.server.internal>http://auth:8080</cas.server.internal>
+			<cas.server.internal>${cas.internal.url}</cas.server.internal>
 			<hibernate.show_sql>false</hibernate.show_sql>
 			<server.url>${env.SERVER_URL}</server.url>
 		</properties>
