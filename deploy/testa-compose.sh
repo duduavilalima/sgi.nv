@@ -47,6 +47,8 @@ GW=$(docker network inspect bridge --format '{{(index .IPAM.Config 0).Gateway}}'
 porta_livre() { python3 -c 'import socket,sys; s=socket.socket(); s.bind((sys.argv[1], 0)); print(s.getsockname()[1])' "$GW"; }
 PORTA_BANCO=$(porta_livre)
 PORTA_CAS=$(porta_livre)
+# Senha do banco descartável, gerada a cada execução: nenhuma senha fica escrita no repositório.
+SENHA_BANCO=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
 
 cat >"$REL/.env" <<FIM
 SGINV_IP_PRIVADO=$IP
@@ -55,7 +57,7 @@ DB_HOST=$GW
 DB_PORT=$PORTA_BANCO
 DB_NAME=sgi
 DB_USERNAME=postgres
-DB_PASSWORD=teste-postgres
+DB_PASSWORD=$SENHA_BANCO
 FRONTEND_XMX=1g
 JOBS_XMX=512m
 MAIL_REDIRECT_TO=teste@mailhog.local
@@ -106,7 +108,7 @@ log_tem jobs-service "[espera] aguardando: $GW:$PORTA_BANCO (" && ok "jobs-servi
 ! log_tem jobs-service "Starting JobsServiceApplication" && [ "$(reinicios sgi-nv-jobs)" = 0 ] &&
   ok "jobs-service não iniciou e o container não reiniciou" || falha "jobs-service subiu ou reiniciou sem a db"
 
-docker run -d --name "$BANCO" -p "$GW:$PORTA_BANCO:5432" -e POSTGRES_PASSWORD=teste-postgres -e POSTGRES_DB=sgi postgres:17 >/dev/null
+docker run -d --name "$BANCO" -p "$GW:$PORTA_BANCO:5432" -e POSTGRES_PASSWORD="$SENHA_BANCO" -e POSTGRES_DB=sgi postgres:17 >/dev/null
 for _ in $(seq 1 60); do docker exec "$BANCO" pg_isready -q -U postgres && break; sleep 1; done
 for _ in $(seq 1 30); do log_tem jobs-service "[espera] dependências no ar" && break; sleep 2; done
 log_tem jobs-service "[espera] dependências no ar" && ok "com a db no ar, o jobs-service segue" ||
