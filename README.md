@@ -35,6 +35,30 @@ docker compose -f docker-compose.web.yml up --build
 
 Os containers acessam o Postgres e o SMTP do host via `host.docker.internal`. Para parar: `docker compose -f docker-compose.web.yml down`.
 
+# Deploy na EC2 `sgi-nv` (`deploy/`)
+
+O compose de deploy (`deploy/docker-compose.yml`) sobe três serviços:
+- `frontend`: Tomcat 9 com o WAR unificado, que já traz o `rest`, atrás do CAS;
+- `jobs-service`: Spring Boot no `eclipse-temurin:11-jre`;
+- `mailhog`.
+
+O `rest` não é um serviço à parte: o WAR dele, isolado, expõe a API sem autenticação (S4/T-005).
+
+- **Portas:** só no `SGINV_IP_PRIVADO`, a 8080 (frontend, entrada em `/sgi/nv/index.html`) e a 8025 (interface do MailHog). O SMTP 1025 fica na rede do compose.
+- **E-mail (fase 1):** o mesmo bloco `MAIL_*` vai para o `frontend` e para o `jobs-service`, apontando para o MailHog. O SMTP do SES resolve para `127.0.0.1` nos dois (`extra_hosts`). `MAIL_REDIRECT_TO` é obrigatório, porque o padrão do `email.properties` é um endereço real.
+- **Banco:** `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USERNAME` e `DB_PASSWORD`. O `frontend` os recebe por `-Ddb.*`, no datasource JNDI. O `jobs-service` os recebe como `DB_*`. O modelo está em `deploy/.env.example`.
+- **Layout:** `/opt/sgi-nv/releases/<versão>/`, com o link `/opt/sgi-nv/current`. O `.env` fica em `/opt/sgi-nv/.env`, e cada release aponta para ele.
+
+```bash
+# artefatos, no JDK 17
+SERVER_URL=http://10.0.2.10:8080 CAS_EXTERNAL_URL=http://10.8.0.1:8090 CAS_INTERNAL_URL=http://10.0.1.10:8090 \
+  mvn -B clean package -DskipTests -Pcompile.web,build.docker,build.unified
+deploy/monta-release.sh /tmp/sgi-nv-<versão>   # recusa WAR sem o rest e jar sem as dependências
+deploy/testa-compose.sh                        # teste local com postgres:17 descartável, sem AWS
+```
+
+O `build.docker` copia para `build/target/` o `jobs-service.jar` de antes do `repackage` do Spring Boot, sem as dependências. Por isso, o `monta-release.sh` pega o jar em `servers/jobs-service/target/`. A correção do build está como pendência na T-035, em `docs/TASKS_DEPLOY_ONLINE.md` no repositório `sgi`.
+
 # Servidor de JOBs
 
 Os jobs rodam no `jobs-service` (Spring Boot, `JobScheduler`). Não há mais RabbitMQ nem fila de e-mail.
