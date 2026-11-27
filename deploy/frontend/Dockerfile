@@ -7,5 +7,9 @@ RUN rm -rf /usr/local/tomcat/webapps/*
 ADD --checksum=sha256:7ffa46f8c619377cdebcd17721b6b21ecf6659850179f96fec3d1035cf5a0cdc \
     https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.jar /usr/local/tomcat/lib/
 COPY server.xml /usr/local/tomcat/conf/server.xml
+# Espera a db e o CAS antes do Tomcat (T-024): ESPERA_TCP e ESPERA_HTTP no docker-compose.yml.
+COPY --chmod=0755 espera.sh /usr/local/bin/espera.sh
 
 EXPOSE 8080
+ENTRYPOINT ["/usr/local/bin/espera.sh"]
+CMD ["catalina.sh", "run"]

@@ -47,6 +47,7 @@ O `rest` não é um serviço à parte: o WAR dele, isolado, expõe a API sem aut
 - **Portas:** só no `SGINV_IP_PRIVADO`, a 8080 (frontend, entrada em `/sgi/nv/index.html`) e a 8025 (interface do MailHog). O SMTP 1025 fica na rede do compose.
 - **E-mail (fase 1):** o mesmo bloco `MAIL_*` vai para o `frontend` e para o `jobs-service`, apontando para o MailHog. O SMTP do SES resolve para `127.0.0.1` nos dois (`extra_hosts`). `MAIL_REDIRECT_TO` é obrigatório, porque o padrão do `email.properties` é um endereço real.
 - **Banco:** `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USERNAME` e `DB_PASSWORD`. O `frontend` os recebe por `-Ddb.*`, no datasource JNDI. O `jobs-service` os recebe como `DB_*`. O modelo está em `deploy/.env.example`.
+- **Espera (`deploy/espera.sh`):** é o entrypoint das duas imagens. O `frontend` só inicia o Tomcat quando a `db` aceita conexão na `DB_PORT` e o `<CAS_INTERNAL_URL>/sgi/security/login` responde. O `jobs-service` espera só a `db`, porque não fala com o CAS. Enquanto espera, cada container loga uma linha `[espera] aguardando: ...` por minuto. A espera fica no container, e não no `depends_on`, porque depois de um reboot o Docker religa os containers sem olhar o compose.
 - **Layout:** `/opt/sgi-nv/releases/<versão>/`, com o link `/opt/sgi-nv/current`. O `.env` fica em `/opt/sgi-nv/.env`, e cada release aponta para ele.
 
 ```bash

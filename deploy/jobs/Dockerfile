@@ -7,6 +7,8 @@ ENV TZ=America/Sao_Paulo
 # Diretórios de interface do InativacaoUsuarioJob (padrão /var/lib/sgi/interface/rh/ e .../history/).
 RUN mkdir -p /var/lib/sgi/interface/rh/history
 WORKDIR /app
+# Espera a db antes da JVM (T-024): ESPERA_TCP no docker-compose.yml.
+COPY --chmod=0755 espera.sh /usr/local/bin/espera.sh
 # Forma exec: propriedades -D com espaço (crontabs) vão como argumentos antes de -jar; opções da JVM
 # (ex. -Xmx) por JAVA_TOOL_OPTIONS.
-ENTRYPOINT ["java", "-jar", "/app/jobs-service.jar"]
+ENTRYPOINT ["/usr/local/bin/espera.sh", "java", "-jar", "/app/jobs-service.jar"]

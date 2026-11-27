@@ -40,6 +40,8 @@ mkdir -p "$SAIDA/frontend" "$SAIDA/jobs" "$SAIDA/artefatos"
 cp "$RAIZ/deploy/docker-compose.yml" "$RAIZ/deploy/.env.example" "$SAIDA/"
 cp "$RAIZ/deploy/frontend/Dockerfile" "$RAIZ/build/images/web/server.xml" "$SAIDA/frontend/"
 cp "$RAIZ/deploy/jobs/Dockerfile" "$SAIDA/jobs/"
+cp "$RAIZ/deploy/espera.sh" "$SAIDA/frontend/"
+cp "$RAIZ/deploy/espera.sh" "$SAIDA/jobs/"
 cp "$WAR" "$SAIDA/artefatos/frontend.war"
 cp "$JAR" "$SAIDA/artefatos/jobs-service.jar"
 git -C "$RAIZ" rev-parse HEAD >"$SAIDA/VERSAO" 2>/dev/null || true
