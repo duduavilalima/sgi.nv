@@ -8,7 +8,9 @@
 # - o frontend no ar (/sgi/nv/index.html 200) e o MailHog (/api/v2/messages 200);
 # - um e-mail enviado de dentro do frontend chegando ao MailHog;
 # - o logoutRequest do CAS (POST sem token CSRF) chegando ao SingleSignOutFilter, e um POST comum
-#   sem token ainda recusado (T-050).
+#   sem token ainda recusado (T-050);
+# - a espera (T-024): o compose sobe com a db e o CAS fora, o frontend e o jobs-service aguardam; com
+#   a db no ar, só o jobs-service sobe; com o CAS (um httpd falso) no ar, o frontend sobe.
 # Nunca usa o .env da raiz do repositório (aponta para um banco real; T-005).
 #
 #   deploy/testa-compose.sh          (gere os artefatos antes; ver monta-release.sh)
@@ -18,6 +20,7 @@ RAIZ=$(cd "$(dirname "$0")/.." && pwd)
 TMP=$(mktemp -d)
 REL=$TMP/release
 BANCO=sgi-nv-teste-banco
+CAS=sgi-nv-teste-cas
 IP=127.0.0.1
 export COMPOSE_PROJECT_NAME=sgi-nv-teste
 
@@ -27,7 +30,7 @@ falha() { echo "FALHA $*"; falhas=$((falhas + 1)); }
 
 limpa() {
   [ -d "$REL" ] && (cd "$REL" && docker compose down -v --remove-orphans >/dev/null 2>&1) || true
-  docker rm -f "$BANCO" >/dev/null 2>&1 || true
+  docker rm -f "$BANCO" "$CAS" >/dev/null 2>&1 || true
   rm -rf "$TMP"
 }
 trap limpa EXIT
@@ -38,14 +41,16 @@ done
 
 "$RAIZ/deploy/monta-release.sh" "$REL" >/dev/null
 
-# Banco descartável, publicado no gateway da bridge padrão do Docker (alcançável dos containers).
+# Banco descartável e CAS falso, publicados no gateway da bridge padrão do Docker (alcançável dos
+# containers). As portas são escolhidas antes, porque os dois só sobem depois do compose (espera).
 GW=$(docker network inspect bridge --format '{{(index .IPAM.Config 0).Gateway}}')
-docker run -d --name "$BANCO" -p "$GW::5432" -e POSTGRES_PASSWORD=teste-postgres -e POSTGRES_DB=sgi postgres:17 >/dev/null
-PORTA_BANCO=$(docker port "$BANCO" 5432/tcp | head -1 | sed 's/.*://')
-for _ in $(seq 1 60); do docker exec "$BANCO" pg_isready -q -U postgres && break; sleep 1; done
+porta_livre() { python3 -c 'import socket,sys; s=socket.socket(); s.bind((sys.argv[1], 0)); print(s.getsockname()[1])' "$GW"; }
+PORTA_BANCO=$(porta_livre)
+PORTA_CAS=$(porta_livre)
 
 cat >"$REL/.env" <<FIM
 SGINV_IP_PRIVADO=$IP
+CAS_INTERNAL_URL=http://$GW:$PORTA_CAS
 DB_HOST=$GW
 DB_PORT=$PORTA_BANCO
 DB_NAME=sgi
@@ -65,6 +70,12 @@ else
   falha "sem MAIL_REDIRECT_TO o compose deveria recusar"
 fi
 rm -f .env.sem
+if sed '/^CAS_INTERNAL_URL=/d' .env >.env.sem && ! docker compose --env-file .env.sem config -q 2>/dev/null; then
+  ok "sem CAS_INTERNAL_URL o compose recusa"
+else
+  falha "sem CAS_INTERNAL_URL o compose deveria recusar"
+fi
+rm -f .env.sem
 servicos=$(docker compose config --services | sort | tr '\n' ' ')
 [ "$servicos" = "frontend jobs-service mailhog " ] && ok "serviços: $servicos" || falha "serviços: $servicos"
 
@@ -79,6 +90,54 @@ services:
 FIM
 export COMPOSE_FILE=docker-compose.yml:teste.yml
 docker compose up -d --build --quiet-pull >/dev/null 2>&1 || { docker compose up -d --build; exit 1; }
+
+echo "== espera (T-024)"
+# Sem -q: o grep lê tudo, e o docker compose logs não leva SIGPIPE (com pipefail, seria falha).
+log_tem() { docker compose logs "$1" 2>&1 | grep -F -- "$2" >/dev/null; }
+reinicios() { docker inspect -f '{{.RestartCount}}' "$1"; }
+URL_CAS="http://$GW:$PORTA_CAS/sgi/security/login"
+sleep 15
+log_tem frontend "[espera] aguardando: $GW:$PORTA_BANCO $URL_CAS" && ok "frontend aguarda a db e o CAS" ||
+  falha "frontend sem a linha de espera pela db e pelo CAS"
+log_tem jobs-service "[espera] aguardando: $GW:$PORTA_BANCO (" && ok "jobs-service aguarda só a db" ||
+  falha "jobs-service sem a linha de espera pela db"
+! log_tem frontend "Server version name" && [ "$(reinicios sgi-nv-frontend)" = 0 ] &&
+  ok "Tomcat não iniciou e o container não reiniciou" || falha "frontend subiu ou reiniciou sem a db e o CAS"
+! log_tem jobs-service "Starting JobsServiceApplication" && [ "$(reinicios sgi-nv-jobs)" = 0 ] &&
+  ok "jobs-service não iniciou e o container não reiniciou" || falha "jobs-service subiu ou reiniciou sem a db"
+
+docker run -d --name "$BANCO" -p "$GW:$PORTA_BANCO:5432" -e POSTGRES_PASSWORD=teste-postgres -e POSTGRES_DB=sgi postgres:17 >/dev/null
+for _ in $(seq 1 60); do docker exec "$BANCO" pg_isready -q -U postgres && break; sleep 1; done
+for _ in $(seq 1 30); do log_tem jobs-service "[espera] dependências no ar" && break; sleep 2; done
+log_tem jobs-service "[espera] dependências no ar" && ok "com a db no ar, o jobs-service segue" ||
+  falha "jobs-service continua esperando com a db no ar"
+sleep 10
+! log_tem frontend "Server version name" && ok "com a db no ar e o CAS fora, o frontend continua esperando" ||
+  falha "frontend subiu sem o CAS"
+
+# CAS falso: 200 com User-Agent e 500 sem ele, como o CAS do SGI (visto na AWS, T-024).
+cat >"$TMP/cas.sh" <<'FIM'
+cat >/resposta.sh <<'R'
+#!/bin/sh
+ua=
+while IFS= read -r l; do
+  l=${l%$(printf '\r')}
+  [ -z "$l" ] && break
+  case $l in [Uu]ser-[Aa]gent:*) ua=1 ;; esac
+done
+if [ -n "$ua" ]; then
+  printf 'HTTP/1.1 200 OK\r\nContent-Length: 6\r\nConnection: close\r\n\r\nlogin\n'
+else
+  printf 'HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\nConnection: close\r\n\r\n'
+fi
+R
+chmod +x /resposta.sh
+while true; do nc -l -p 8090 -e /resposta.sh; done
+FIM
+docker run -d --name "$CAS" -p "$GW:$PORTA_CAS:8090" -v "$TMP/cas.sh:/cas.sh:ro" busybox:1.36 sh /cas.sh >/dev/null
+for _ in $(seq 1 30); do log_tem frontend "[espera] dependências no ar" && break; sleep 2; done
+log_tem frontend "[espera] dependências no ar" && ok "com o CAS no ar, o frontend segue" ||
+  falha "frontend continua esperando com a db e o CAS no ar"
 
 echo "== portas"
 publicadas=$(docker ps --filter "label=com.docker.compose.project=$COMPOSE_PROJECT_NAME" --format '{{.Ports}}' |

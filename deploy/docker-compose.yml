@@ -2,8 +2,8 @@
 # jobs-service (Spring Boot) e MailHog, que recebe todo o e-mail da fase 1.
 #
 # Roda de dentro de uma release, montada por deploy/monta-release.sh:
-#   /opt/sgi-nv/releases/<versão>/   este arquivo, frontend/ (Dockerfile e server.xml),
-#                                    jobs/ (Dockerfile), artefatos/ (WAR e jar) e
+#   /opt/sgi-nv/releases/<versão>/   este arquivo, frontend/ (Dockerfile, server.xml e espera.sh),
+#                                    jobs/ (Dockerfile e espera.sh), artefatos/ (WAR e jar) e
 #                                    .env -> /opt/sgi-nv/.env (segredos, fora das releases)
 #   /opt/sgi-nv/current              link para a release no ar
 #
@@ -47,6 +47,10 @@ services:
     environment:
       <<: *mail
       TZ: America/Sao_Paulo
+      # O espera.sh (T-024) só inicia o Tomcat com a db e o login do CAS do SGI respondendo; vale
+      # também no reboot, quando o Docker religa o container sem olhar o depends_on.
+      ESPERA_TCP: "${DB_HOST:?defina DB_HOST no .env}:${DB_PORT:-5432}"
+      ESPERA_HTTP: "${CAS_INTERNAL_URL:?defina CAS_INTERNAL_URL no .env}/sgi/security/login"
       # O datasource JNDI jdbc/SGIDB do server.xml lê -Ddb.* (T-005).
       JAVA_OPTS: >-
         -Xmx${FRONTEND_XMX:-2g} -Dfile.encoding=UTF-8 -Duser.timezone=America/Sao_Paulo
@@ -70,6 +74,8 @@ services:
     environment:
       <<: *mail
       TZ: America/Sao_Paulo
+      # Só a db (T-024): o jobs-service não fala com o CAS, e o SGI fora não deve parar os jobs.
+      ESPERA_TCP: "${DB_HOST:?defina DB_HOST no .env}:${DB_PORT:-5432}"
       # O jobs-service não usa JNDI: lê DB_* no jdbc.properties (T-005).
       DB_HOST: "${DB_HOST:?defina DB_HOST no .env}"
       DB_PORT: "${DB_PORT:-5432}"
