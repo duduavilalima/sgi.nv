@@ -1,0 +1,93 @@
+# SGI.nv na EC2 sgi-nv (T-023, Spec §3 e §6): frontend (Tomcat 9, WAR unificado com o rest),
+# jobs-service (Spring Boot) e MailHog, que recebe todo o e-mail da fase 1.
+#
+# Roda de dentro de uma release, montada por deploy/monta-release.sh:
+#   /opt/sgi-nv/releases/<versão>/   este arquivo, frontend/ (Dockerfile e server.xml),
+#                                    jobs/ (Dockerfile), artefatos/ (WAR e jar) e
+#                                    .env -> /opt/sgi-nv/.env (segredos, fora das releases)
+#   /opt/sgi-nv/current              link para a release no ar
+#
+#   cd /opt/sgi-nv/current && docker compose up -d --build
+#
+# Portas publicadas só no IP privado da sgi-nv: 8080 (frontend) e 8025 (interface do MailHog). O
+# SMTP do MailHog (1025) fica só na rede do compose. O rest não é serviço à parte: o build.unified
+# o embute no WAR do frontend, atrás do CAS (T-005). O nome do projeto é fixo: trocar o current
+# para outra release substitui os mesmos containers.
+name: sgi-nv
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: 20m
+    max-file: "5"
+
+# Mesmo bloco de e-mail nos dois serviços (o email.properties é um só; T-005). Na fase 1, só o
+# MailHog: SSL e STARTTLS desligados e o SMTP do SES resolvido para loopback (extra_hosts).
+x-mail: &mail
+  MAIL_HOST: "${MAIL_HOST:-mailhog}"
+  MAIL_PORT: "${MAIL_PORT:-1025}"
+  MAIL_SSL: "${MAIL_SSL:-false}"
+  MAIL_STARTTLS: "${MAIL_STARTTLS:-false}"
+  MAIL_USER: "${MAIL_USER:-}"
+  MAIL_PASS: "${MAIL_PASS:-}"
+  MAIL_FROM: "${MAIL_FROM:-suporte_sgi@copony.com.br}"
+  MAIL_DEBUG: "${MAIL_DEBUG:-false}"
+  # Sem valor, o email.properties usa um endereço real: o valor fica sempre explícito.
+  MAIL_REDIRECT_TO: "${MAIL_REDIRECT_TO:?defina MAIL_REDIRECT_TO no .env}"
+
+x-sem-ses: &sem-ses
+  - "email-smtp.us-east-1.amazonaws.com:127.0.0.1"
+
+services:
+  frontend:
+    build: ./frontend
+    image: sgi-nv-frontend:${SGINV_VERSAO:-local}
+    container_name: sgi-nv-frontend
+    restart: unless-stopped
+    environment:
+      <<: *mail
+      TZ: America/Sao_Paulo
+      # O datasource JNDI jdbc/SGIDB do server.xml lê -Ddb.* (T-005).
+      JAVA_OPTS: >-
+        -Xmx${FRONTEND_XMX:-2g} -Dfile.encoding=UTF-8 -Duser.timezone=America/Sao_Paulo
+        -Ddb.host=${DB_HOST:?defina DB_HOST no .env} -Ddb.port=${DB_PORT:-5432}
+        -Ddb.name=${DB_NAME:?defina DB_NAME no .env} -Ddb.username=${DB_USERNAME:?defina DB_USERNAME no .env}
+        -Ddb.password=${DB_PASSWORD:?defina DB_PASSWORD no .env}
+    extra_hosts: *sem-ses
+    ports:
+      - "${SGINV_IP_PRIVADO:?defina SGINV_IP_PRIVADO no .env}:8080:8080"
+    logging: *logging
+    volumes:
+      - "./artefatos/frontend.war:/usr/local/tomcat/webapps/sgi#nv.war:ro"
+    depends_on:
+      - mailhog
+
+  jobs-service:
+    build: ./jobs
+    image: sgi-nv-jobs:${SGINV_VERSAO:-local}
+    container_name: sgi-nv-jobs
+    restart: unless-stopped
+    environment:
+      <<: *mail
+      TZ: America/Sao_Paulo
+      # O jobs-service não usa JNDI: lê DB_* no jdbc.properties (T-005).
+      DB_HOST: "${DB_HOST:?defina DB_HOST no .env}"
+      DB_PORT: "${DB_PORT:-5432}"
+      DB_NAME: "${DB_NAME:?defina DB_NAME no .env}"
+      DB_USER: "${DB_USERNAME:?defina DB_USERNAME no .env}"
+      DB_PASS: "${DB_PASSWORD:?defina DB_PASSWORD no .env}"
+      JAVA_TOOL_OPTIONS: "-Xmx${JOBS_XMX:-1g} -Dfile.encoding=UTF-8 -Duser.timezone=America/Sao_Paulo"
+    extra_hosts: *sem-ses
+    logging: *logging
+    volumes:
+      - "./artefatos/jobs-service.jar:/app/jobs-service.jar:ro"
+    depends_on:
+      - mailhog
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: sgi-nv-mailhog
+    restart: unless-stopped
+    ports:
+      - "${SGINV_IP_PRIVADO:?defina SGINV_IP_PRIVADO no .env}:8025:8025"
+    logging: *logging
