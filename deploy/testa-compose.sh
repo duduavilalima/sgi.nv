@@ -6,7 +6,9 @@
 # - o SMTP do SES resolvendo para loopback nos dois;
 # - portas publicadas só no IP de SGINV_IP_PRIVADO (8080 e 8025), nada na 1025;
 # - o frontend no ar (/sgi/nv/index.html 200) e o MailHog (/api/v2/messages 200);
-# - um e-mail enviado de dentro do frontend chegando ao MailHog.
+# - um e-mail enviado de dentro do frontend chegando ao MailHog;
+# - o logoutRequest do CAS (POST sem token CSRF) chegando ao SingleSignOutFilter, e um POST comum
+#   sem token ainda recusado (T-050).
 # Nunca usa o .env da raiz do repositório (aponta para um banco real; T-005).
 #
 #   deploy/testa-compose.sh          (gere os artefatos antes; ver monta-release.sh)
@@ -100,6 +102,15 @@ codigo() { curl -s -o /dev/null -w '%{http_code}' "$1"; }
 for _ in $(seq 1 90); do [ "$(codigo "http://$IP:8080/sgi/nv/index.html")" = 200 ] && break; sleep 2; done
 [ "$(codigo "http://$IP:8080/sgi/nv/index.html")" = 200 ] && ok "frontend: /sgi/nv/index.html 200" || falha "frontend fora do ar"
 [ "$(codigo "http://$IP:8025/api/v2/messages")" = 200 ] && ok "MailHog: /api/v2/messages 200" || falha "MailHog fora do ar"
+
+# Logout único (T-050): o CAS avisa por POST, servidor a servidor, sem token CSRF. Com o
+# SingleSignOutFilter antes do CsrfFilter, o aviso é tratado (200); antes, o CSRF o barrava e o
+# access-denied-handler respondia 405.
+pedido='<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="LR-1" Version="2.0"><saml:NameID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">teste</saml:NameID><samlp:SessionIndex>ST-1-teste-cas</samlp:SessionIndex></samlp:LogoutRequest>'
+c=$(curl -s -o /dev/null -w '%{http_code}' --data-urlencode "logoutRequest=$pedido" "http://$IP:8080/sgi/nv/login/cas")
+[ "$c" = 200 ] && ok "logoutRequest do CAS sem token CSRF: 200 (SingleSignOutFilter)" || falha "logoutRequest do CAS: $c"
+c=$(curl -s -o /dev/null -w '%{http_code}' -d campo=valor "http://$IP:8080/sgi/nv/app/main.html")
+[ "$c" != 200 ] && ok "POST comum sem token CSRF continua recusado ($c)" || falha "POST sem token CSRF aceito"
 ! (exec 3<>"/dev/tcp/$IP/1025") 2>/dev/null && ok "SMTP 1025 não publicado" || falha "SMTP 1025 publicado"
 
 # SMTP do MailHog pela rede do compose, a partir do frontend (o bash do container fala TCP).

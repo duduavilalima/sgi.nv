@@ -38,7 +38,10 @@
 
 		<!-- Para o logout correto quando o cas-security é um servidor externo -->
 		<security:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER" />
-		<security:custom-filter ref="singleLogoutFilter" before="CAS_FILTER" />
+		<!-- Antes do CSRF: o POST do logoutRequest vem do CAS, servidor a servidor, sem token CSRF.
+		     Depois dele, era barrado (405) e quem saía pelo SGI continuava logado aqui (T-050). O
+		     SingleSignOutFilter só age com logoutRequest ou ticket; os demais POST seguem para o CSRF. -->
+		<security:custom-filter ref="singleLogoutFilter" before="CSRF_FILTER" />
 
 		<!-- Proteção CSRF -->
 		<security:custom-filter after="CSRF_FILTER" ref="csrfHeaderFilter" />
